@@ -1,0 +1,49 @@
+Azure Active Directory Integration with Azure Kubernetes Service Cluster Admins
+We can use Azure AD Users and Groups to Manage AKS Clusters
+
+Pre-requistires
+Make sure ur azure cluster is up and running
+az aks get-credentials --name aksdemo3 --resource-group aks-rg
+
+Verify the nodes , list the resoure grps or list the kubernets cluster
+az aks list
+az group list
+az group list --output table -- list in table formats
+
+# Verify Nodes
+kubectl get nodes
+kubectl get nodes -o wide
+
+# Get Cluster Information
+kubectl cluster-info
+
+create a custer in a particular location maybe central us
+az group create --location centralus --name aks-rg3
+
+We can create Admin Users in Azure AD and Associate to Azure AD Group named k8sadmins and those users can access Azure AKS Cluster using kubectl.
+Three important things we need to remember before making any changes to our existing AKS Clusters
+AKS-managed Azure AD integration can't be disabled
+non-RBAC enabled clusters aren't supported for AKS-managed Azure AD integration
+Changing the Azure AD tenant associated with AKS-managed Azure AD integration isn't supported
+
+Create a Azure Active Directory Group and user
+
+Create Azure AD Group
+Go to Azure Active Directory
+Group Type: security
+Group Name: k8sadmins
+Group Description: AKS Cluster Admins who has full access to Kubernetes Clusters
+Click on Create
+
+Create Azure AD User & Associate User to Group {Create User in Azure Active Directory & Associate User to k8sadmins group}
+Go to All Services -> Azure Active Directory -> Users -> New User
+UserName , password , groups and roles {Groups: k8sadmins
+                                        Roles: User}
+
+
+Step-03: Enable AKS Cluster with AKS-managed Azure Active Directory feature
+Go to All Services -> Kubernetes Services -> aksdemo3 -> Settings -> Configuration
+AKS-managed Azure Active Directory: Select Enabled radio button
+Admin Azure AD groups: k8sadmins
+
+Step-04: Access an Azure AD enabled AKS cluster using Azure AD User

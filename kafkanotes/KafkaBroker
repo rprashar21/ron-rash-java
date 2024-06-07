@@ -1,0 +1,12 @@
+Brokers are called bootstrap servers,, cluster of servers
+they are identified using an id
+brkoer contains certain topics
+
+Broker topics
+
+broker-101   broker-102   broker-103
+topicA       topicA       TopicA
+po           p1           p2
+
+topicB      topicB
+po          p1

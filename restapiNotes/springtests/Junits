@@ -1,0 +1,23 @@
+An ArgumentCaptor captures the argument passed to a method we can verify if the argument passed to the method is what we expected it to be.
+ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+@Captor
+ArgumentCaptor<String> stringArgumentCaptor;
+
+ @Test
+    void testName(){
+        Dog dog = mock(Dog.class);
+
+        Owner owner = new Owner();
+        owner.adoptDog(dog);
+
+        Mockito.verify(dog).giveName(stringArgumentCaptor.capture());
+        String captorValue = stringArgumentCaptor.getValue();
+
+        Assertions.assertEquals("Max", captorValue);
+    }
+
+# Mocks
+ @Mock annotation in combination with the MockitoExtension for JUnit Jupiter for service class
+ Use Constructor Injection or better use Lombok for field injection
+ The @Mock annotation specifies the fields in which Mockito should inject mock objects.
+ The @MockitoExtension tells Mockito to evaluate those @Mock annotations because JUnit does not do this automatically.

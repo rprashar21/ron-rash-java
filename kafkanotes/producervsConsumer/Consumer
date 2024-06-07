@@ -1,0 +1,64 @@
+Consumer knows which topic/partition to read the data from and they read the data from low - high offset
+Each partition is assigned to only one consumer from agroup at a time. po is assigned to c0 frm grp1  c0 can read from another partiton but not same c1
+will read from another partition, c3 can be idle
+
+now this partition po can be assgined to another consumer from another grp
+conumer co from one grp s reading message , the offset value keeps track of this ,, the offset is commited to a topi c called __consumer_offsets topic
+these offsets are periodically commited the the __consumer_offset topic
+Java consumers will automatically coomit fsset alt least once
+
+Maximum number of consumers that can work on a kafka topic is equal to the partition number.
+The additional consumers will be idle, and won't do any job.For example with 4 partitions,
+if you add 6 consumers, 2 of the consumers will be idle, only 4 of them will consume data, each assigning to a single partition.
+
+Consumer offset is basically till which point the consumer in a consumer group have read messages from a topic partition.
+, a consumer offset represents the position or offset within a Kafka topic partition where a consumer group has read up to.
+This offset helps Kafka track the progress of consumers in reading messages from partitions.
+
+Consumer Groups: Kafka consumers often work in consumer groups, where each consumer in the group reads a portion of the messages in a topic.
+Kafka manages offset tracking and distribution of messages to consumers within the same consumer group.
+Consumers can seek to a specific offset, rewind to the beginning of a partition, or start consuming from the latest available offset.
+Managing consumer offsets is crucial for ensuring data integrity and reliability when processing messages from Kafka topics.
+
+Offset: Each message in a Kafka topic partition is assigned a unique offset,
+which is essentially a sequential ID. Consumers use these offsets to keep track of which messages they have already consumed.
+
+offsets are regularly commited when u call the poll() method and the auto.commit.interval.ms has leapses
+auto.commit.interval.ms=5000 ie 5 seconds and enable.auto.commit=true
+ make sure all message are committed before we poll again or else u can do it with a separate thread from time to time callling .commitSync  or commitAysnc
+To allows consumers in a group to resume at the right offset, I need to set group.id
+
+Consumer Lag: Consumer lag refers to the difference between the latest offset available in a partition and the offset that a particular consumer group has consumed up to.
+It helps monitor how far behind a consumer group is in processing messages from a partition.
+
+Checkpointing: Consumer offsets are often checkpointed, typically in a Kafka internal topic or an external storage system like Apache ZooKeeper
+or Apache Kafka itself using the __consumer_offsets topic.
+This helps ensure that if a consumer crashes or is restarted, it can resume reading from where it left off by using the stored offset.
+
+
+Committing an Offset: Consumers can manually commit their offsets or use automatic offset commits,
+depending on their configuration. Committing an offset informs Kafka that a consumer has successfully processed messages up to a certain point.
+
+This is what rebalancing is -- when one consumer is killed the others rebalance and start reading message from the partitions .
+
+consumers from the same group cannot read message from the same partition , they are single threaded, when the consumer is killed then kafak does the rebalancing
+then it can read messages from the partiotion of the consumer that got killed.
+
+Each partition is assigned to only one consumer at a time.
+
+If you have multiple consumers within the same group and you want to increase parallelism for consuming messages from a partition,
+you can add more consumer instances to the group. Kafka will automatically rebalance the partitions to distribute the load among the available consumers.
+
+Moving of partitions between consumers is called rebalance
+
+Different types of rebalance
+Eager Rebalance -- when a new partition is added , then all consumers give up memebership and rejoin the group and randomly get assigned groups
+for a short period the entire consumer group stops reading messages
+Cooperative rebalance -- opposite of the above
+
+startergies -- kafakaconsumer partition.assignment.startarergy
+properties.setPropery("partition.assignment.startarergy",CooperativeStickyAssignor.class.getName())
+when we use kafka connect or kafka streams cooperative rebalance is defualt
+
+static group memebership
+every partition is assigned to consumer and when the consumer leaves an rejoins within the session.timeout , it gets back the same partition

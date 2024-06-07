@@ -1,0 +1,32 @@
+docker compose file is basically a definition file which services we want and what is their dependency
+
+mkdir jenkins-dir
+cd jenkins-dir
+vim docker-compose.yml
+
+version: '3' // current version of docker-compose
+services:
+ myapp:
+  build: // here we can have a docker-compose file
+  ports:
+   - "8100:8080" // mapping container to local port
+  volumes:
+   - "PWD/jenkin-data-dir:/var/jenkins-home" copy all the data from the docker container to this local machine"
+  networks:
+   - net
+networks:
+ net:
+
+
+verson
+db_host:
+ container_name: postgres-container
+ image: postgres
+ ports:
+  - "5439:5432"
+ environment:
+  - "POSTGRES_PASSWORD=postgres"
+  volume
+
+# run this docker compose
+docker-compose up -d --> in detached mode

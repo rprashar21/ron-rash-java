@@ -1,0 +1,16 @@
+Oath2.0 -- OAuth 2.0 with OIDC is based on standardized protocols that define the interaction flow between clients,
+ authorization servers, and resource servers.
+ JWT, on the other hand, is a token format and does not define any specific protocols for authentication or authorization.
+ JWT is specfically for authentication
+ Authentication is handled by the OpenID Connect protocol, which provides identity information about the user.
+ Authorization is performed by OAuth 2.0, allowing fine-grained control over access to protected resources.
+
+ SingleSignOn- users authenticate once and can access multiple applications or services without re-entering their credentials.
+ helps to defince scopes- based on specific requirements of the application or service.
+ easily integrate with 3rd parties
+
+ Token Format: JWT is a self-contained token format that includes user claims, such as user ID, roles, and other relevant information.
+  In contrast, OAuth 2.0 with OIDC uses separate tokens for authentication (ID Token) and authorization (Access Token).
+In summary, OAuth 2.0 with OIDC offers a standardized and flexible approach for authentication and authorization,
+with support for Single Sign-On, centralized authentication servers, dynamic scopes, and third-party integration.
+JWT, on the other hand, is a token format that primarily focuses on authentication and lacks the standardized protocols and authorization capabilities provided by OAuth 2.0 with OIDC. The choice between the two depends on the specific requirements and the level of flexibility and standardization needed in your application.

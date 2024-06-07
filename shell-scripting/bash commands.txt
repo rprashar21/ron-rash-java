@@ -1,0 +1,138 @@
+Bash commands
+# list
+ls -a  list all the files and the hidden files
+ls -l list details about more files
+ls -ltr
+drwxr-xr-x    d- mean its a folder
+first 3 rwr -- read write and execute
+next 3 r-x -- guest can read but cannot write or execute
+next 3 r-x  -- everyone else can read but not write or execute
+man -- to see manual
+mkdir
+
+touch # create/ update a  file
+touch xyz.xls # create if not exist but also updates the timestamp
+tree -> to see the folder structiure
+in a linux distribution
+xdg-open fileName --> to open a file in any other linux distribution
+
+mv example/folder . -- moving to current folder
+rm -rf -- delete
+rm file01 --> removes file01
+rm file* -- remove all file with the name starting as file
+echo "hello wolrd" > file01.txt    -- creates and write content to the file
+cat file01.tx -- shows the contents of the files
+cat file01.txt file02.txt  shows contents of 2 files wgether
+cat file01.txt file02.txt > file03.txt witres contents of 2 files into another file
+
+# echo command
+> will override >> will append
+echo "hello world " > file01.txt -- create the files and overrides its contents
+echo "hello world " >> file01.txt -- appends to the contents of the file
+
+# reading the files
+cat less head tail -- for reading the contents of the file
+
+# copy
+cp *.txt ./examples/folder21  copies all text files to folder21 inside path examples/folder21 folder
+cp -r folder1/ folder2/  copy all the  contents of the directories becoz its a directory
+cp folder1/file01 folder2/    copying files from folder1 to folder2
+cp b* bfolder  copy all the file starting with b to bfolder
+cp -R folder1/ folder2    copy all the  contents from folder1 to folder 2
+
+#mv
+rm folder2
+mv folder1/ folder2/ move does not require recursive moves folder1 to folder2
+
+mv folder1 ../. moves folder 1 one step back from folder2 to current working directory
+
+#find
+find . -name file01.txt -- finds a file in the current directory with name
+find . -type f -name file01.txt --> finds a specifi type pf file
+find . -type d -name file01.txt -- >type of file, f means file , d means directory
+find . -type f -iname query.sql  -- used for ignoring the case
+
+#grep
+global regular expression print-- is used to search text in a file
+-r is recusrive when we want to do something inside a folder
+grep -r "end" example
+grep -rn "end" example -- finds the word and line number
+grep -rni "end" example -- case insenstative
+grep -rni "end" . find in current folder
+grep -rni -A 3 "hello" example -- shows 3 line below the founded word
+grep -rni -A 3 -B 3 "hello" example -- shows 3 line below and before the founded word
+grep "order" file01.txt -- we can  use regular expression
+man grep -- to find all details about grep
+
+history -- gives history of all the commands i have written
+history | grep "grep" -- find  all grep commands executed
+sudo is super suer
+cat file01.txt -- suppose to run this we need sudo
+so press
+sudo !!
+
+ctrl + r -- to search for some commands
+
+#vim - curl
+cur helps us to connect to remote servs using protcocals like http,ldap etc
+curl  is  a  tool to transfer data from or to a server, using one of the supported protocols
+       (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS,  POP3,  POP3S,  RTMP,
+       RTSP,  SCP,  SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP). The command is designed to work
+       without user interaction
+#vim
+vim file01.txt -- opens a file in vim
+
+:set numbers -- shows numbers in the file     or set nu
+:syntax on  -- adds some lighting
+
+to exit  : q!
+
+to navigate
+h -- left
+j -- down
+k -- up
+l --right
+0 -- start of line
+$ -- end of line
+w -- move word by word
+b -- previous word
+^ -- begin of the word in a line
+gg - start of file
+G -- end of file
+shift +[
+8gg -- goes to line 8
+24gg 00 goes to a line 24
+
+# insert mode
+when u do vim filename u are in command mode
+to enter insert mode press i
+to go back press esc
+
+press esc to exit insert mode and the press u
+u -- to undo changes in insert mode
+ctrl +r to redo
+
+a - append
+shift + o -- insert before a line
+shift + a  -- appends to the end of the line
+
+# save
+:w -- written -- this saves into the file
+:wq -- save and quit
+
+#delete cut and paste
+d - to delete
+dw -- delete a word
+dd -- delete a line
+4dd -- delete 4 line
+dG -- deletes everything
+dd - cut g -- paste
+
+# search in vim
+/wordtobesearch
+n - next word
+N -- backwards
+
+search and replace
+:%s/searchfor/replaceword/gc -- g--global c-confirm
+:%s/searchfor/replaceword/g -- directly replaces doesn't ask

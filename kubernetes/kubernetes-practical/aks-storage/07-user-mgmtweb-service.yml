@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+  labels:
+    app: lb-service-webapp
+spec:
+  type: Loadbalancer;
+  selector:
+    app: webapp-pod # the pod it wil redirect traffic to
+  ports:
+    - name: http-externalport
+      port: 80 # where the service will run
+      targetPort : 8080 # to redirect the traffic to this port

@@ -1,0 +1,132 @@
+
+git config --global user.name
+git config --global user.email
+
+#create a branch in pipeline
+then push
+git push -u origin dev/CCT-1912
+
+
+git pull --rebase origin team/SCMI
+git commit -m "SCMI-1303"
+git commit --amend --no-edit
+git reset commitid
+
+git branch --> to show which branch we are in
+git branch -r --> to check for all remote branches
+gt branch -a  --> to show all branches
+git branch feature-a --> create new branch
+git checkout feature-a --> switch to different branch
+git switch main --> swithced to this branch
+git checkout -b feature-new --> create and checkout to the new branch
+git branch -d feature-a --> -d to delete a branch
+
+# to restore changes in a file
+git restore . --> in the curent pat
+git restore filename --> restore changes in that file
+
+git clean -df --> clear all untracked files
+
+to go back to a commit
+git log
+git checkout <commitid>
+
+Head ??
+Head is the latest commit in any  branch
+do a git log it will show the latest head -> main origin/main
+
+Detached Head ?
+when we checkout a commit and the git is unaware of the commit belongs to which branch,
+becoz the same commit can belong to 2 same commits on 2 diff branches
+then it is called a detached head
+
+how to handle git detached head ??
+git log --> we see c1 c2 c3 commits --> we got to c2 commit --> git checkout c2 --> now we are in detached head on c2 commit??
+do git log (HEAD)
+git branch --> u will see --> * (HEAD detached at 7453972)
+we make our changes in c2 commit detached state  {git add . , git commit -am " detached head commits "}
+then we create a new detached branch-->  git branch detached-branch ,, and the switch to orginal branch  here it is main and then merge that detached branch
+
+steps to handle detached head
+git checkout <commit-id>  --> checkout to a new commit
+git log --> see deatched head
+git branch  --> see detached branch
+make chanegs and commit in detached state
+git add .
+git commit -m " detahced commit changes"
+create a new branch detached-head-branch --> create a new branch ths will put all changes to this branch
+git switch main --> checkout to main branch
+git merge detached-head-branch --> merge this branch to main to get all the changes
+
+# git reflog -- reflog alllows us to get back lost information
+Reset A commit
+git checkout <commit-id>
+git restore --staged filename
+git log -- check logs
+git reset <commitid>
+
+#similarly we can perform the same steps to when we delete a branch
+git checkout -b feature-delete -- this is the branch we will delete and then using reflog retain the changes
+add/commit  some file here---> git commit -am "some changes in feature-delet" and then switch to main and delete that branch
+
+switch to master --> git switch master ,, delete the branch git branch -D feature-delete
+do a git reflog --> git reflog --> u can see ur commit from the delete branch
+{from here perform the same steps we did in detachec } ie checkout that commit, commit the changes, then create a branch and then merge those changes in master
+git checkout commitid
+git add . , git commit -m " the lost changes"
+git branch feature-delete
+git switch feature-delete ,, add some more changes
+git swicth main ,, git  merge feature-delete
+
+
+
+checkout a specific commit
+git checkout coomit-id --> this may lead to a detached head
+to get out of this just checkout to a branhc
+git checkout branc-name
+
+undo changes from a file
+ git restore .
+
+# stash
+git stash
+git stash apply
+
+git stash list  -- shows a list of stashed changes
+git stash apply 1
+
+add messages to ur stashes
+git stash push -m "latest changes"
+git stash list
+git stash pop 0  --> apply and remove the stashed changes
+git stash clear --> clears the entire stash
+
+
+
+#rebase --
+when your master is ahead from your feature branch the rebase will pull changes from
+master and apply beneath your local changes in the feature branch
+
+git pull -r origin main  -- this will pull changes from master
+# resolve conflicts
+git add .
+git rebase --continue and then give a commit message
+git push -f  --> forcefully
+
+
+
+fork a repository
+upstrem -- from where you hae forked a repository
+git remote add upstream https://.................
+
+create a new branch
+
+git merge team/cct-857 team/cct-876 --no-ff
+
+
+remove files from the staging area
+git rm --cached -r .
+git rm --cached -r fileName
+git remote add origin https://github.com/rohitprashar/crnew.git
+git branch -M main
+git push -u origin main

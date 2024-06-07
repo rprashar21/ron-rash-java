@@ -1,0 +1,162 @@
+Azure Functions are a serverless compute service in Microsoft Azure.
+You can use Azure Functions to deploy code without having to think about what servers the code will run on.
+Azure functions are well-suited for event-driven processing as you will see later in this Lab.
+Functions also integrate with other Azure Services making monitoring and logging automatic.
+But to begin with, you need to create a Function App for all of your Azure Functions to live inside of.
+You will create a Function App in this Lab Step
+
+Steps ,
+1. In the Azure Portal search bar, enter Function App and click Function App under Marketplace in the results drop-down:
+In portal seacrh Function apps
+give necessary details like resource grp,runtime stack,consumption plan ,storage,enable monitorung
+
+You now have a Function App to begin deploying Functions to.
+Initially, there are no Functions in the Function App. You will deploy one in the next Lab Step
+
+There are several ways to create and deploy Azure functions.
+Azure Functions integrates with GitHub and other version control systems
+
+The function you create in this Lab will integrate Azure Blob Storage with Azure Table Storage
+Any time a blob is uploaded to a Blob Storage container, a corresponding row in Table Storage will be created.
+The function will highlight the concept of binding and demonstrate how easy it is to integrate services with Azure Functions.
+
+
+Steps
+1.Make sure you are on the Functions tab and click on Create in Azure Portal.
+
+2. Observe the various templates available before clicking Azure Blob Storage trigger:
+
+3. Under Template details, fill out the following values before clicking Create:
+
+   Name: UploadTrigger
+   Path: uploads/{name} (uploads is the name of the blob storage container where you want to monitor for blobs.
+    The uploads container has been pre-created when you started the Lab.
+    {name} is a pattern that will match the name of any blob in the container.)
+
+    Template details
+    New Function UploadTrigger
+    Path uploads/{name}
+    Strorage Account AzureWebJobsStorgae
+
+    The function.json file stores the bindings for the C# script function.
+     The binding encapsulates what triggers your Function and the data associated with it.
+      In this case, any new blob added to the uploads/ path will trigger the function (blobTrigger)
+       and the input (in) binding will populate the Function input parameters
+       myBlob and name (as seen in the first line of the run.csx C# script).
+
+    There are also output bindings.
+    You want to store the blob information into a table and use an output binding to achieve that.
+
+ 4. Add the following output binding to the bindings list in function.json
+
+     ,
+     {
+       "name": "$return",
+       "type": "table",
+       "direction": "out",
+       "tableName": "uploads",
+       "connection": "AzureWebJobsStorage"
+     }
+     The $return name indicates that the table binds to the return value of the function.
+      More details about Table Storage binding is available here.
+
+ 5. Move to the run.csx file and replace the code with the following that returns an object of a new class called Upload:
+
+ public static Upload Run(Stream myBlob, string name, ILogger log)
+ {
+     log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+     return new Upload() {
+         PartitionKey = "Uploads",
+         RowKey = Guid.NewGuid().ToString(),
+         Name = name,
+         Length = myBlob.Length
+     };
+ }
+ public class Upload
+ {
+     public string PartitionKey { get; set; }
+     public string RowKey { get; set; }
+     public string Name { get; set; }
+     public long Length { get; set; }
+ }
+ The returned Upload object is what is used for the output bind to Table Storage.
+ The binding uses the PartitionKey and RowKey properties to create the partition and row key of the entity stored in the table.
+  A timestamp will automatically be added by the table.
+  Notice how the trigger and output binding are entirely described in the function.json file.
+   There is no code in run.csx that indicates there is any binding taking place.
+   This separation helps keep the code clean and more maintainable.
+
+In the Azure Portal search bar, enter storage accounts and click Storage accounts under Services in the results drop-down:
+go to ur storage --> tables --> create a table {uploads }
+The table can now accept entities created by the output binding of the Function you created.
+
+ Click Containers under Date storage in the left navigation bar:
+ Clikc the table uploads
+ upload something
+ This should also trigger the Blob Storage trigger that causes your Function to run.
+ You will inspect the table's entities to confirm this.
+
+ Close the Upload blob and uploads container blades to return to the Containers blade and click Storage Browser in the left navigation bar:
+  It may take a minute for the entity to appear because the Function may be slow to load the first time it is called.
+  This is because the consumption plan unloads the Function if it has not been recently used.
+
+THis is the java code for the azure function
+import com.microsoft.azure.functions.annotation.*;
+import com.microsoft.azure.functions.*;
+import java.util.*;
+import java.io.InputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+
+/**
+ * Azure Functions with Blob Trigger.
+ */
+public class Function {
+    /**
+     * This function will be invoked when a new blob is uploaded to the specified container.
+     */
+    @FunctionName("uploadBlobTrigger")
+    public void run(@BlobTrigger(name = "myBlob",
+                     dataType = "binary",
+                     path = "uploads/{name}",
+                     connection = "AzureWebJobsStorage") InputStream myBlob, @BindingName("name") String name,
+                     final ExecutionContext context) {
+
+        long length = 0;
+        try {
+            length = myBlob.available(); // Get the size of the stream
+        } catch (IOException e) {
+            context.getLogger().severe("Failed to get blob length");
+        }
+
+        context.getLogger().info("Java Blob trigger function processed a blob\n Name:" + name + " \n Size: " + length + " Bytes");
+
+        Upload upload = new Upload();
+        upload.setPartitionKey("Uploads");
+        upload.setRowKey(UUID.randomUUID().toString());
+        upload.setName(name);
+        upload.setLength(length);
+
+        // Optionally: save the Upload object or perform other operations
+    }
+
+    public class Upload {
+        private String partitionKey;
+        private String rowKey;
+        private String name;
+        private long length;
+
+        // Getters and setters
+        public String getPartitionKey() { return partitionKey; }
+        public void setPartitionKey(String partitionKey) { this.partitionKey = partitionKey; }
+
+        public String getRowKey() { return rowKey; }
+        public void setRowKey(String rowKey) { this.rowKey = rowKey; }
+
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+
+        public long getLength() { return length; }
+        public void setLength(long length) { this.length = length; }
+    }
+}

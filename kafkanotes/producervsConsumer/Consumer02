@@ -1,0 +1,52 @@
+Consumer project with openseacrch which is a fork of elasticsearch
+The consumer will consume messages from kafak and send it to opensearch
+
+
+
+Consumer Delivery
+At most once :  the messages or offsets  are committed as soon as they arrive
+which can lead to loss of data because messages are commited before they are processed
+1,2,3,4  5,6-- no we have processed message 1 2 and then the consumers goes down 3 4 message has been processed ,, now consumer comes up and reads message from 5,6
+where it was last commited and we loose somes message --
+
+At least once --
+ offsets are commited after the message is processed ,, this can lead to duplicacy y ,, so make sure ur app is idempotence
+use this approach
+
+Auto Offset Behaviour
+offsets are commited when u call the poll method and enable.auto.commit= true
+example
+auto.commit.interval=5000 and enable.auto.commit= true -- this means that the messages should be processed within 5 seconds
+before calling the poll method again
+call commitSync synchronous method or commitAysnc method
+s
+while(true){
+  List<Records> batch  consumer.poll(Duration.ofMillis(100))
+    doSomethingSync(batch)
+}
+
+// do something maually enable.auto.commmit = false,
+commit the offsets to an external system
+
+Consumer Internals
+1. Conumers in a grp talk to Consumer Group Coordinator to tell about cnsumers which are dead.
+
+Hearbeat Thread and Poll mechanism
+Consumer HeartBeat Thread sends heartbeat to the consumer to check if the consumer is alive
+heartbeat.interval.ms =3 or 1/3 of session.timeout.ms - 45 seconds{heartbeats are send to the broker
+and if no heartbeat is sent within this time the consumer is dead }
+
+ie this is mechnaism to check if the consumer is dead or not
+
+Poll mechanism
+max.poll.interval.ms -- max time between 2 polls before declaring consumer dead
+ie this is mechnaism to check if the consumer is stuck
+
+max.poll.records 1byte -- max records to be polled during a request
+fetch.min.bytes (500)-- how much data u want to poll at least once
+fetch.max.wait.ms -- max wait time the broker will block the request ,, if there is not enough data it wil delay
+
+
+Consumer rack awareness
+the consumer is on different data center than the leader partition then it is better to consume data from the closest replica
+for that we configure the rack.id

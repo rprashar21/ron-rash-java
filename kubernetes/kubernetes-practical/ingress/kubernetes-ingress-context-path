@@ -1,0 +1,1 @@
+kubectl apply -R -f kube-manifests/  -- apply all the manifest files  -R recursively in the folder kube-manifests  and its sub directories

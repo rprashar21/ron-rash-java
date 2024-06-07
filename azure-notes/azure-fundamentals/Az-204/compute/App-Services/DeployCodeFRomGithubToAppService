@@ -1,0 +1,49 @@
+Steps
+
+1.Create a Resource grp to hold all the resources
+2.Create a App Service Plan Resource
+3.Create a web app inside the app service
+4.Deploy a sample git project from Github on to the web app in app service
+
+create a resource group from command line azure cli
+az group create --name webapprg --location westus
+az group create --name webapprg --location westus
+
+create a app service plan
+az appservice plan create --name appserviceplantest --resource-group webapprg --location westus --sku F1 {the free pricing tier}
+
+create a web app
+az webapp create --name <app-name> --resource-group webapprg --plan appserviceplantest
+
+Deploy a sample git project from Github on to the web app in app service
+az webapp deployment source config --repo-url https://github.com/Azure-Samples/html-docs-hello-world
+ --branch master --manual-integration --name <app_name> --resource-group webapprg
+
+We can also use continuos deployment
+Go to Azure portal --app service -- find the webapp --> deployment center -->
+click on disconnect so that we can now do continuous deployment instead of
+manual deployment,
+
+Now create a staging slot so that contnious deployment can be set on that slot
+and then swap with productin {manually or auto swap or swap with preview}
+Slot creation change the pricing tier to standard -- got to scale up to change the pricing tier to standard
+go to deployment slot ,, add a slot --> create a staging slot {clone with production }--?
+ Select the stagin slot and go back to deployment center
+from the staging slot and then choose the belwo settings
+source github
+choose the build options
+choose details like organization ,repo and branch
+
+
+Questions
+Which parameter to the Azure CLI web app deployment command specifies that you're deploying the code manually?
+manual-integration
+
+Which Azure CLI command creates an App Service plan?
+az appservice plan create
+
+When you are creating an Azure App Service plan, the SKU refers to pricing tier_____.
+
+Which parameter to the Azure CLI web app deployment command specifies the location of the GitHub repository
+repo-url
+

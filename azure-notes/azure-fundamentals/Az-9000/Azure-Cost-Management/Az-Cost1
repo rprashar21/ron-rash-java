@@ -1,0 +1,51 @@
+Describe factors that can affect costs in Azure
+Azure is opex that is operational expense
+
+That OpEx cost can be impacted by many factors.
+Resource type
+Consumption
+Maintenance
+Geography
+Subscription type
+Azure Marketplace
+
+Resource Type
+type of resource , setting of resource region
+when u create a an Azure resource azure creates a metered instances for that resource.
+The meters track the resources' usage and generate a usage record that is used to calculate your bill.
+
+eg storage account resource
+type - blob or performance tier or access tier or redundancy
+same storage account in different regions may show different costs and changing any of the settings may also impact the price.
+
+for a vm license of os , processor and no of core , attached storage affects the price
+
+Consumption
+Pay-as-you-go pay for what u use
+“reserved” resources. Many services, including databases, compute, and storage all provide
+the option to commit to a level of use and receive a discount, in some cases up to 72 percent.
+reserve capacity using and paying for a certain amount of Azure resources during a given period (typically one or three years).
+
+Maintenance
+Using resource groups can help keep all of your resources organized
+every time you provision a VM, additional resources such as storage and networking are also provisioned but when u deprovision it it may not
+be deallocated and u might have to pay extra for it.
+
+Geography
+With  global deployment comes global pricing differences. The cost of power, labor, taxes, and fees vary depending on the location.
+Network traffic is also impacted based on geography
+
+Network Traffic
+Bandwidth refers to data moving in and out of Azure datacenters.
+Some inbound data transfers (data going into Azure datacenters) are free.
+ For outbound data transfers (data leaving Azure datacenters), data transfer pricing is based on zones.
+
+ Subscription type
+  Azure subscription types also include usage allowances, which affect costs.
+  Azure free trial subscription provides access to a number of Azure products that are free for 12 months
+   includes credit to spend within your first 30 days of sign-u
+
+ Azure Marketplace
+ When you purchase products through Azure Marketplace,
+ you may pay for not only the Azure services that you’re using,
+ but also the services or expertise of the third-party vendor. Billing structures are set by the vendor.

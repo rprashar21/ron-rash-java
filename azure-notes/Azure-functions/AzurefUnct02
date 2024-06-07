@@ -1,0 +1,20 @@
+How to deploy Azure functions??
+1.We can deploy directly from our visual studio code -- for this we need azure function extensions
+2. directly into a local git -- Inside function app we need to configure with git
+3. recommended way is using a  source control integration with remote git repositories hosted
+on services like GitHub, Bitbucket or Azure Repos.This offers the continuous deployment.
+source control integration enables a workflow in which a code update triggers deployment to function
+so when we push a code to a git repo azure functions are compiled and automaticlly deployed to
+
+
+Monitor Azure Functions
+Monitor ur azure function app by integrating it with Application Insights Service.
+Azure functions needs storage account to store the function app code and functions runtime data
+It store the logs in storage account
+
+Monitor ur Azure function app by creating alerts for eg
+For example, you can choose from about 64 signals to alert on.
+Say, for example, I could alert on client Http errors.
+So if I'm getting more than ten errors, say over a five minute period, then it should trigger an alert.
+Once you have set 1 or 2 conditions, you can describe the alert details which will be displayed in
+the table on alerts page.

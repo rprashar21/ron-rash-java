@@ -1,0 +1,38 @@
+Shared responsibility model hybrid model
+Physical security, power, cooling, and network connectivity are the responsibility of the cloud provider.
+data responibilty is consumer
+
+With an on-premises datacenter, you’re responsible for everything. (private cloud)
+
+The consumer is always responsible for
+The information and data stored in the cloud
+Devices that are allowed to connect to your cloud (cell phones, computers, and so on)
+The accounts and identities of the people, services, and devices within your organization
+
+The cloud
+The physical datacenter
+The physical network
+The physical hosts
+
+cloud model
+Operating systems
+Network controls
+Applications
+Identity and infrastructure
+
+Cloud Models
+Private -used by a single entity.  much greater control for the company  comes with greater cost and fewer of the benefits of a public cloud deployment.
+Public -  built, controlled, and maintained by a third-party cloud provider
+Hybrid
+Multi-cloud - 2 or more diff cloud providers
+Azure Arc - set of technologies which help u maintain ur private,public,hybrid or multi cloud
+if u have ur vmware in private cloud env but wnat to migrate to public take help of Azure VMware Solution
+
+Public cloud	                             Private cloud	                                                         Hybrid cloud
+No capital expenditures to scale up	         Organizations have complete control
+                                             over resources and security	                               Provides the most flexibility
+
+Applications can be quickly provisioned	     Data is not collocated with other organizations’ data	         Organizations determine
+ and deprovisioned                                                                                           where to run their applications
+Organizations pay only for what they use	Hardware must be purchased for startup and maintenance	           Organizations control security, compliance, or legal requirements
+Organizations don’t have complete control over resources and security	Organizations are responsible for hardware maintenance and updates

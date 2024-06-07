@@ -1,0 +1,38 @@
+zero trust model
+Zero Trust is a security model that assumes the worst case scenario
+ verifies each request as though it originated from an uncontrolled network.
+
+Principles
+Verify explicitly - Always authenticate and authorize based on all available data points.
+Use least privilege access - Limit user access with Just-In-Time and Just-Enough-Access (JIT/JEA),
+ risk-based adaptive policies, and data protection.
+Assume breach - Minimize blast radius and segment access.
+Verify end-to-end encryption. Use analytics to get visibility, drive threat detection, and improve defenses.
+
+The Zero Trust model requires everyone to authenticate and then grants access based on authentication rather than location
+
+The Defense-in-Depth model in Azure is a layered approach
+Phyical Security -- data centers are protected -  protect computing hardware in the datacenter.
+Identiry and Access -- ensuring that identities are secure,Control access to infrastructure and change control.Single Sign on and MFA
+Permieter - network perimeter protects from network-based attacks against your resources ,
+At this layer, it's important to:
+Use DDoS protection to filter large-scale attacks before they can affect the availability of a system for users.
+Use perimeter firewalls to identify and alert on malicious attacks against your network.
+
+Network -  limiting the network connectivity across all your resources to allow only what's required.reduce the risk of an attack spreading
+Limit communication between resources.
+Deny by default. Restrict inbound internet access and limit outbound access
+
+Compute -- Vms are protected - Malware, unpatched systems, and improperly secured systems open your environment to attacks.
+Secure access to virtual machinw
+Implement endpoint protection on devices and keep systems patched and current.
+
+Application - ensure that applications are secure and free of vulnerabilitie
+Store sensitive application secrets in a secure storage medium.
+Make security a design requirement for all application development.
+
+Data
+Stored in a database.
+Stored on disk inside virtual machines.
+Stored in software as a service (SaaS) applications, such as Office 365.
+Managed through cloud storage.

@@ -1,0 +1,8 @@
+There are several logging and monitoring connections to Azure Functions.
+In this Lab Step, you will explore the logging and monitoring built into the Azure Function Console and Application Insights.
+The Azure Function Console is useful for developing Functions in the Azure Portal, like you have done in this Lab,
+and for focusing in on a single Function.
+Application Insights has a much broader scope and provides more details about the Function and its operating environment.
+You can also correlate events in Application Insights because it can consume logs and metric data from other services.
+Application Insights can be configured after a Function is deployed,
+however you included Application Insights when you first created your Function so it is ready to use.

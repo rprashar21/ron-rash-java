@@ -1,0 +1,17 @@
+An Azure region contains a set of data centers that are connected by using a low-latency network.
+
+There are different payment options in Azure including pay-as-you-go (PAYG),
+Enterprise Agreement (EA),
+and Microsoft Customer Agreement (MCA) accounts.
+Your Azure costs are ‘per subscription’. You are charged monthly for all resources in a subscription.
+Therefore, to use different payment options per department, you will need to create a separate subscription per department.
+You can create multiple subscriptions in a single Azure Active Directory tenant.
+
+A resource group is a logical container for Azure resources.
+Resource groups make the management of Azure resources easier.
+With a resource group, you can allow a user to manage all resources in the resource group,
+ such as virtual machines, websites, and subnets.
+ The permissions you apply to the resource group apply to all resources contained in the resource group.
+
+
+w

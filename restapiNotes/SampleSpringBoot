@@ -1,0 +1,62 @@
+@RestControllerAdvice is an annotation in Spring that combines @ControllerAdvice and @ResponseBody.
+It is used to create a global exception handler for handling exceptions thrown by the application's RESTful API controllers.
+
+When you annotate a class with @RestControllerAdvice, it becomes a central place to handle exceptions across multiple controllers.
+It allows you to define methods that will be invoked when exceptions of specific types are thrown, providing a consistent and uniform way to handle errors in your API.
+
+Typically, the methods within a @RestControllerAdvice class are annotated with @ExceptionHandler to specify the type of exception they handle.
+When an exception occurs within any of the mapped controllers,
+Spring will look for a matching @ExceptionHandler method in the @RestControllerAdvice class and invoke it to handle the exception.
+
+But we highly recommend using Constructor injection over other types.
+Because it allows the application to initialize all required dependencies at the initialization time.
+   a.) Prevents using reflection
+
+   b.) Forces the object to be created with the injected parameter
+
+   c.) Lets to do the injection without using @Autowired annotation
+
+   d.) Lets the injected field to be defines as final so that the it favours immutability
+
+Here's an example of a @RestControllerAdvice class that handles a custom StudentNotFoundException:
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleStudentNotFoundException(StudentNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    // Handle other exceptions...
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(Exception ex) {
+        return "Internal server error";
+    }
+}
+GET:
+
+200 OK: The request was successful, and the response contains the requested data.
+404 Not Found: The requested resource could not be found.
+PUT:
+
+200 OK: The request was successful, and the resource was updated.
+201 Created: The request was successful, and a new resource was created.
+204 No Content: The request was successful, and there is no additional content to send.
+PATCH:
+
+200 OK: The request was successful, and the resource was partially updated.
+204 No Content: The request was successful, and there is no additional content to send.
+POST:
+
+201 Created: The request was successful, and a new resource was created.
+202 Accepted: The request has been accepted for processing but is not yet completed.
+204 No Content: The request was successful, and there is no additional content to send.
+DELETE:
+
+200 OK: The request was successful, and the resource was deleted.
+204 No Content: The request was successful, and there is no additional content to send.
+404 Not Found: The requested resource could not be found.

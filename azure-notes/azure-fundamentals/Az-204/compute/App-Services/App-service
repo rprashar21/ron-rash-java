@@ -1,0 +1,63 @@
+App-Service Paas
+
+To deploy web applications to Azure App Service
+the command is ::
+az webapp up --sku F1 --name <app-name>
+
+az - azure command
+webapp --> deploy in web app service
+up --> create the web app in the current directory
+sku f1 --> mean swe want to use the free tier
+--name the name shoudl be unique across azure
+
+optional commands >
+--resource-group -->
+--location --> specifies whihc region you app will be hosted
+--plan  --> which service lan to use
+
+It will create teh app in the default location with windows os
+
+command
+az webapp up --sku F1 --name <app-name>
+go to the foleder where we have create the app ,, make some changes
+now run the command
+just run --> az webapp up
+
+
+------------App service Plans----
+Azure takes care of the underlying infra we need to decide infra
+3 main settins
+os -> window or linux
+region --> somehwere close to ur main market
+Price Tier--> slect the compute resources
+ some of them  are
+ free tier 1 gb
+ shared env dev,test 100 1 gb
+ dedicated dev test 100 10gb ram 3 instances
+ premimu  250gb disk space , 30gb ram , 50 instances
+
+  Pricing tier model
+
+         free Shared  basic  Standard(run prod workloads) premium(enhanced pef and scale)
+          isolated(high pef ,security and isolation)
+ disk
+ max instances
+custom domain
+autoscale
+ You can do auto scaling or chnage the pricing tier
+
+
+ ------------overview-------
+ App Service is PAAS ,, manages underlying software
+ supports many lanagues liek jaba php .net node
+
+ App service plan --> os , pricing tier ,region
+
+ The Isolated tier gives you a private, dedicated environment that’s in its own virtual network.
+
+If scaling out doesn’t solve performance issues,
+then you can switch your plan to a pricing tier that has more powerful instances and/or a higher limit on the number of instances you can have. ]
+This is called scaling up, and it’s very easy to do.
+
+
+

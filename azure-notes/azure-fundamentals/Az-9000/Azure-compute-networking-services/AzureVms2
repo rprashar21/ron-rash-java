@@ -1,0 +1,60 @@
+ Azure Container Instances are a platform as a service (PaaS) offering.
+ Azure Kubernetes Service (AKS) is a container orchestration service
+
+
+ Azure Functions is an event-driven, serverless compute that doesn’t require maintaining virtual machines or containers
+ you're only charged for the CPU time used while your function runs.
+ Functions can be either stateless or stateful.
+ Stateless means they respond to an event
+ Stateful (called Durable Functions), a context is passed through the function to track prior activity.
+
+ App Services
+ Web apps
+ API apps
+ WebJobs
+ Mobile apps
+
+  Azure virtual networking
+  allows communication between Azure resources
+  Communicate with on-premises resources
+  Filter network traffic
+  Connect virtual networks
+
+ Azure virtual networking supports both public and private endpoints to enable communication
+ between external or internal resources with other internal resources.
+
+ You can divide that IP address space into subnets and allocate part of the defined address space to each named subnet.
+
+ Communicate with on-premises resources
+ Azure virtual networks enable you to link resources together in your on-premises environment and within your Azure subscription.
+
+ Point-to-site virtual private network connections are from a computer outside your organization back into your corporate network.
+  In this case, the client computer initiates an encrypted VPN connection to connect to the Azure virtual network.
+
+ Site-to-site virtual private networks link your on-premises VPN device or gateway to the Azure VPN gateway in a virtual network.
+ In effect, the devices in Azure can appear as being on the local network. The connection is encrypted and works over the internet.
+
+ Azure ExpressRoute provides a dedicated private connectivity to Azure that doesn't travel over the internet.
+ ExpressRoute is useful for environments where you need greater bandwidth and even higher levels of security.
+
+Route network traffic
+ Azure routes traffic between subnets on any connected virtual networks, on-premises networks, and the internet
+ Route tables allow you to define rules about how traffic should be directed. u can create ur own custom tables
+
+ Border Gateway Protocol (BGP) works with Azure VPN gateways, Azure Route Server, or Azure ExpressRoute
+ to propagate on-premises BGP routes to Azure virtual networks.
+
+ Filter network traffic
+ Azure virtual networks enable you to filter traffic between subnets
+ Network security groups are Azure resources that can contain multiple inbound and outbound security rules.
+ You can define these rules to allow or block traffic, based on factors such as source and destination IP address, port, and protocol.
+
+ Network virtual appliances are specialized VMs that can be compared to a hardened network appliance.
+ A network virtual appliance carries out a particular network function, such as running a firewall or
+ performing wide area network (WAN) optimization.
+
+ Connect virtual networks
+ Peering allows u to connect 2 virtual network the network is prvate and can be in separat regions
+
+ User-defined routes (UDR) allow you to control the routing tables between subnets within a virtual network or between virtual networks.
+ This allows for greater control over network traffic flow.

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: ReplicaSet --> name of the resource being created
+metadata:
+  name: my-helloworld-rs --> name of the replicaset
+  labels:
+    app: my-helloworld -- label which is used to identify the replicaset later on
+spec: --> desired state of the replicaset under this we have replicas,selector,template
+  replicas: 6 -- this makes sure that there are always six pods running
+  selector:  --> identifies which pods the replicasets should manage
+    matchLabels: -->It uses a label selector to match Pods with the label "app: my-helloworld."
+      app: my-helloworld -- this is the app
+  template: Defines the template for creating new Pods managed by the ReplicaSet
+    metadata: Contains metadata for the Pods created from the template. It assigns a label "app: my-helloworld" to all Pods created from this template.
+      name: pod-name
+      labels:
+        app: my-helloworld
+    spec:
+      containers:
+      - name: my-helloworld-app container name
+        image: stacksimplify/kube-helloworld:1.0.0
+
+So the ReplicaSet controller will ensure that there are always six Pods running with the specified container image name is my-helloworld-app
+and the name of the replicaSet is my-helloworld-rs and since there are 6 pods running and the pods name will be my-helloworld
+pod --> my-helloworld
+container{running inside the pod} -- my-helloworld-app
+replica-set name - my-helloworld-rs
+
+
+Lets create a replicaset --
+kubectl create -f replicaset-demo.yml --> we create a replicaset, we apply a deployment file
+
+list,decribe and see all the pods
+kubectl get replicaset or kubectl get rs
+kubectl describe replicaset/<name-of-the-replicaset>
+kubectl describe replicaset/my-helloworld-rs
+
+# Expose ReplicaSet as a Service
+Expose ReplicaSet with a service (Load Balancer Service) to access the application externally (from internet)
+kubectl expose rs <ReplicaSet-Name>  --type=LoadBalancer --port=80 --target-port=8080 --name=<Service-Name-To-Be-Created>
+kubectl expose rs my-helloworld-rs  --type=LoadBalancer --port=80 --target-port=8080 --name=my-helloworld-rs-service
+
+# Get Service Info
+kubectl get service
+kubectl get svc
+

@@ -1,0 +1,113 @@
+ When working with Cosmos DB, developers have the ability to decide where they stand regarding their approach to consistency.
+  Simply put, consistency is the likelihood that a change you make to a database item will be
+   immediately available anywhere that data is accessible. There is more to it than that, however.
+
+ Cosmos DB offers several levels of consistency, each with its own tradeoffs.
+ Consistency can be viewed as a spectrum offering different levels of consistency.
+ However, because data in Cosmos DB can also be replicated globally, an inverse relationship exists between consistency and latency.
+ If you choose to not to replicate your data and only offer it via one local data center,
+ you can inversely offer strong consistency, since changes to your data don't need to be replicated across the globe.
+ Inversely, if you choose to replicate your data either globally or across multiple data centers,
+ then you're offering lower latency to access your data but can't offer as much consistency to changes in your data,
+  since it'll take longer to replicate those changes globally than it would to a single local data center.
+
+ Further affecting your decision is the difference between write and read regions.
+ Write regions are regions containing data centers that will accept write operations to your database.
+ Read regions contain read-only Cosmos DB instances for your database. Write vs. read regions effect your consistency and latency as well,
+ and will be explained further below.
+
+
+ Steps
+
+ 1. In the database menu to the left, click Default consistency under Settings:
+ 2. consistency is set to be session in deafult
+ In the spectrum of consistency, Session offers the most distributed balance between consistency and latency.
+  Notice the infographic showing the consistency offered by Session consistency:
+  The graph shows that in the two regions closest to each other (Australia Central and Australia East),
+  operations are perfectly synchronized. However, data replicated to Australia Southeast takes longer to reach the same consistency.
+   This goes to show the balance mentioned earlier.
+
+ 3.  Click Strong:
+ Notice that the consistency for writes to the database is perfect:
+ This means any write operations will immediately be readable in any data center.
+  However, as you've learned, the trade-off will be the availability and latency of the data.
+  Strong consistency has tradeoffs including the fact that you can't have strong consistency with multi-master replication.
+   Multi-master replication means having more than one Cosmos DB write location, which is a great option if low latency is your priority.
+    To summarize,  strong consistency offers the highest level of consistency between new writes to your database and read operations against the same data,
+    but comes at the cost of some of Cosmos DB's best tools for decreasing latency.
+     It's the job of every Azure administrator to come to the best balance for your needs.
+
+ ============= ================================= =================================== =========
+ Triggering an Azure Function With Cosmos DB NoSQL Changes
+
+ To run arbitrary code in response to changes in Cosmos DB, you can trigger Azure Functions off of
+ the Cosmos DB change feed that writes out events based on changes in Cosmos DB databases.
+ Azure Functions are Azure's serverless architecture allowing you to run code without managing any servers.
+ You will see how the Cosmos DB change feed seamlessly ties into Functions so you can perform arbitrary operations
+ based on the events in your Cosmos DB database.
+  In the context of stock price quotes, you may write buy and sell rules for stocks in Azure Functions triggering on Cosmos DB changes.
+
+  1. In the search bar at the top of the Azure Portal, enter function. Click Function Apps under SERVICES:
+  The table on the right lists a function app that the Cloud Academy Lab environment created when you started the Lab.
+  Function Apps are containers for individual functions.
+
+  2.The App Service plan/pricing tier is (Consumption), which means you only pay when your functions are executing.
+  The price is based on the length of execution multiplied by the average amount of memory used by the function during execution.
+
+  3.  In the Overview section, under the Functions tab, and click the Create in Azure portal to create a new function
+  4. Enter cosmos in the search bar, and click Azure Cosmos DB trigger function template:
+  5. In the Template Details form, enter the following values, and then click Create:
+
+    New Function: TradingABC
+    Azure Cosmos DB account connection: Click New, then select the Cosmos DB account in the blade that appears
+    Database name: stocks
+    Collection name: ticker
+    Create lease collection: Yes
+
+  6. Click on the newly created function and then move to the Code + Test section:
+
+  using System;
+  using System.Collections.Generic;
+
+  public static void Run(IReadOnlyList<ToDoItem> input, ILogger log)
+  {
+      if (input != null && input.Count > 0)
+      {
+          log.LogInformation("Documents modified " + input.Count);
+          log.LogInformation("First document Id " + input[0].id);
+      }
+  }
+
+  // Customize the model with your own desired properties
+  public class ToDoItem
+  {
+      public string id { get; set; }
+      public string Description { get; set; }
+  }
+The first line references the Microsoft.Azure.DocumentDB.Core package that needs to be installed using the NuGet package manager
+for .NET. When editing Azure Functions from the Portal, you need to upload a function.proj file to install packages.
+
+7. Download this function.proj file and upload it by clicking Upload in the menu bar.
+
+The Portal currently empties any function.proj file that is uploaded and you will need to edit it from within the Portal.
+
+8. Select function.proj from the file drop-down menu:
+9. In the Logs panel at the bottom, select Filesystem logs from the drop-down menu:
+The filesystem logs will provide more feedback on the package update you are about to perform.
+10. Paste in the following file contents before clicking Save:
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.16.2" />
+  </ItemGroup>
+</Project>
+
+12. Change back to the run.csx file in the file editor drop-down menu and change its contents to the following:
+13. This function will find both the ID and the price of the stock.
+Then, if the price is higher than 15, the function will recommend that you sell the stock.
+ If the price is less than or equal to 15, the function will recommend that you buy the stock.
+
+ . In the Cosmos DB Data Explorer, select stocks > ticker > Items and click New Item.
+

@@ -1,0 +1,40 @@
+Purpose of tags
+A good organization strategy helps you understand your cloud usage and can help you manage cost
+One way to organize related resources is to place them in their own subscriptions.
+resource groups to manage related resource
+
+Resource tags are another way to organize resources. they provide meatadata about ur resource
+
+Metadata is useful for
+Resource management Tags - enable you to locate and act on resources that are associated with
+specific workloads, environments, business units, and owners
+Cost management and optimization Tags -  group resources on their cost
+Operations management Tags - group resources based on criticality Service-level agreements (SLAs).
+Security Tags
+Governance and regulatory compliance Tag -
+resources that align with governance or regulatory compliance requirements, such as ISO 27001.
+Workload optimization and automation Tags - resource with complex deployments , like azure devops
+
+
+manage resource tags
+You can add, modify, or delete resource tags through Windows PowerShell,
+the Azure CLI,
+Azure Resource Manager templates,
+the REST API, or the Azure portal.
+
+You can use Azure Policy to enforce tagging rules and conventions
+Resources don't inherit tags from subscriptions and resource groups
+allowing you to create custom tagging schema on each level based on resource resource group subscription
+
+A resource tag consists of a name and a value. You can assign one or more tags to each Azure resource.
+
+example of tags
+Name         Value
+AppName    The name of the application that the resource is part of.
+CostCenter The internal cost center code
+env         prod dev or test
+impact how mission critical the resource is
+
+You might decide that only mission-critical resources have the Impact tag.
+All non-tagged resources would then not be considered as mission-critical.
+

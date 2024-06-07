@@ -1,0 +1,109 @@
+namespace is like a package -- we can package kubernetes resource and use them differently for example like qa dev and prod
+it means ur dev and qa or prod cluster will have different resources and all of them are separate
+namespace helps in that.
+Namespaces allow to split-up resources into different groups.
+Resource names should be unique in a namespace
+We can use namespaces to create multiple environments like dev, staging and production etc
+Kubernetes will always list the resources from default namespace unless we provide exclusively from which namespace we need information from.
+
+Namespace has 2 important features
+LimitRange
+ResoureQuota
+
+mainfest file for namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+
+now under this namespace we can deploy all our manifest files
+kubectly apply -f kube-maifests/ -n dev3 --> deploy all the manifest files inside namespace dev
+kubectly apply -f kube-maifests/ -n qa --> deploy all the manifest files inside namespace qa
+kubectly apply -f kube-maifests/ -n prod --> deploy all the manifest files inside namespace prod
+
+Limit Range --
+ Now under a namespace we have many pods like frontend,backend,redis,db,pods ,, all these pods can use a lot of resources
+ to limit that LimitRange constraints the pods from using min/mx cpu resource per pop or in a namespace
+
+NameSpace manifest file
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev3
+
+----
+LimitRange manifest file
+
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: any-name
+  namespace: dev3
+spec:
+  limits:
+    - default:
+        cpu: "500m"  # If not specified default limit is 1 vCPU per container
+        memory: "512Mi" # If not specified the Container's memory limit is set to 512Mi, which is the default memory limit for the namespace.
+      defaultRequest:
+        cpu: "300m" # If not specified default it will take from whatever specified in limits.default.cpu
+        memory: "256Mi" # If not specified default it will take from whatever specified in limits.default.memory
+      type: Container
+
+ResoureQuota means how many kubernetes resource object u can create in a namespace
+for example in dev/qa/prod or any ther namespace
+admin can put constraints as to how many pods,services,configMapspersistenceVolumeClaims,secrets or other resources can be created per
+namespace
+
+ResourceQuota manifest file
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev3
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ns-resource-quota
+  namespace: dev3
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    pods: "5"
+    configmaps: "5"
+    persistentvolumeclaims: "5"
+    secrets: "5"
+    services: "5"
+
+create all objetcs
+kubectl apply -f kube-maifests/ --> depploys all the manifest files
+
+kubectl get all pods -n dev3
+
+# view pod specification
+kubectl get pod <pod-name> -o yaml -n dev3
+
+# describe the limits and resource      quota
+kubectl get limits -n dev3
+kubectl describe limits <name of the limts>
+
+# describe quota
+kubectl get quota -n dev3
+
+kubectl describe <quota-name> -n {namespace name}
+kubectl describe quota ns-resource-quota -n dev3
+
+# List Service
+kubectl get svc -n dev3
+
+# Access Application
+http://<Public-IP-from-List-Services-Output>/app1/index.html
+
+# Delete All
+kubectl delete -f kube-manifests/
+
+
+
+

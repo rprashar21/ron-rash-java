@@ -1,0 +1,2 @@
+create an azure function
+got to azure functions--> give details like rg,subscription,plan{consumption,appserviceor premium} ,storage account

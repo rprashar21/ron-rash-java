@@ -1,0 +1,36 @@
+Availability zones are physically separate datacenters within an Azure region.
+ Each availability zone is made up of one or more datacenters equipped with independent power, cooling, and networking.
+
+Conditional Access allows administrators to control, allow, or deny access to resources based on certain signals.
+You can require that access to certain applications only be allowed if the users are using an approved client application.
+
+
+azure cosmos db is serverless and paas
+
+create onpremise network with azure --> local network gateway
+
+SlA
+you can add redundant service or fall back to ur application to improve sla
+but not dependent service which is monolith app
+
+Sla in azure is a formal agreement between the customer and azure
+Availabilty is always gauranteed
+
+Which phase is service are subjected to sla ?
+Generally Available
+
+During public preview only specila invte can acces -- false
+ublic preview is subjected to sla --> no
+
+private preview -- few customers are invited to access feature ,, no formal support
+public preview -- customer with proper ad license, microsoft customer service will support , but sla not there
+Generally availabe --> feature is opened for licensed customer
+
+services in private privew need separate portla -- false
+service in publicc preview can be used in prod env -- true
+
+correct lifecylye of preview
+private public and generally availabel
+
+
+

@@ -1,0 +1,54 @@
+pull the latest image for docker
+docker pull elasticsearch:7.17.12
+
+run docker as container
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.17.12
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.17.12
+
+run a docker -d detached mode so that it is not attached to the terminal
+runs on port 9200
+-p 9200:9200 -p 9300:9300:
+These flags map ports from the host machine to ports in the container.
+Elasticsearch uses port 9200 for its REST API and port 9300 for node-to-node communication.
+This mapping allows you to access Elasticsearch externally via port 9200 and communicate between nodes using port 9300.
+
+-e "discovery.type=single-node":
+This sets an environment variable within the container.
+In this case, it's configuring Elasticsearch to run in a single-node mode,
+which simplifies the cluster setup for testing or development.
+
+this is the response we get when we use localhost:9200
+{
+  "name" : "763a91918c7a",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "8ZLg9bFBTNScV5tVdA7RPQ",
+  "version" : {
+    "number" : "7.17.12",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "e3b0c3d3c5c130e1dc6d567d6baef1c73eeb2059",
+    "build_date" : "2023-07-20T05:33:33.690180787Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.11.1",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+HEAD Method:
+The HTTP HEAD method is a standard HTTP request method used to retrieve metadata about a resource without actually fetching the resource itself.
+It's commonly used to check if a resource exists, retrieve information about it, or verify its status.
+
+URL http://localhost:9200/product_index:
+This URL is targeting an Elasticsearch index named product_index (or whatever index name you replace it with). The URL is formed based on the following components:
+
+http://localhost:9200: The base URL of your Elasticsearch instance. By default, Elasticsearch's REST API runs on port 9200, and the localhost address is used when running Elasticsearch locally.
+product_index: The name of the Elasticsearch index you want to interact with. An index in Elasticsearch is similar to a database table, and it stores the data you want to search and analyze.
+So, when you send a HEAD request to http://localhost:9200/product_index, you are asking Elasticsearch for metadata about the product_index index, such as whether it exists or not.
+
+we need to conect the elastci search to our application
+
+URL http://localhost:9200/product_index: this port gives us the des
+{"product_index":{"aliases":{},"mappings":{"properties":{"_class":{"type":"keyword","index":false,"doc_values":false}}},"settings":{"index":{"routing":{"allocation":{"include":{"_tier_preference":"data_content"}}},"refresh_interval":"1s","number_of_shards":"1","provided_name":"product_index","creation_date":"1693132350310","store":{"type":"fs"},"number_of_replicas":"1","uuid":"6T8r1VbJRYK1FlwTpfUgkA","version":{"created":"7171299"}}}}}
+

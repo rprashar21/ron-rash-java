@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Pod
+metdata: # name {mandatory name of the resource},  labels and namespace
+  name: front-end-pod
+  labels:
+    app: front-end-app
+spec:
+  containers:
+    - name: front-end-container
+      image: ronrash/frontendImage
+      ports:
+        - containerPort: 80 # port on which the conatiner will run inside the pod
+    - name: supporting-front-end-container
+      image: ronrash/supporting-front-end-image
+      ports:
+        - containerPort :81 # port on whihc another container will run inside the pod
+
+# there are 2 conatiners running on ports 80 and 81 inside the pod
+# load balancer details
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end-load
+  labels:
+    app: front-load-balancer
+spec: # type{mandatory},selector{pod it will manage the traffic for} ports
+ type: LoadBalancer
+ selector:
+   app: front-end-pod
+ ports:
+   - name: http
+     port: 80
+     targetPort: 80
+
+# replicaset
+apiVersion: v1
+kind: ReplicaSet
+metadata:
+  name: rs-front # name of my replicaset
+    labels:
+      app: front-end-rs
+spec: # from here on it is same as pod definition
+  replicase:
+  seletor:
+    matchLabels: front-end-app
+  template: # detail about the pod
+    metadata:
+      name: front-end-pod # name of the pod
+      labels:
+        app: front-end-app
+    spec:
+      containers:
+        - name: supporting-front-end-container
+          image: ronrash/frontendImage
+          ports:
+            -containerPort: 80
+
+
+

@@ -1,0 +1,70 @@
+Developers are most often facing challenges to store and manage secrets and credentials
+ while building a solution for an organization.
+ Azure Key Vault offers a secure implementation of a secret management solution with a wide range of capabilities to support the development needs.
+  It eliminates the need for developers to handle secret management.
+
+While building web-based solutions, including API, and web applications,
+ it is crucial to secure and manage the environment variables in a central location for ease of use.
+
+In this hands-on lab, you will learn how to secure the application settings on a web app using Key Vault referenced secrets in the Azure Portal.
+
+Upon completion of this advanced-level lab, you will be able to:
+
+Add secrets to Key Vault resource
+Azurez managed identities in Azure
+Create application settings using the Key Vault reference
+
+
+Azure Key Vault is centralized secret storage that allows you to control the distribution and access to the secrets.
+Access to the keys requires proper authentication and authorization before access is granted.
+
+In this lab step, you will add the application settings values to Key Vault as a secret using the Azure Portal.
+
+Steps
+1.  select cosmos db services --> select the  Cosmos DB resource from the list named calacal##
+2. From the left blade menu, choose Keys under Settings. Copy and store the PRIMARY CONNECTIONS STRING:
+
+The keys section contains the primary and secondary access keys along with the connection string for the Cosmos DB account for programmatic access.
+ You will need to store the connection string in the Key Vault for secret reference by the web app.
+
+3. Click Data Explorer from the left blade menu and expand the database ToDoList under NOSQL API:
+ The database named ToDoList along with a container Items is already created in the lab.
+  You will use these two resources while connecting the web app to the Cosmos DB account.
+
+4 . To access the Key Vault to store the secrets,
+  type vaultcal in the Azure Portal search bar and select the only listed Key vault resource under Resources:
+
+5 .From the left blade menu, select Secrets and the click + Generate/Import to start adding the secrets to the vault:
+   Use the following information to create the first secret entry and click Create once done:
+
+   Upload options: Ensure Manual is selected
+   Name: Enter cosmos-connection-string
+   Secret value: Paste the PRIMARY CONNECTIONS STRING copied in the instruction 3.
+
+ 6. Click +Generate/Import again and add the following two secrets:
+
+    Secret 1
+    Name: Enter database-name
+    Secret value: Enter ToDoList
+    Secret 2
+    Name: Enter container-name
+    Secret value: Enter Items
+    The final secrets view will look like this:
+
+ 7. Click the secret called cosmos-connection-string and select the current version of the secret:
+ 8. Copy and store the Secret Identifier from the secret window:
+
+ The secret identifier URL is the fully qualified URL to access the URL programmatically,
+  provided the user has appropriate access to the secret value.
+  While accessing the key vault secret from web app application settings, you'll refer to this URL while configuring the settings.
+
+ Similarly, you will need to access the other two secrets and store the secret identifier URL for later use.
+
+ secret identifier for connection string
+ https://vaultcal1421ceb.vault.azure.net/secrets/cosmos-connection-string/58f1740130024478a91ec0ef216f2811
+
+ databse name
+ https://vaultcal1421ceb.vault.azure.net/secrets/database-name/3bbf18bc3e7646e383952270bc73a926
+
+ container name
+ https://vaultcal1421ceb.vault.azure.net/secrets/container-name/b05d016f6f2846fdb95f779a1e720208

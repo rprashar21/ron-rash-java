@@ -1,0 +1,45 @@
+Any time an application receives a request, there's a chance that the operations that are associated
+ with that request might take additional time to execute.
+A common way to deal with these types of longer-running operations is to add them to a queue,
+which is then processed later and maybe even by a different server altogether.
+This type of deferment strategy is called task queuing and Azure Cache for Redis serves this purpose well by acting as a distributed queue.
+
+f you need to invalidate the data in your Redis cache use flush command
+
+Cache aside - a strategy in which data items are loaded into the cache only as needed
+
+
+
+A content delivery network, which is also known as a CDN,
+is a network of distributed servers that's used to more efficiently deliver content to end users.
+
+CDNs do is store cached content on what are called edge servers that are located in specific point-of-presence
+locations that are near the end users who are consuming the content.
+Default ttl is 7 days
+
+Create a cdn resource -- name,
+name
+cdn-endpoint -- anyname
+origgin type -- webapp or storage or
+origin hostname -url of the original webserver
+
+Caching rules to referesh cach on cdn based on rules
+
+Query Strings to cache beahviour
+
+pricing tiers
+Plans for azure cache
+Basic --->single node,250mb--53 gb No sla
+Standard -->  2 nodes,high sla
+Premium -->high thruput,low latency, it has redis moudules
+
+To load data on demand into the cache from a large database use data cache pattern.
+
+
+
+Databases often are too large to load directly into a cache, so it is common to use data cache pattern.
+Session store is used to store user-session information instead of storing too much data in a cookie
+that can adversely affect performance.
+Distributed transactions allow a series of commands to run on a back-end datastore as a single operation.
+By using content cache, you can provide quicker access to static content compared to back-end datastores.
+Session store, distributed transactions, and content cache cannot be used to load data on demand.

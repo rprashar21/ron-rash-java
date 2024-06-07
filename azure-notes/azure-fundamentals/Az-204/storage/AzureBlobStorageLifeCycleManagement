@@ -1,0 +1,58 @@
+Hot Tier -- > highest storage cost, lowest access cost, frequently accessed
+Cool Tier --> Infrequent, Storages cost is low , acccess cost is high,, upto 30 days ,, penalty fpr deleting data before that
+Archive Tier --> rarely accessed , storag low ,acces hight , penalty of accessed before 180 days,,
+it takes upt 0 15 hours before u can access data
+
+
+Lifecycle Policy -->
+move data from hot tier to cool tier after 30 days
+move data from cool to archive after 12 months
+delet data from archive after 10 years
+
+Creating a policy
+storage account --> lifecycle managemnet {only for gen purpose v2 and blob storage accounts}==>
+add a rule --rulname --> aply rule --> blob type and blob subtype {blob base}
+here create rules and create conditions
+if base blob was created more than 30 days move to cool storage
+if base blob was created more than  365ays move to archive storage
+if base blob was created more than 365*10 days delete blob
+
+Azure policy runs once in 24 hrs
+
+we can use filters to apply these rules/policies to a certain type of blobs
+select option -->limit blob with filters
+
+2 types of filters
+Blob Prefix
+Blob Index
+You can set rules/policies for many storage accounts or blobs use a configuration file or json
+
+click on the code view
+rule tab 2 sections
+Rule Actions
+Rule Filters
+
+donwload this policy file and make necessay changes and then upload this file and use the below caommnd to apply it
+command to make change from command line is
+az storage account management-policy create --account-name ronstorageaccount --policy policy.json --resource-group ron-rg
+
+
+Blob versoning ,, if turned on it will save a copy of the blob everytime blob is modified ,, in that way u can go to a previous version of blob
+
+Bobl Subtypes
+Blob base
+
+Questions
+a potential conditions for action in a lifecycle rule
+Days since blob was created,modified or accessed
+
+An Azure Storage lifecycle policy rule contains which two parts
+rule actions and filters
+For example, suppose we want a lifecycle rule to only apply to blobs that start with the word “report”,
+then we’d select “Limit blobs with filters”.
+ Now there’s a tab called “Filter set”.
+ There are two types of filters we can apply: blob prefix and blob index match.
+ The second one is more complicated and requires tagging your blobs before it’ll work.
+ The blob prefix is the one we need for our example.
+  We just need to type “report” in this field. And we have to click the Update button.
+  Now the rule will apply to any blobs that start with those letters.

@@ -1,0 +1,27 @@
+inner join -- records which occur in both the tables with something in common
+
+select * from employee_table
+inner join depament_table
+on emp.name = dept.name;  // some common column name
+
+
+full outer join grabs entire data from both tables
+full outer join with where will get unique rows from either table
+which is basically opposite of inner join . rows unique to eeach table
+
+
+left outer join returns content exclusivley from the left table
+which mean it will return everything from left table and also what both tbales have in common but not
+anything specific to right table
+
+this query will return everything from table1 and also common names between the 2 tables if any
+select * from table1
+left outer join table2
+on table1.name = table2.name
+
+now oif we perform a where is nul it will give us contents exclusive to left table
+
+this query will return which is only specific to table1 becoz of the null condition
+select * from table1
+left outer join table2
+on table1.name = table2.name where table2.name is null

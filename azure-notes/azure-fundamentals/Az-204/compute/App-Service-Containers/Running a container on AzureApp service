@@ -1,0 +1,106 @@
+Steps
+
+Create an instance of Azure Container registry
+Build a container image
+Upload it to a conatiner registry
+Deploy it from the conatiner registry to Azure app service
+Connect and test ur app
+
+what is a Docker container ??
+A self-contained software environment that includes an application and all of its dependencies
+
+Most containers deployed to Azure App Service use the _____ operating system.
+Linux
+
+For you to deploy a container on Azure App Service, the pricing tier for your service plan has to be at least _____.
+BAsic
+
+Azure Container registry  provides a central location for storing container images.
+
+------------------------------------------------------------------------------------------
+Conatiner related service in Azure
+Azure containerInstance -->  its like the docker ,, which creates docker like containers for ur service, foucs on appp dev and deployments
+
+Aks -- managemet of theses containers, container orchestration
+Azure Container Registry ---> central repo for manging these container ,, just like docker registry,, supports docker Swarm , kubernetes
+Azure App Service --> manage web app, mobile app on linux or windows based systems, auto scaling load balacning and integrate with Ados
+Azure Service Fabric is a distributed systems platform that allows you to build and operate scalabe distributed apps, easy to
+package ,deploy microservices
+
+------------------------------------------------------------------------------------------------
+Anatomy of Dockerfile -- Skelteon of ur app ,, text file
+Used by docker build to create ur image
+FROM ubuntu
+LABEL maintainer rohitprashar21@gmail.com --> email of the person who maintains this
+ADD appsetup / --> this will add a file called appsetuo into the root folder of the image being created
+Run jacva -jar  adc.jar
+CMD["echo","Hi Everybody!"]
+
+------------------------------------------------------------------------------------------------
+Muti Stage builds
+Prior to multi stage buidls ,, keep the image size low was a challenge
+u can use mutiple from ,, that is using a build from one stage to use the image in another satge
+
+FROM golang:1.7.3 AS builder --> thsi can be used in another stage this is a named stage
+WORKDIR /go/src/github.com
+RUN
+COPY app.go .
+RUN
+FROM
+
+When u build an image u dont have to build the entire docker file including every stage
+u can specify a single target build stage
+
+eg
+docker build --target builder -t myimagename/something:latest
+
+--> --tagret option tells docker build to create an image up ti the builder stage
+
+------------------------------------------------------------------------------------------------------------------
+Best practices for Multiple stage builds
+1.Avoid large complex containers -- separate images for website ,db,cache
+eg u can scale website ,, leaving db container alone
+
+2. Avoid unnecessary packages
+3. choose an appropriate base image
+4. avoid including app data
+
+------------------------------------------------------------------------------------------------------------------
+Create an azure container registry
+search for container registry
+create -- name -- subs, rg location pricing tier
+goto repositories
+
+login to ur acr ie azure container registry
+from azure cli
+az ac login --name <nameofurcontainerregistry>
+az ac login --name ron-acr
+login succeded
+
+Deploy a docker image app  to the azure conatier registry
+
+Login to the docker terminal
+run or pull the image -- this pulls from the docker hub
+docker pull hello-world
+
+push this image to docker containe rregistry, before that we need to tag it with fully qualified domain name
+docker tag <image-name> <acr>/<image-name>:version
+docker tag hello-world ron-acr.azurecr.io/hello-world:v1
+
+now push
+docker push ron-acr.azurecr.io/hello-world:v1
+
+To ocnfirm
+go to the portal --> container registries --> look at the app
+
+to run this
+docker run ron-acr.azurecr.io/hello-world:v1
+
+
+----------Summary-----
+Questions
+Docker is a software containerization platform
+Dcokerfile is a text file that contains the commands necessary to build an image
+Azure Container registry  allows you to store and manage your container images in a central location.
+Azure Kubernetes Service container orchestration service
+Microservice an application development strategy in which each part of an application is deployed as a completely self-contained component

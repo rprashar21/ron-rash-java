@@ -1,0 +1,59 @@
+ stop all running containers in Docker
+ docker stop $(docker ps -q)
+ docker ps -q: This command lists all the running containers and outputs only their container IDs using the -q flag.
+
+# docker compose is nothing but a definition file for all our services
+#running jenkins using docker container
+
+1.docker pull jenkins/jenkins -- this will pull the latest image from docker
+2.creates a folder jenkins-home
+3. used a docker-compose file to spin up the jenkins service
+
+services:
+  jenkins:
+    container_name: jenkins-container
+    image: jenkins/jenkins
+    ports:
+      - "8089:8080" // jenkins will run on the host machine on this port
+    volumes:
+      - "PWD/jenkins-data:/var/jenkins_home" // all the data of jenkins will be copied from docker to jenkins data folder of the host machine
+    networks:  // netwrok where they will run
+      - net
+networks: // create a network
+  net:
+
+
+# run the docker logs -f <container-d > to see the initial admin password
+f80a21effc5c48fb89835eb7e23f139b
+
+# docker commands
+docker-compose start
+docker-compose down -- for deleting all files i
+docker-compose restart jenkins -- start a particular service
+docker-compose stop -- stops the services
+star
+
+//details
+admin/admin
+ron
+
+# to go inside the jenkins container
+docker exec -ti jenkins-container bash
+whoami --> returns jenkins
+
+# out put to a file
+echo "my name is $NAME" > /tmp/file.txt
+
+#createing a script file in the local folder and connecting to the vms
+mkdir centos-dir
+
+#!/bin/bash
+
+Name=$1 // this basicaly means firstParamter
+LastName=$2
+Show=$3
+
+now to run this ./script.sh we need to give this executable permission
+chmod +x ./script.sh
+
+

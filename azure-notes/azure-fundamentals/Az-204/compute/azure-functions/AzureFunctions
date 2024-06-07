@@ -1,0 +1,59 @@
+Azure functions,, run code on cloud,
+every fa has a storage account, if the storage account is deleted the fa is deleted
+they are just http endpoints that u can call any other hhtp endpoint
+they reside on azure any time u call on demand.
+less costly
+storage types -->
+blob storage,Azure files by default,
+queue storage
+table storage
+
+
+Azure function have triggers,binding,they are serverless and no host server to hold or store info between calls.
+they are provisoned in the cloud and deprov when not in use
+
+-------------
+Triggers are created in a configuration file ,
+the trigger type  u choose actuall defines ur project
+a specific type of event which causes the function to run
+
+types of trigger
+Http/webhook -- when httop or webhook hits the endpoint the trigger causes the fucntion to execute/run
+eg-- github repo,delete,download,push pull req,commit fork
+timer-- based on some time
+storage queue -- some message comes in the queue triggering our function, message contents are passed as input to the function
+service bus queue or topic
+blob trigger --
+event hub -- when events reach the hub
+data
+
+only one trigger
+all bindings in/out and triggers have a direction prpoperty
+trigger dir is always in
+
+Anatomy
+function.json
+{
+ bindngs:{
+   }
+ Http Trigger :
+              {
+              "type":"httpTrigger",
+              "dir":in
+
+              }
+}
+
+input bindings can have both in/out and inout dir
+blob storage
+cosmos db
+iot hub
+microsft excel table
+
+output bindings
+event grid
+event hubs
+http webhooks
+queue storage
+sendGrid
+service bus

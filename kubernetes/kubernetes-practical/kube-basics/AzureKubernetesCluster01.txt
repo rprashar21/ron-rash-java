@@ -1,0 +1,95 @@
+Create A Kubernetes Cluster
+https://github.com/stacksimplify/azure-aks-kubernetes-masterclass/tree/master/01-Create-AKS-Cluster
+
+Kuberenetes Services -- create a cluster aks-ron-deom
+Basics
+Subscription: Azure subscription 1
+Resource Group: Creat New: aks-rg1
+Cluster preset configuration: Standard
+Kubernetes Cluster Name: aksdemo1
+Region: (US) Central US
+Availability zones: Zones 1
+AKS Pricing Tier: Free
+Kubernetes Version: Select what ever is latest stable version
+Automatic upgrade: Enabled with patch (recommended)
+Node Size: Standard DS2 v2 (Default one)
+Scale method: Autoscale
+Node Count range: 1 to 5
+ip address - aks-ron-deom-dns-kwgoo8iz.hcp.centralus.azmk8s.io
+
+login to ur azure cluster
+# Template
+az aks get-credentials --resource-group <Resource-Group-Name> --name <Cluster-Name>
+az aks get-credentials --resource-group aks-rg1 --name aks-ron-deom
+
+# Replace Resource Group & Cluster Name
+az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+# List Kubernetes Worker Nodes
+kubectl get nodes
+NAME                                STATUS   ROLES   AGE    VERSION
+aks-agentpool-11024587-vmss000000   Ready    agent   6h1m   v1.26.6
+aks-agentpool-11024587-vmss000001   Ready    agent   6h1m   v1.26.6
+kubectl get nodes -o wide
+
+Namespace is like a package --  is very important-- it means ur dev and qa or prod cluster will have different resources and all of them are separate
+namespace helps in that.
+Namespaces allow to split-up resources into different groups.
+Resource names should be unique in a namespace
+We can use namespaces to create multiple environments like dev, staging and production etc
+Kubernetes will always list the resources from default namespace unless we provide exclusively from which namespace we need information from.
+
+mainfest file
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:dev3
+
+now under this namespace we can deploy all our manifest files
+
+kubectly apply -f kube-maifests/ -n dev3 --> deploy all the manifest files inside namespace dev3
+kubectly apply -f kube-maifests/ -n qa
+
+kubectly apply -f kube-maifests/ -n prod
+
+kubectl get namespaces
+NAME              STATUS   AGE
+calico-system     Active   6h3m
+default           Active   6h4m
+kube-node-lease   Active   6h4m
+kube-public       Active   6h4m
+kube-system       Active   6h4m
+tigera-operator   Active   6h3m
+
+# List Pods from all namespaces
+kubectl get pods --all-namespaces
+
+# List all k8s objects from Cluster Control plane
+kubectl get all --all-namespaces
+
+
+install kubernetes cli and azure cli on local desktop
+# Install Azure CLI (MAC)
+brew update && brew install azure-cli
+
+# Login to Azure
+az login
+
+# Install Azure AKS CLI
+az aks install-cli
+
+# Configure Cluster Creds (kube config)
+az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+# List AKS Nodes
+kubectl get nodes
+kubectl get nodes -o wide
+
+
+now we have a folder named kube-manifests where we have 2 files deployment and load balancer so when we apply
+kubectl apply -f kube-manifests/ this will apply our deployment files and create deloymenets abd services
+
+kubectl get deployments
+kubectl get services
+
+

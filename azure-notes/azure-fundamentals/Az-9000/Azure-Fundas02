@@ -1,0 +1,88 @@
+Azure Storage Account
+The Azure storage account Standard general-purpose v2 is the most common type which supports Blob Storage (including Data Lake Storage),
+Queue Storage, Table Storage, and Azure Files. Reference: https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview
+
+Azure File Sync is a service that allows users to sync files between on-premises and cloud Windows servers.
+ Reference: https://learn.microsoft.com/en-us/azure/storage/file-sync/file-sync-introduction
+
+Azure Storage Account provides access to your Azure storage resources.
+Azure Storage Explorer allows you to upload to Azure, download from Azure, or move between storage accounts.
+Azure File Sync is a service that allows users to sync files between on-premises and cloud Windows servers.
+AzCopy is a CLI tool for copying blobs or files.
+
+
+Azure Identity
+Azure provide identity management system {id/pwd } based on "Active Directory "AD or AAD -> identiy as a service
+Azure AD MFA works by requiring two or more of the following authentication methods:
+• Something you know, typically a password.
+ • Something you have, such as a trusted device that's not easily duplicated, like a phone or hardware key.
+  • Something you are - biometrics like a fingerprint or face scan. Reference: https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-mfa-howitworks
+
+RBAC -- Role Based Active Control
+Roles -- reprsents common tasks for the job
+Permissions to that role  -- Users to that role
+
+Azure Active Directory (Azure AD) allows organizations to synchronize on-premises
+directories to enable a consistent identity experience between cloud and on-premises.
+Reference: https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis
+
+The Microsoft Defender secure score feature in Defender for Cloud enables you to achieve below two main goals:
+ • to help you understand your current security situation • to help you efficiently and effectively improve your security
+
+
+Cost OR Pricing in Azure
+Free Load Balancers AD Virtual Networks,Resource groups
+
+Pay per usage
+Azure function have 1 million excution per month free
+0.20$ per million executions --> cheapest vm is $20 per month
+
+Vms are charged per second
+Availability zones have different prices
+
+Azure Pricing Calculator
+Calculate pricing for ur services
+The Total Cost of Ownership (TCO) calculator is a free tool that anyone can use to estimate the costs of migrating their data and applications
+to Azure and predict potential savings
+
+Resource Tags - tag for ur resourceGroups that will help u undersatnd what the resource is used for
+Tags provide metadata that can be added to Azure resources to organize related resources and help with billing and support issues.
+pay per service -- function apps, Logic apps, Storgae
+
+
+Azure Tools for managing and deploying Azure Resources
+Azure Portal,cli,azure mobile app,Powershell
+
+Azure Arc
+Azure ARC allows you to see and manage all of your on premises infrastructure, regardless of where
+that infrastructure is running outside of Azure.
+And so what that means is you can have servers and Kubernetes clusters and SQL servers that are either
+running inside your organization on premises or in other clouds such as Amazon, AWS, and you can see
+and manage them all within this AAC dashboard.And so this is basically the consolidation of all your servers running across multiple clouds and in
+your own environment
+
+IAAC -Infrastructure as code means all ur vm servers,load balancer and networks all ur configurtaion is stored in
+a configuration file ,, ie whta is known as iac and store that file in github or any code repo
+U can take that and redploy it when u mess it up
+
+Drift is when u accidentalyy change ur IAC configuration and thru this pervious commit u can get back to the state where it was
+
+IAc option are Arm Templates{json},terraform 3rd part tool to code ur infrastructure,bicep ,chef puppet
+
+What is Arm Templates Azure resource Manager it is service the command line tool that runs underneath ur azure portal
+alllows us to interact with resource groups
+
+With Azure Cloud Shell, you can run scripts using Bash or PowerShell.
+
+
+Monitoring Tools
+The Azure Advisor will analyze your use of Azure and make you specific recommendations based on your usage across
+reliability (formerly called availability, security, performance, cost and operational excellence categories.
+ Reference: https://learn.microsoft.com/en-us/azure/advisor/advisor-overview
+
+Azure Service Health allows you keep track of Azure resource, both your specifically deployed resources and the overall status of Azure.
+ Azure Service Health is composed of Azure status, the service health service, and Resource Health.
+
+Azure Monitor is a comprehensive monitoring solution for Azure services that includes several monitoring tools and services.
+You can use Azure Monitor to monitor applications, VMs, containers, DB, security or networking events in Azure, other clouds, or on-premises.
+

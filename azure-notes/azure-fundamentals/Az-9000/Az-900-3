@@ -1,0 +1,42 @@
+Azure storage redundancy and replication options
+
+azure lrs zrs has 3 copies in primary
+grz and gzrs has 6 copies in primary and seconday combines   3 in each
+
+blob and general purpose accounts are different
+
+which apage is used to assign roles  to grant access
+Access control IAM
+
+aad lets u set dynamic mebership rules - allows users to define on or more rules
+
+a resource can have multiple locks ,, like a read only lock and then a delet lock
+
+what roles can create and delete locks
+Owner and User Access Admin
+
+
+last sync time is a property to check which operations have been replicated to the secondary region
+Hot access tier: data that is accessed frequently (for example, images for your website). highest storage and lowest access cost
+the archive tier is not supported as default access tier for storgae account
+
+not all the regions have availability zones
+North America does not have a single region it has multiple regions
+ervery region has multiple datacenters
+
+Availabilty zones protect ur data and applicatiosn from datacenter failures
+
+azure devtest labs is a sevrice for easily creating using  and managing iaas vms or paas env n labs
+
+Azure site recovery provide disaster recovery for vms
+azure monitor can monitor onpremis and clud and also send alerts to actve directory security groups
+
+to transfer all the data to azure ,, u can check whether the company complies with companys regional requirement s
+use azure trust portal
+
+To improve regulatory requirements
+Microsoft defender for cloud or azure security center
+
+Azure key vaults is used to store secrets for server apps
+it automatically generates a new secret after every user
+also store certificates

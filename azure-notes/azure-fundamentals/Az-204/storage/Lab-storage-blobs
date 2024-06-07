@@ -1,0 +1,40 @@
+Azure Blob storage allows you to store unstructured data in Microsoft's Azure cloud.
+Blobs can be any sort of data.
+ Containers are used to organize blobs within a Storage Account.
+ You can store up to 500TB of data in a single container.
+
+ In this Lab Step, you will use the general-purpose Storage Account
+ General-purpose storage accounts don't support hot or cool storage, which requires a Blob storage account
+ Block blobs are the most general type of blob
+ block blob is made up of individual blocks that can be up to 100MB in size.
+ A block blob can include up to 50,000 blocks, giving a maximum blob size of 4.75TB
+
+ n this Lab, you will use blobs small enough to fit within a single block.
+
+ 1.Create a container called images by entering:
+ New-AzStorageContainer -Name images -Permission Off
+
+     The Permissions parameter specifies what type of anonymous read access is allowed. It can be set to:
+
+ Container: Anonymous access to list the container contents and read blobs
+ Blob: Anonymous access to read blobs
+ Off: No anonymous access
+
+ PublicAccess is Off.
+
+ 2. Upload a sample image to the images container:
+
+ When dealing with the contents of a blob, the cmdlets end with Content.
+ This command succeeds because you are logged in as the storage account creator,
+ so this is not an anonymous request.
+ By default, the BlobType parameter is BlockBlob. That is why the output shows BlobType: BlockBlob.
+
+ 3. Get the blob you just uploaded from the container:
+ $blob = Get-AzStorageBlob -Container images -Blob image.png
+ it does not download the content of the blob
+
+ 4. Print the $blob properties:
+    $blob
+
+ 5. Get the URI of the blob:
+    $blob.ICloudBlob.StorageUri

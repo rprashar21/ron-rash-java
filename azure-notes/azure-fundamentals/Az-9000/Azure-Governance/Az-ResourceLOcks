@@ -1,0 +1,36 @@
+resource locks
+A resource lock prevents resources from being accidentally
+deleted or changed even with people having  acces to the resources.
+Resource locks can be applied to  resources, resource groups, or subscription
+Resource locks are inherited meaning rg and all resources under that are locked
+
+
+Types of Resource Locks
+one that prevents users from deleting delete in command line it is called canNotdelete
+one that prevents users from changing or deleting a resource
+
+Delete means authorized users can still read and modify a resource, but they can't delete the resource.
+ReadOnly means authorized users can read a resource, but they can't delete or update the resource
+
+manage resource locks
+resource locks from the Azure portal, PowerShell, the Azure CLI, or from an Azure Resource Manager template.
+
+
+How do I delete or change a locked resource?
+To modify a locked resource, you must first remove the lock.
+After you remove the lock, you can apply any action you have permissions to perform.
+Resource locks apply regardless of RBAC permissions.
+ Even if you're an owner of the resource, you must still remove the lock before you can perform the blocked activity.
+
+ Eg
+ u created a resource --> storage account and locked it and gave readonlylock
+ after that u are now trying to add a container to the resource i.e storage accont
+ when u add
+ The error message lets you know that you couldn't create a storage container because a lock is in place.
+ The read-only lock prevents any create or update operations on the storage account, so you're unable to create a storage container.
+
+ Modify the resource lock and create a storage container
+
+ Change the Lock type to Delete and select OK. now u can add the container but cannot delete to delete remove the lock from the resource
+ select the lock and then delete it
+ after this u can delete the resource {storage account}

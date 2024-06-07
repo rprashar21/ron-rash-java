@@ -1,0 +1,19 @@
+# Initialize Terraform
+terraform init
+
+# Validate Terraform Templates
+terraform validate
+
+# Execute Terraform Plan
+terraform plan
+terraform plan -out v1out.plan
+
+# Create / Deploy Terraform Resources
+terrafrom apply
+terraform apply v1out.plan
+
+# Verify current infrastructure state
+terraform show
+
+# Format Terraform files
+terraform fmt

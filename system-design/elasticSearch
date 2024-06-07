@@ -1,0 +1,56 @@
+ElasticSearch is a full text search engine with an HTTP web interface.
+It is fast because instead of searching the text it searches the index.
+It's designed to handle large volumes of data and provide lightning-fast search capabilities.
+Elasticsearch uses a data structure called an "inverted index" to achieve its high-speed searching and querying capabilities.
+
+Elasticsearch extends the concept of the inverted index to handle not only words but also various types of data (numeric, geospatial, etc.)
+and supports complex queries, filtering, aggregation, and more. This enables it to power a wide range of applications beyond simple search, including log analysis, e-commerce, recommendation systems, and more.
+The type of index is called ineverted index , becoz based on the word we go to a specif page and retriev the data .
+
+Example of how elastcisearch internall works
+Suppose you have three documents:
+
+Document 1: "The quick brown fox"
+Document 2: "Jumped over the lazy dog"
+Document 3: "A brown dog chased the fox"
+
+Steps
+1. Tokenization and Text Processing:
+Break each document into terms/words. For example, "The quick brown fox" becomes ["the", "quick", "brown", "fox"].
+
+2. Building the Index:
+For each term, maintain a list of document IDs where the term/word appears. For example:
+"the" -> [1, 3] -- its in document 1 and 3
+"quick" -> [1]
+"brown" -> [1, 3]
+"fox" -> [1, 3]
+"jumped" -> [2]
+"over" -> [2]
+"lazy" -> [2]
+"dog" -> [2, 3]
+"chased" -> [3]
+
+3. searching
+For example, if you search for "brown dog," Elasticsearch would retrieve the document IDs associated with "brown" (1, 3) and "dog" (2, 3).
+It then performs set operations like intersection to find the documents where both terms appear, which would be Document 3 in this case.
+
+
+It makes it easier to perform data aggreagtion as it retrives data from multiple sources,
+stores data in document format similar to mongodb.
+Data is serialized in json format . This adds a non realtional nature
+
+It is distributed and can be horizontally sacled , ie we can add more instances to  a cluster,
+rather that vertically scaling where we just add more pressure on a resource by increasing its resources
+It is restful and hence it can be easily integrated with ur application
+
+When to use elasticSearch ?
+Storing or operating on unstrutured data which changes frequelty .
+Full text search -- fuxxy searches rank documents based on the most searched.
+Using it for storage and analysis tool -- Aggregation tool as ELK elasticsearch kibana to visualize data on real time
+
+
+Components of elastic search
+Index - > index is one or more dicuments
+Document -> consists of words or fields
+Shards -> split up the indexes horizontally
+Replica -- > One or more copy of indexes

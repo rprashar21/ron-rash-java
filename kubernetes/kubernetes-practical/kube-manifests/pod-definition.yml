@@ -1,0 +1,20 @@
+apiVersion: v1 # version or group under whihc ur resource here pod is under
+kind: Pod     # k8s resource object to be created
+metadata:     # info about ur pod has 3 things name,laberls and namespace
+  name: front-end-pod   # this is mandatory ,, name of ur pod
+  labels:
+    app: my-app-latest   # optional use, some kind of label to identify ur pod
+  namespace: dev # optional ,, its folder like structure to identify resources
+spec:
+  containers: # list of conatiners
+    - name: container-name-frontend #name of my container
+      image: stack/frontendImage
+      ports: # list of ports
+        - containerPort: 80
+    - name : conatiner-name-backend
+      image:  stack/backendImage
+      ports:
+        - containerPort: 81
+
+
+

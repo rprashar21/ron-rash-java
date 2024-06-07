@@ -1,0 +1,125 @@
+ In this lab we used a Remote Desktop client to connect to an Azure VM running Windows.
+
+Remote Desktop Protocol (RDP) is a protocol developed by Microsoft that enables a remote connection to a Windows host.
+its like a client/server model where the computer runs remote desktop cleint softare and connects
+
+Steps
+ 1.Click on the search bar, enter virtual machines and click Virtual machines under Services:
+  we have a vm created called ca-lab-vm
+  look at its properties -->
+
+ 2. click on the connect tab -- there are 3 connections
+    native RDP
+    connect using rdp
+    bastion
+    windows admin center
+
+ 3. In the Connect blade that appears, click Select in the Native RDP box, and click Download RDP file:
+   this downloads  a Remote Desktop file (.rdp extension) that serves as a shortcut to connect to your machine.
+   The .rdp file is used by the Remote Desktop client to connect to the running VM.
+
+
+==========================Azure Resource Manager ========================================================================================================
+Azure Resource Manager (ARM) templates allow you to specify groups of resources to be deployed together
+it provides iaas code for quick deployments
+
+In this lab u will create ARM templates to create genpurpopes v2 accounts which has storage,blobs,table,ques
+
+ go inside the rdp ,, click on powershell ise --> install install the Azure (Az) Storage module
+ 3 . . In the PowerShell prompt, install the Azure (Az) Storage module for PowerShell by entering:
+
+ [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+ Install-Module Az.Storage -RequiredVersion 2.2.0
+ Install-Module Az.Resources -RequiredVersion 2.2.0
+
+ 4. Click Yes when prompted to update the NuGet package provider:
+ 5. Close the Windows PowerShell ISE Window and open a new Windows PowerShell ISE.
+ 6. Enter Az in the Name search field in the Commands tab on the right.
+  the list shows all of the cmdlets that are installed with the Az.Storage and Az.Resources modules
+  (and the Az.Accounts module they depend on).
+   You can select any of them and click Show Details to see what parameters the cmdlet accepts.
+ 7. At the PowerShell prompt, enter the following to log your PowerShell session into Azure:
+    Add-AzAccount
+
+ 8.View the storage account that contains your VMs virtual hard drive image by entering:
+  PS C:\Users\student> Get-AzStorageAccount
+
+ StorageAccountName  ResourceGroupName PrimaryLocation SkuName      Kind    AccessTier CreationTime          ProvisioningState EnableHttpsTrafficOnly LargeFileShares
+ ------------------  ----------------- --------------- -------      ----    ---------- ------------          ----------------- ---------------------- ---------------
+ nhy4jtgawwjd2vmdiag cal-1503-072      southcentralus  Standard_LRS Storage            3/31/2024 12:26:15 PM Succeeded         False
+
+9 . Click the down arrow to the right of the word Script in the command prompt header:
+This exposes the script editing area
+In the Untitled.ps1 tab, paste in the following ARM template
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Standard_ZRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Account type."
+      }
+    },
+    "blobEncryptionEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable or disable Blob encryption at Rest."
+      }
+    }
+  },
+  "variables": {
+    "storageAccountName": "[tolower( concat('castor', substring(parameters('storageAccountType'), 0, 2), uniqueString(subscription().id, resourceGroup().id) ))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "2016-12-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('storageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "keySource": "Microsoft.Storage",
+          "services": {
+            "blob": {
+              "enabled": "[parameters('blobEncryptionEnabled')]"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    }
+  }
+}
+
+save the script
+10. Click on the new file icon to create a file for your deployment script:
+Enter the following command in the file:
+
+11. Deploy the template by entering the following at the PowerShell prompt:
+    .\template-deploy.ps1
+
+Your storage account should be deployed within a minute
+
+Get-AzStorageAccount
+
+12 .Make the new storage account the default for the current PowerShell session by entering:
+Set-AzCurrentStorageAccount -ResourceGroupName cal-1503-072 -StorageAccountName nhy4jtgawwjd2vmdiag

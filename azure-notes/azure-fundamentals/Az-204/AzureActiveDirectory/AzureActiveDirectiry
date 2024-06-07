@@ -1,0 +1,19 @@
+For example, what if you wanted to assign permission to view Storage containers but not to read the blobs inside those containers?
+Create custom role that contained only that permission. You need to have  permission to create custom roles first.
+
+Microsoft Entra ID can only authenticate users.
+RBAC rol ased access is  what they should be allowed to do in Azure
+
+
+Contributors -- should be assigned to developer -- Developers need to be able to access and modify everything
+Readder role to End-users need access to everything, but they shouldn’t have the ability to modify anything
+Administrators need to be able to access and modify everything, and they also need to be able to grant or deny access to other users.
+
+
+When using RBAC, you assign roles to users and groups, and also  assign them to Azure service instances
+A typical example would be: you have an application that runs on a virtual machine that needs to
+read data from and write data to an Azure SQL Database instance called SQL Database
+1. So the application would need to be granted the permissions to do that.
+However, you wouldn’t be able to grant permissions to the application itself,
+but you could grant them to the virtual machine instance on which the application is running.
+You could assign the SQL DB Contributor role for SQL Database 1 to the virtual machine.

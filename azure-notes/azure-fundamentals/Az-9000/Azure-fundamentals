@@ -1,0 +1,103 @@
+Resource --> virtual servers ,db
+Generally resource indicate the region where they are created
+A resource is associated with only one subscription.
+ResourceGrps-- > logical grouping of these resources, they should have similar life cycle like deploy togethter and delete together
+Permissions are assigned at the reource level.
+These resource groups can be under a particalr subscrition
+A resource group is a logical container for Azure resources. Resource groups make the management of Azure resources easier.
+With a resource group, you can allow a user to manage all resources in the resource group, such as virtual machines, websites, and subnets.
+The permissions you apply to the resource group apply to all resources contained in the resource group.
+
+Subscriptions-- billing unit with azure ,, ca
+Types
+free 200 credits for first 30 days
+pay as u go model
+enterprise
+free credits for startups
+companies can have multiple subscriptions like dev Subscription , Qa Subscripton and HR Subscrition
+separate subscriptions within an organization like sales,It finance
+management groups -- different subscriptions or resources for different groups like qa dev application hr finance
+here are different payment options in Azure including pay-as-you-go (PAYG),
+Enterprise Agreement (EA), and Microsoft Customer Agreement (MCA) accounts. Your Azure costs are ‘per subscription’.
+You are charged monthly for all resources in a subscription. Therefore, to use different payment options per department,
+you will need to create a separate subscription per department.
+You can create multiple subscriptions in a single Azure Active Directory tenant.
+
+----------------------------------------------------------------------
+Azure Compute services -- Execute the code in the cloud
+VMs,Aks,Aci(azure conatiner instance),App Services(web apps)
+
+Virtual Machine -- Infrastruture As Service Iaas  -- Aws EC2 -- its like ur  using ur local machine on cloud
+{no of cores ,cpu speed,ram size ,temp disk}
+
+VMss - Virtual Machine Scale Sets - LoadBalancer manages --> 2 or more vms with same configuration
+running the exact same code and directing traffic to thses
+Able to scale based on demand -- like 100 to 1000vms
+
+PAaS - Platform as service - App Services
+You give ur code or package ur app and give to azure and they promise to run on whaever server configuration they are using in the background
+to run that but promise performance
+Its like abstraction to ur vms
+
+Azure Functions is a serverless computer service that allows a piece of code to be deployed and
+executed without needing server infrastructure or any configurations.
+Azure function apps - to run small peices of code on cloud --
+eg move all files from one container to another conatiner
+   call an external api to clear cache
+
+Azure App Service is a fully managed PaaS (Platform as a Service) service for developers.
+
+Aci
+Containers -- ur code is an image and basically it can be copied into ur dev or staging or prod as it is
+and the deployement processs is easier.
+Container instances are a simpler form and you cannot scale up many machines
+
+Aks -- runs on a cluster of servers
+
+----------------------------------------------------------------------
+
+Azure Networking services
+You can restrict traffic to multiple virtual networks in multiple subscriptions with a single Azure firewall.
+Azure Firewall is a managed, cloud-based network security service that protects your Azure Virtual Network resources.
+It’s a fully stateful firewall as a service with built-in high availability and unrestricted cloud scalability.
+Reference: https://learn.microsoft.com/en-us/azure/firewall/overview
+
+Virtual Network -- Computers communicating with each other located on same network
+Subnet -- sub division of these networks {these subnets have diff security settings for frontend servers,backedn server,database servers}
+It is a way of dividing ur own virtual network into security zones
+Vpn - connecting ur home network to ur office network
+Express Route - very fast and private . Eg when using azure services u can connect ur corporate network to these azure networks
+whihc are highly encrypted
+Dns -  take ur domain name and host it on azure
+Monitoring Management tools --> Azure Monitor, Network Watcher And Express Route
+
+DDos - Distributed denial of service attack protection
+load balancer - distribute traffic
+app gateway -  higher level of load balancer with an optional load balancer
+cdn - content delivery network -- stores common static files  on the edge for better customer xperience
+
+Azure Frond door service --> loadbalancer +cdn +firewll 3 in one
+
+Azure App Service is a fully managed PaaS (Platform as a Service) service for developers.
+Reference: https://learn.microsoft.com/en-us/azure/app-service/overview
+
+Peering or newtwork peering --> allowing resources in diff networks to talk to each other
+this can be done in same regions or across regions
+
+Public and private endpoints
+
+
+
+----------------------------------------------------------------------
+Virtual Machines - important key concepts
+images are like operating systems
+VM famiy -- Choose the right hardware
+Vm Size -- cpus ram
+Disks
+
+Script for installing a nginx server
+#!/bin/sh
+sudo su -- becoming a super user
+apt-get -y update
+apt-get -y install nginx
+echo "Welcome to in28minutes $(hostname)" > /var/www/html/index.html

@@ -1,0 +1,37 @@
+Azure Resource Manager ARm
+zure Resource Manager (ARM) is the deployment and management service for Azure.
+
+When a user sends a request from any of the Azure tools, APIs, or SDKs, Arm recieves the request , arm authenticates the request and sends it to the
+azure services
+You see consistent results and capabilities in all the different tools because all requests are handled through the same API.
+
+
+Arm benefits Or what can u do
+A Resource Manager template is a JSON file that defines what you want to deploy to Azure.
+Deploy, manage, and monitor all the resources for your solution as a group,
+apply tags to ur resources , aply access control for ur resources , clarify ur orgnaization illings
+
+
+ARM templates and Bicep are two examples of using infrastructure as code with the Azure Resource Manager to maintain your environment.
+
+
+ARM templates
+Use arm templates to descibe what resource u need on azurre like in a json format
+the deployment code is verified before u run it, resoruces will connected correctly ,,s uppose u wnat 100 resruces paralelely it will help u
+create those ,, same as terraform
+Templates can even execute PowerShell and Bash scripts before or after the resource has been set up.
+
+Benfits
+decalaratove syntax means declare what you want to deploy not actaul programmin commands on how do it
+Repeatable results:
+Orchestration - not worry about complexities
+Modular files:
+Extensibility
+
+
+Bicep
+Bicep is a language that uses declarative syntax to deploy Azure resources.
+Defines infra and configuration Then, ARM deploys that environment based on your Bicep file.
+ While similar to an ARM template, which is written in JSON, Bicep files tend to use a simpler, more concise style.
+
+Support for all resource types and API versions:

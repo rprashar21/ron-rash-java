@@ -1,0 +1,16 @@
+Js is synchromous
+
+Promise is a javascript object that are used to handle asynchronous operations in a more organized or manageable way.
+It has 3 states
+Pending: The initial state. The promise is neither fulfilled nor rejected; it's still in progress.
+Fulfilled: The state where the promise is successfully resolved with a value. This is often referred to as "resolved" as well.
+Rejected: The state where the promise encounters an error or failure and is rejected with a reason for the failure.
+
+within the promise we need to pass a call back function and in this function we need to pass 2 more functions
+these 2 functions are passed as parameters,they can be called anything
+
+const promise = new Promise((resolve,reject)=>{
+let value = true ; // here we check whether this
+
+}) //
+

@@ -1,0 +1,69 @@
+Vagrant is an automation tool which uses HypervisorType2{for managing these  virtual machines }
+
+Why Vagrant -->
+No need for Os
+Automatic installation
+Mangae all the vm settings in a file VagrnatFile
+Provisioning
+
+Comands are simple for a Vagrant
+Vagrant up
+vm vagrant ssh --> go inside the vm
+vagrant halt
+vagrant destroy
+
+Steps to create Vagrant
+mkdir ~/Desktop/vagrant-vms -> create a dir in the home folder
+mkdir centos
+mkdir ubuntu
+
+Inside centos folder -- go to vagrant cloud and copy the image for centos
+vagrant init generic/centos7 --> this will download a vagrant file along with
+ls
+vagrantFile --> this file has all the information
+vagrant up --> brings up the virtual machine
+vagrant status --> shows status of that vagrant in that folder
+vagrant global-status --> status of all the vms
+vagrant globla-status --prune --> remove all the vms
+vagrant destroy --force --> destroys all the vms created in that folder
+vagrant ssh -> inside the vm
+sudo -i --> change as roor user
+whoami
+exit
+
+then there is oemthing called synced directoreis -> basically whaever u create/edit/delet inside these they will replicate
+config.vm.synced_folder "/Users/rohitprashar/Desktop/vagrant-vms/ubuntu", "/opt/scripts"
+
+Provisioning - Provisioning in vagrant means executing commands or scripts when the VM comes up.
+
+
+Now we have a virtual machine monitor in oracle virtual box which is basically a hypervisor2 (hosted hypervisor) which needs the underlying os)
+We use vagrant {an automated tool to manage vm inside our virtual box}
+
+inside ubuntu folder
+we will --> install ubuntu image -- this will download the vagrant image -- where we have can change public/private settings for
+sync directories
+
+steps-->
+vagrant init generic/centos7 --> this is the box name 0r os a vagrant file will be placed inside our folder
+
+
+# to make changes to the vagrant file lets open up that
+vim VagrantFile --> setup a ip address,ram,static ip address
+
+vagrant up --> will basically bring up our virtual environment or servers
+vagrant ssh -> go inside the vm
+
+sudo -i --> switch  to root user
+vim etc/hostname --> change the hostname
+exit
+
+then go to the documentation to perform the steps to install wordpress on our machine
+vagrant ssh
+sudo -i
+
+# install dependeince basically follo all he steps from the documentation
+sudo apt update  ->> a
+
+
+

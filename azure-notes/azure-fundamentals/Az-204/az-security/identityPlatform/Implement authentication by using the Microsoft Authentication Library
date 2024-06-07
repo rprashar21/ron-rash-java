@@ -1,0 +1,106 @@
+Explain the benefits of using Microsoft Authentication Library and the application types and scenarios it supports.
+Instantiate both public and confidential client apps from code.
+Register an app with the Microsoft identity platform.
+Create an app that retrieves a token by using the MSAL.NET library.
+
+Basicaly it is used to get tokesn from microsoft azure resources
+
+MSAL.js	JavaScript/TypeScript frameworks such as Vue.js, Ember.js, or Durandal.js
+MASAL.NET for .net apps
+
+
+Register an application with the Microsoft identity platform
+Use the PublicClientApplicationBuilder class in MSAL.NET
+Acquire a token interactively in a console application
+
+
+Sign in to the portal: https://portal.azure.com
+go to  Microsoft Entra ID --> app registrations --> new registration.
+field value
+Name	az204appreg
+Supported account types	Select Accounts in this organizational directory only
+
+
+Use the PublicClientApplicationBuilder class to build out the authorization context.
+var app = PublicClientApplicationBuilder
+    .Create(_clientId) //.Create	Creates a PublicClientApplicationBuilder from a clientID.
+    .WithAuthority(AzureCloudInstance.AzurePublic, _tenantId)
+    .WithRedirectUri("http://localhost")
+    .Build();
+
+  .WithAuthority	Adds a known Authority corresponding to an ADFS server.
+   In the code we're specifying the Public cloud, and using the tenant for the app we registered.
+
+
+public class Az204Auth {
+
+    private final static String CLIENT_ID = "APPLICATION_CLIENT_ID";
+    private final static String TENANT_ID = "DIRECTORY_TENANT_ID";
+    private final static String AUTHORITY = String.format("https://login.microsoftonline.com/%s/", TENANT_ID);
+    private final static String REDIRECT_URI = "http://localhost";
+
+    public static void main(String[] args) {
+        try {
+            String token = acquireTokenInteractively();
+            System.out.println("Token:\t" + token);
+        } catch (Exception e) {
+            System.out.println("Error acquiring token: " + e.getMessage());
+        }
+    }
+
+    private static String acquireTokenInteractively() throws MalformedURLException, InterruptedException, ExecutionException {
+        PublicClientApplication app = PublicClientApplication.builder(CLIENT_ID)
+                .authority(AUTHORITY)
+                .build();
+
+        Set<String> scopes = Collections.singleton("user.read");
+
+        // Creates an interactive request
+        CompletableFuture<IAuthenticationResult> future = app.acquireToken(
+                InteractiveRequestParameters.builder(new java.net.URI(REDIRECT_URI))
+                        .scopes(scopes)
+                        .build());
+
+        IAuthenticationResult result = future.get();
+        return result.accessToken();
+    }
+
+=============================== =============================================================================================
+Authentication flows
+Authorization code	Native and web apps securely obtain tokens in the name of the user
+On-behalf-of	The application calls a service/web API, which in turns calls Microsoft Graph
+Implicit	     Used in browser-based applications
+Device code	      Enables sign-in to a device by using another device that has a browser
+Integrated Windows	Windows computers silently acquire an access token when they're domain joined
+Interactive	         Mobile and desktops applications call Microsoft Graph in the name of a user
+Username/password	The application signs in a user by using their username and password
+
+Public client applications: apps that run on devices or desktop computers or in a web browser cannot hold secrets
+Confidential client applications apps run on web servers daemon app, difficult to access and can hold secrets
+
+=============================== ============================================================================================================================
+Intialize client apps configure the app from code or config file
+With MSAL.NET 3.x use client builders
+PublicClientApplicationBuilder
+ConfidentialAppClientBuilder
+
+Steps
+register ur app with microsof entra id
+Need info
+client id
+identity provide url (named the instance) and the sign-in audience for your application known as authority
+tenant ID ,app secret(client secret string ) or certifcate of type X509Certificate2
+
+Intialize Public client
+nstantiates a public client application signs in mircosofts azure app with their school/work or presonal accounts
+IPublicClientApplication app = new IPublicClientApplication.create(clientId).build
+
+instantiates a confidential application (a Web app located at https://myapp.azurewebsites.net)
+handling tokens from users in the Microsoft Azure public cloud with their work and school accounts, or their personal Microsoft accounts
+The application is identified with the identity provider by sharing a client secret:
+
+string redirectUri = "https://myapp.azurewebsites.net";
+IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
+    .WithClientSecret(clientSecret)
+    .WithRedirectUri(redirectUri )
+    .Build();

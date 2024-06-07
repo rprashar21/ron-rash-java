@@ -1,0 +1,125 @@
+You will use the Cloud Shell to aid you in securing APIs using client certificates
+Another way to secure access to API Management APIs is using client certificates.
+ Client certificate checks leverage APIM policy. Specifically, client certificate policies use:
+
+ Policy control flow (<choose>) to take conditional action based on the presented client certificate
+ Policy expressions which are C# expressions that support a subset of .NET framework types.
+ The Context variable used in expressions captures information about the request, including any client certificate.
+
+ APIM service instances can store certificates allowing you to only grant API access to requests presenting one of the known certificates.
+ In this lab step, you will create a self-signed certificate in Cloud Shell and upload it to your APIM instance.
+  You will then configure a policy to forbid any request without a valid client certificate.
+
+
+  Steps
+  Step1
+  In your Cloud Shell, enter the following commands to create a private key and self-signed certificate:
+
+  openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+
+  The openssl req command is used for certificate signing requests and generating self-signed certificates.
+  The options have the following meanings:
+
+  -x509: generate a certificate (rather than a certificate request)
+  -newkey rsa:4096: create a new 4096-bit RSA key
+  -keyout key.pem: save the new key in key.pem
+  -out cert.pem: save the certificate in cert.pem
+  days 365: the certificate is valid for 365 days
+  -nodes: do not protect the key with a passphrase (you may want to exclude this option in practice)
+
+  Step2
+  Press enter at all of the prompts to leave the certificate fields blank.
+
+  The generated PEM encoded certificate can be used by the curl command to include the client certificate in requests,
+  but APIM requires a PFX certificate, which includes the key and certificate in a single file.
+
+  Step3
+  Enter the following command to create a PFX certificate, and press enter at each prompt to leave the password blank:
+  openssl pkcs12 -inkey key.pem -in cert.pem -export -out cert.pfx
+
+  Step4
+  Enter the following commands to upload your PFX certificate to Azure blob storage where you can download it:
+  # Get existing storage account name
+  account_name=$(az storage account list --query "[0].name" --output tsv)
+  # Create a storage container to upload the certificate
+  az storage container create --account-name $account_name --name certs --public-access blob
+  # Upload the PFX certifcate
+  az storage blob upload --account-name $account_name --container-name certs --name cert.pfx --file cert.pfx
+  # Output the download URL
+  echo https://$account_name.blob.core.windows.net/certs/cert.pfx
+
+  Step5
+  Click the link output by the last command to download the PFX certificate to your computer.
+
+  Leave Cloud Shell open because you will use it later.
+
+  Step 6
+  In the Portal view of your APIM instance, click Certificates in the left sidebar:
+  Click + Add.
+  Set the following values before clicking Add:
+  Id: Enter lab
+  Certificate: Choose Custom (APIM also integrates with Azure Key Vault certificates)
+  Certificate: Click the folder icon and select the cert.pfx file you downloaded.
+  Password: Leave blank
+
+  Step7
+  Click Custom domains in the left sidebar.
+  Click Yes for Request client certificates followed by Save.
+
+  Step 8
+  Navigate to your httpbin API's inbound policy editor for all operations:
+  You will now configure the policy to forbid any requests without a known client certificate.
+
+  Paste the following policy after the <set-backend-service .../> line:
+          <choose>
+              <when condition="@(context.Request.Certificate == null
+               || !context.Deployment.Certificates.Any(c => c.Value.Thumbprint == context.Request.Certificate.Thumbprint))" >
+                  <return-response>
+                      <set-status code="403" reason="Invalid client certificate" />
+                  </return-response>
+              </when>
+          </choose>
+
+  The policy uses <choose> to evaluate conditions,
+  defined by <when>, and how to respond to them (<return-response>).
+   The condition is a policy expression which is indicated by the @(...) notation. Everything inside the expression is C# syntax. There are two logical conditions being evaluated:
+
+  context.Request.Certificate == null which matches if the request does not present any client certificate, and
+  !context.Deployment.Certificates.Any(c => c.Value.Thumbprint == context.Request.Certificate.Thumbprint)
+   which matches is the presented certificate's thumbprint doesn't match any of the known certificate thumbprints.
+
+  If either of the conditions match, the <return-respone> section executes causing a 403 (forbidden)
+  response to be returned and the request never reaches the backend.
+
+  If a request doesn't match the condition, meaning a known client certificate is presented with the request,
+  the request proceeds to be sent to the backend.
+
+  Step 9
+  Click the /get operation followed by Test.
+  Scroll down to the HTTP request section and click the eye icon to reveal the subscription key:
+
+  You will use these values to help construct a request using the curl command in your Cloud Shell.
+
+  In you Cloud Shell, construct the following curl request:
+  curl -X GET https://apim-ron.azure-api.net/get \
+       -H 'Ocp-Apim-Subscription-Key: e6fa90a38ce24831a7f7e6336b6a313c'
+
+  The command sends an HTTP GET request with the subscription header set. It is expected to be forbidden given the policy you added.
+  You should see no output from the command.
+
+  Enter the following command to include the client certificate in the request and confirm the request succeeds:
+
+  curl -X GET https://apim-ron.azure-api.net/get \
+       -H 'Ocp-Apim-Subscription-Key: e6fa90a38ce24831a7f7e6336b6a313c' \
+       --key key.pem --cert cert.pem
+
+
+  In this lab step, you secured your API with client certificates. You started by creating a self-signed certificate and uploading to APIM. You then configured an inbound policy that required requests to include a known client certificate or else the request would immediately result in a forbidden response.
+
+  Other ways to configure client certificate checks are to check the certificate issuer, subject, and/or thumbprint value against expected values.
+
+  In addition to subscriptions and client certificates, APIM also supports securing APIs by restricting requester IP addresses,
+   basic authentication (username and password) or managed identity, and OAuth2.0.
+
+https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-mutual-certificates-for-clients#checking-the-issuer-and-subject
+https://learn.microsoft.com/en-us/azure/api-management/api-management-policies#access-restriction-policies

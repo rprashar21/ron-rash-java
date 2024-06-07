@@ -1,0 +1,55 @@
+Here we will create Aks clusters
+Understand kube config and some commands like:
+kubectl config view
+kubectl config current-context
+kubectl config use-context <context-name>
+
+To access multiple aks clusters
+az aks get-credentials --resource-group <rg-name> --name <aks-cluster-name>
+
+https://github.com/ronrash/azure-aks-kubernetes-masterclass/tree/master/21-Azure-AKS-Authentication-and-RBAC/21-01-AKS-Cluster-Access-Multiple-Clusters
+
+How to create aks clusters
+# Create AKSDEMO3 Cluster
+                location                     resourcegrp name
+az group create --location centralus --name aks-rg3
+az aks create --name aksdemo3 \
+              --resource-group aks-rg3 \
+              --node-count 1 \
+              --enable-managed-identity \
+              --generate-ssh-keys
+
+# Backup SSH Keys in ur local , the command line to access aks should be enable
+cd $HOME/.ssh
+mkdir BACKUP-SSH-KEYS-AKSDEMO-Clusters
+cp id_rsa* BACKUP-SSH-KEYS-AKSDEMO-Clusters
+ls -lrt BACKUP-SSH-KEYS-AKSDEMO-Clusters
+
+
+Undestand the Kubeconfig
+# View kubeconfig
+kubectl config view
+
+# Clean existing kube configs
+cd $HOME/.kube
+>config
+cat config
+
+# View kubeconfig
+kubectl config view
+
+# Configure AKSDEMO3 & 4 Cluster Access for kubectl
+az aks get-credentials --resource-group aks-rg3 --name aksdemo3
+
+# View kubeconfig
+kubectl config view
+
+# View Cluster Information -- this tells us which context we are in currently
+kubectl cluster-info
+
+# View the current context for kubectl
+kubectl config current-context
+
+Switch between contexts
+kubectl config use-context aksdemo3 --> switched to aksdemo3 cluster
+kubectl config use-context aksdemo4 --> switched to aksdemo3 cluster

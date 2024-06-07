@@ -1,0 +1,65 @@
+Generatve Ai --> Generative Pre-trained transformer or GPT models
+Understand and create natural langauge
+GenAi -- takes promt and returns a natural language ,visual or code
+
+Model that works with images {create , edit and suggest } is called DAll-e
+
+AI -- Machines which imitate human behaviour and learn from humans to create/execute tasks
+Machine Learning --> subset of ai where algorithms take data fit it into models to make predictions
+Deep Learning Models --> subset of machine learning where artificail neral networks return resuts for complexx cases
+
+----------------------Azure Open Ai ----
+collabration between mirosft and openai
+
+---------------Ai Copilot in Micorsoft Power apps----------------------------------------------------------------------------------
+Micorsoft has incorporated Ai Copilot n power apps to aid development and enable ai into these apps with no code
+using Ai natural langauge processing
+
+It enables users to create a simple data management app using plain text
+
+Ai copilot uses a text promtp to define dataverse tables
+The table structured is refined using co-pilot and text prompts and once the design is finalised the
+pwer app studio can create a fully functional app where we can view create and edit data
+
+Ai copilto can also use excel data to create the dataverse tables based on the excel data
+Power apps have ai control on forms where it can interrogate the data based on simsiliar to chatgpt
+
+What are the characteristics of Power Apps that allow Copilot AI to easily augment app development?
+Power Apps euse low-code, no-code data-driven development methodology where
+ apps are created from pre-defined  templates based on uderlying data they are interacting with.
+ Copilot AI is used at the front end of the development process to design the data structure from
+ which the app’s structure and functionality is derived.
+
+ How can you use Copilot AI to get the database table how you want it
+ Upload an Excel file with sample data.
+ Use Copilot AI within the table creation screen to add, delete, or modify columns to customize the initial table.
+
+ how AI is integrated into Power Apps
+ Copilot integrates natural language processing into Power Apps, enabling users to query organizational data.
+ Copilot AI uses natural language processing to create simple data-driven applications.
+
+---------------Ai Copilot in Micorsoft Power apps----------------------------------------------------------------------------------
+
+Creation of chatbots with co-piot improves significantly
+Create a bot based on prompt
+eg create a employye support bot -->
+
+Guesswork in assuming triggers and topics
+Copilot creates branching topics and triggers based on bots performance and does what u feed info to t
+
+Generative answers ,, if the bot is unable to answer soem question it will google it basically or use other website to provide ans
+this is called fallback ,, set a url for the bot to fallback into
+
+-----------------Building a bot using Power Virtual Agents ----------------
+go to power virtual agents
+click on chatbots and creata  chatbot
+u can add a url for generative ai capabilitis
+3 restriction fo this url
+1. if the site is external it must be indexed or found by bing
+2. sould not use site with forms or comments from endusers like reddit, it can reduce the accuracy
+3. the url should not be more that  2 layers deep
+
+
+The setting to manage boosted conversations accuracy is "Bot Content Moderation".
+While the URL for generative content can only be two sublevels deep, the bot can delve into any subsites within there as long as they are all under the same top level domain.
+

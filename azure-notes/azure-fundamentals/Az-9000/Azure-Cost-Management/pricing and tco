@@ -1,0 +1,60 @@
+pricing calculator and the total cost of ownership (TCO) calculator
+
+ Pricing calculator is designed to give you an estimated cost for provisioning resources in Azure.
+estimate for individual resources,
+pricing calculator’s focus is on the cost of provisioned resources in Azure
+Pricing calculator is for information purposes only only for estimates
+Nothing is provisioned when you add resources to the pricing calculator, and you won't be charged for any services you select
+estimate any  provisioned resources, including compute, storage, and associated network costs
+
+TCO total cost of ownership  calculator
+compare the costs for running an on-premises infrastructure to the cloud
+enter your current infrastructure configuration, including servers, databases, storage, and outbound network traffic
+it will then compare the costs with ur current env to azure env
+add in assumptions like power and IT labor cost
+
+Microsoft Cost Management tool
+
+If you accidentally provision new resources,
+you may not be aware of them until it’s time for your invoice.
+
+Cost Management is a service that helps avoid those situations.
+ability to quickly check Azure resource costs, create alerts based on resource spend,
+ and create budgets that can be used to automate management of resources.
+
+ Cost analysis is a subset of Cost Management for  Azure costs
+ can quickly view the total cost in a variety of different ways, including by billing cycle, region, resource,
+ explore and analyze your organizational costs
+ aggregated costs by organization to understand where costs are accrued a
+ you can see accumulated costs over time to estimate monthly, quarterly, or even yearly cost
+
+ Cost alerts
+ Cost alerts provides a single location where u can check all the diff types of alerts in the Cost Management Service
+
+ Budget alerts
+ Credit alerts
+ Department spending quota alerts.
+
+  Budget alerts
+  are based on usage or cost , reaches or exceeds the amount defined the codnition of the budget.
+  Budget alerts support both cost-based and usage-based budgets
+  Budget alerts are generated when  budget alert conditions are met.
+  Whenever an alert is generated, it appears in cost alerts
+
+  Credit Alerts
+  Credit alerts notify you when your Azure credit monetary commitments are consumed.
+  Monetary commitments are for organizations with Enterprise Agreements (EAs).
+  generally generated at 90 or 100% email is sent to account woner
+
+  Department spending quota alerts
+   when department spending reaches a fixed threshold of the quota.
+  an email to department owners is sent at 50% or 75 %
+
+  Budgets
+  A budget is where you set a spending limit for Azure.
+  can set budgets based on a subscription, resource group, service type, or other criteria
+  set a budget alert which sends an email or triggers another condition
+
+
+
+

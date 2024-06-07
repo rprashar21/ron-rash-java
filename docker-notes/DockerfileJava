@@ -1,0 +1,23 @@
+# Build a JAR File
+FROM maven:3.8.2-jdk-8-slim AS stage1
+WORKDIR /home/app
+COPY . /home/app/
+RUN mvn -f /home/app/pom.xml clean package
+
+# create an image
+FROM openjdk:8-jdk-alpine
+COPY --from=stage1 /home/app/target/hello-world-java.jar hello-world-java.jar
+ENTRYPOINT ["sh", "-c", "java -jar /hello-world-java.jar"]
+
+# build this application
+# docker build -t application-name:v1 .
+# docker run -d -p 5001:5000 hello-world:v1
+###
+# docker images --> docker images | head -n 2 
+# docker ps
+#
+#
+#
+#
+#
+# command to see the top 2 docker or latest images docker images | head -n 2

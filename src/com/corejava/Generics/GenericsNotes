@@ -1,0 +1,15 @@
+It makes sure that you can add only specific type of objects in a collection
+
+class Box<T>{
+ private T data ;
+ private void set(T data){
+ this.data = data
+ }
+ private T get(){
+ return this.data
+ }
+
+ psvm(){
+ Box<Integer>
+ }
+}

@@ -1,0 +1,101 @@
+
+With Cosmos DB, you can provision throughput at two levels:
+Containers
+Databases
+
+Which Cosmos DB API supports the column-family database model?
+cassandra
+
+Cosmos Db is global and supports multi-model
+primary data is written in multiple regions
+MongodB Api
+Gemlin for graphs -- relationships , strore info about entites
+Postgres for relational db
+Casandra -- column-family database model
+
+==================================================================================================================================================================================================================================================================
+Consistency Levels on Cosmos DB
+Strong --> strong guarantees that read operation will return most recent version,its slow,relational dbs use this,
+Eventual Consistency --> offered by no sql db, eventually all replicas will have the data if no new writes are made, requests may return old value
+                         lowest latency ,worst consistency
+Consistent Prefix -->  same as eventual consitency, but makes sure that reads can never see out of order writes,
+                              read can get old values but not out of order
+Session Consistency --> guarantess constinecy for that session,client will nevers ee old data for that session,no conflicts between clients,
+                       lowest latecn for reads and writes
+Bounded Staleness --> 2nd most popular,reads may lag behind writes for a small amoyt of time,
+                       costs are same as strong constinecy and allows u to distribute
+                      ur dbs across regions and has lower latency.
+
+
+=====================================================================================================
+Indexing
+consistent  - whwnere an item is updated
+lazy     -- updating in quiter periods
+none     -- no update
+
+============================================================================================================================================
+
+Create a cosmos db account with a default consistency level and high availability
+create a nosql db
+create a container with indexing poicy and autoscaled thruput
+
+=====================================================================================================
+
+Cosmos db Change feed processor
+Some action is performed every time there is change in the contianer/ some data is updated in the container
+eg a game which updates the scores in the cosmos db container, now u need a leaderboard
+Rohit - 89
+Swati - 98
+Shabaz - 87
+Now everytime the  new score is updated the leaderboard gets updated , this can be done using the change feed
+Whenever there  is  change in the cosmos db container there is update in the change feed processor.
+
+You can get updates from the change feed processor using the push or the pull model.
+Azurefunctions use the change feed processor behind the scenes
+
+The change feed processor has 4 components
+Monitored Container Component - The container u monitor for changes
+Lease Container - keeps track of what has been processed and also co-ordinates processing between multiple intances
+Compute Instance - host where u run ur change feed processing app like a vm ,docker running ur application
+Delegate Container - to process a batch of chnages ,, in our case the leaderboard
+
+Change feed processor handle errors , if u wnat to get notified about notifications configure lifecycle notifications
+
+Change Feed Estimator -- To know when to scale up ur cmpute instance use the change feed estimator
+
+To have more control use the pull model
+
+
+The change feed processor has four main components:
+The monitored container: The monitored container has the data from which the change feed is generated.
+ Any inserts and updates to the monitored container are reflected in the change feed of the container.
+The lease container: The lease container acts as state storage and coordinates processing the change feed across multiple workers.
+ The lease container can be stored in the same account as the monitored container or in a separate account.
+The compute instance: A compute instance hosts the change feed processor to listen for changes.
+ Depending on the platform, it might be represented by a virtual machine (VM), a kubernetes pod,
+  an Azure App Service instance, or an actual physical machine.
+   The compute instance has a unique identifier that's called the instance name throughout this article.
+The delegate: The delegate is the code that defines what you, the developer, want to do with each batch of changes that the change feed processor reads.
+
+
+When choosing a partition key for a Cosmos DB container, which of the following are true? (Select 2 answers).
+If you have a write-heavy application, then you should choose a partition key that spreads the data out evenly across the partitions.
+For example, you wouldn’t want to choose a datestamp field as the partition key because every day,
+it would write all new data to the same partition, and the next day, it would do the same. Instead, you should choose a partition key that would have a wide range of values for write requests, such as a user ID or a device ID.
+
+If you have a read-heavy application, then you should decide on your partition key by looking at what the most common queries will be.
+For example, if most of the queries will request data about a single user,
+then you should choose the user ID field as the partition key.
+That will make it easy for Cosmos DB to find the data, and it will also evenly distribute the data across partitions because
+it will put each user’s data on a different partition.
+
+
+Consistent prefix is the same as eventual consistency, except that it guarantees that read operations will never see out-of-order writes.
+
+With strong consistency, users are guaranteed to read the latest committed write.
+
+Session consistency guarantees consistency for each client session. So a client will never see data older than what it has written during a session.
+
+Bounded staleness guarantees that reads may lag behind writes by a limited amount of time.
+
+Eventual consistency guarantees that if no new writes are made to an item, then eventually all of the replicas will have the same value for that item.

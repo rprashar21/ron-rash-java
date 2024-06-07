@@ -1,0 +1,48 @@
+elasticity - elastic computing is the ability to quickly expand increase computer processing memory
+,storage resources without depending upon planning and engineering during the peak usage -
+ bsically increase and decrease the usage resources based on demand
+
+NSG - Network security group --> contains the security rules that allow or deny
+inbound traffic /outbound traffice to azure resources
+
+What is the present maximum capacity for storage accounts?
+5pib
+
+Resource type, Consumption, and Geography.
+ These factors influence the cost of Azure resources.
+Maintenance, on the other hand, is an important aspect of managing resources to control costs
+ but does not directly influence the cost of the resources themselves.
+
+Azure App Service and Azure SQL Databases are both PaaS services!
+
+No! 1 resource = 1 resource group (very simply logic)
+
+The General Data Protection Regulation (GDPR) is a regulation in EU law on data protection and
+privacy in the European Union and the European Economic Area.
+The GDPR is an important component of EU privacy law and of human rights law,
+in particular Article 8 of the Charter of Fundamental Rights of the European Union.
+
+HYbrid Cloud mode multiple Public Clouds in conjunction with a Private Cloud.
+
+Reducing the amount of data transferred between Azure regions can help reduce costs by minimizing data egress charges.
+
+Power BI can use Azure DataLake and Azure SQL Data Warehouse to generate reports for your business
+
+For users wishing to adopt cloud services, Azure provides a web-based TCO Calculator.
+You can use this calculator to estimate the costs of migrating your data and applications to Azure and predict potential savings.
+
+Azure ExpressRoute, which provides a dedicated, private network connection between on-premises infrastructure and Azure data centers.
+Azure Stack is a hybrid cloud solution that allows you to use Azure services on-premises, without an internet connection
+
+Ingress bandwidth is free. You pay for egress (outbound).<br>For more info: <a>
+Azure Blueprints allows you to create a "template" on which new subscriptions can be made.
+This way, new subscriptions can come with a pre-defined list of policies,
+ARM templates, and custom RBAC roles. This way, a subscription follows a company standard each time.
+
+Which Azure AD licenses (select two) are made available through Azure?
+office 365
+Azure Active Directory
+
+ What type of document Microsoft Service Trust Portal provide?
+ A list of standards that Microsoft follows, pen test results,
+ security assessments, white papers, faqs, and other documents that can be used to show Microsoft's compliance effort

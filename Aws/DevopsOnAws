@@ -1,0 +1,86 @@
+Aws codepipeleine is a pipeline in aws
+Aws Code Build
+
+AWS CodeCommit { source } + AWS CodeBuild {build}+ Aws CodeBuild+ThirdPartyTools {test} --> PROD AWS CodeDepoly
+
+Aws Code Commit is a like a git repository on aws
+Fully Managed - no need to maintain source control servers
+scales automatically
+secure
+Highly available
+If services our deployed to Aws its better integrtion
+
+       Aws Code Build                    vs          Jenkins
+No need to manage or provision any server      Need to maintain master and slave
+pay as u go                                     pay for idle servers
+fully managed and scales auto                   take care of availabilty
+very high plugin ecosystem                      lot of prepackaged envs
+easy to intregate                              can use codebuild as woker node
+
+Aws Code Build --> pull ur source code from git or ,builds the project in the env and pushed the code to amazon s3 or send notification to amazon sns
+
+Aws Code Pipline  is a fully managed pipeline to managure ur application build,test and deploy the release process
+it is fully managed ,, it also supports 3rd parties like jenkins,
+
+Sample --> AWS --> CodePipeline -->
+1st Stage
+Source --> AwsCodeCommit,Amazon Ecr {repo for docker images},Git,GitHub,Amazon S3
+check in ur code it will trigger the entire build process ,everything or all these steps are written in the buildspec.yml file
+it take ur code and downloads all the dependencie
+
+2nd stage
+build ur code and dockerize the application into a container image
+and pushes the code to a container respoistory like docker hub or amazon ecr or azure container registry
+in this buildspec.yml determines all the steps of the build process is a  file where u can write any bash command
+
+creating docker image
+docker build --tag $my-pplication:$TAG
+
+push to conatiner registry
+docker push $ANU_REPO_URL:$TAG  --> pushed this to the conatiner ,, the from here the deployment manifest file will pick the name of the
+ conatiner registry and use that tag name to push to the aks cluster kubectly apply -f deployment-k8s.yml
+
+deployment-k8s.yml
+apiVersion: 'v1'
+kind: deploymrent
+metadata:
+  name: my-app
+spec:
+ replicas:3
+ startergy:
+   type: rollingUpdates
+  ......
+
+  spec:
+   containers:
+   - name:deployment-k8s.yml
+     image: CONTAINER_IMAGE -- this is the name which will get picked up when the image is pushed to the conatiner registry
+
+Now since the code buld is pushing the code to ECR and EKS ,, the code commit and code build are part of the aws code pipeline and the Ima user using this
+service has basic access, we need to define some Iam policeies or roles to do these further steps like having the ECR and Aws K8s access.
+This new role should have access to aws-auth config map
+
+CI/CD Flow for eks demo
+part1
+IAM Roles for
+Create IAM Roles for
+CodePipeline
+CoddeBUild
+kubectl Role -->Edit configmap to give access to kubectl role
+
+part2
+pipeline
+create codepipeline ,
+build spec file
+dockerfile
+run the pipeline
+
+
+Eks Devops
+
+ECR or ACR -- Amazon Elastic Container Registry
+
+ur app +  git then dockerize app docker image in docker Hub --> aks
+                                        here comes ECR
+
+

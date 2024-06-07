@@ -1,0 +1,43 @@
+Describe Azure virtual private networks
+Vpn {Virtual Private Network} connect 2 private networks over an untrusted network which is the internet.
+
+VPn gatweways are virtual network gateways and are deployed in deicated network subnets
+They help in
+connect on premise datacenters to virtual networsts -- site to site connection
+connect individual devise to virtula networks ,, point to point
+Connect virtual networks to other virtual networks through a network-to-network connection.
+
+Only one vpn gateway can be deployed in virtual network
+
+When setting up a vpn u need to decide the policy ,, policy based or route based
+
+Policy-based VPN gateways specify statically the IP address of packets that should be encrypted through each tunnel.
+This type of device evaluates every data packet against those sets of IP addresses to choose the tunnel
+where that packet is going to be sent through.
+
+Route-based gateways, IPSec tunnels are modeled as a network interface or virtual tunnel interface.
+Ip routing decides  which one of these tunnel interfaces{static or dynamic routing protocol} to use when sending each packet
+
+Route-based Vpn gateways preferred connection method for on-premises devices. They're more resilient to topology changes such as the creation of new subnets.
+Use a route-based VPN gateway for
+Connections between virtual networks
+Point-to-site connections
+Multisite connections
+Coexistence with an Azure ExpressRoute gateway
+
+These are all High-availability scenarios
+
+Active/StandBy
+ VPN gateways are deployed as two instances in an active/standby configuration
+When planned maintenance is affected the active instance , the standby takes in charge
+
+Active/Active
+With BGP routing protocol, you can also deploy VPN gateways in an active/active configuration.
+ you assign a unique public IP address to each instance
+
+ExpressRoute failover incase of expressroute failure u can use vpn gateways as an alternative
+
+Zone-redundant gateways
+ In regions that support availability zones VPN gateways and ExpressRoute gateways can be deployed in a zone-redundant configuration
+ Deploying gateways in Azure availability zones physically and logically separates gateways within a region .
+ These gateways require different gateway stock keeping units (SKUs) and use Standard public IP addresses instead of Basic public IP addresses.

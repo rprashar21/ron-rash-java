@@ -1,0 +1,47 @@
+jenkins is a tool for running ci/cd
+
+configure jenkins using a docker 0r in aws or in azure
+
+jenkins configure global environements.
+
+
+
+# create a jenkins job
+1. install maven and git plugins
+2. add maven to ur build --jenkins-->global tool configuration --> under maven installations {maven-name}-->version of maven using
+3.Copy the git repo url ,branch name,credentials
+
+4 . Add build steps like maven build {invoke top-level maven targets }
+5.  another step is maven tests -- make sure to have these separate
+6.  sonarqube steps --> add the sonarqube configurations
+7.  Deploy ur jar --> Add build steps --> ececute a jar {jav a-jar path}
+8. Archive ur jar
+9. send email notificatiosn
+https://www.jenkins.io/doc/book/pipeline/syntax/
+Screenshot 2023-06-10 at 18.33.53![](../../Screenshot 2023-06-10 at 18.33.53.png)
+
+
+# what are git hooks
+
+Git hooks are basically -- trigger so whenever someone pushes into the repo build is triggered
+
+
+DSL -- Domain Specifc Langauge
+https://jenkinsci.github.io/job-dsl-plugin/ for all dsl releated commands
+job('example_dsl') // job is a function
+{
+  description('this is just a sample')
+  parameters
+  {
+    stringParam('Name',defaultValue='rohit',description='this is my name')
+    booleanParam('FLAG',true)
+    choiceParam('OPTIONS',['option 1 (default)','option 2','option 3'])
+  }
+  scm{
+    git('https://github.com/jenkins-docs/simple-java-maven-app.git','master')
+  }
+  steps{
+    shell(""" echo 'hello' """
+    )
+  }
+}

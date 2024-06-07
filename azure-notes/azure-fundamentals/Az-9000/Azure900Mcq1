@@ -1,0 +1,99 @@
+Azure Cognitive Services API --
+Logic apps, functions, and service fabric are all examples of what model of compute within Azure?
+Servelress Model
+
+In Microsoft Azure, what is the maximum number of virtual machines that can be included in a single Virtual Machine Scale Set, as per Azure's standard guidelines and capabilities?
+100
+ single Virtual Machine Scale Set can support up to 1000 VM instances.
+
+High availability in a system means that it is designed to operate continuously without failure for a long period of time. This is achieved by building redundancy into the system, eliminating single points of failure, and enabling rapid recovery from any failures that do occur. In other words, even if a component of the system fails, there are other components that can take over, allowing the system to continue operating seamlessly.
+
+While high availability often aims for close to 100% uptime, the claim of maintaining 100% availability is practically unrealistic due to factors like maintenance needs and unexpected failures. Also, having a minimum of two VMs may contribute to high availability but isn't a definitive requirement — it depends on the specifics of the system architecture.
+most Azure GA services do have service level agreements
+Azure's hosted SQL database service -
+SQL Database is a SQL Server compatible option in Azure, a database as a service
+
+
+---- Distributed Denial of Service (DDoS) attacks-----
+Network-level attacks are attacks that target the network infrastructure,
+such as the routers and switches that connect your Azure resources to the internet.
+Azure DDoS Protection IP Protection Tier can protect against network-level attacks by absorbing and rerouting excessive traffic,
+and by scrubbing malicious traffic.
+
+Transport-level attacks are attacks that target the transport layer of the network protocol stack, such as TCP and UDP.
+ Azure DDoS Protection IP Protection Tier can protect against transport-level attacks by absorbing and rerouting excessive traffic,
+ and by scrubbing malicious traffic.
+
+Application-level attacks are attacks that target the application layer of the network protocol stack, such as HTTP and DNS.
+ Azure DDoS Protection IP Protection Tier does not protect against application-level attacks,
+  because it is designed to protect against network and transport-level attacks.
+
+ protect against application-level attacks, you need to use a web application firewall (WAF).
+ A WAF is a software appliance that sits in front of your application and filters out malicious traffic.
+ WAFs can be configured to protect against a wide variety of application-level attacks,
+ such as SQL injection, cross-site scripting, and denial of service attacks
+
+ In order to establish a site-to-site VPN connection with Azure,
+ a VPN Gateway is required on your company's internal network.
+ A VPN Gateway is a specific type of virtual network gateway that sends encrypted traffic across a public network, like the Internet.
+
+What is the name of the group of services inside Azure that hosts the Apache Hadoop big data analysis tools?
+HDInsight
+
+Agility in cloud computing
+It refers to the ability to quickly respond to and drive changes in the market
+
+They are resources that execute tasks requiring CPU cycles" - Compute Services
+
+Azure Resource Manager (ARM) is the deployment and management service for Azure.
+ It provides a management layer that enables you to create, update, and delete resources in your Azure account.
+ The ARM model allows you to work with resources in a consistent manner, whether through Azure portal, PowerShell, REST APIs/SDKs,
+ or the Command-Line Interface (CLI).
+
+
+Compliance Manager will track your own compliance with various standards and laws.
+Azure Security Center - unified security management and threat protection; a security dashboard inside Azure Portal
+Log Analytics Workspace is required to collect logs and metrics
+you can create custom policies using JSON
+
+Azure Stack, an extension of Azure that allows businesses to run apps in an on-premises environment
+and deliver Azure services in their datacenter.
+With Azure Stack, you get the flexibility of using Azure’s cloud capabilities while maintaining your own datacenter for privacy,
+regulatory compliance, or other requirements.
+
+Additionally, Azure offers services such as Azure Private Link,
+ which provides private connectivity from a virtual network to Azure services,
+ and Azure ExpressRoute, a service that enables a private, dedicated network connection to Azure.
+So, contrary to the statement, Azure does have private cloud offerings along with its public cloud, making the statement FALSE.
+
+Reserved Instances often offer 40% or more savings off of the price of pay-as-you-go virtual machines
+
+Azure Monitor - a centralized dashboard that collects all the logs, metrics and events from your resources
+Network Security Group (NSG) - a fairly basic set of rules that you can apply to both inbound traffic and outbound traffic
+that lets you specify what sources, destinations, and ports are allowed to travel through from outside the virtual network to
+inside the virtual network
+
+Cool access tier offers cost savings when you expect to store your files and not need to access them often
+Cognitive Services is an API that Azure provides, that gives access to a set of pre-built machine learning models including vision services,
+speech services, knowledge management and chat bots.
+
+In Azure, Management Groups provide a way to manage access, policies, and compliance for multiple subscriptions.
+They can be structured into a hierarchy for the organization's needs.
+All subscriptions within a Management Group automatically inherit the conditions applied to the Management Group,
+facilitating governance on a large scale.
+
+Resource Groups, on the other hand, are containers for resources deployed on Azure.
+They do not provide management capabilities across multiple subscriptions.
+
+RBAC (Role-Based Access Control) is a system that provides fine-grained access management to Azure resources
+ but it doesn't inherently support the organization of subscriptions into hierarchies.
+
+Azure Active Directory is a service that provides identity and access management
+ capabilities but does not provide a direct mechanism for managing multiple subscriptions in nested hierarchies.
+
+review features are not fully ready and this phase does not include formal support.
+Private Preview, Public Preview, and General Availability
+
+Distributed Denial of Service attacks (DDoS) -a type of attack that originates
+from the Internet that attempts to overwhelm a network with millions of packets of bad traffic that aims
+to prevent legitimate traffic from getting through

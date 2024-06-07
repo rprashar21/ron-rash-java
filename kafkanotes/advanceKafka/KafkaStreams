@@ -1,0 +1,11 @@
+So we have polled data using kafkaCOnnector to our topic{wikimedia.recentchange} in our kafka broker
+now we want to perform some computations using this like count the no of times an email was created by a bot or human
+This can be done using kafkas Stream application
+
+What is kafka Streams?
+Easy data processing and transformation library within kafka like data transformation,data enrichment,fraud detection,
+monitoringand alerting
+This can  be aeasily done using a standard java application , no need to write a separate cluster
+
+
+

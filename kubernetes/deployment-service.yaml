@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-11-08T18:41:26Z"
+  labels:
+    app: credit-k8-deployment
+  name: credit-k8-deployment
+  namespace: default
+  resourceVersion: "151048"
+  uid: 059a740f-909d-42aa-88a8-aebd625ee0a8
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.108.164.252
+  clusterIPs:
+  - 10.108.164.252
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 31343
+    port: 8082
+    protocol: TCP
+    targetPort: 8082
+  selector:
+    app: credit-k8-deployment
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost

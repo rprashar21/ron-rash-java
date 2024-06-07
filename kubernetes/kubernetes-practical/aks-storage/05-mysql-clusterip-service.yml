@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service # name of the load balcner service
+  labels:
+    app: mysql-service
+  namespace: # optional
+spec:
+  type: ClusterIp # optional which means ot will be an internal load abalncer
+  selector:
+    app: mysql-pod # name of the pod it has to redirect traffic
+  ports:
+    - name: http
+      port: 3306 # service port
+  clusterIP: none # this means we are using ClusterIP load baalncer
+

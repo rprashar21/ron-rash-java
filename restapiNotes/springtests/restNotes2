@@ -1,0 +1,10 @@
+@RequestMapping("/users/{id}")
+public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+    // Code to retrieve user by ID
+}
+
+In Spring MVC, both @RestControllerAdvice and @ControllerAdvice are used to handle exceptions and apply global behavior to controllers.
+ However, they have different purposes and are used in different scenarios:
+
+In summary, @ControllerAdvice is used for traditional Spring MVC applications where the response can be in various formats,
+ while @RestControllerAdvice is used specifically for RESTful APIs, where the response is typically in JSON format.

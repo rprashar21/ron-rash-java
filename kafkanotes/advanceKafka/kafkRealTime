@@ -1,0 +1,30 @@
+Important factors for partition count and replication factors
+partition can handle a thruput of a few mbs(measure it if you setup)
+more partitions means better parallelism,thruput,mor consumers{a partition is assigned to one consumer in a grp}
+we can have more brokers if you have more clusters
+
+
+Guideline
+Partitions per topic = Small cluster (<6 brokers): 3times(brokers) 18 partitions
+big cluster 12 brokers == 2*brokers == 24 partitions
+depends upon how many consumers you have
+
+Chooes the replication factor ,, nver have 1 in production ,, min is 2 ,usually 2 4
+(n-1 )
+more replication will reduce lead to high latenct if acks=all
+
+get started with 3 ,, if the replication factor is an issue get more brokers
+
+if u need more partitions add clusters
+
+Topic Naming convention
+MessageTYpes
+logging
+queuing
+tracking
+etl/db
+streaming
+push --> for bacth computations
+user --> user-specific data
+
+data format can be .avro , .protobuf .json .log

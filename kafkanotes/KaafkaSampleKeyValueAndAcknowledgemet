@@ -1,0 +1,78 @@
+The 4 core apis used by kafka are
+producer,consumer,stream,connector api
+
+Consumer offset --> it is on tje topics where where the consumer has last consumed message it has the details --
+ it is commited inside the toic
+if the consumer dies it will satrt reading message from where it left whcih means duplicate mesage can be read ,, we need to make sure our systekm is idempotenet
+which means it can handle duplicate messages
+offsets are commited instantly if processging goes wrong messages can be lost
+consumer has read from eg PaymentTopic -- and has read from offet 0-20 and then goes down and then when it comes up it will start reading messages from offset 21
+
+Consumer Groups -- >ConsumerPayment --> grp1 --> reading from PaymenTopic{ partitions 0 and 1}
+                    ConsumerPayment --> grp1 --> reading from PaymenTopic {partitions 2 and 3}
+                    ConsumerBooking --> grp2 --> reading from BookingTopic {partition 0 and 1}
+                    ConsumerBookingIdle --> grp1 --> reading from BookingTopic {partition 1 and 2}
+
+Consumer Groups grp1 there can be multiple consumer instances of same group reading from same topic on different partitions
+COnsumer poll is single threaded      TestTopic{p0,p1,p2,p3} --{grp1-ConsumerA po}  consumer A has 4 instances of same group
+                                                               {grp1 ConsumerA p1} {grp1 ConsumerA p2} {grp1 ConsumerA p2}
+
+                                                               {grp2 -COnsumer B p0,p1} -- Consumer B has 2 instances first insatce is reading from p0 and p1
+                                                               {grp2 -COnsumer B p2,p3} -- Consumer B has 2 instances second instance is reading from p2 and p3
+
+Each Application will have unique consumer groups
+Brokers manage these consumer groups -->
+
+Commit Log
+Kafka wrtes the message to the file system --> lik in our machine if it is installed in our machine
+Each partition will have its own log,
+
+Retention Policy
+how long messages are retained in these files --
+property is log.retention.hours in server.properties for 7 days
+
+
+Producer
+Prodcer writes data to the topics and knows which topic to write , incase of failures they recover automaticalyy
+They can choose to send a key with the message ()
+if key is null -- data is sent in round robin manner
+if key is !null  -- data is sent to the same partition hashing.
+key is id_123 -- sent to partition0
+key is id_123 -- sent to partition0  again sent to same partition
+
+key/ value can be null they can be compressed and headers are optional
+kafka producers only send and consume bytes
+
+data serialization means converting these objects to bytes
+keyobject      value object
+123            "hello world"
+
+int              string
+keySerializer    ValueSerializer is StringSerializer
+IntegerSerializer
+
+key is           Value is binary
+binary
+
+Kafka partioner is a code logic whchc decides the message should be sent to which partition
+record -->.send-> producer{partition logic} -->partition1
+keyhashing is the process of determining the mapping of a key to a partition
+keys are hashed using the murmur2algo
+
+targetPartion = Math.abs(Utils.murmur2(KeyBytes))%(numPartion-1)
+
+Producer acknolegemet
+acks=0 means producer will not wait for acknowledgement
+acks=1 -->prodcuer will wait fro leader
+acks=all prodcuer will wait fro leaders and replicas
+
+min.insync.replicas=1: only the leader has to acknowledge
+min.insync.replicas=2:  the leader and one replica has to acknowledge
+
+this is the bare min , so that if the leader fails there is atleast one backup
+
+Kafka Topic Avialabilty
+acks=all and min.insync.replicas=2: this is recommended becoz we can afford for atleast on broker to go down
+
+that is why we should have a replication factor of 3 which means 3 partitions across 3 differemt serves
+the leader and the replicass will have to acknowledge ,, we will never loose data

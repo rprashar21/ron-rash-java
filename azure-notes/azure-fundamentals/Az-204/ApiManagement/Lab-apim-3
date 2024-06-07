@@ -1,0 +1,56 @@
+API Management provides different ways to authenticate users.
+Subscriptions are a mechanism for granting access to APIs in API Management.
+You saw previously that APIM subscriptions are enabled by default when you created your API.
+Subscriptions provide an API consumer with a subscription key that they can include in requests to grant access to an API.
+Subscriptions can grant access at the following scopes:
+
+Product
+All APIs (every API in an API Management instance)
+An Individual API
+When you created the consumption-tier APIM instance, a default all API subscription was created automatically.
+That default subscription allows the requests to succeed when using the portal's built-in test mechanism.
+It is recommended to create a different key for each API consumer.
+
+As you saw earlier, requiring a subscription can be enabled or disabled.
+You will re-enable the requirement for a subscription on your API in this lab step and understand
+how subscription keys are used in requests. Lastly, you will see how to create new subscriptions.
+
+Step 1
+click on the any api -- goto test --> HTTP request
+Back in the portal Test tab, click on the eye icon, and observe the HTTP Request section:
+
+The Ocp-Apim-Subscription-Key request header with the default subscription key value assigned
+(you can reveal the actual value by clicking the eye icon in the upper-right corner).
+ There is also an additional header included that allows you to trace the handling of the request.
+
+With the subscription key included the request returns a success code.
+The response body all of the HTTP headers, which is what httpbin's /get operation is expected to do.
+ Notice API Management has added additional headers.
+
+Step2
+Click the Trace tab and observe the time that each phase takes and glance through the trace details.
+
+You may also want to try adding the subscription-key URL query parameter
+(append _?subscription-key= to the URL) to confirm that your browser can get a successful response
+to the /get operation with a subscription key provided in the URL.
+
+Step3
+Click Subscriptions in the APIM sidebar:
+
+The default Built-in all-access subscription key is the only one on the list.
+Also, note that subscription keys have a primary and secondary key which makes it possible to rotate
+keys without downtime because the primary and secondary keys can be regenerated indepent of one another.
+
+The Allow tracing setting needs to be enabled to support tracing.
+ You may not want tracing enabled for external consumers.
+
+Click Add subscription to familiarize yourself with the available settings for subscriptions.
+
+It is not necessary to create another subscription for this lab,
+but you may create a subscription and test that the key works when provided as a URL query parameter for your API.
+
+In this lab step,
+you learned about APIM subscriptions and how they can be used to restrict access to APIs.
+ Subscriptions include two keys that allow you to rotate keys in case a key is leaked.
+ An all API subscription gets created when you created the consumption tier API Management instance by default.
+

@@ -1,0 +1,92 @@
+Create an Azure API Management service instance
+Create APIs in API Management
+Use API Management policies to transform responses and secure APIs
+Secure APIs in API Management with Subscriptions
+Secure APIs in API Management with Client Certificates
+
+Steps to create an apim resource
+give necessary details like resourcegrp,subsription resource name , plan consumption plan
+
+
+API Management allows you to define APIs using a variety of approaches including:
+
+Importing from API standard definitions such as OpenAPI,
+Building the API in the provided portal designer, and
+Using existing Azure resources.
+
+Steps for api
+In the Create from App Service form that appears, click Browse,
+select the only available App (its name begins with calab-) and click Select.
+This is the App created when you started the lab.
+You can view the app at the Web App Url in the upper-left corner of this lab under your lab credentials:
+
+Step 2
+The Full view allows you to configure a versioning scheme,
+which is very useful in production but not required for this lab.
+
+The default API when creating from an App Service app provides an operation for each of the most common
+HTTP verbs (GET, POST, etc.) and sets the app as the Backend (seen on the right).
+The defaults don't match the operations for what's needed by httpbin in this lab so you will modify the operations.
+
+Step 3
+Click the Setting tab and copy-paste the value of Base URL into the Web Service URL:
+
+Step 4
+Click the Design tab and click the pencil icon next to Frontend to view the OpenAPI spec editor:
+The OpenAPI editor allows you to edit all the operations in a single view.
+It is also possible to edit individual operations using a form view in the portal.
+
+It is outside of the scope of this lab to explain in detail the OpenAPI specification.
+Know that it is a common approach to describing RESTful APIs and can be represented in JSON or YAML.
+The view in the portal uses JSON. Beyond that, what is needed for the lab will be explained when required.
+
+Step 5
+What you selected will be replaced in the next instruction.
+The selection includes API operation definitions and some default security settings that are
+covered in more detail in the following lab steps.
+The security objects are automatically rewritten until you disable them in the API settings.
+
+    "paths": {
+        "/get": {
+            "get": {
+                "description": "Returns GET data.",
+                "operationId": "/get",
+                "responses": {
+                    "200": {
+                        "description": "The GET request's data (headers, etc.)"
+                    }
+                }
+            }
+        },
+        "/xml": {
+            "get": {
+                "description": "Returns XML data.",
+                "operationId": "/xml",
+                "responses": {
+                    "200": {
+                        "description": "Data in XML format"
+                    }
+                }
+            }
+        }
+    }
+}
+
+This specification defines two operations (defined in the paths object):
+
+An HTTP GET /get operation that returns a 200 response with the request's headers (in JSON format by default)
+An HTTP GET /xml operation that returns a 200 response with a response in XML format.
+You can view the responses directly from the app (not going through the APIM instance)
+at the following URLs, where you replace <Web App Url> with the Web App Url presented below your lab credentials in the upper-left panel:
+
+<Web App Url>/get
+<Web App Url>/xml
+
+Summary
+In this lab step, you defined a new API that uses an App Service app as its backend.
+The APIM instance is acting as a proxy in front of the App Service app.
+You defined the API operations using an OpenAPI specification in JSON format.
+
+It is worth mentioning that related APIs in APIM can be grouped using the concept of APIM Products.
+Products should be used in practice and are required for publishing APIs,
+ but are not necessary to illustrate the learning objectives of this lab.

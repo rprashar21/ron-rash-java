@@ -1,0 +1,27 @@
+az login
+az aks get-credentials --resource-group RG-DEV-CS01-CL01 --name K8-DEV-CS01-CL01
+kubectl config use-context K8-DEV-CS01-CL01
+kubectl get pods -n ns-dev-ccm-10
+
+kubectl config use-context K8-DEV-CS01-CL01
+
+kubectl: This is the command-line tool for interacting with a Kubernetes cluster.
+It allows you to deploy applications, inspect and manage cluster resources, and view logs.
+
+config: This is a subcommand of kubectl. It is used for modifying or viewing configuration details related to kubectl.
+The configuration details include cluster, user, and context information.
+
+use-context: This is a specific operation under the config subcommand.
+The use-context operation is used to switch the current context to a specified one.
+
+K8-DEV-CS01-CL01: This is the name of the context you want to switch to.
+In Kubernetes, a context is essentially a combination of a cluster, a user, and a namespace.
+ It represents a specific environment within your Kubernetes setup.
+ For example, you might have different contexts for development, testing, and production environments.
+
+So, when you run the command kubectl config use-context K8-DEV-CS01-CL01,
+you are telling kubectl to change the current context to K8-DEV-CS01-CL01.
+This means that all subsequent kubectl commands will be executed against the cluster and namespace defined in this context,
+and using the credentials associated with it.
+This command is very useful in scenarios where you are managing multiple clusters or
+when you need to switch between different environments (like development, staging, and production) within the same cluster.

@@ -1,0 +1,43 @@
+goto azure active directory --> mfa settings
+
+Service Settings has Mafa settings like trusted ips,app passwords,verification options
+goto azure active directory --> mfa settings --> additional cloud based settings
+trusted ip only works with full mfa feature, inside company intranet and will bypass the 2 step verification process
+
+=====================================================================================================================================
+
+ For all of these to use u need a premium membership
+Enable SSPR - Self Service Password Reset
+goto azure active directory --> password-reset   {create a group  wan to apply the ssr to} -->
+from properties page --> click on selected under the pwd reste enable option and then select the grp, then no of auth methods.
+and make 2 optons like email and phone , sleect other options like days min devices
+
+=====================================================================================================================================
+Signin reports can bes seen under 2 main components
+Activity
+ Signins -- user sigin in activit amanaged activites
+ Audit logs
+Security
+Risk events -- attempts or failed attempts
+
+To asee all these roles a Tenant must have Azure Ad Premium license
+To see the reports user must be
+Security Admin
+Security Reader
+Report Reader
+Global Admins
+User can see his signs activties
+
+Admins can see patterns of users , how many users have signed in
+
+=====================================================================================================================================
+How to use these signin reports
+got to azure active dir(Microsofts entra id)--> sign ins {under monitoring section}
+
+=====================================================================================================================================
+Azure Active Directory monitoring allows admin to route azure ad activity logs to diff services
+
+Az ad activity logs to -- {
+                          storage accounts, Azure event hub ,azure analytic logs --> and then to splunk or sumologic
+                           to analyse the data, dashboards create alerts
+                           }

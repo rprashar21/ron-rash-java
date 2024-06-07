@@ -1,0 +1,28 @@
+Helm is a package manager for kubernetes, helps at define,install upgrade complex kubernetes applications
+These packages are called charts
+They can be versioned,shared and published
+
+lets do a demo on helm chart for nginx server
+
+traffic --> servvice{load balancer}--> pod, replica3 of nginx server
+
+brew install helm
+helm search repo
+helm search wordpress
+helm search the hub
+helm search hub nginx
+
+traffic --> servvice{load balancer}--> pod, replica3 of nginx server
+
+install wordpress
+helm search hub
+helm search hub nginx
+helm repo add bitnami url --> first we need to install the bitnami and then do a search -- we install this repo which is actually a metadata and not a repo
+
+helm pull bitnami/nginx --untar=true --> puling nginx image
+
+
+helm install <name >bitnami/nginx  --> install ing nginx
+# this will  deploy all the mainfest files
+
+

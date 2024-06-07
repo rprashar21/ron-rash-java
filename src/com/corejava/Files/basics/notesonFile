@@ -1,0 +1,32 @@
+There are 2 packages java.io and java.nio
+
+java.io -- reading data from external resources
+file -- file i basically a handler used by the operating system to keep track of the file
+
+
+
+
+
+
+Reader
+FileReader
+Writer
+FileWriter
+
+InputStream
+FileInputStream
+
+BufferedInputStream
+
+PrintStream
+PrintWriter
+
+
+Java.nio -- non blocking nio with java --
+communication is done thru specific types of Channels ad  BUffer and date stroed ib
+They are aysnchromous, non blocking, they include file locking , this means instead of locking the entire file
+they block a region of the file
+Help to retreive metadat information
+file notification system, i.e chnages happening on file can be notified
+suppiorts multithreading, they manage memory efficiently,reading and writing files directly to and from memory buffers
+thru something called as FileChannel.

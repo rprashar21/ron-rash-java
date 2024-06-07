@@ -1,0 +1,69 @@
+
+The whole idea is to automate the entire process of provisioning servers
+Terraform is used for Infrastructure as code.
+provision software/servers  on the cloud.
+You can provision/provide virtual servers, load balancers, provide storage,databases.
+you can create a number of resources in the cloud,like virtual servers, load balancers,databases, networking configuration,
+using terraform configuration
+
+
+Typically, TerraForm is used to do server provisioning.
+929109527990
+ron
+
+Ansible is used for maintaining/configuration of the software on cloud
+
+TerraForm --
+1.terrform init --- downloads the plugins for aws,google
+
+2. creating Iam user in aws -> also setting up the environment variables
+   
+
+3. Create s3 buckets
+resource "aws_s3_bucket" "my_s3_bucket_rondev" { --> this is the internal name which we use in the terraform
+ bucket = "my-s3-bucket-rondev"  -->this is the name in aws cloud
+}
+
+In terraform when we want to execute a command it is 2 step process
+1. Plan -- to check what would happen if we exceute the command  -- terraform plan
+2. execute -- execute the plan                                   -- terraform apply
+3 states -Desired -- what we want  that is what we write in
+          Know -- what we have in backupfile
+          actual -- whatever is the state in aws
+
+We understood the importance of TerraForm.tfstate, and we understood the fact that in TerraForm,
+there are three different kinds of state - the desired state, which is actually defined in the terraform configuration files.
+
+The known state - which is present in the tfstate files,
+and the actual state which is actually the state of a specific resource on the cloud, on AWS.
+
+
+ commands executed in TerraForm
+brew install terraform
+terraform --version
+terraform version
+terraform init
+export AWS_ACCESS_KEY_ID=*******
+export AWS_SECRET_ACCESS_KEY=*********
+terraform plan
+terraform console
+terraform apply -refresh=false -- when we do not want the states to be refereshed
+terraform plan -out iam.tfplan  -- when we ant to store the plan to an output file
+terraform apply "iam.tfplan"    -- applying a specific plan
+terraform apply -target=aws_iam_user.my_iam_user --apply a specific resource becoz we know what has changed
+terraform destroy -- once everything is used you can destroy the resources
+terraform validate
+terraform fmt
+terraform show
+export TF_VAR_iam_user_name_prefix = FROM_ENV_VARIABLE_IAM_PREFIX
+export TF_VAR_iam_user_name_prefix=FROM_ENV_VARIABLE_IAM_PREFIX
+terraform plan -refresh=false -var="iam_user_name_prefix=VALUE_FROM_COMMAND_LINE"
+terraform apply -target=aws_default_vpc.default
+terraform apply -target=data.aws_subnet_ids.default_subnets
+terraform apply -target=data.aws_ami_ids.aws_linux_2_latest_ids
+terraform apply -target=data.aws_ami.aws_linux_2_latest
+terraform workspace show
+terraform workspace new prod-env
+terraform workspace select default
+terraform workspace list
+terraform workspace select prod-env

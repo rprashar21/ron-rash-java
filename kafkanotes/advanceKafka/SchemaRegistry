@@ -1,0 +1,37 @@
+Stores and retrieves schemas for producers and consumers
+ensure backward and forward compatabilty on topics
+we can decrease the size of the payload of data sent to kafka
+
+Apache Avro is a format,Protobuf or json
+
+Scheama regitry is a separate component ,, needs proper configuration that is confluent website we can see taht
+so that data sent from producers into kafka is validated ie, goo or bad ddata
+bcoz kafka does not know what dat u send string/int byte or good,bada data
+
+The schema registry is a separate component with producers and consumer need to be able to talk to them
+it rejects bad data
+
+
+How to slect whihc api
+Choose kafka producer when data is produced by u ,
+if data is sourced use kafka connectors
+
+
+Then to do Kafka to Kafka transformations you would use Kafka Streams,
+which is a library that we just saw,or KSQL DB, which is a database
+that allows you to do SQL queries on top of Kafka
+by also leveraging internally Kafka Streams.
+
+Then if you wanted to send data into a target for storage and for analysis later on
+then Kafka Connect Sink would be your main API.
+
+But if you have for example,the final goal of just sending an email
+and then it goes away.Then a Kafka Consumer would be a perfect API for you.
+
+Behind the scenes use schema registry
+
+Questions
+To transform data from a Kafka topic to another one use kafka streams
+To continuously export data from Kafka into a target database use kafka Connect Sink
+Kafka cannot verify our incoming data's schema and ensure it's correct,Kafka does not verify or parse incoming data
+Kafka does not have  a schema registry enabled by default, we need to separabtle

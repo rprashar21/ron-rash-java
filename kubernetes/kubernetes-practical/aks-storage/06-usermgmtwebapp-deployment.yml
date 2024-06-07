@@ -1,0 +1,39 @@
+apiVersion: app/v1 # version of the deployment currenty used
+kind: Deployment
+metadata:
+  name: webapp-mysql
+  labels:
+    app: webapp
+spec: # definition of replicas and pods
+  replicas: 1 # no of instances of pods for the application
+  selector: # name of the pod for which the replicas need to be cfreated
+    matcLabels:
+      app: webapp-pod
+  template: # definition of the pod
+    metadata: # name of the pod lables
+      name: webapp-pod # name of the webapp pod where the container will be deployed
+      labels:
+        app: webapp-pod
+    spec:
+      initContainers: # a container whihc will run while our container tries to access the backend pod
+        - name: init-db # name of the db
+          image: busybox:1.31 # nameo of the images
+          command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
+      containers: # webapp container related details
+        - name: webapp-pod-container # the container which wil run inside our pod
+          image: stacksimplify/kube-usermgmt-webapp:1.0.0-MySQLDB
+          imagePullPolicy: Always # this will alwasy pull thelatet s=image
+          ports:
+            - containerPort: 8080 # conatiner pirt where the pod is runnin
+          env:
+            - name: DB_HOSTNAME
+              value: "mysql-service" # name of the service
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "webappdb"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: "dbpassword11"
+

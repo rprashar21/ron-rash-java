@@ -1,0 +1,45 @@
+Azure storage account iss accessible from anywhere in the world over HTTP or HTTPS.
+
+Type of storage account determines the storage service and redundancy services
+Locally redundant storage (LRS)
+Geo-redundant storage (GRS)
+Read-access geo-redundant storage (RA-GRS)
+Zone-redundant storage (ZRS)
+Geo-zone-redundant storage (GZRS)
+Read-access geo-zone-redundant storage (RA-GZRS)
+
+Standard general-purpose v2
+Blob Storage (including Data Lake Storage), Queue Storage, Table Storage, and Azure Files
+LRS, GRS, RA-GRS, ZRS, GZRS, RA-GZRS all of them support the above
+Standard storage account type for blobs, file shares, queues, and tables.
+Recommended for most scenarios using Azure Storage.
+If you want support for network file system (NFS) in Azure Files, use the premium file shares account type.
+
+
+Premium block blobs Premium storage account type for blob blocks only.
+Blob Storage (including Data Lake Storage)
+LRS, ZRS
+Recommended for scenarios with high transaction rates or that use smaller objects or require consistently low storage latency.
+
+Premium file shares - Premium storage account type for file shares only.
+Azure Files
+LRS, ZRS
+Use this account type if you want a storage account that supports both Server Message Block (SMB) and NFS file shares.
+
+Premium page blobs
+Page blobs only	LRS	Premium storage account type for page blobs only.
+
+benefits of using an Azure Storage Account is having a unique namespace in Azure for your data
+
+account name + Azure Storage service = endpoint
+
+Rules for storage account name
+3-24 chars in length with numbers and lowercase
+storage name must be unique within azure
+
+Azure storage services
+Blob Storage	https://<storage-account-name>.blob.core.windows.net
+Data Lake Storage Gen2	https://<storage-account-name>.dfs.core.windows.net
+Azure Files	https://<storage-account-name>.file.core.windows.net
+Queue Storage	https://<storage-account-name>.queue.core.windows.net
+Table Storage	https://<storage-account-name>.table.core.windows.net

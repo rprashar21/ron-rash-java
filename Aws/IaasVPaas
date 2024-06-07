@@ -1,0 +1,42 @@
+Iaas Infrastructuire as a service
+Infrastructure as code (IaC) is the process of managing and provisioning infrastructure
+(networks, virtual machines, load balancers, and connection topology) through CODE/Config Files.
+E:g
+Vagrant for local
+Terraform for Cloud
+Ansible for Servers
+
+Cloudformation for AWS
+Use Only Infrastructure from cloud like using vm virtual machine services to deploy ur app/databases
+Cloud Provider is responsible for Hardware,Netwroking and Virtualization
+Lets say u want to deploy a java application on a linux instance
+u are responsible for installing Linux then jvm and then the application
+You are responsible for Os upgrades and patches
+Application Code and Runtime
+Configuring Load Balances managing between these vms
+Auto Scaling -- limke redcuing nu of vms
+Availabilty -- making sure vm are avaiable
+
+These all are done using terraform
+The Cloud Provide is responsible for the hardware and virtualization software after that it is all ur responsibilty
+like upgrades scaling load balancing
+
+Alternative to This PAAS -platform as a service -- give the above responsibilty to cloud provider
+If u have a java app just give ur code ,, cloud provider is responsible for os and jvm,,
+u are responsible for the code of ur application
+
+In Paas
+Cloud Provide is responsible for Iaas + Os upgrades  patches application runtimes (ie auto scaling availability load balancing )
+Elastic Beanstalk  Azure App Service Google app engine
+Database  Relational & No Sql (Azure Sql Amazon RDS)
+Ai Queues Ml Operations
+
+ Docker Images of the Microservice --- Docker Image has everything a microserice needs
+ like app runtime jdk  code dependencies
+ Docker is cloud neutral light wieght and they do not have a guest OS and also provides isolation for containers
+ Amazon eks
+ Amzon ecs -- cloud container service in aws
+ Fargate -- Serverless ECS/EKS
+
+
+ Serverless -- u dont need to worry about ur clusters like if u have 2 instances-- what is the hardware/sofware/os of these instances

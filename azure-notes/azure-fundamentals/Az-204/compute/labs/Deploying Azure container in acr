@@ -1,0 +1,143 @@
+
+Logging int azure portal using the azure cli
+az login -u <>username -p <>password
+az login -u student-1458-2285097@labscloudacademy.onmicrosoft.com -p Ca1_QkybGSQO
+once u login into the account u can see the following details
+ {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "fd1fbf9f-991a-40b4-ae26-61dfc34421ef",
+    "id": "3555dde6-72a3-47a0-8305-ad3715fb42c3",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "CloudAcademyLabs Prod 6",
+    "state": "Enabled",
+    "tenantId": "fd1fbf9f-991a-40b4-ae26-61dfc34421ef",
+    "user": {
+      "name": "student-1595-2304314@labscloudacademy.onmicrosoft.com",
+      "type": "user"
+    }
+  }
+
+====================================================
+Azure Container Instances are the fastest way to deploy a container in Azure.
+An application which is containerized using docker/dockerized
+
+In this lab step, you will deploy a container image using Azure Container Instances.
+
+Step 1.
+rg=$(az group list --query "[].name" --output tsv)
+This will provide the resource group to deploy a Container Instance to.
+
+Use the az container CLI command to create an Azure Container Instance:
+
+az container create command creates a new container instance in Azure Container Instances (ACI).
+az container create --resource-group $rg \
+  --name calabscontainer \
+  --image gcr.io/cloudacademy-labs-support/aci-helloworld:1.0.0 \
+  --dns-name-label calab-$rg \
+  --ports 80 \
+  --cpu 1 \
+  --memory 2
+
+This command would create a new container instance in Azure with the specified configuration.
+ It's designed to run a simple "Hello World" web application accessible over the internet.
+
+Steps to see the container instance
+ Go to azure portal and search for azure container instances
+ u will see  a container named calabscontainer c
+ Click the calabscontainer Container Instance:
+ Copy the FQDN:
+ Open a new browser tab and paste in the FQDN:
+ go back an click on containes
+ Containers are deployed in container groups.
+ Container groups are a similar concept to Kubernetes pods.
+  They are a grouping of containers and run on the same hardware and use the same networking.
+  click on logs to see the logs
+
+  You can also connect to the container shell through the connect tab for further troubleshooting.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+In this lab step, you will deploy an Azure Container Instance to perform a benchmark test and then power off the container when complete.
+
+Azure Container Instances only bill for the resources used while the container is running
+
+In your terminal, get the fully qualified domain name of the web server container:
+fqdn=$(az container show --name calabscontainer --resource-group $rg --query "ipAddress.fqdn" -o tsv)
+
+
+Run the following command to start a container that runs a benchmark process:
+az container create \
+  --resource-group $rg \
+  --name benchmark \
+  --image gcr.io/cloudacademy-labs-support/ab:1.0.0 \
+  --dns-name-label bench-$rg \
+  --ports 80 \
+  --cpu 2 \
+  --memory 2 \
+  --command-line "/usr/bin/ab -k -c 1 -n 10000 http://$fqdn/" \
+  --restart-policy Never
+
+The --restart-policy parameter is set to Never which will cause the container to stop and never start again after running its process.
+which means the container will not start automatically
+
+--  --name benchmark \  this the name of the container instance
+When started the benchmark container will run the apache benchmark tool specified using the --command-line
+parameter which will run the test against the previously deployed ACI web server's FQDN
+
+az container logs --name benchmark --resource-group $rg
+
+The container logs will display the results from the benchmark test
+
+tye to scale up the webserver
+az container create \
+  --resource-group $rg \
+  --name calabscontainer \
+  --image gcr.io/cloudacademy-labs-support/aci-helloworld:1.0.0 \
+  --dns-name-label calab-$rg \
+  --ports 80 \
+  --cpu 2 \
+  --memory 4
+
+The following error is displayed indicating that the container must be re-deployed in order to scale up:
+InvalidContainerGroupUpdate) The updates on container group 'calabscontainer' are invalid.
+ If you are going to update the CPU Resource (old "1", new "2"),Memory Resource (old "2", new "4") for a container group,
+ you must delete it first and then create a new one.
+Code: InvalidContainerGroupUpdate
+Message: The updates on container group 'calabscontainer' are invalid.
+If you are going to update the CPU Resource (old "1", new "2"),Memory Resource (old "2", new "4") for a container group,
+ you must delete it first and then create a new one.
+
+Delete the Azure Container Instance group:
+az container delete --resource-group $rg --name calabscontainer --yes
+
+Re-deploy the container group with more resources:
+az container create \
+  --resource-group $rg \
+  --name calabscontainer \
+  --image gcr.io/cloudacademy-labs-support/aci-helloworld:1.0.0 \
+  --dns-name-label calab-$rg \
+  --ports 80 \
+  --cpu 2 \
+  --memory 4
+
+az container create \
+   --resource-group $rg \
+   --name calabscontainer \
+   --image <image-name>
+   -
+
+Use az container start to start the benchmark test again:
+
+az container start --name benchmark --resource-group $rg
+
+Because the benchmark container group is already configured to run the benchmark test against the webserver container,
+simply starting the container will kick off the benchmark test again.
+
+Check the container logs to view the benchmark results:
+az container logs --name benchmark --resource-group $rg
+
+This is an incredibly useful method for troubleshooting performance on an application.
+In a real-world scenario, this can be further expanded upon to check performance from different Azure regions
+ by deploying container groups in different regions as well as deploying them in different internal virtual networks.
+
+In this lab step, you learned about restart policies and how to deploy an Azure Container Instance to run one task and then stop.

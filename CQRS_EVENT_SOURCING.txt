@@ -1,0 +1,71 @@
+Cqrs -- data is often queried frequently than altered  or written separately
+       high performance  better management ,reading and writing data separately
+
+It provides us with the ablity  to scale reads and writes sseparatley .Heavy traffic on the read side will nt affect the write side .
+Also it provides us the ability to save resources by not being forced to scale a part of the application that does not require it .
+eg if command side is idle and the query side is taking several hits we can scale/increase the no of pods on query side
+
+Event Sourcing - It is an approach where whatever changes you make on a object or entity is stored as a sequence of immutable events in an event store
+as opposite to just storing the current object
+
+Event store provides a complete log for every state change
+                 the state of an object/aggreagte can be recreated by replaying the event stored
+                imporves write performace as events are appended without any update or delete operations
+                in case of failure the event store van be used  to restore read database.
+
+Kafka - event streaming platform- has capability to  ingest millions /trillions of records per day without any performance lag
+
+Architecture -- BankAccountCommandApi - Command SIde
+   Components -- CommandDispatcher Interface
+                CommandHandler    Interface
+                EventSourcingHandler Interface
+                EventStore I- Db MongoDB
+                AccountAggreagte
+                AggregateRoot
+                EventPublisher Interface
+                EventStoreRepository Interface
+
+    BankAccountQueryApi--
+    Components - QueryDispatcher Interface
+                 QueryHandler   Interface
+                 BankAccountEntity
+                 EventConsumer Interface
+                 EventHandlerInterface
+                 MySql Db as ReadDatabase
+
+How it works --
+        COMMAND SIDE
+1.A client makes an open account command request -- the commandApi takes in the request
+The commandApi from its controlMethod() uses the command dispatch to dispatch the open account command  to the command Handler
+
+2. CommandHandler will create a new AccountAggreagte instance which extends the AggregateRoot  ,
+Once the open account command has been handled, it will raise the account open event that will alter the state of the aggregate.
+
+3. The command handler will then post the account aggregate object to the event sourcing handler that will persist,
+the uncommitted changes on the aggregate in the form of events via the events store.
+Once completed, it will mark the changes on the aggregate as committed.
+The events store, on the other hand, will be responsible for persisting new events to the event or via the events store EventStoreRepository
+
+4. Once the event is persisted it will publish a new event to the kafka topic thru the EventPublisher
+
+     QuerySIde
+
+1. There will be an event consumer that will subscribe to the kafka topic and pass the event to the event handler
+2. The handler will handle the AccountOpenEvnent and build the BankAccountEntity and persist to read database
+
+3. when client wants the the account info -- it will on query side same as controller -- handler -db get the data back
+
+
+Tools      
+
+
+Cqrs -  3 message types -- command , query events
+
+Command - something has to be done -- eg open a account/case/hearing command. info to take an action
+events -- describes something has happened -- A typical source of events are the agregates.
+          When something important has happened in an aggreagte an event is raised
+
+          recreate the state of the object or aggragte
+
+aggregate - an aggregate is an Entity/ group of entities that is always kept in a consistent state.
+            aggreagte root is responsible to keep it in consistent state

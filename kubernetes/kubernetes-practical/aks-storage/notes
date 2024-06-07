@@ -1,0 +1,81 @@
+Azure Disks -- offers storage, highly durable,high performance,securtiy,scalable for traffic
+
+We are going to create a MySQL Database with persistence storage using Azure Disks for that we need to create strorage classes,persitent volumes
+config maps
+Kubernetes Object	    YAML File
+
+Storage Class	        01-storage-class.yml
+Persistent Volume Claim	02-persistent-volume-claim.yml
+Config Map	             03-UserManagement-ConfigMap.yml
+Deployment, Environment Variables, Volumes, VolumeMounts	04-mysql-deployment.yml
+ClusterIP Service	    05-mysql-clusterip-service.yml
+
+Concepts
+Stroage Class
+
+kubectl get sc -- gets the storage class details
+NAME                    PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+azurefile               file.csi.azure.com   Delete          Immediate              true                   20h
+azurefile-premium       file.csi.azure.com   Delete          Immediate              true                   20h
+default (default)       disk.csi.azure.com   Delete          WaitForFirstConsumer   true                   20h
+
+reclaimPolicy - delete
+
+ This manifest creates a StorageClass named "managed-premium-retain-sc"
+ with specific settings for dynamic provisioning of Azure Disk storage in a Kubernetes cluster.
+
+for storage class we do not have spec we have parameters
+we can use the default storage class but if we want that even when our workloads are deleted it sholud be retained we can
+go for custom
+
+apiVersion:
+kind: StorageClass
+metadata: managed-premium-retain-sc
+provisioner: kubernetes.io/azure-disk who is the provisioner for this azure disk
+reclaimPolicy: Retain ie even after deleting the workloads/PVs persitent Volumes the associated Azure Disk will not be deleted. .
+volumeBindingMode: default is immediate, but in our case we want when we deploy the workLoad for that WaitForConsumer
+                   ie which means that the PV will not be provisioned until a Pod using the PVC is scheduled on a node.
+                   useful unused PVS will not be created
+allowVolumeExapnsion: true allowing PVs to be resized if the underlying Azure Disk supports it.
+parameters: Contains Azure-specific parameters for provisioning disks.
+ storageAccountType: Premium_LRS, -- Premium (SSD) storage should be used. You can change this to "Standard_LRS"
+                               if you want to use Standard (HDD) storage.
+ kind: managed --> default is shared othere are maneged and dedicated indicating it is managed by azure
+
+# Create Storage Class & PVC
+kubectl apply -f storage-class.yml
+kubectl apply -f persistent-volume-claim.yml
+
+# List Storage Classes
+kubectl get sc
+
+# List PVC
+kubectl get pvc
+
+# List PV
+kubectl get pv
+
+create a deployment file for database pod
+mysql-deployment.yml , this is a deployment file then create a service-deployment file  that is an internal load balancer ClusterIp
+
+# the aim is to have a web app deployed with a backedn
+internet-->loadbalancerSevice -- webapppod -->clster ip --> mysql-pod
+
+We are going to deploy a User Management Web Application which will connect to MySQL Database schema webappdb during startup.
+Then we can test the following APIs
+Create Users
+List Users
+Delete User
+
+what files need to b created
+Kubernetes Concepts	YAML File
+Deployment	05-UserMgmtWebApp-Deployment.yml
+Environment Variables	05-UserMgmtWebApp-Deployment.yml
+Init Containers	05-UserMgmtWebApp-Deployment.yml
+Load Balancer Service	06-UserMgmtWebApp-Service.yml
+
+If we deploy all manifests at a time, by the time mysql is ready our User Management Web Application pod will be throwing error due to unavailability of Database.
+To avoid such situations, we can apply initContainers concept to our User management Web Application Deployment manifest.
+We will see that in our next section but for now lets continue to test the application
+
+Now lets create a deployment file for web application and pass env variable to connect to the database

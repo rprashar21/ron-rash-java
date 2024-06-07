@@ -1,0 +1,10 @@
+ while both Azure PaaS and serverless computing aim to simplify application deployment and management,
+ serverless takes it a step further by abstracting away almost all infrastructure management,
+ providing auto-scaling, and offering a consumption-based billing model.
+
+ Paas                      Vs                                              Azure Functions or serverless
+ control over overall architecture                                      we have no control plus it does auto scaling based on consumption
+ choose runtime and sacling options                                      follow a consumption-based pricing model.
+ predictable pricing model based on the resources you allocate,        You are billed based on the number of executions and the resources consumed during those executions.
+ such as VM instances or database capacity.
+ You pay for the allocated resources, regardless of whether they are fully utilized.

@@ -1,0 +1,58 @@
+Scaling out --> increasing the no of resources
+Scaling in --> decreasing the no of resources
+Scaling up --> changing the pricing tier to a premium tier
+Scaling dow --> changing to a lower pricing pla like the free, or basic
+
+App Service Plan
+Free Basic Standard Premium
+
+
+
+ scaling in/out and only availabe in basic plans and higher not on free and shared
+ basic includes manual scaling
+ Autscaling is withou human intervention is on standard palns and hire
+
+ Service which handles Autscaling is Azure Monitor
+
+ Autoscale via Appservice plan in Azure monitor
+ or go in the Azuremonitor and use Autoscale service plan )
+
+
+Autoscaling
+Scale Condition -->  Action
+Rule --> Virtual Machine
+
+there can many rules
+cpu precentage
+memory percentage
+data in
+dat out
+disk queue length = no of messages in the queue
+wide variery of network metrics
+
+eg
+Rule is if cpu % == 75 in a 10 min period
+Action --> scale to 1 or scale to maybe 3 vms
+
+Cool down period --> no of mins to wait before scaling operation can begin
+def = 5mins
+
+eg
+rule --> if cpu % is >-70% for 5 mins
+action --> increase to 2 vms
+
+Scale out will always win over scale in becoz of perfromance issues
+
+Scale to a specific count -- based on scheduling ie time
+i.e sacle to 5 vms on weekdays from 08:00 - 6pm
+and scale to 1vm on weekends
+
+questions
+1. “cool down” period. This is the number of minutes to wait after a scaling operation before Monitor can scale again.
+2. by default the cool down is for 5 mins
+3. When creating rules, besides metrics, there’s the scaling action that you want it to take.
+You can tell Monitor to scale out by exactly a certain number of VM instances, such as 1 in our example,
+or scale out to a total number of instances, such as 3, or you can tell it to scale out by a percentage.
+4. The way autoscaling works is that you can create one or more scale conditions that specify exactly
+what will trigger Azure to add or remove virtual machines.
+5. The service that actually handles autoscaling is Azure Monitor.

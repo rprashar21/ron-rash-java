@@ -1,0 +1,63 @@
+Tool for accessing storage account for a limted period of time, can share with clients
+Shaed Access Signature is a signed uri for accessing storage account for a limted period of time, can share with clients
+
+3 types of SAS
+User Assigned sas -- secured with microsoft identity -- share access to blob storages
+Service sas-- secured with storage account key -- delegate access to all storage service , blobs,table,queues,files
+account sas  -- secured with storage account key -- delegate access to all storage service , blobs,table,queues,files
+               one or more storage services
+
+Microsoft recommends that you use Microsoft Entra credentials instead of account keys as they can be compromised easliy
+whe ur app requires access to blob storage use Microsoft Entra credentials to create a user delegation SAS for security
+
+
+How shared access signatures work??
+This is a shaed access signature
+ https://medicalrecords.blob.core.windows.net/patient-images/patient-116139-nq8z7f.jpg
+ ?sp=r&st=2020-01-20T11:42:32Z&se=2020-01-20T19:42:32Z&spr=https&sv=2019-02-02&sr=b&sig=SrW1HZ5Nb6MbRzTbXCaPm%2BJiSEn15tC91Y4umMPwVZs%3D
+
+ sp=r	Controls the access rights.
+         values add, c for create, d for delete, l for list, r for read, or w for write.
+         This example is read only. The example sp=acdlrw grants all the available rights.
+
+ st=2020-01-20T11:42:32Z	The date and time when access starts.
+ se=2020-01-20T19:42:32Z	The date and time when access ends. This example grants eight hours of access.
+ sv=2019-02-02	            The version of the storage API to use.
+ sr=b	                    The kind of storage being accessed. In this example, b is for blob.
+ sig=SrW1HZ5Nb6MbRzTbXCaPm%2BJiSEn15tC91Y4umMPwVZs%3D	The cryptographic signature.
+
+ Bestpractices
+ securely distribute a SAS and prevent man-in-the-middle attacks, always use HTTPS.
+ mist secure is user delegation
+ set your expiration time to the smallest useful value
+ rule of minimum-required privileges.
+
+
+===============================================
+When to use ??
+Use a SAS when you want to provide secure access to resources in your storage account to any client
+ who doesn't otherwise have permissions to those resources.
+
+ eg
+ clients upload and download data via a front-end proxy service.
+  front-end proxy service does validation polics
+
+
+A lightweight service authenticates the client as needed and then generates a SAS.
+ Once the client application receives the SAS, they can access storage account resources directly
+ with the permissions defined by the SAS and for the interval allowed by the SAS.
+ The SAS mitigates the need for routing all data through the front-end proxy service.
+
+ Many real-world services might use a hybrid of these two approaches
+ When you copy a blob
+
+
+
+
+
+ at resides in a different storage account, you must use a SAS to authorize access to the source blob.
+ When you copy a file to another file that resides in a different storage account
+ When you copy a blob to a file, or a file to a blob, you must use a SAS to authorize access to the source object,
+ even if the source and destination objects reside within the same storage account.
+
+ questions

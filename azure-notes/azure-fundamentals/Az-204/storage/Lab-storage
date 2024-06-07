@@ -1,0 +1,22 @@
+Static website is one of the newly introduced capabilities of Azure Storage Account
+that lets you host static HTML-based website and associated assets to host website.
+The hosting does not require any rendering or management of the hosting platform.
+ If you are looking to host a simple landing page or static content, a Static website with Azure Storage might be the best option for your organization.
+
+In this lab step, you will enable the static website feature and upload the asset files to serve the static website.
+
+Static Website is a feature in Azure Storage that enables you to serve static content such as HTML,
+ JavaScript, CSS, and images directly from the storage container without setting up or managing the hosting server
+
+ 1. Create a storage account
+ 2. click Static website under Data management section:
+ 3: Toggle the Static website to Enabled and type index.html for the Index document name and click on save
+ 4.Copy and Navigate to the Primary endpoint URL on a new tab: you will see an error
+
+ The static website created two containers for hosting the static web app.
+  $logs container will store all the logs related to the website events while
+  $web will host all the website assets including any images and javascript libraries.
+  The index.js file will reside in the $web container along with other assets.
+
+  4. click om the web contianer and upload some files
+

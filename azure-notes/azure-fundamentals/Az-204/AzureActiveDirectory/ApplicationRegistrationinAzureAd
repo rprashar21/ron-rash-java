@@ -1,0 +1,93 @@
+ApplicationRegistration
+Saas Providers and Developers often develop and deploy cloud resources,
+
+Before Integrating these app/services with Azure Ad they need to be first registered with Ad
+The developer must first give info about teh app to the Azure Ad
+like url where app is located
+url to send replies to
+url that identifes the app
+
+
+========================================================================================================================================================================================================
+How to register an app with Azure  Ad ??
+goto azure active directiry --> app registrations --> give the necessary details
+We get a unique application id
+
+========================================================================================================================================================================================================
+What is Azure appliation proxy
+This is an Ad feature  which  allows users to connect to on-prem webapps from a remote client
+App Proxy provides cloud services and on-prem connector
+
+users --> app proxy -->app proxy connector ==>  on-prem webservers
+
+Steps explained
+1.users signins using azure active directory once susccessfull
+2. Azure Ad sends a token to users client device
+3. Client sends token to Application Proxy
+4. App proxy retrieves the user principal name and security principal name from the token request
+5. sends request to Application Connector {if single sign on is there it will perform additional auth}
+6. The connector sends request to on-prem webservers response is end back via the same route to users
+
+========================================================================================================================================================================================
+Configure Azure Ad Application proxy
+Azure ad offers a app proxy service which users can use to conect on -prem servers with their azure ad account
+
+What are we going to do
+Create an on-prem env
+We will use azure portal to add the on-prem IAs app to our Azure Ad Tenant
+We will install the proxy conenctor on a windows server in our local directory and register it with app proxy
+We will verify that a test user can sign on to th application by using azure ad account
+To use application proxy we need a windows server and also we need a connector
+The proxy connector is an agent which manages the outbound connection from the app proxy to the on-perm web servers
+
+Steps
+Use an admin account
+goto azure active directory ---> application proxy --> download the connector service and install it ,, verify if te connector is installed
+goto azure active directory ---> application proxy {here we will see the new connector}
+
+lets prepare our on-prem environment -- our app added to ad
+goto azure active directory ---> enterprise app -> on-prem iss web-app --> give necessary details name , internal web url,
+
+Test our app
+test a user --> goto azure active directory --> getting started --> assign a user for testing -> add a user --> select a grp and assign
+
+to test
+opne a icnognito window ,, usinh the exernal url for the web app
+sigin using azure creds and then we are propmted to sign in into our internal application {add the user details}
+
+
+=====================================================================================================
+B2b -- corporate app <---> with azure services guest users
+An organization can collaborate with guest users by inviting them to sign in into compansy applications
+
+=====================================================================================================
+Adding guest users
+once the guest user is regiesterd with our apps they can sigin using their own credentials
+
+How to add a new guest user to Azure Ad so that he can access my some xyz application??
+goto azure active directory --> users -->  + new guest user ---> give the users email address --> click on invite
+now we can assing an app to him
+goto azure active directory --> enterprise app --> select the app --> users and groups --> add the user --> select
+the user wil recieve an email and then he can clickl on it an voila --click and finish the sign up process
+
+=====================================================================================================
+Sumamry Questions
+
+In Microsoft Entra ID, use the _____ feature for applications that don't support two-step verification.
+app password
+Some applications don't support two-step verification. To use these applications, use the app passwords feature.
+
+When using Microsoft Entra multi-factor authentication,
+you can allow your users to mark devices as trusted.
+ What this does is permit users to opt out of two-step verification for a set number of days on their regular devices.
+
+The password option is available for both MFA and SSPR.
+Security questions and email addresses can be used only with SSPR.
+SMS and voice call are both available for MFA usage,
+ as well as SSPR usage;
+ however, app passwords can only be used for MFA,
+  and even in those cases can only be used in certain conditions.
+
+
+
+

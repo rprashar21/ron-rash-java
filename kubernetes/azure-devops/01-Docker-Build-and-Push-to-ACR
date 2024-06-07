@@ -1,0 +1,86 @@
+
+This sample we are going to create a local repository and create basic docker image and push the changes to github and then
+From there we will run our azure pipeline --- azure pipline wil pull the code from git hub and push the docker image to azure container registry
+
+1.Create a git hub repositiry
+local git repo https://github.com/ronrash/az-kubernetes
+
+2. create an azure container registry --> azrondevops.azurecr.io -- service name
+
+Go to Services -> Container Registries
+Click on Add
+Subscription: Azure subscription 1
+Resource Group: aks-rg1
+Registry Name: azrondevops.azurecr.io (NAME should be unique across Azure Cloud)
+Location: Central US
+SKU: Basic (Pricing Note: $0.167 per day)
+Click on Review + Create
+Click on Create
+
+Step 3 Create a devops Organization
+
+https://dev.azure.com/rohitprashar712/
+Sign in to Azure DevOps
+Our Organization will be automatically created and if you want to manually create organization you can create one.
+Organization Name: rohitprashar712
+
+Step 4 create a devops project
+Project Name: azure-demo-210191
+Project Description:
+Visibility: Private
+Advanced: Leave to defaults
+Version Control: Git
+Work Item Process: Basic
+
+Step 5  Create Basic Build Pipeline
+
+Create Folder -> App1-Pipelines
+Go to Pipelines -> Create New Pipeline
+Where is your Code?: Github
+Select Repository:
+Provide Github Password
+Click on Approve and Install for Repositories selected
+Configure Your Pipeline: Docker (Build and Push Image to Azure Container Registry )
+Select an Azure Subscription: activesubsciption1
+Continue (Login as admin user)
+Container Registry: azrondevops
+Image Name: app-demo-nginx
+Dockerfile: $(Build.SourcesDirectory)/Dockerfile
+Click on Validate and Configure
+Change Pipeline Name: 01-docker-build-and-push-to-acr-pipeline.yml
+Click on Save and Run
+Commit Message: Pipeline-1: Docker Build and Push to ACR
+Commit directly to master branch: check
+Click on Save and Run
+
+Step 6 -- makes some changes anad push again it will retrigger the build
+Step 7 --> check ur acr under repositories it will push the images
+ -- so under ur repos -- u can have a folder like structure and push all the imgaes
+   - appdemonginx -- this our repo name
+
+docker pull azrondevops.azurecr.io/appdemonginx:4
+so here in acr maintain a folder like sturcture
+-- app1Nginx -- these are tags for the same image
+   - 1
+   - 2
+-- app2Java
+   - 1
+   - 2
+   - 3
+-- app3Python
+   - 1
+   - 2
+   - 3
+ Add Namespace for Docker Images stored in ACR
+ Go to Pipeline -> 01-Docker-Build-and-Push-to-ACR -> Edit
+ Update the below and Save
+ # Before
+   imageRepository: 'app1nginx'
+
+ # After
+   imageRepository: 'app1/app1nginx' -- inside my acr we will have app1--> under that we will have all the repos
+
+doing this change will retrigger a pipeline build
+
+Disable the pipeline
+Go to Pipeline -> 01-Docker-Build-and-Push-to-ACR -> Settings -> Disable

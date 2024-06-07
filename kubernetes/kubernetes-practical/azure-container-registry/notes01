@@ -1,0 +1,60 @@
+Azure Container resgitry same as Docker rogisrty
+
+pull images from Azure Container registry using Service Principal
+
+We are going to pull Images from Azure Container Registry which is not attached to AKS Cluster.
+We are going to do that using Azure Service Principals.
+Build a Docker Image from our Local Docker on our Desktop
+Push the docker image to Azure Container Registry
+Create Service Principal and using that create Kubernetes Secret.
+Using Kubernetes Secret associated to Pod Specificaiton, pull the docker image from Azure Container Registry and Schedule on Azure AKS NodePools
+
+Verify Docker Image in ACR Repository
+Go to Services -> Container Registries -> acrdemo2ss
+Go to Repositories -> app2/acr-app2
+
+Create Service Principal to access Azure Container Registry
+
+#!/bin/bash
+# This script requires Azure CLI version 2.25.0 or later. Check version with `az --version`.
+
+# Modify for your environment.
+# ACR_NAME: The name of your Azure Container Registry
+# SERVICE_PRINCIPAL_NAME: Must be unique within your AD tenant
+ACR_NAME=acrdemo2ss
+SERVICE_PRINCIPAL_NAME=acr-sp-demo
+
+# Obtain the full registry ID for subsequent command args
+ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
+
+# Create the service principal with rights scoped to the registry.
+# Default permissions are for docker pull access. Modify the '--role'
+# argument value as desired:
+# acrpull:     pull only
+# acrpush:     push and pull
+# owner:       push, pull, and assign roles
+SP_PASSWD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
+SP_APP_ID=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query [].appId --output tsv)
+
+# Output the service principal's credentials; use these in your services and
+# applications to authenticate to the container registry.
+echo "Service principal ID: $SP_APP_ID"
+echo "Service principal password: $SP_PASSWD"
+
+this service principle file will create the principal ID and principal password which we will use in the secrets file
+# Template
+kubectl create secret docker-registry <secret-name> \
+    --namespace <namespace> \
+    --docker-server=<container-registry-name>.azurecr.io \
+    --docker-username=<service-principal-ID> \
+    --docker-password=<service-principal-password>
+
+# Replace
+kubectl create secret docker-registry acrdemo2ss-secret \
+    --namespace default \
+    --docker-server=acrdemo2ss.azurecr.io \ this is the docker container resgistry
+    --docker-username=80beacfe-7176-4ff5-ad22-dbb15528a9a8 \
+    --docker-password=0zjUzGzSx3_.xi1SC40VcWkdVyl8Ml8QNj
+
+# List Secrets
+kubectl get secrets

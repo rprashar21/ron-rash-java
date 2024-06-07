@@ -1,0 +1,5 @@
+super Keyword:
+
+Used to refer to immediate parent class object.
+Can be used to invoke superclass constructor from the subclass.
+Also used to access methods of the superclass that are overridden by the subclass.

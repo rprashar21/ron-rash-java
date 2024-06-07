@@ -1,0 +1,104 @@
+Azure Functions is a serverless compute service, code first imperative
+Azure Logic Apps is a serverless workflow integration platform, design first declarative
+
+Function code files are stored on Azure Files shares on the function's main storage account.
+
+When you create a function app in Azure, you must choose a hosting plan for your app.
+3 plans
+Consumption Plan - default, pay-as-u-go, only pay for compute resource running ur function app,
+                   function host are added removed based on no of incoming events
+                   Event driven . They scale automatically based on periods of hig load
+                   1.5 gb memory with one cpu -- all function apps share this
+Premium Plan -   pre-warmed workers which run the app with no delay,runs on pwerful instances ,connect to virtuak networks
+Dedicated Plan - if ur using any app service plan u can use this as well . best for long running scenarios , Durable functions cannot be used.
+
+2 other hoisting plans where control and isolation is best
+ASE - App service env is an app service feature ,, provides a full isolated,dedicated env at high scale -- manual
+Kubernetes(direct or Azure Arc) - same on kubernetes platfrom  -- event driven
+
+
+Function app timeout duration
+property - functionTimeout in host.json --> function needs to respond within this time
+
+plan           default    max
+consumption     5         10     mins
+premium         30       unlimited
+dedicated      30        unlimited
+
+
+==================================================================
+Runtime scaling
+Azure Functions use scale controller to monitor whether to sacle in or out.
+eg Azure Queue trigger -- scales based on queue length and age of oldest message
+
+input bindings
+Webhooks,event hubs,blob stroage queie,timer ---> increase no of events --scale controller -- increase funct app instances
+the platfrom may scale to 0 if nothing is there
+
+Scaling behaviors
+A single function app can scale to 200 instances , no limit for concurrent msgs
+HTTP triggers, new instances are allocated per second
+Non Http Triggers new instances are allocated per 30 second
+
+
+functionAppScaleLimit value. limit the no of instances a function app can scale
+0 or null for unrestricted, or a valid value between 1 and the app maximum.
+
+
+Azure Functions hosting plans is best when predictive scaling and costs ie dedicated
+
+===========================================================================
+Azure functions functions.json file
+2 imp peices code and config file
+
+function.json file
+{
+"disabled":false
+ "bindings":[
+     // ..... all the bindings are here
+     {
+         "type": "bindingType",
+         "direction": "in",     Indicates whether the binding is for receiving data into the function or sending data from the function.
+            "name": "myParamName",
+                     // ... more depending on binding
+     }
+    ]
+}
+
+A function app is an execution context in Azure in which your functions run.
+all functions inside this share same pricing plans ,runtime version  deployment method
+
+host.json file contains runtime-specific configurations and is in the root folder of the function app.
+A bin folder contains packages and other library files
+
+===========================================================================
+Binding direction
+triggers cause the function to run , only one trigger
+All triggers and bindings have a direction property in the function.json file:
+
+triggers always have in direcion
+input and output have in and out
+there is inout also If you use inout, only the Advanced editor is available via the Integrate tab in the portal.
+
+===========================================================================
+Scenario
+where a queuetrigger reads data from a Azure Queue Storage and makes a row entry in azure storage
+ function.json file for this scenario.
+{
+  "bindings": [
+    {
+      "type": "queueTrigger",
+      "direction": "in",
+      "name": "order", // function parameter that receives the queue message content
+      "queueName": "myqueue-items", the queue which the trigger monitors
+      "connection": "MY_STORAGE_ACCT_APP_SETTING"
+    },
+    {
+      "type": "table", output
+      "direction": "out",
+      "name": "$return", // property specifies how the function provides the new table row
+      "tableName": "outTable",
+      "connection": "MY_TABLE_STORAGE_ACCT_APP_SETTING"
+    }
+  ]
+}

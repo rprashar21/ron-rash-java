@@ -1,0 +1,4 @@
+Streams can perform operations on Collections
+
+Parrallel operations are easy to perform rather than having to spawn multiple threads
+Streams are sequence of elements which can created oit of a collection

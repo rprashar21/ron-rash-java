@@ -1,0 +1,73 @@
+
+#primary key --
+ it is a column or group of clumns which uniquely identifies a row
+ uniquely identify the record
+
+
+#foreign key  is a field or group of fields in a table  which uniqule identify a row in another table
+a foregin key in a table references a primary key in another table
+. so foreign key can repeat in a table becoz its primary somewhere else
+
+
+#serial data types
+
+#create a table
+#user_account table
+create table user_account(
+ user_id serial primary key,
+ user_name varchar(50) unique not null,
+ email varchar(50) unique not null,
+ password varchar(50) not null,
+ created_on timestamp not null,
+ last_login timestamp
+);
+
+# jobs
+create table jobs(
+ job_id serial primary key,
+ job_name varchar(50) unique not null
+);
+
+create table user_jobs(
+ user_id Integer references user_account(user_id),
+job_id Integer references jobs(job_id),
+hire_date timestamp
+);
+
+insert into user_account(user_name,email,password,created_on)
+values('rohit21','rohitprashar21@gmail.com','hello123',current_timestamp);
+
+insert into jobs(job_name) values ('tester');
+
+// this will work becoz we have user_id with 1 and job_id with 1.
+insert into user_jobs(user_id,job_id,hire_date) values(1,1,current_timestamp);
+
+// when we insert this we get  the below error why becoz those user_id and job _id is not present in the table
+hence violates the foreign key constraint.
+We have to make sure that when we're inserting something that has a foreign key constraint,
+ that it actually exists in the other tables.
+
+insert into user_jobs(user_id,job_id,hire_date) values(10,10,current_timestamp);
+
+
+Key (user_id)=(10) is not present in table "user_account".insert or update on table "user_jobs"
+violates foreign key constraint "user_jobs_user_id_fkey"
+
+#update
+update user_jobs
+set hire_date = user_account.created_on
+from user_account
+where user_jobs.user_id = user_account.user_id;
+
+#delete
+delete from jobs where job_name ='consultant' returning job_id,job_name;
+
+
+#check constraint
+create table information(
+info_id serial primary key,
+name varchar(50) not null,
+birthday Date check (birthday > '1900-01-01'),
+hire_date Date check (hire_date > birthday),
+salary Integer check (salary >1000)
+);

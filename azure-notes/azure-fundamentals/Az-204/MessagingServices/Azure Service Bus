@@ -1,0 +1,36 @@
+Azure Service Bus is a messaging service in micorsoft often called as pub/sub
+supports queues and topics
+
+Service bus is used for communication between applications and services.by communicating messages between application using these message services
+applications can be decoupled
+
+Azure Service Bus is a messaging service from Microsoft.
+Service Bus is based upon the Publish/Subscribe messaging model,
+ which is often referred to simply as Pub/Sub.
+ Azure Service Bus supports Queues and Topics.
+
+Queues are used for pushing messages to a single consumer.
+Topics are used to distribute messages to multiple consumers in one-to-many message publishing scenarios.
+
+The benefits of using Pub/Sub messaging include:
+No need for expensive polling operations
+Applications and services can be decoupled
+Fault tolerance
+Scalability
+
+Queues
+Use queues when you need to ensure that a message is processed exactly once and by only one consumer,
+especially in task processing or sequential processing scenarios.
+Messages in a queue are consumed by a single consumer.
+Once a message is processed by a consumer, it is removed from the queue and cannot be processed by another consumer.
+
+Topics
+Use topics for broadcasting messages to multiple subscribers, e
+specially in scenarios requiring updates to multiple components or real-time information distribution.
+
+Messages published to a topic can be consumed by multiple subscribers.
+Each subscriber gets a copy of the message, allowing for one-to-many message distribution.
+
+Core entities in a azure service bus Queues topics and subscriptions
+Queues provide reliable message queuing and delivery, topics and subscriptions provide publish-subscribe messaging, and together,
+they form the core messaging entities in Azure Service Bus

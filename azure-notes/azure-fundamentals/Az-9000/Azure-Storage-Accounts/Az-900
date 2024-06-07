@@ -1,0 +1,44 @@
+Ingress bandwidth is free. You pay for egress (outbound).<br>For more info: <a>
+
+Which type of cloud service model is typically licensed through a monthly or annual subscription?
+ one version of the application is used for all customers, and it is licensed through a monthly or annual subscription.
+  PaaS and IaaS use a consumption-based model, so you only pay for what you use.
+
+  IaaS helps you reduce the cost and complexity of maintaining a physical server and its datacenter infrastructure.
+   Virtual networks are part of the IaaS cloud service.
+
+ Resource tags can be used to group billing data and categorize costs by runtime environment,
+ such as billing usage for virtual machines running in a production environment.
+
+ ARM templates define an application's infrastructure requirements for a repeatable deployment that is done in a consistent manner.
+  A validation step ensures that all resources can be created in the proper order based on dependencies, in parallel and idempotent.
+  Azure Monitor is a platform that collects metric and logging data, such as CPU percentages. The data can be used to trigger autoscaling.
+
+  Management groups can be used in environments that have multiple subscriptions to streamline the application of governance conditions.
+  Resource groups can be used to organize Azure resources.
+  Administrative units are used to delegate the administration of Microsoft Entra resources, such as users and groups.
+  Accounts are used to provide access to resources.
+
+  ARM is the deployment and management service for Azure.
+  Virtual machines are software emulations of physical computers.
+  They include a virtual processor, memory, storage, and networking resources.
+  Virtual machines host an operating system, and you can install and run software just like on a physical computer.
+
+  You can link virtual networks together by using virtual network peering.
+  Peering enables resources in each virtual network to communicate with each other.
+
+   Service endpoints are used to expose Azure services to a virtual network, providing communication between the two.
+   ExpressRoute is used to connect an on-premises network to Azure.
+   NSGs allow you to configure inbound and outbound rules for virtual networks and virtual machines.
+   Peering allows you to connect virtual networks together.
+
+   Conditional Access is a feature that Microsoft Entra uses to allow or deny access to resources based on identity signals, such as the device being used.
+   SSO enables a user to sign in one time and use that credential to access multiple resources and applications from different providers.
+   MFA is a process whereby a user is prompted during the sign-in process for an additional form of identification.
+   Hybrid identity solutions create a common user identity for authentication and authorization to all resources, regardless of location.
+
+
+   An Azure RBAC role is applied to a scope,
+   Resource locks prevent the accidental change or deletion of a resource.
+   Resource tags are used to locate and act on resources associated with specific workloads, environments, business units, and owners.
+   Policies enforce different rules across resource configurations so that the configurations stay compliant with corporate standards.

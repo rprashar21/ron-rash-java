@@ -1,0 +1,86 @@
+1.first step in designing a RESTful API is to identify the resources , products orders ,hearings ,judiciaries
+2.Once you have identified the resources, you need to define the URIs  Each URI should uniquely identify a resource
+3. The HTTP methods such as GET, POST, PUT, DELETE, etc. should be defined for each URI.
+ These methods represent the actions that can be performed on a resource.
+4. Define the Request and Response Formats:  includes specifying the data that should be included in the request and response
+5. Define the Authentication and Authorization: You need to define the authentication and authorization mechanisms that will be used to secure the API.
+ This includes specifying the authentication protocol, such as OAuth or JWT, and defining the authorization rules.
+6. Test the API: Once you have designed the API, you should test it thoroughly to ensure that it is working as expected.
+This includes testing the various HTTP methods, the request and response formats, and the authentication and authorization mechanisms.
+
+7. Document the API: Finally, you should document the API to make it easy for developers to understand how to use it.
+This includes providing examples, code snippets, and detailed documentation on each URI, HTTP method, and request and response format.
+Swagger OpenApi Specification
+
+ Design ur Apis Api Versioning
+
+ 1.Uri versioning -- includes verson in ur uris
+ /api/v1/users - Version 1 of the user profiles API.
+ /api/v2/users - Version 2 of the user profiles API.
+
+ 2.Request param Versioning
+  /api/users/param?version=1
+  /api/users/param?version=2
+
+  Implement Request Param
+  @GetMapping("/api/users/",params="version=1")
+  public String getAllNames()
+  {
+  return repo.getAllNames();
+  }
+
+   @GetMapping("/api/users/",params="version=2")
+    public List<Name> getAllNames()
+    {
+    return repo.getAllNames();
+    }
+
+  Header Versioning
+  /api/users/
+  headers=[X-API-VERSION=1] -- when the client wants to use version 1
+  /api/users/
+  headers=[X-API-VERSION=2] -- when the client wants to use version 2
+
+   @GetMapping("/api/users/",headers="X-API-VERSION=1")
+      public List<Name> getAllNames()
+      {
+      return repo.getAllNames();
+      }
+
+  Mime Type or Accept Header Versioning
+  /api/users
+  produces=[application/vnd.company.app+v1+json] - when the client wants to use version 1
+  /api/users
+  produces=[application/vnd.company.app+v2+json] - when the client wants to use version 2
+
+    @GetMapping("/api/users/",produces="application/vnd.company.app+v1+json")
+        public List<Name> getAllNames()
+        {
+        return repo.getAllNames();
+        }
+
+Using Postman
+for Header Versoning go to headers
+Key              Value
+X-API-VERSION    1
+
+For AcceptHeader
+Key        Value
+Accept     application/vnd.company.app+v1+json or application/vnd.company.app+v2+json
+
+Here we can have differenet resources as well
+
+Versioning
+Media Type or Accept Header  -- GithUb
+Same url with different Accept Headers --> different resources
+
+Header Versioning--> Microsoft
+Uri Versioning ---  change in the url
+Request Parameter Versioning -- Params in Postman -- Change in Parameters
+
+Factors for Versoning
+Uri Pollution in case of Uri Versionung
+missuuse of http headers
+caching
+Can we execute the request on browser
+Api Documentt

@@ -1,0 +1,71 @@
+Monitoring Azure Web Apps
+There are several facets to monitoring Web Apps in Azure.
+You should be familiar with what is available for monitoring, so that you can use the best tool for the task at hand.
+ The following list summarizes the most commonly used monitoring tools available to you:
+
+Metrics: Metrics are collected for Web Apps and measured by server-level information,
+such as the number of failed requests, average response time, and data in/out.
+ You have seen metrics at work in the charts visible on Web Apps overview blades.
+ Metrics is a global service that is part of Azure Monitor.
+ It measures data for a wide-variety of Azure resources, not only Web Apps.
+
+Metrics have different retention periods based on their time resolution:
+ Per minute metrics are retained for 30 hours
+ Per hour metrics are retained for 30 days
+ Per day metrics are retained for 30 days
+
+Diagnostic Logs: Collect logs from your application and/or from the web server hosting your application.
+The level of detail of the logs can be configured. You may need to configure higher levels of details when actively debugging issues,
+and return to a lower level of detail to reduce the amount of storage space used, and associated costs, for logs.
+By default, diagnostic logs are all disabled.
+
+Resource health: Monitors your App Services for Azure service issues that may be impacting your Web Apps.
+For example, service outages or smaller-scale hardware issues impacting the hardware serving your Web App.
+ Resource health is useful for checking if any SLAs have been violated, entitling you to a refund.
+  Resource health is a global service that can monitor multiple resource types, not only Web Apps.
+
+Service health: Service health is a general service that reports broad service outages, and not individual resource health.
+If a complete App Service outage is being experienced, Service health will report the outage,
+ but because the outage affects the individual health of individual resources,
+ Resource health will also notify you. Therefore, for monitoring a specific Web App, you can just check Resource health.
+
+ Steps
+ On the Overview blade of the production Web App, click the Monitoring tab, and click on one of the charts to open a Metrics blade:
+ 1. Add metrics
+ connections
+ HTTP 2xx
+ HTTP Server Errors
+ Thread Count
+
+ . Scroll down the sidebar menu and select Monitoring > App Service Logs:
+ Application -logging filesystem --> Enable application logging to collect diagnostic traces from your web app code.
+ You'll need to turn this on to enable the streaming log feature.
+ This setting turns itself off after 12 hours.
+
+ Application logging (Blob) -> Logs are collected in the blob container that is specified under Storage settings
+
+ Web server logging --> Gather diagnostic information for your web server
+ Detailed error messages -- > gather detailed error messages from your web app
+ failed request tracing --> Gather diagnostic information on failed requests
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Monitoring Application Performance With Application Insights
+Application Insights is an application performance management (APM) service
+
+find and diagnose performance issues
+Find and diagnose runtime exceptions
+Monitor and alert on application health
+Analyze customer usage
+Create custom key performance indicator (KPI) dashboards
+
+Application Insights can collect data from applications in Azure,
+running on-prem, or on other clouds.
+The integration with Azure Web Apps makes it exceptionally easy to use in Azure.
+
+In the search bar at the top of the Azure Portal, enter app insight. Click Application Insights under Services:
+create the aplication insights
+Click Turn on Application Insights and in the Application Insights form, under Link to an Application Insights resource, click the Select existing resource button:
+
+

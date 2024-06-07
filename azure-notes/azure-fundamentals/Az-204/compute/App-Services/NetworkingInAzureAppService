@@ -1,0 +1,138 @@
+Custom Domain
+1-- Azure app has a defaut url at the end --> .azurewebsites.net
+2. we need to change the pricing tier to a paid one as it supports having custom domain
+
+Thinsg to do
+Upgrade ur Pricing tier
+resgiter domain name
+can edit the dns record
+
+Got to custom domains settings in ur app service and get the
+custom domain verification id 2020320323023i203i230
+and address id ip address --> suppose 20.40.202.27
+
+In ur domain provide
+go to dns records
+
+@ --> rootname
+Type NAME VALUE
+A     @   20.40.202.27  value is ur ip address of the webapp in ur azure
+
+if u want to set the subdomain name like
+Type    NAME     VALUE
+CNAME     www   cawebapp.azurewebsites.net  value is ur url  of the webapp in ur azure
+
+eg
+Type    NAME     VALUE
+A        @       20.40.202.27
+CNAME   www      cawebapp.azurewebsites.net
+
+@ is the rootname
+www is the subdomain
+
+TXT is just additionl info whihc does not affect the resolution of ur doamin name
+Need to creatw 2 txt records to prove to microsoft u own this domain and the subdomain
+
+asuid -app service unique identifier
+
+Type  Name       Value                  App Service Unique Identifier
+TXT   asuid      2020320323023i203i230 {custom domain verification id }
+TXT   asuid.www  2020320323023i203i230
+
+NOw
+got to azure app service--> webapp--> custom domain -- add ur custom domain
+add the domain name like himaavan.com
+
+CUSTOM DOMAIN            foot.com
+Hostname record type     A record
+
+validate button
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+To secure ur domain name u need to setup tls/ssl certificate settings
+
+check ur plan
+free and basic do not support the tls/ssl plans
+Need to have tls/ssl certificate file which contains a private ke and public key
+These pair of keys is used to encrypt/decrypt traffic between the website and the user over the internet
+The certificate checks if the browser is interacting with website directly  prventing middle man attack
+
+3. Create a Tls binding with ur custom domain
+
+How to create a certificate ??
+App Service Certifcate free ,,
+provided by digcert checks for the authenticity of the certificate
+or import form a third party
+
+To create a certificate  --got to tls/settings on ur web service app--> private key certificate.pfx-->
+--> click on create app service managed and add ur custom domain
+Now bind tls/ssl to ur domain
+there are 2 types of tls/ssl
+1. Sni SSl --> binds  certificate using websites hostname,, more flexibilty and easy to configure ,, not used on very old browsers
+2. Ip Based SSl --> binds the cert using websites ip address
+
+sni is more useful
+also select the htts only option in ur tls/ssl settings
+
+what is tls mutual auth
+for a website to know it is communication with a client and to a hacker use tls mutual auth
+Tls Mutual Authentication is used when the website wants to know if the user is not a hacker is legitimate
+used within an individual org becoz it requires that client devices have a client certficate
+
+go to configuration and set client certificate mode to on
+also need to add authentication code to ur app
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Inbound and outbound rules
+restrict ip address
+
+if u have resources in azure say vm  and want to connect to ur web app service u can use a service endpoint
+azure db -----> app -- u can connect restrict access using a service endpoint rather than an ip address
+
+A service endpoint is something u can enable on a subnet
+
+U can create a private endpoint for ur app
+azresurce --->private enpoint --->ur app
+this helps to connect form on-prem as well
+
+onprem--->azure vpn or azure express route ---> az resource--->private endpoint --> ur app
+
+Hence private endpoints are recommended over the service endpoits
+
+For outbound connections from ur app to onperm or az rosucres
+1.u can have hybrid connection managers running on port 443
+Secure and no requirement of azure express
+
+2.Vnet integration 2 types
+Regional Vnet Integration -- no instatallation ,
+Gateway-Required Vnte -- erquired when ur app needs to connect to vnet in another region {doesnt allow onprem over express rout}
+
+
+Goto app service --webapp -- networking -- vnet integration --> add vnet
+if ur app is in the same region as vnet then nothing irequred the vnet should have an empty subnet
+UR app --> VNet{azure app } --> vpn ---> onprem
+
+
+----------
+
+Questions
+To allow an Azure App Service app to respond to requests over HTTPS, you need to enable _____.
+Tls/SSL integration
+
+When setting up a custom domain name in Azure App Service,
+ you need to add a _____ to your domain records to prove to Microsoft that you own the domain.
+
+Custom Domain Verification ID
+
+If you have resources in an Azure virtual network that need to connect to your Azure app
+over the Microsoft backbone network rather than over the Internet, then you can restrict access to your app using a(n) _____.
+service endpoint
+
+When setting up a custom domain name in Azure App Service, to prove to Microsoft that you own a domain and its subdomain, you need to create a(n) _____ record for each of them.
+TXT
+
+When setting up a custom domain name in Azure App Service,
+ you will need to go to your domain provider's website and create a(n) _____ DNS record if you're going to use a root domain.
+ A for root domain name
+ CNAME for subdomain

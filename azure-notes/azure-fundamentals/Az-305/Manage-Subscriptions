@@ -1,0 +1,98 @@
+4 key roles setup by Azure
+Contributor --> can make changes to azure resources but cannot assign roles to other resources
+owner --> the can manage resources and allow the user{owner} to assign roles to other users
+reader -- only view/read the azure resources
+user access administrator -- only allowed to manage user access,but no access to resources themselves
+
+
+Assign roles to users
+Go to any resourcegrp or subscription
+click on accesscontrol(IAM) --> add role assignment --> select the role {owner,contributor,reader,user accessa admin}--> choose the user
+
+
+
+Demo to add or change the subscription admins
+goto subscriptions --> access control--> add co admin
+the user will not be shown uder role assignments becoz these are not role assignments, they are actually permissions over subscription
+
+To remove go uder classic admin adn remove
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Subsription Policies
+Azure Security Center --> Creates default security policy for subscription
+
+They are many default security policies
+Security Updates - retrieves a daily list of security/criticalk updates
+Security Configurations
+Endpoint Protection
+Disk Encryption
+Network Security Groups
+Web app firewall
+
+-------- Resource Groups------
+the resources in a resource grp can deployed in multiple regions
+the resource goupr requres a location to store deployment metadata information and definition assoicated with group
+
+dev/test resource groups
+staging resource groups
+production resource groups
+
+Resource Policies
+Azure policy is a service which create,assigns and manages policies  and enforces diff rules over azure resources.
+then these resources wil stay compliant ie, follow these rules
+eg -- a policy which restricts an azure vm of a certain size ,,
+if u try to create an azure resource with a greater size ,, it will not allow this
+
+Resource locks
+prevent resources from being accidentaly deleted
+
+Types of locks
+Delete
+Read Only
+
+Lock Levels
+CanNotDelete -- allows users to read and modify a resource but not delete
+Read Only  -- allows users to only read not modify nor delete similar to read only access role
+
+Resource locks are inherited so lock at parent level ,, is inhertied by all resources
+under the same subscription,resource group
+
+Eg Of readOnly lock -->causing confustion -- areadonly lock on storage account will prevent the users from listing the keys
+becuase the listing keys is thru a post request as keys which are returned are available for write operation
+Readonly lock on appservice resources prevents displaying of files becoz displayin files requires write access
+
+to create or delete management locks u need access to
+microsoft.authorization/*
+or
+microsoft.authorization/locks/*actions
+
+only built in user and user access admin are granted these roles
+
+create a locks
+go to a resource or rg or subscripton .. go to settings under that locks ->create a lock
+name and lock type
+
+--------------Tags--------------------------------------------------------
+custom grouping of resources  ,, keep them or group them
+eg envirnoment, prod ,to a resource group
+limit for a rg is 15 tags pre rg ,, name len is 512 chars
+cannot contain special characters
+
+Tags are not inherited
+Use contributor role so that tags cn be applied to all the resources under that rg.
+eg top apply tag to all vms use tag Virtual machine contributor role
+
+--------------MOve resource group to another resource group--------------------------------------------------------
+when moving resurces across rg ,,both source and destinations are locked , the function normally but cant be added or deleted or uodated
+thy are blocked untill the process is completed
+
+Steps to be taken
+the source and destination subscription must exist within the same azure active directory teanant
+the dest subscription should be registered for the resource provider if not u will get an erro
+the account moving resources should have the following access/permissions
+
+source
+Microsoft.Resources/subscriptions/resourceGroups/moveResources/action
+
+destination
+Microsoft.Resources/subscriptions/resourceGroups/write

@@ -1,0 +1,8 @@
+server.port=9000
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.jpa.show-sql=true
+spring.data.jpa.repositories.bootstrap-mode=default
+
+https://haris-zujo.medium.com/spring-cloud-gateway-request-filtering-and-redirection-9e4b6d559d1a
+//rohit

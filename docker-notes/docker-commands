@@ -1,0 +1,27 @@
+stop all runninng containers
+docker stop $(docker ps -q) -- lists all the runninf conatiners
+
+docker system prune -a
+this will remove all stopped containers
+all networks not used by atleast one container
+all build cache
+
+# run docker image by pulling it directly from dockerHub
+ docker run -d -p 8081:8080 rondocker2191/credit-card 
+ 
+#push to docker hub
+docker push rondocker2191/credit-card  -- this will go ahead and create a repository in your docker hub account with credit-card name
+
+# build a docker image
+docker build -t rondcoker2191/credit-card .
+then push it to odkcer hub
+docker push rondocker2191/credit-card
+
+
+Why Docker Kubernetes
+Docker containerising apps .. standard/ same packaging for all types of applications
+just have the docker machine and can run all the apps
+
+To start a container  for example to start in local
+docker start postgres-container
+

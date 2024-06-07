@@ -1,0 +1,59 @@
+IAM - Identiy And Access Mangement
+Iam is a global service - iam user is a root user with too many permisssions
+ and we need to makes sure  it does not have many permissions and hence
+we create users -- groups users attach policies to the user or groups
+policy attached to the group is inherited by the users in that group
+IAM User Groups can contain only IAM Users.
+
+Protect the users and group -- 1.PaaswordPolicy {paswword length/ char/alphanumeric} 2.MFA
+MultiFactorAuthentication
+Virtual MFA DEVICE google authenticator
+
+How can we access aws  3 options?
+1. aws management console (protected by password+mfa)
+2.aws cli --> access keys
+3. aws sdk -- accessing apis thru access keys
+
+
+Iam Role - is an entity that defines a set of permissions for making request to aws and will be used by an aws service
+Allows EC2 instances to call AWS services on your behalf.
+roles allow entities{like ec2 intsance/aws lamda} in the AWS to
+ get credentials for a short duration and to do whatever they need to do.
+
+Create a role --role-->Aws service{ec2/lambda} basically allow these service to perform some actions-->
+assign a policy {IAMReadOnlyAccess} and give the role a name
+
+Iam Security Tool
+Iam credentials Report -- a report showing all users and their status
+IAM Access Advisor -- shows the service permission granted to a user when those services were last accessed
+u can revise ur policies using them
+
+click --> credential report
+users-->select the user -->access advisor
+
+
+Best Iam guideline to user
+Dont use the root account expept for aws account setup
+assign users to groups and assing permissions to the groups
+enable mfa , create users and roles to allow servoce to access aws features
+use access keys  for programmtic access (cli/skdk)
+
+IAM SUMMARY
+User - root user , IAm user having certain permissions
+Groups - contains user , policies defien the permissions for groups/users
+roles for ec2 /lambda instances
+security : mfa
+aws cli sdk access keys
+audit cred report and access advisor
+
+Questionss
+IAM Users access AWS services using their own credentials (username & password or Access Keys).
+Use the root account only to create your first IAM User and a few account/service management tasks. For everyday tasks, use an IAM User.
+Which principle should you apply regarding IAM Permissions? - Grant least privilege
+IAM User Groups can contain only IAM Users.
+A statement in an IAM Policy consists of Sid, Effect, Principal, Action, Resource, and Condition. Version is part of the IAM Policy itself, not the statement.
+
+
+
+
+

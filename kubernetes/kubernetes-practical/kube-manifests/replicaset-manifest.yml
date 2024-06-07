@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ReplicaSet
+metadata:
+  name: rs-my-app-latest # name of the replicaset
+spec:  # details about the replicaset # spec replicas,selector,template,
+   replicas: 3 # how many instance of copies do u wnat to have for the pod
+   selector:
+     matchLabels: back-end-redis
+   template: #pod template whatever we have under  pod manifest file
+     metadata: # details about the pod
+       name: back-end-pod
+       labels:
+         app: back-end-redis # thus should be same as selector-matchlabels to know which pods it manages
+     spec:
+       containers:
+         - name: back-end-container
+           image: ronrash/redisImge
+           ports:
+             - containerPort: 80

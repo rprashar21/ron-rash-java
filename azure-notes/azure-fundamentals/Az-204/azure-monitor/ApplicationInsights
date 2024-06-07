@@ -1,0 +1,48 @@
+When the app is not performing and we need to check which component is causing issue use Application Insights
+configure to send data to app insgihts from the app.
+
+
+Auto-instrumentation is the preferred method of instrumentation when it's available because:
+No code changes are required
+SDK update overhead is eliminated
+Since auto-instrumentation is available for .NET applications running on Azure App Service for Windows, it is the preferred method.
+
+Data only streams to Live Metrics while you’re on the page, and it disappears as soon as you leave.
+Data on the Live Metrics page is displayed within one second.
+live metirs  free,depends on ur langauge
+
+Live Metrics is enabled differently depending on the language your application was written in.
+
+Standard test supports checking the validity of a website's SSL certificate
+It's possible to check the validity of an SSL certificate using the TrackAvailability() method,
+but that would require writing a custom test application, so it would be much easier to use a Standard test instead.
+
+Application Insights is a feature of Azure Monitor that provides extensible application performance management
+(APM) and monitoring for live web applications.
+
+Azure Monitor helps you maximize the availability and performance of applications and services.
+Application Insights is part of Azure Monitor.
+
+Log Analytics is a tool in the Azure portal to edit and run log queries from data collected by Azure Monitor Logs
+and interactively analyze their results.
+
+Azure Advisor scans your Azure configuration and recommends changes to optimize deployments, increase security, and save money.
+
+
+================ Azure Application Insights API calls=====
+The TrackEvent API call tracks user actions and other events.
+It is used to track user behavior or to monitor performance.
+
+TrackMetric API call is used to track performance measurements such as queue length
+TrackRequest API call is used to log the frequency and duration of server requests for performance analysis.
+TrackTrace API call is used to capture Resource Diagnostic log messages and can also be used to capture third-party logs
+
+The GetMetric method handles local pre-aggregation and then only submits an aggregated summary metric at a fixed interval of one minute.
+TrackMetric sends raw telemetry, missing pre-aggregation.
+SetMetric and LogMetric are not valid methods to send pre-aggregated summary metrics to Azure Monitor.
+
+Using standard metrics both minimizes the volume of data ingested into Application Insights
+ and maximizes the accuracy of the collected metrics.
+
+Applying sampling and filtering would negatively affect the accuracy of the collected metrics.
+Using log-based metrics does not minimize the volume of data ingested into Application Insights.

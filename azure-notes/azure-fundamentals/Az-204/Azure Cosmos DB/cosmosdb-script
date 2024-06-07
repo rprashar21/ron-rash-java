@@ -1,0 +1,55 @@
+# Create a Cosmos DB account, database, and container
+
+# Variables
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+failoverLocation="South Central US" --> when the primay location fails this wil act as a primary region ,to enable automatically enable service-managed failover
+resourceGroup="cosmosdb-rg-$randomIdentifier"
+account="cosmos-$randomIdentifier" #needs to be lower case
+database="db1"
+container="container1"
+partitionKey="/zipcode"
+maxThroughput=1000
+
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location"
+
+# Create a Cosmos DB account for NoSQL API
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup
+--default-consistency-level Eventual
+--locations regionName="$location" failoverPriority=0 isZoneRedundant=False
+--locations regionName="$failoverLocation"
+failoverPriority=1 isZoneRedundant=False
+--enable-automatic-failover
+
+# Create a NoSQL API database
+echo "Creating $database"
+az cosmosdb sql database create --account-name $account --resource-group $resourceGroup --name $database
+
+# Define the indexing policy for the container, include a composite index
+printf '
+{
+    "indexingMode": "consistent",
+    "includedPaths": [
+        {"path": "/*"}
+    ],
+    "excludedPaths": [
+        { "path": "/headquarters/employees/*"}
+    ],
+    "compositeIndexes":[
+        [
+            { "path":"/name", "order":"ascending" },
+            { "path":"/age", "order":"ascending" }
+        ]
+    ]
+}' > "idxpolicy-$randomIdentifier.json"
+
+# Create a NoSQL API container
+echo "Creating $container"
+az cosmosdb sql container create --account-name $account --resource-group $resourceGroup --database-name $database
+--name $container --idx @idxpolicy-$randomIdentifier.json --partition-key-path $partitionKey --max-throughput $maxThroughput
+
+# Clean up temporary indexing policy file
+rm -f "idxpolicy-$randomIdentifier.json"

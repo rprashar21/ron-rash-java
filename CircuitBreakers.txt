@@ -1,0 +1,21 @@
+CircuitBreaker Patttern
+Hystrix circuit Breaker Framework will tolerate failures up to a threshold. Beyond that, it leaves the circuit open.
+Which means, it will forward all subsequent calls to the fallback method,
+to prevent future failures. This creates a time buffer for the related service to recover from its failing state.
+
+Wraps up our rest api call in a circuit breaker object which monitors for failure
+Once the failure reaches a certain threshold .the circuit breaks or opens and we can configure a fallback method
+to show some default response
+Its is proxy call
+
+@HystrixCommand Elements
+fallbackMethod : Specifies a method to process fallback logic
+threadPoolKey : The thread-pool key is used to represent a HystrixThreadPool for monitoring, metrics publishing, caching and other such uses.
+threadPoolProperties: Specifies thread pool properties.
+groupKey: The command group key is used for grouping together commands such as for reporting, alerting, dashboards or team/library ownership
+
+
+https://www.baeldung.com/spring-data-derived-queries
+https://www.baeldung.com/spring-data-jpa-query
+https://www.baeldung.com/spring-data-jpa-stored-procedures
+https://www.baeldung.com/hibernate-identifiers

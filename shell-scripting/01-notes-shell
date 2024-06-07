@@ -1,0 +1,75 @@
+#! --> bsically means shebang
+#!/bin --> the path // there
+##!/bin/bash,dash,ksh,sh --> these are diff executables to execute this script and they have different syntax
+# similar to java it needs an executable to tell the linux kernal to exexute this command
+
+
+execute this file ./ <name-of the file>
+or sh <name-of-the-file>
+
+touch vs vim vs cat
+touch -- creates a file also updates a file
+vim --> creates and opens a file
+cat --> opens the contents of a file
+chmod -- grant permission
+ch -- change
+
+chmod <file-name>
+
+VVV --> first V ur permission second vv grp permission thrird vvv --all users
+user,group,everyone
+
+linux uses formula 7 {4 2 1}
+4 - read
+2 - write
+1 - execute
+
+chmod 444 xyz.sh --> every body has only read permission
+chmod 777 xyz.sh -->  everyone has read/write/ex permission
+
+chmod 777
+
+top -- > to check/analyze the health of ur node ,cpu and ram,all running sleeping consuming process
+run a script file to check all of these and run the top command inside ur script
+df --> prints all info about storage space on this virtual machine
+free --> memory of the machine
+nproc --> cpu of the current machine
+
+ps -ef --> show all the process running on my machine
+ps -ef | grep "" --> | called as pipe is used to intregrate 2 separate commands , it will intgerate output of first command to second command
+.test.sh | grep 5 --> suppose the script file out 5,10,15 | grep 5 will further filter the output and return 5 and 15
+grep is global regular expression print
+
+| pipe will send the output of the first command to the second command
+
+cur helps us to connect to remote servs using protcocals like http,ldap etc
+curl  is  a  tool to transfer data from or to a server, using one of the supported protocols
+       (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS,  POP3,  POP3S,  RTMP,
+       RTSP,  SCP,  SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP). The command is designed to work
+       without user interaction
+
+so suppose my logs are store in azure blobl storage and there is an error, i will use the curl command to fetch the
+log file from azure blob or aws s3 and check for errors in the file
+
+curl https://....../logerrorfile.log | grep error
+another command i can use is the wget --> downloads the file
+wget https://....../logerrorfile.log --> this will download the file ,save it and then we can grep for errors
+
+and then use
+cat logerrorfile.log | grep error
+
+to get info use
+curl -X GET facebook.com
+
+ps -ef | grep amazon | awk -F" " '{print $2}'
+ps -ef --> show all the process
+grep amazo --> from all the process show only amazon process
+awk -F" " '{print $2}' from the amazon process only show column 2nd
+this means show all the process | grep amazon and awk that means show 2nd colun
+
+if we run
+ps -ef | grep amazon
+501 45284 42295   0 12:15pm ttys001    0:00.00 grep amazon
+
+ps -ef | grep amazon | awk -F" " '{print $2}'
+45284

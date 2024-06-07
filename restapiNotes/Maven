@@ -1,0 +1,39 @@
+Maven is software managemnet tool- it manages ur dependencies and versions
+For example build a jar file ,, run unit and itegration tests deploy
+Maven helps in all of these
+
+Pom.xml or Project Object Model
+1. Maven Dependencies : frameworks and libraries used in this project
+<dependecies><dependecies> you have in ur project
+
+2. Parent Pom is like --  which version of spring framework spring boot we are using and what all dependecies we are getting
+dependenices and java version plugins and configurations
+
+Name Of our Project : group id  and artifact id and also the version of our app
+So if any other project wants to make use of our project, they can use this group ID, artifact ID,and you can also have a version.
+
+BuildLifecycle for our maven
+validate: validate the project configuration
+compile: compile the source code
+test: run tests against the compiled source code
+package: package the compiled code into a JAR, WAR or EAR file
+verify: perform checks on the packaged code to ensure its integrity
+install: install the packaged code in the local repository
+deploy: deploy the packaged code to a remote repository
+
+Version In Maven
+1.0.0 [major.minor.patch]
+1.1.2
+1.2.3
+major -- siginficant amout of work
+minor -- little work required for upgrade
+pacth -- no work to upgrade
+
+Snapshots -- under development should not take snapshots
+10.0.0-SNAPSHOT -- under development
+10.0.0-M1 -- milestone
+10.0.0 -- Released
+
+
+
+

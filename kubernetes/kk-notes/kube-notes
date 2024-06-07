@@ -1,0 +1,58 @@
+Kubeconfig -- a file which has information to access the kubernetes cluster
+docker ps --
+
+when we want to create any kubernetes resource object we use the command
+for example to create a pod
+ kubectl create -f pod.yml
+kubectl is the command-line tool for interacting with Kubernetes clusters.
+create is the action to create a Kubernetes resource.
+-f specifies that you are providing a file.
+pod.yml is the YAML file containing the configuration for the pod you want to create.
+
+And on all these nodes
+we'll have the container runtime installed.
+
+
+ Services in kubernets
+ In Kubernetes, a Service is an abstraction layer that provides a stable IP address and DNS name for a set of Pods in a cluster.
+ It acts as a load balancer, routing traffic to the appropriate Pod based on labels associated with the Pods.
+
+ A Service consists of two parts: a set of Pods and a label selector. The label selector defines the group of Pods that the Service will route traffic to.
+  When you create a Service, Kubernetes creates an endpoint object that includes the IP addresses of the Pods that match the label selector.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

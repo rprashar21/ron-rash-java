@@ -1,0 +1,34 @@
+Zookeeper is a software to manage brokers
+helps in performing leader selection for partitions
+it sends notification to kafaka incase of topic creation or die brkoer compes up or down
+
+zookeeper alternate is raft
+they do not store consumer offset
+
+u can use zookeeper with kafka brekoers but not with kafka clients{prodcuer,consumer,}
+kafka clients use connection endpoint
+consumers store offset == offset is value with each record
+
+basicall do not use zookeeper as a configurtion in ur kafka clients
+
+kafka raft
+raft protcols -- now kafka can scale upto millions of partitions
+with a Quorom controller
+
+Questions
+Once a message sent to a topic, a message cannot be modified it is immutable
+Brokers are identified by id number
+Every brokers contain only subset of topics and partitions
+If a topic has a replication factor of 3 each partion will live on 3 different brokers
+If a topic has a replication factor of 3, what maximum number of brokers can be stopped without impacting the topic availability?
+ 3(replication factor) - 1 = 2
+Each partition can only have 1 leader, and multiple replicas
+Very important: you only need to connect to one broker (any broker) and just provide the topic name
+you want to write to. Kafka Clients will route your data to the appropriate brokers and partitions for you!
+ou only need to connect to one broker (any broker) and just provide the topic name you want to read from.
+Kafka will route your calls to the appropriate brokers and partitions for you!
+Two consumers that have the same group.id (consumer group id) will read from mutually exclusive partitions
+Kafka Consumer Offsets are stored in...
+
+
+Do not block your .send(). Instead, make sure to .close() your producer before shutting down your application

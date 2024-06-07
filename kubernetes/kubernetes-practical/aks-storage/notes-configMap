@@ -1,0 +1,3 @@
+A configMap is an api object used to store non confidential data in key-value pairs.
+Pods can use configMapsas env variables,command line arguments or as configuration files in volumes
+this bascially allows us to decouple env specific configuration from ur container images

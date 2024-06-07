@@ -1,0 +1,52 @@
+Storage Services
+Azure Blobs: A massively scalable object store for text and binary data.
+Also includes support for big data analytics through Data Lake Storage Gen2.
+Azure Files: Managed file shares for cloud or on-premises deployments.
+Azure Queues: A messaging store for reliable messaging between application components.
+Azure Disks: Block-level storage volumes for Azure VMs.
+Azure Tables: NoSQL table option for structured, non-relational data.
+
+Benefits of Azure Storage
+Durable and highly available - redundancy -durable across geo zones
+secure - date written to azure storages are encypted also provides access control
+Scalable - storages services are hoghly scalabale
+managed - azure takes care of updates and stuff like that
+Accessible - accessible from anywhere in the world over httpor https
+
+Azure Blob Storage - binary large objects like text images or vides ,, unstructred data with no extension
+ideal for
+Serving images or documents directly to a browser.
+Storing files for distributed access.
+Streaming video and audio.
+Storing data for backup and restore, disaster recovery, and archiving.
+Storing data for analysis by an on-premises or Azure-hosted service.
+
+accessed via http orhttps urls links azure storage apis,clis ,powershell,client library
+also supports many langausges .net java ruby node python php
+
+Azure Blob  access tiers {data which is accessed and updated frequently ,sometimes or rarel}
+Hot access tier: data that is accessed frequently (for example, images for your website). highest storage and lowest access cost
+Cool access tier: data that is infrequently accessed and stored for at least 30 days (for example, invoices for your customers).
+Cold access tier: data that is infrequently accessed and stored for at least 90 days.
+Archive access tier:data that is rarely accessed and stored for at least 180 days,
+with flexible latency requirements (for example, long-term backups).
+
+Azure Files
+Azure File storage offers Server Message Block (SMB) or Network File System (NFS) protocols
+SMB Azure file shares are accessible from Windows, Linux, and macOS clients
+NFS Azure Files shares are accessible from Linux or macOS clients.
+SMB Azure file shares can be cached on Windows Servers with Azure File Sync for fast access near where the data is being used.
+
+Benfits of Azure Files
+PowerShell cmdlets and Azure CLI can be used to create, mount, and manage Azure file shares.
+Azure Files has been built from the ground up to always be available.
+
+
+Azure Queues Service  for storing large numbers of messages
+commonly used to create a backlog of work to process asynchronously.
+can be combined with compute functions like Azure Functions to take an action when a message is received
+
+Azure Disks
+same as a physical disk, but they’re virtualized – offering greater resiliency and availability than a physical disk
+
+Azure Table storage stores large amounts of structured data. non realtional data

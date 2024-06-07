@@ -1,0 +1,16 @@
+Questions
+You need to limit the maximum number of API calls allowed from a single source for a specific time interval.
+What will u use ? --> POlicy
+API publishers can change API behavior through configuration using policies.
+Policies are a collection of statements that run sequentially on the request or response of an API.
+A product has one or more APIs, a usage quota, and the terms of use and cannot be used to restrict the number of API calls.
+Subscriptions are the most common way for API consumers to access APIs published through an API Management instance.
+ API is a representation of a back-end API and needs to be configured with a policy to implement a rate limit.
+
+ define policies to multiple scopes.
+ You need to enforce a policy evaluation order. -
+the <base /> element
+The <base /> element provides the ability to enforce policy evaluation order.
+The <when /> element is part of the choose policy and is evaluated in order of its appearance within the policy
+follow-redirects attribute is part of the forward request policy, so it does not have any impact on the policy evaluation order.
+The condition attribute is part of the retry policy, so it does not have any impact on the policy evaluation order.

@@ -1,0 +1,76 @@
+Azure Servless Services
+Compute -> Azure FUnction Apps {event drive compute services}
+Run code on demand -- Unlike IAAS or PAAS
+No managing of software and hardware -- the cloud manages it
+Pay when ur code runs
+trigger ur code it runs and the task is over![](../../Screenshot 2023-08-07 at 13.34.13.png)
+Azure Functions Documentation: https://docs.microsoft.com/en-us/azure/azure-functions/
+
+Azure Functions Pricing: https://azure.microsoft.com/en-us/pricing/details/functions/
+
+
+Triggers and Bindings
+triggers what triggers the function apps
+in an event driven system it could be the events in the eventgrid
+There are 4 types of trigger
+HTTP trigger
+Timer Trigger
+Blob Storage
+Queue triggers
+
+A Function app must have one trigger- trigger is basically what invokes that trigger
+
+Bindings --> declarative way to connect services and resources to the azure functions
+
+<------Creation of function Apps -- >>>>>>
+we can create a group of function Apps for particlaur resources
+they are under resource groups and they have storage accounts which stores the function app files
+Os - in whihc the function app runs
+Plan Type - Consumption - pay as you go , sacles automatically
+App Service plan is where you have dedicated reserved VMs, which are always running and you manage
+the scaling by increasing and decreasing the number of VMs
+Premium plan, where there is at least one function app instance running to avoid a cold start,which
+means u have to pay even the function app is not running
+
+Monitoring of function Apps
+Application Insights
+
+Creating a Function within the function Apps
+Http Trigger - Name
+3 Authorization type
+ Function - a function or host key is required - fuction key works only for that function ,
+ host key works for all the functions within that function aspp
+ Admin - Level Authorization a special master key is required
+
+ and admin they require some sort of key based aithorizations
+
+
+Edit Trigger --> Integration -- request input for our trigger
+Authorization level --> Http methods allowed like get post
+
+Input and Output bindings which is used to integrate our function app with other azure services
+
+Function.json file contains all  the triggers and binding of our function in a json format
+
+The function has 2 params context and req
+The context object is used to pass data to and from ur application
+
+The function keys
+Function keys
+Function keys are scoped to this function and can be used to access this function.
+Function --> app keys
+System keys
+System keys are automatically managed by the Function runtime.
+System Keys provide granular access to functions runtime features.
+Host keys (all functions)
+Use Host keys with your clients to access all your HTTP functions in the app.
+_master key grants admin access to Functions Runtime APIs.
+
+These authntication and aithorization is used to protect function apps during development
+ and for protection in production we can use alternative like Api Management.
+
+Monitor -- tab is used for monitoring logs , how when what happened to function apps
+Configuration - This configuration page is used to store function app configuration settings like connection strings
+               and even the global variables that are used inside the Azure function code.
+how Azure manages your code and the runtime. u can get that info by accessing the storage account in overview
+Azure function runtime creates a couple of blob containers to store logs and secrets associated to your functions.

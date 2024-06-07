@@ -1,0 +1,31 @@
+Azure account--> containers --> blobs
+they have properties called Lease
+Lease status --locked
+Lease state -- leased
+Lease duration -- infinite
+
+Metadata is optional
+
+Azure storage client libraries to make changes to the azure programtically
+
+Questions
+Which C# method in the Azure Storage client libraries for .NET do you need to call to set a blob’s properties?
+SetHttpHeadersAsync
+
+Metadata is user-defined and optional, while properties are automatically created by Azure
+
+App protection policy data protection configuration?
+Data protection under APP is offered in three configurations
+Enterprise basic -> protects app with PIN and encryption and has data wiping also validates Android device and is similarto
+  Exchange Online mailbox policies.
+Enterprise-enhanced  -> data leakage prevention with minimum OS requirements.
+suitable users for  work or school data in a mobile scenario.
+Enterprise HIgh --> ncludes all features from basic and enhanced , and adds advancedd data protection,pin config and App Mobile Threat Defense.
+
+Which C# method in the Azure Storage client libraries for .NET do you need to call to retrieve a blob’s metadata
+GetPropertiesAsync
+It shows how to set the ContentType and ContentLanguage properties.
+
+Which C# method in the Azure Storage client libraries for .NET do you need to call to set a blob’s properties?
+SetHttpHeadersAsync
+

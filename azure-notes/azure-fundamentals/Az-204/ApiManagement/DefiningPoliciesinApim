@@ -1,0 +1,16 @@
+Policies can be defined as a series of action on an api that are applied  to incoming/outgoing requests.
+
+Azure API manangement can modify an api using the policies
+
+There are diff policy scopes
+Global -- policy is applied at global level fir every api in the API Management Resource
+Workspace -- policy is applied at a specific workspace
+Product -- policy is applied at a specific Product
+Apis -- policy is applied at a api level ie for all operations under that api
+Operation -- policy is applied to a specific operation
+
+Policy Definition --> are configured using xml documents or guided by editor
+Policy expressions which use C # code allowing management traffic for apis without specialized code
+
+=============API Management Policy Reference ============================
+

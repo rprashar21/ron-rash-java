@@ -1,0 +1,10 @@
+sudo --> substitute user do --> got to the root user
+su -- switch
+
+sudo su -     # take u to the root user
+su rohit --> switch to rohit suer
+su swati
+
+
+find to find files
+sudo find -name <file-name>

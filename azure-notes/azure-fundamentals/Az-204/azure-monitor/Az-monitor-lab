@@ -1,0 +1,77 @@
+Azure Monitor can ingest data from a large number of applications and services in your cloud and on-premises infrastructure.
+You can use azure monitor to do analytics,logs alerts
+
+In this lab, you'll learn more about Azure Monitor by configuring metrics,
+saving visualized data in dashboards, setting alerts, and automating responses to your data with action groups.
+
+Configure and save metrics in Azure Monitor
+Metrics are an Azure Monitor tool provides near-real-time numerical data about ur infrastructure.
+Metrics are collected at regular, defined intervals and help you act on data quickly,
+ both by visualizing data and helping automate actions based on that data through alerts.
+
+
+ Goto Monitor --> metrics-->{select the vm u have created eg ca-lab-vm}
+ Now lets create some metrics
+
+ Select Percentage CPU as the Metric and Avg as the Aggregation:
+ The Metric drop-down allows you to select different metrics to track.
+ The Aggregation drop-down allows you to specify different options for processing the the data points.
+
+
+====================================================================================================================================================================================
+Log Analytics workspaces are unique environments to collect and interact with several Azure Monitor data sources in Azure.
+Companies use Log Analytics workspaces in part because it allows them to import data from a variety of sources
+and query it using a robust query language that you'll cover in another lab step.
+
+You can also manage alerts, view the health of your resources and more from your workspace.
+In this lab step, you'll practice creating a Log Analytics workspace and configuring it to receive log data from an Azure VM.
+
+Steps
+Goto LogAnaytics Workspaces
+create
+give details
+Subscription: Leave as the default option
+Resource Group: Select the only available one
+Name: ca-lab-workspaceXXXX, where XXXX is a random 4-digit number
+Region: West US
+
+review and create
+ You've created a Log Analytics workspace. Next, you'll need to import data from some source,
+ to be able to view that data in your new workspace. An Azure virtual machine has been provisioned in this lab.
+ You'll connect that VM to your workspace next, so that you can view its data.
+
+gotot log anaytics workspace
+--> under classic --select virtual machine .. se ur vm and click connect to connect to this workspace
+
+============================== ==========================================================================================
+A big reason companies use Log Analytics workspaces is their ability to use a
+powerful query language called Kusto Query Language (KQL) to query logs.
+KQL is a pipeline-driven, read-only query language that will look very familiar if you've ever worked with a structured query language (SQL).
+
+In this lab step, you'll use KQL to query data about the virtual machine you connected to your Log Analytics workspace.
+
+Steps
+In your workspace blade, click Logs on the left under General:
+ Input the Heartbeat command into the query window:
+ The Heartbeat query checks virtual machines attached to a workspace at regular intervals
+
+
+============================== ==========================================================================================
+Metric alerts are an Azure Monitor tool used to alert you when some metric crosses a threshold,
+ Metric alerts can be triggered by a wide range of both pre-defined and custom metrics,
+ and can be used to do anything from send an email or text to triggering an Azure function.
+
+In this lab step, you'll configure a metric alert to fire when an Azure VM has used more than a specified amount of CPU, on average, over a certain period.
+
+goto monitor--> alert rule -slect vm--> next conditions select percentage cpu
+conditions
+signal name --> percentage cpu
+aggregation type --> Avergae
+operator --> greater than
+Threshold value --> 80
+
+when to evaluate
+check every 1 min
+lookback 5 min
+
+This means that your alarm will trigger if its CPU usage average goes over 0, for a period of at least 1 minute.

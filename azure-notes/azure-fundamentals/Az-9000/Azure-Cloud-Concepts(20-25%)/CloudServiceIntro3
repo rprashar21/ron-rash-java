@@ -1,0 +1,38 @@
+Describe the benefits of reliability and predictability in the cloud
+Reliability and predictability are two crucial cloud benefits that help you develop solutions with confidence.
+
+
+Reliability is the ability of a system to recover from failures and continue to function.
+It's also one of the pillars of the Microsoft Azure Well-Architected Framework.
+The cloud, by virtue of its decentralized design, naturally supports a reliable and resilient infrastructure
+if obe region is down reources might be running in other regions
+
+
+Predictability in the cloud lets you move forward with confidence.
+Predictability can be focused on performance predictability or cost predictability.
+
+Perfromance - Autoscaling, load balancing, and high availability
+Cost - Cost predictability is focused on predicting or forecasting the cost of the cloud spend
+
+You can use -  Total Cost of Ownership (TCO) or Pricing Calculator to get an estimate of potential cloud spend.
+
+
+benefits of security and governance in the cloud
+set templates ensure corporate standards are met,security,Cloud-based auditing
+
+
+benefits of manageability in the cloud
+major benefit of cloud computing is the manageability option
+
+2 types of management
+Management of the cloud
+Automatically scale resource deployment based on need.
+ Deploy resources based on a preconfigured template, removing the need for manual configuration.
+ Monitor the health of resources and automatically replace failing resources.
+ Receive automatic alerts based on configured metrics, so you’re aware of performance in real time.
+
+ management in cloud
+ Through a web portal.
+ Using a command line interface.
+ Using APIs.
+ Using PowerShell.

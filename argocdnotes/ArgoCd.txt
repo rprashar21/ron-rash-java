@@ -1,0 +1,116 @@
+GitOps --
+Configuration,Infrastructure as Code
+IAc + Ansible + git
+
+Collaboration +change Mechnaism
+
+Pull vs Push model
+We pull and push the cd which is the iac code
+
+ArgoCd is  a Gitops  based CD  with pull model design
+CD - Continous delivery tool for kubernetes
+
+
+What we did before ArgoCd ?
+We needed tools to deploy change in our kubernetes clusters like kubectl/helms
+Grant access in CI/Cd  system to apply  deployemnst in K8 cluster , Configure Kubeconfig
+
+what does ArgoCd does ?
+ArgoCd is deployed on k8s cluster and will watch over our configuration any chaanges will apply on K8 cluster
+We will have config repo -- where all configurations are managed ,, K8 will keep looking into this
+
+Why ArgoCd ?
+State Visibility  - Visibility to the last sync status and application health overall
+Git is the source of our truth
+Keep your cluster in sync with Git
+Easy rollback
+More Security
+Grant access to ArgoCd Only
+You can deploy the same application to th K8s cluster
+
+#Core Concept
+Application -- To use argocd and deploy applications we have to define an application
+               2 things
+               1.git(source of manifests)
+               2.Destination cluster and namespace
+   Application Source Tools Supported by ArgoCd is
+    1. Helm Charts
+    2. Kustomize.io
+    3. Directory od Yaml Files
+    4. Jsonnet
+
+Project - Logical grouping of applications --
+ it is mandatory to create applications for a project
+
+ Useful??
+ allow trusted git repos
+ allow certain apps to be deployed  into specific clusters and namespaces
+Sync -- Sync is the process of making the actual state == desired state
+Refresh - ArgoCd compares the latest code in Git with the live state ,figures out what is different
+automatically referhes after 3 seconds
+
+# 3 Components
+1. ArgoCd Api server -- expose api for crdu of applicatiosn
+2. Repo server
+3. applicatoon controller
+
+#Enable Kubernets cluster in docker Desktop
+1.kubectl get nodes
+
+create a namespace for agrocd
+kubectl create  ns argocd  ->namespace/argocd created
+
+#apply the high availabe setup
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+here the resources are created
+
+kubectl get all -n argocd
+
+# see all the pods created and running
+kubectl get pods -n argocd
+
+
+----------------------Get Initial Pwd from agroCd --------
+
+It is stored as as a secret in ArgoCd namespace
+kubectl get secret -n argocd  -- we get back - argocd-initial-admin-secret
+
+# now get secret from this in
+kubectl get secret -n argocd argocd-initial-admin-secret -o yaml
+
+apiVersion: v1
+data:
+  password: VTVKcnBXWDdGS3dvLXNrNQ== This is the password
+kind: Secret
+metadata:
+  creationTimestamp: "2022-11-06T21:04:24Z"
+  name: argocd-initial-admin-secret
+  namespace: argocd
+  resourceVersion: "1741"
+  uid: 9fce1a8a-8a7d-44b9-838d-409428c085cd
+type: Opaque
+
+Encoding password -U5JrpWX7FKwo-sk5
+
+#Expose ArgoCd server (Api+Ui)
+ArgoCd server cannot be accessed directly
+we can expose by using a Service :Loadbalance -- change argocd service to LoadBalancer
+                                   Ingress -- create ingress service that points to  argocd Service
+
+    Use Kubernetes Port forward  to access this in local machine
+    #Port Forward
+    kubectl port-forward svc/argocd-server -n argocd 8080:443
+    kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+Port Forwarding is used to access argo cd web ui
+WHAT IS PORT Forwarding --(ALLOW OUTSIDE SERVER TO MAKE CONNECTION WITH YOUR MACHINE)
+
+get all services in your argo cd
+kubectl get svc -n argocd
+argocd version
+
+argocd login localhost:8080
+Username-- admin
+password - U5JrpWX7FKwo-sk5
+
+argocd cluster list

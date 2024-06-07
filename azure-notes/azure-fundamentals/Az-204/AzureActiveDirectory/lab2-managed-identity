@@ -1,0 +1,51 @@
+Managed Identity provides an application identity to the PaaS or SaaS offering in the Azure
+that allows you to connect to any Azure service that supports RBAC access through Azure AD.
+
+Azure allows you to create two types of managed identities:
+
+System-assigned: Azure services enabled you to create an identity directly on the service instance.
+The lifecycle of the identity is tied to the resource. Deleting the resource also deletes the attached identity.
+
+User-assigned: You can also create an identity manually and assign it to a resource in Azure.
+ One identity can be assigned to more than one resource and the original identity is managed separately from the attached resources.
+
+In this lab step, you will add application settings to the web app with Key Vault reference using the Azure Portal.
+
+Steps
+1. In the Azure Portal search bar, enter app services and click App Services under Services
+and select the only listed web app resources with name similar to calabcal###:
+
+2. click browse to see the forntend of the web app
+The web frontend will fail to load as the web app is unable to find the required application settings for the Cosmos DB connection.
+ You will fix it in the next instruction.
+
+3. To understand the secret reference flow, click Identity from the left blade menu and select User assigned on the right hand side window:
+The web app is assigned a user-assigned type managed identity that creates a service principal in the Azure tenant.
+ This enables other resources to add permissions to the service principal, ultimately allowing the web app to access the resource as well.
+A Key Vault secret access permission has been added for the same identity to access the secrets programmatically:
+
+4 .Click Configuration under Settings and click + New application settings to add the application settings:
+A Key Vault reference is of the form @Microsoft.KeyVault({referenceString}),
+ where {referenceString} is replaced by either SecretUri=secretUri
+ or a combination of VaultName, Secret Name and/or Secret version.
+
+ Use the following information to add the application settings and click OK once done:
+
+ Name: Enter constr
+ Value: Enter @Microsoft.KeyVault(SecretUri=####) while replacing the # with the Secret Identifier URL copied from the Key Vault secret version in the previous lab step.
+
+5. Click + New application setting and add 2 more app settings:
+
+   App Setting 1
+
+   Name: Enter database
+   Value: Enter @Microsoft.KeyVault(SecretUri=####) while replacing the # with the secret identifier from the database-name secret in the key vault.
+   App Setting 2
+
+   Name: Enter container
+   Value: Enter @Microsoft.KeyVault(SecretUri=####) while replacing the # with the secret identifier from the container-name secret in the key vault.
+   The application settings will look like this when the settings are added:
+
+ The Source value specifying the Key vault Reference confirms that the secrets are fetched from the key vault.
+
+ Click Save > Continue from the top menu items once done.

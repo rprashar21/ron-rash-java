@@ -1,0 +1,48 @@
+Deployment is the superset or wrapper aroudn our replicaset
+so basically the have the same definition ,, only difference is the kind of resource
+
+
+
+# Get Container Name from current deployment
+kubectl get deployment my-first-deployment -o yaml
+
+# Update Deployment - SHOULD WORK NOW
+here we are updating our previously applied deployment to a new deployment by setting a new image
+kubectl set image deployment/<Deployment-Name> <Container-Name>=<Container-Image> --record=true
+kubectl set image deployment/my-first-deployment kubenginx=stacksimplify/kubenginx:2.0.0 --record=true
+
+By default, rollout happens in a rolling update model, so no downtime.
+
+# Verify Rollout Status
+kubectl rollout status deployment/my-first-deployment
+
+# Verify Deployment
+kubectl get deploy
+
+Verify the Events and understand that Kubernetes by default
+do "Rolling Update" for new application releases.
+With that said, we will not have downtime for our application.
+
+check the replica set and pods
+
+We have the rollout history,
+so we can switch back to older revisions using revision history available to us.
+
+kubectl rollout history deployment/<Deployment-Name>
+kubectl rollout history deployment/my-first-deployment
+
+We can rollback a deployment in two ways.
+Previous Version --
+Specific Version
+
+Review the "Annotations" and "Image" tags for clear understanding about changes.
+# List Deployment History with revision information
+kubectl rollout history deployment/my-first-deployment --revision=1
+kubectl rollout history deployment/my-first-deployment --revision=2
+kubectl rollout history deployment/my-first-deployment --revision=3
+
+
+# Rollback Deployment to Specific Revision
+kubectl rollout undo deployment/my-first-deployment --to-revision=3
+
+Rolling restarts will kill the existing pods and recreate new pods in a rolling fashion.

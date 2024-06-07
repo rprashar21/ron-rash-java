@@ -1,0 +1,64 @@
+Azure event grid-- is used for routing events to appropriate subscribers
+integrates applications using events
+
+publisher --sends events to Azure event grid -- > subsriber
+Event Subsriptions are event handlers the route/filter the events to event handlers
+
+Event handlers are applications/services which  handle these events
+event sources or publishers are
+custom topics
+Domains
+saas providers such as
+partner events
+api management
+azure functions
+event handler includes webhooks
+event hubs
+blob storage
+service bus and queues
+relay hybrid queues
+storage quesu
+
+5 imp pieces of azure event grid
+event
+event sources
+topics
+event subsciptions
+event handleers
+
+Endpoint validation is used to verify that the webhook endpoint specified by a subscriber is valid
+and reachable before it can recieve events
+
+Azure Event Grid uses a security feature called endpoint validation to verify that the webhook endpoint
+specified by a subscriber is valid and reachable before it can receive events.
+When an event subscription is created, Event Grid sends a subscription validation event to the specified endpoint,
+ containing a validation code that the endpoint must echo back to the Event Grid service.
+ This mechanism ensures that the endpoint is both reachable and authorized to receive events.
+
+Queues are used for point-to-point communication, while topics are useful in publish/subscribe scenarios.
+
+In Azure Service Bus, queues are used for point-to-point communication and store messages until
+the receiving application is available to receive and process them.
+On the other hand, topics are useful in publish/subscribe scenarios,
+allowing multiple independent subscriptions that work like queues from the
+receiver side and enabling subscribers to receive a copy of each message sent to the topic.
+
+
+
+In Azure Event Hubs, a partition key is used to map incoming event data to specific partitions.
+organize the data and keep related events together in the same partition,
+ensuring that they are delivered in order of arrival.
+Using a partition key can improve performance, reliability, and scalability of your event processing pipeline.
+
+
+Questions
+You need to ensure an application can receive events filtered by values in the data field in the advanced filtering options.
+An advanced filter is used to filter events by values in the data fields and specify the comparison operator.
+An event type filter is used to send only certain event types to the endpoint.
+A subject filter is used to specify a starting or ending value for the subject.
+Topics is not a type of filter; the event grid topic provides an endpoint where the source sends events.
+
+Messages can be peeked at in the queue without removing them from the queue by calling the PeekMessages method of the QueueClient class.
+ The Peek method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.
+ The ReceiveMessages method of the QueueClient class removes them from the queue.
+ The ReceiveMessageAsync method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.

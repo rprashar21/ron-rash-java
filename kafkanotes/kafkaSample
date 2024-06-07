@@ -1,0 +1,73 @@
+kafka distributed event streaming platform -- high throughput and fault tolernace , can store messages replication factor
+Topic — A bucket of messages (or events in case of kafka) where services may place or read messages from.
+Messages are organized and durably stored in topics. A topic is similar to a folder, and these messages are the files in that folder.
+Topics are multi-producer and multi-subscriber. Messages can be read as many times as needed, unlike traditional messaging systems,
+msgs / events in kafka are not deleted after consumption. Instead, you can define for how long Kafka should retain those events/msgs.
+
+Kafka topics are divided into a number of partitions, which contain msgs/events in an unchangeable sequence.
+ Each msg in a partition is assigned and identified by its unique offset.
+ A topic can also have multiple partition. This allows multiple consumers to read from a topic in parallel.
+
+Topics should have a replication factor>1
+broker100 broker101       broker102
+topicA    topicA           topicA
+part0     part1             part2
+
+          topicA          topicA--part1 --replication
+          part0 --replication
+topicB    topicB
+part1     part0
+
+At any time only one broker can be the leader for a given partition, prodcuers send data to only the broker that is the leader of the partition
+
+In Kafka, replication is implemented at the partition level. The redundant unit of a partition is called a replica.
+Each partition usually has one or more replicas over a few Kafka brokers in the cluster.
+
+Every partition (replica) has one server acting as a leader and the rest of them as followers.
+The leader replica handles all read-write requests for the specific partition and the followers replicate the leader.
+If the lead server fails, one of the follower servers becomes the leader by default.
+
+When a producer publishes a msg to a topic, it is published to its leader. The leader appends the msg to its offset and increments its msg offset.
+consumer reads the message from the partion leader of that topic
+from kafka ver2.4 consumers can read message from partition replicas
+
+Summary
+Kafka has a sized component called a cluster.
+
+Inside a cluster, we’ve got several servers, also known as brokers (usually at least three brokers to provide enough redundancy.)
+
+Kaka brokers are called bootstrap server --
+u need to only connect to the broker and kafka clients will connect to all the servers inside the cluster
+broker100 broker101 broker102
+topicA    topicA    topicA
+part0     part1     part2
+topicB    topicB
+part1     part0
+
+
+
+when a message gets sent to a broker, it gets sent to a particular topic.Topics allow us to categorize data.
+ The data can eventually get broken into several partitions.
+
+By splitting the topic into multiple partitions, we’re facilitating scalability, as each partition can be read by a separate consumer.
+
+Each broker is responsible for receiving messages from producers and committing those messages to disk.
+The broker is also responsible for answering consumers’ fetch requests and serving them.
+
+While designing a Kafka system, it’s always a wise decision to factor in topic replication. As a result,
+its topics’ replicas from another broker can solve the crisis,
+ if a broker goes down. Broker1 has Topic 1 and 10 partitions ,  its replica is in Broker2, so on and so forth.
+  It has got a replication factor of 2;
+ it means it will have one additional copy other than the primary one.
+  It is not possible to have the number of replication factor more than the number of available brokers.
+
+Moreover, exactly one consumer instance reads the data from one partition in one consumer group, at the time of reading.
+
+Since, there is more than one consumer group, in that case, one instance from each of these groups can read from one single partition.
+
+However, there will be some inactive consumers, if the number of consumers exceeds the number of partitions.
+ Let’s understand it with an example if
+ there are 8 consumers and 6 partitions in a single consumer group, that means there will be 2 inactive consumers.
+
+
+Kafka Cluster: A Kafka cluster is a system that comprises of different brokers, topics, and their respective partitions.

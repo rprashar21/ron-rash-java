@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-load-balancer-service-external
+  labels:
+    app: usermgmt-webapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: usrmgmt-web-app-pod # name of the pod where it will redirect traffic
+  ports:
+    - port: 80
+      targetPort: 8080

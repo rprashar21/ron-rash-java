@@ -1,0 +1,35 @@
+Azure generates separate billing reports and invoices for each subscription so that you can organize and manage costs.
+Resource groups can be used to group costs, but you will not receive a separate invoice for each resource group.
+Management groups are used to efficiently manage access, policies, and compliance for subscriptions.
+You can set up billing profiles to roll up subscriptions into invoice sections, but this requires customization.
+
+
+Availability zones are primarily for virtual machines, managed disks, load balancers, and SQL databases.
+Virtual Machine Scale Sets are an Azure compute resource that you can use to deploy and manage and scale a set of identical virtual machines.
+
+Agility
+Deploying and configuring cloud-based resources quickly as business requirements change is called
+
+
+Azure Cost Management allows you to create and manage cost and usage budgets by monitoring resource demand trends,
+ consumption rates, and cost patterns.
+It also allows you to use historical data to generate reports and forecast future usage and expenditures.
+
+
+Azure Policy can help to create a policy for allowed regions,
+which enables you to restrict the deployment of virtual machines to a specific location.
+
+After an outage, Service Health provides official incident reports called root cause analysis (RCA), which you can share with stakeholdersx§
+
+Application Insights is a feature of Azure Monitor that allows you to monitor running applications,
+ automatically detect performance anomalies, and use built-in analytics tools to see what users do on an app.
+
+Service Health notifies you of Azure-related service issues, such as region-wide downtime.
+
+ncorrect: Data Catalog –– This enables data discovery.
+
+Incorrect: Data Sharing –– This shares data within and between organizations.
+
+Incorrect: Data Estate Insights –– This accesses data estate health.
+
+Correct: Data Policy –– This governs access to data.

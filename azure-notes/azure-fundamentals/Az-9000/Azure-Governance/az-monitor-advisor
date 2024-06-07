@@ -1,0 +1,63 @@
+Azure Advisor
+evaluates your Azure resources and makes recommendations to improve reliability,
+     security, and performance, achieve operational excellence, and reduce costs.
+ You can use filters to select recommendations for specific subscriptions, resource groups, or services
+
+Reliability - continuty of ur business-critical applications.
+Security - threats
+Performance  speed of ur app
+Cost optimize and reduce costs
+Operational Excellence
+
+
+Azure Service Health
+ helps you keep track of Azure resource, deployed and overall azure resource
+
+ Combines with 3 diff resources
+ Azure status - global view s, informs you of service outages in Azure, give a global view of health of all the services
+ Service Health - narrower view ,  focuses on the Azure services and regions you're using.
+ Resource Health - tailored view ,  prvides health of individual cloud resource  like vms
+
+ Azure Status - global view page of all ur services across all azure regions
+ broader view
+
+ Service Health - narrower view of Azure services and regions
+ Best place for service impacting communications about outages, planned maintenance activities
+  Service Health alerts to notify about maintenace outages,
+
+ Resource Health - tailored view
+ prvides health of individual cloud resource  like vms
+ Azure Monitor, you can also configure alerts to notify you of availability changes to your cloud resources.
+
+
+ Azure Monitor
+ is a platform for collecting data on ur resources ,analysin visulaizing and acting on results.
+ monitors Azure resources on premise and cloud resources
+ Metrics provide - Log analytics
+
+ logging and metric data collected from ur app
+ ogging and metric data are stored in central repositories
+ Now this data is used in many ways
+ 1. view real-time and historical performance
+ 2. high-level reports on the Azure Monitor Dashboard
+ 3.  you can use the data to help you react to critical events in real time,
+
+ Azure Log Analytics
+ is atool where u run queries on data collected by azure monitor
+ write simple query or use features of og analytics to sort filter
+
+ Azure Monitor Alerts
+ re an automated way
+ For example, you could set a metric-based alert up to notify you when the CPU usage on a virtual machine exceeded 80%.
+ An action group is simply a collection of notification and action preferences that you associate with one or multiple alerts.
+ Azure Monitor, Service Health, and Azure Advisor all use actions groups to notify you when an alert has been triggered.
+
+
+ Application Insights is an azure Monitor feature for web apps .
+ u can setup app insights to help u monitor
+ Request rates, response times, and failure rates
+ Dependency rates, response times, and failure rates, to show whether external services are slowing down performance
+ Page views and load performance reported by users' browsers
+ AJAX calls from web pages, including rates, response times, and failure rates
+ User and session counts
+ Performance counters from Windows or Linux server machines, such as CPU, memory, and network usage

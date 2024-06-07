@@ -1,0 +1,56 @@
+subquery is basically a 2 step process
+the inner query is executed first and then the outer query
+we can also use in operator if we have multiple results return from the subquery
+
+
+A suquery can perofrom on another table as well
+
+select marks from marks_table
+where student_name in (select student_name from student_table)
+
+the exist operator is used to test for existence of rows in the subquery
+A subquery is passedin the EXISTS() function to check if the subquery returned any results
+
+eg /*
+    return back the films that have a rental rate higher than the average rental rate
+
+     2 step process
+     1. calcualte average rental rate -   select avg(rental_rate) from film; this return 70
+     2. from that result return films > rental rate
+   */
+   select rental_rate from film where rental_rate > (select avg(rental_rate) from film);
+
+/*
+ i want to see which films are returned between 2 specific dates
+ returned dates are in rental table which has inventory id
+ now inventory id is in inventory table along with film id
+ film id is in film table with title
+
+so maping is done in this way we first get invenory id from rental thru that we also get the film id
+and then do join on film table
+*/
+
+/*
+this query will give us the film ids in inventory table becoz of the join between rental and
+inventory table
+then we do a jon on inventory and film table to get film
+titles becoz they have primary and foreign key relationship
+*/
+select film_id, title
+from film where film_id in
+(select inventory.film_id
+from rental inner join inventory on  inventory.inventory_id = rental.inventory_id
+where return_date between '2005-05-29' and '2005-05-30')
+order by title ;
+
+
+/*
+same can be done using exists function 
+it checs if we get any result from subquery
+*/
+
+select first_name,last_name from customer as c 
+where exists 
+(
+select * from payment as p where p.customer_id = c.customer_id and amount >11 
+);

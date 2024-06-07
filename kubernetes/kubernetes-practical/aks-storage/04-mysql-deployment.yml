@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # name of the pod
+      app: mysql-pod
+  stratergy:
+    type: Recreate # this will destroy and recreate the database
+  template: # definition of a pod # Pod Template
+    metadata: # name of the pod  metdadata section has 3 things we know
+      name: mysql-pod # pod name ,, l
+    spec: # Pod Specification
+     containers:
+       - name: mysql-pod-container
+         image: mysql:5.6
+         env: # env variable we can have for the db
+           - name: MYSQL_ROOT_PASSWORD
+             value: dbpassword11
+         ports:
+           - containerPort: 3306 # port for ur sql
+             name: mysql
+         volumeMounts: # bascially weh ave created the sql pod and wwe have to map to our disk ontainer level resource
+          - name: mysql-persistentStorage # name of my vloume mount
+            mountPath: /var/lib/mysql
+       volumes: # Pod Spec Level resource we list of
+       - name: mysql-persistentStorage
+         persistentVolumeClaim:
+           claimName: azure-managed-disk-pvc  # this nameshould match the one in persistent-vlumeclain So whenever this respective pod is deployed,# it'll call this Azure manager disk PVC,
+       - name: usermanagement-dbcreation-script
+         configMap:
+           name: usermanagement-dbcreation-script
+
+

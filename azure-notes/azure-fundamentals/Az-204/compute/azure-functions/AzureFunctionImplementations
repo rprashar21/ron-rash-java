@@ -1,0 +1,38 @@
+There are 3 types of authorization
+function -- function specific key is required
+anonymous -- no key is required, anyone can access
+admin -- master key is required
+
+
+The runtime version can be configured in the Function App settings under the "Configuration" section in the Azure portal.
+
+monitor Azure Functions?
+thru Application insights , Azure Monitor, and the log stream feature in the Azure portal.
+Application Insights provides detailed telemetry data,
+such as request rates, response times, and failure rates, and helps in diagnosing issues with your functions.
+
+u can handle exception thru try catch block in code ,, Application Insights to track exceptions.
+
+Secure function apps using Api keys, azure active directory ,App Service Authentication
+
+In a Consumption Plan, scaling is automatic based on the number of incoming events.
+In a Premium Plan and Dedicated (App Service) Plan, you can manually scale by adjusting the number of instances.
+
+
+==============More questions ========
+ which configuration in the host.json file can help manage sudden surges of concurrent requests to an Azure Function?
+Enable  dynamic concurrency in the host.json file.
+It adjusts the number of concurrent executions based on real-time load,
+
+
+Question : You need to ensure that your Azure Function does not time out when processing large payloads. Which approach should you take?
+Use Durable Functions to break down the processing into smaller, manageable tasks.--
+Durable Functions allow for long-running processes by breaking them into smaller steps, which can handle complex, large, or stateful workflows without running into timeout issues
+
+Question : How can you ensure your Azure Function scales appropriately during flash sales with unpredictable request patterns?
+
+Deploy the function in a Premium Plan and configure autoscaling settings.
+Premium Plan provides better performance, supports VNET integration, and allows for custom scaling options to handle high demand efficiently
+
+Question: Which security measures can you implement to secure HTTP-triggered Azure Functions in an e-commerce application?
+Use API keys, Azure Active Directory (AAD) authentication, OAuth tokens, and implement HTTPS for secure communication.

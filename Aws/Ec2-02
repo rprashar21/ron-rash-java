@@ -1,0 +1,84 @@
+Budget -- zero spend budget and -- budgets
+Billings --> bills --> bills by service
+
+ec2 instance - elastic cloud compoute
+advance setting {use data } --need to run only once on server startup
+in the summary we can all details --no of instances ,os,type of virtual server,storage volumes ebs
+,once launched we can see odr details
+
+Types of instances -- based on  ram high speed ,performance
+https://aws.amazon.com/ec2/instance-types/
+
+Aws naming convention
+
+General Purpose , Compute Optimized, MemoryOptimized
+m5.2xlarge
+m:instance class -- general pur
+5:generation (keeps improvong)
+2xlarge:size within the instance class
+
+General Purpose -- for web servers and code repos
+good balance with compute, memory , network
+t2
+
+Compute Optimized -- batch processing ,high perofromance web servers,machine learning
+c6g
+
+MemoryOptimized - R6g-- high ram
+
+# Security Groups
+they handle traffic coming in and out of our ec2 instancees
+they are like firewall living outside the ec2 instance
+These groups have rules
+Type Protocol port range  source    description
+http tcp      22          0.0.0.0/0 {anywhere}
+ssh  tcp      80          128.91.146.85/32  -- specific
+
+inbound and outbound rules
+Network and Security GRoups -->
+
+
+#ssh
+secure shell -- allow u to control a remote machine
+
+Use Ec2 instance connect
+Use IamRole to connect to ur ec2 instane
+
+Private vs Public Vs Elastic Ip
+Elastic Ip is a fixed public ip for ur ec2 isntance,it is ipv4
+Avoid using ElasticIp -- use load balancer or dns![](../../Screenshot 2023-07-11 at 17.08.56.png)
+BY default ec2 comes with private ip for aws internals
+
+
+Load BAlancers -- server balancing load
+It is managed by aws -  cost less
+high availability,handles failures,separates public traffic from private traffic
+performs health checks
+
+4 types of lOad Balancers
+classic lb
+application lb -http https websocket
+network lb
+gateway lb
+
+users--- lb -- ec2
+lb has security groups
+
+Application Lb- layer 7
+Choose an Application Load Balancer when you need a flexible feature set for your applications with HTTP and HTTPS traffic.
+ Operating at the request level, Application Load Balancers provide advanced routing and visibility features targeted at
+  application architectures, including microservices and containers.
+Load balancing http request across machines
+Routing based on url - great fit for microservices and containerbased applications
+
+www ----route /users --->apploadbalancer--- targetGrp users for application{health groups}
+
+www ----route /search --->apploadbalancer--- targetGrp search for application{health groups}
+
+What are target groups
+Ec2 can be managed by auto scaling groups (https)
+managed by itself http
+lamda functions
+health groups are at target group levels
+
+

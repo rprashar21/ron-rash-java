@@ -1,0 +1,168 @@
+Configuring and Saving Metrics in Azure Monitor
+Metrics are an Azure Monitor tool capable of providing near-real-time numerical data about some aspect of your infrastructure.
+Metrics are collected at regular, defined intervals and help you act on data quickly,
+both by visualizing data and helping automate actions based on that data through alerts.
+
+In this lab step, you'll configure a metric to track an Azure virtual machine (VM), and save that metric to an Azure dashboard.
+
+select the azure monitor , then select a scope -- ca-lab-vm , basically a virtual machine
+Select Percentage CPU as the Metric and Avg as the Aggregation:
+
+In this lab step, you practiced creating an Azure Monitor metric to track the CPU usage for an Azure VM.
+ You also learned how to save metric charts to your default dashboard for easy visibility.
+
+
+ Subscripton - CloudAcademyLabs Prod 4
+ ResourGRoup - cal-3710-78a
+
+ Vm is ca-lab-vm
+ when you create a vm ,, u have other resources created as well along withur vm
+
+
+ -------------------------------------------------------------------------------------------------------------------------------------------
+
+ Configuring Log Analytics Workspaces in Azure
+
+ What is log analytics ??
+ log Analytics workspaces are unique environments used to collect and interact with several Azure Monitor data sources in Azure.
+ Companies use Log Analytics workspaces in part because it allows them to import data from a variety of sources
+ and query it using a robust query language .
+ You can also manage alerts, view the health of your resources and more from your workspace.
+
+ Create a log analytics workspace ,, sub->rg --> resource --> region
+
+ 1. Log Analytics workspaces
+ create teh log analytics workspace
+
+
+ :
+ cal-3710-78a
+
+ once cretad go to  the resource
+ You've created a Log Analytics workspace.
+ Next, you'll need to import data from some source, to be able to view that data in your new workspace. choose the vm
+
+ Select Virtual machines from the left menu under Classic:
+ choose the vm u want to connect
+ You've created a Log Analytics workspace and connected a VM to it.
+ In the background, when you click connect the log analytics agent is deployed as an extension on the VM allowing data to be collected.
+
+
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  Us teh kusto query language with Log analytics
+  u can save queries
+  used the kql in the logs section
+
+ -------------------------------------------------------------------------------------------------------------------------------------------
+ Metric Alerts
+ Metric alerts are an Azure Monitor tool used to alert you when some metric crosses a threshold,
+ and even to act or remediate those crossed thresholds automatically by triggering functions and automated procedures.
+ Metric alerts can be triggered by a wide range of both pre-defined and custom metrics,
+ and can be used to do anything from send an email or text to triggering an Azure function.
+
+ Azure monitor -->
+ create an alert --> slect the resource fo which u want to create an alert i,e the scope
+ give conditions
+ eg Agreagtion Type ---> Average
+ operator >> greater than
+ Threshold value --> 0
+
+ when to evalute
+
+ check details
+note that you can also set the severity of the alert, with 0 being the most severe and 4 being the least:
+In this lab step, you configured a metric alert to listen for the CPU usage of an Azure VM,
+ and to fire when that CPU usage went above a certain average number.
+
+ In this Lab Step, you created an App Service plan. You learned about the different pricing tier features and saw how to monitor an App Service plan.
+
+ It is worth pointing out that App Service plans can be automatically created when you create different types of apps. This Lab has separated the creation of the App Service plan to highlight:
+
+ The App Service architecture where multiple apps go inside a single App Service plan
+ Different tiers available for App Service plans
+
+
+------------------------------ ------------------------------ ------------------------------ ------------------------------ ------------------------------
+
+Azure App Service Web Apps, or simply Web Apps, are the instances of your websites
+and web applications hosted in Azure App Service.
+For most scenarios, Web Apps is the best choice for hosting websites and web applications in Azure.
+Each Web App is deployed into an App Service plan.
+ Web Apps are DevOps-ready, and can be deployed using a variety of continuous deployment tools.
+
+ Create a Windows-based Web App and learn about the other options available.
+
+ 1.  enter app services. Click App Services under Services:
+ 2. create -- webapp
+
+Web app Details
+Details
+Subscription 3555dde6-72a3-47a0-8305-ad3715fb42c3
+Resource Group cal-3841-97c
+Name ca-lab-app-1239912
+Publish Code
+Runtime stack .NET 6 (LTS)
+App Service Plan (New)
+Name ca-lab-plan1
+Operating System Windows
+Region West US
+SKU Standard
+Size Small
+ACU 100 total ACU
+Memory 1.75 GB memory
+Monitoring (New)
+Application Insights (preview) Enabled Name
+ca-lab-app-1239912
+Region
+West US
+Deployment
+Basic authentication
+Disabled
+Continuous deployment
+Not enabled / Set up after app creation
+
+created a Windows-based App Service Web App using the Azure Portal.
+The process of creating and managing Web Apps is DevOps-ready and can be automated using the Azure CLI, PowerShell, or the Azure REST API.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Creating a deployment slot
+Deployment slots allow you to have separate instances of your application that have their own hostnames. This is useful for several reasons:
+
+You can organize your workflow by having dedicated testing and staging slots in addition to the default production slot.
+Once you have vetted a new release in the staging slot, you can swap it into production to avoid having to warm up the production application.
+By swapping releases into production, the previous release remains in a slot where it can easily be swapped back into production
+if an issue is found in the new release.
+Each deployment slot maintains its own configuration and application settings.
+Deployment slots are available with the standard and premium App Service plans.
+
+
+In App Srvice --> this is my service ca-lab-app-232323
+click on deployment slots
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Key benefits of deployment slots are the ability to swap pre-warmed websites into production, and to easily roll back to the previous version, by repeating the last swap. It is a best practice to use deployment slots when deploying a Web App. There are different types of swaps that you can use depending on the level of confidence you have in a release:
+
+Auto Swap: As soon as an application is deployed to a slot it automatically swaps into a target slot.
+This is not the same as deploying directly to the target because the application gets a warm start,
+and the previous release of the target slot is preserved if a rollback is required.
+Swap: The most basic swap type that requires you to manually trigger the swap operation.
+Swap with preview: This type is similar to a regular swap, but allows you to preview the swap before completing it.
+Because each slot maintains its own configuration and application settings, the web app may not behave exactly as it did in the originating slot,
+and that is a good thing.
+Some settings such as SSL certificates, custom domain names, and scale settings do not swap when you swap deployment slots.
+Other settings do swap, such as monitoring and diagnostic settings, framework versions, app settings, and connection strings.
+ However, app settings and connection strings can be configured to be sticky and stay with a slot.
+  For example, if you have separate test and production databases, you can configure the database connection string to stick to each slot.
+
+  In the staging deployment slot
+  1.go to Advanced tools
+  The Advanced Tools are what App Service deployments are built on top of.
+   The advanced tools engine is called Kudu.
+    With Kudu you can get command-line access to instances hosting your Web Apps,
+     view running processes, install site extension, and much more.
+     You will only need to use the Zip file deploy functionality provided by Kudu in this Lab Step.
+     Other deployment options do not require using Kudu and can be configured in the Portal,
+      but require setting up an external repository.
+2. From the Kudu toolbar, click Tools > Zip Push Deploy:

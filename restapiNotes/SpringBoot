@@ -1,0 +1,75 @@
+SpringBoot interview Questions
+
+Spring Boot -- easy to accelerate applications like web
+Basic Spring boot comes with
+spring-boot-starter-web -- dependencies which
+
+why spring framework ?
+Spring framework provides dependency injection and help to develop loosely coupled applications
+
+Spring boot ??
+Using Spring Boot We can develope a lot of appliations
+Web,
+Rest Api
+Full Stack
+Microservices
+
+helps develop applications faster--
+removes boilerplate code - manages beans --
+shortens codee length
+best is auto configuration -- like if we just speciy the db details in application.yaml file
+ it will manage the session,session factory and  and other configuration
+creates stand alone applications
+emmbeded server for testing
+Bean auto scan
+minimum Configuration
+dependency resolutin
+health metrics
+
+What is IOC ?
+Inversion of Control is a software design principle- describes the way in which an object is created
+The framework takes control over the program flow.
+
+Dependency Injection is the pattern through which IOC is achived- ie the responsibility of creating objects is trnaferred from applications
+to spring ioc . It also reduce coupling between multiple objects as it is dynamically injected by the framework.
+
+IOC is principle -- DI is implementation
+
+Advantages of IOC and Dependecny Injection ??
+Loose coupling -- Autowrired
+Less code
+Unit testing becomes easy by using different mocks
+maintaining and reusability
+concurrent development
+
+
+What are beans?
+Spring maneges the lifecyle of java classes are called beans
+
+What is IOC container ?
+It is responsible for instantiating the application class.
+There are 2 types of IOc containers .
+1. BeanFactory
+2. ApplicationContext
+
+Spring framework such as IoC, AOP, and transaction management,
+
+Impornatnt feature of Spring farmework
+Ioc
+Data Access Framework
+Spring MVC
+Transaction Management
+Spring Web Services
+JDBC abstraction layer
+Spring TestContext framework
+Spring IoC Container is the core of Spring Framework.
+It creates the objects, configures and assembles their dependencies, manages their entire life cycle.
+The Container uses Dependency Injection(DI) to manage the components that make up the application.
+ It gets the information about the objects from a configuration file(XML)
+ or Java Code or Java Annotations and Java POJO class. These objects are called Beans.
+ Since the Controlling of Java objects and their lifecycle is not done by the developers, hence the name Inversion Of Control.
+
+
+we can remove the emmbeded tomcat server with some other server
+
+spring.jpa.hibernate.ddl-auto=create-drop

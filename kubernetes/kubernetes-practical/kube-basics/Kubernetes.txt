@@ -1,0 +1,124 @@
+Kubernetes open source container management tool because 1000 of container needs to be managed
+ automates deploying scaling and managing containerized application
+ manages 100s of instance of 100s of microservices
+ standard platform for any infrastructure
+- - automates deploying scaling and managing containerized application
+manages our containers at runtime -- used for  deploying scaling load balancing scheduling
+
+managing a large number of container is not easy
+
+deploying of conatiners , making them talk to each other
+schdeuling
+scaling
+load balancing
+batch execution
+roll Back
+monitoring - health monitoring of ur applications
+auto scaling,service discovery self healing,zero time deployment
+
+Kubernetes in Aws Gcp And Azure
+Container Regitries Like Docker HUb abd Amazon ECR
+
+other management tools are dockercompose --kubernetes marathon
+advantage of kubernetes is availabilty and scalability
+
+Kubernetes components
+pods -- Node > pod > container
+node -- master node or worker nodes
+cluster
+replication controller replica set maitains stable no of pods
+service -abstraction of pods , mainting a virtual ip address , sits in front of pods acts as a load balancer
+deployment - object resource whihc runs multiple replicas of ur application
+secrets
+config Map
+etcd --
+kube-scheduler --> responsible for distributing containers across multiple nodes,looks at the newly created pods and assign them to a node
+Kube-api-server --> front end for kubernetes control plane,it exposes the kubernetes api,all the cli tools talk to this api
+kuber-controller-manager -->
+
+Master Node contains these components
+etcd,
+kube-api-server,
+kube-scheduler,
+Kube-controller-manager manages the nodes when they go down,bring up new containers,NodeController-check on node,ReplicationController-check on pods ,if they go down
+ServiceAccount create access
+CloudControllerManager-
+
+
+Woker Nodes
+ContainerRuntime -- where we run all the kubernetes compnents like docker
+Kubelet-- makes sure that the containers are running inside a pod on  a node
+Kuber-proxy -- network proxy which maintains network rules allowing network in na out of ur cluster
+
+
+
+problem of multiple API calls that block for a long time --- for that we need aysnchrous code
+solve the problem of hitting the database multiple times -- do caching
+
+Services -- Services give access to external world to our applications deployed in kubernetes clusters
+Workloads or pods -- where ur applications are deployed on the kubernetes cluster -- it has configuration to store your application
+kubectl is a command to ineract with the kubernetes cluster
+
+deploy our application -- kubectl create deployment first-rest-api --image=manha/docker image username
+expose the deployemet -- kubectl expose deployment first-rest-api --type=LoadBalancer --port=8080
+
+kubectl follows single responsibilty service- it has one
+pods are the smallest deployable unit -- they have a unique ip address
+these are where the containers live
+a pod is a collection of conatiners and can talk to each other using localhost
+
+kubectl get pods
+kubectl describe pod <podname> -- gives entire details of the pods
+like pod --containers inside the pod ,, docker image,name of the pods ip address -- on which node it is running
+
+Namespace is very important-- it means ur dev and qa or prod cluster will have different resources and all of them are separate
+namespace helps in that
+
+pods have our conatiners and porvides an ip address ,it provides categorization for all these conatiners
+by associating them with labels
+
+replicaset -- maintains the pods -- whenever the pods go down ,, it brings it up
+the stratergy by default is using is called rolling updates-- in deployment-- ie 0 downtime
+The 5 instance of pods for v1 -- one at a time comes up and down
+
+to see the deployment -- kubectlt get deployment --> rest-ap1
+
+
+Pods
+OUr Goal is to containerize our applications and then deploy our applications on the wokernodes inside kubernetes cluster.
+Kubernetes does not do this directly ,, it is encapsulated in to a object called POD.
+Pods generally have one to one relationship with our containers ,ie one app container in one pod
+ to scale up/down we increase/decrease the pods
+We cannot have multiple containers of same kind inside a single pod, but we can have different containers. these conatiners can tal withn the same network
+there are helper containers -- DataPUller,Pushers Proxies
+
+Get the status about ur worker Nodes or
+# Configure Cluster Creds (kube config) for Azure AKS Clusters
+az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+# Get Worker Node Status
+kubectl get nodes
+
+# Get Worker Node Status with wide option
+kubectl get nodes -o wide
+
+To Create a Pod
+kubectl run <pod-name> --image <Container-Image>
+kubectl get pods
+
+# Describe the Pod
+kubectl describe pod <Pod-Name>
+kubectl describe pod my-first-pod
+
+Service Load Balancer
+We can expose our application running on a set of pods using diff types of services
+ClusterIp Service -- internal to k8s cluster
+NodePort Service to internet external
+LoadBalancer Service external outside traffice coming
+Ingress Service
+
+K8s Load balancer will be mapped to the Azure Load balancer, and when we deploy the k8s load balancer a new public ip gets created and is asscocaited
+with that  the frontend ip configuration
+
+port - where the loadbalancer listens to external traffic
+targetPort - container port where our aplication is running.

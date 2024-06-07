@@ -1,0 +1,19 @@
+Which blob access storage tier would you use when dealing with a large amount of data that is actively used?
+Hot
+
+
+What Azure storage method allows you to take a “point-in-time” version of your blob storage account, and supports both managed and unmanaged disks?
+ans is Snapshots
+A blob snapshot is a read-only version of a blob that is captured at a point in time
+Once a snapshot has been created, it can be read, copied, or deleted, but not modified
+Snapshots provide a way to back up a blob as it appears at a moment in time
+With the REST version 2015-07-08 and above,
+
+Server-side encryption is done Azure storage service, and is enabled by default for all managed disks.
+The encryption provides encryption at rest for your data
+and is enabled by default for all managed disks, and whenever possible, snapshots, and images?
+
+Regarding Microsoft Azure Storage, Table storage offers a NoSQL data store
+Which type of storage within Azure Storage is optimized for random access files that are frequently updated?
+
+You would use a Shared Access Signature to provide access to a client that can't be trusted with the account key.

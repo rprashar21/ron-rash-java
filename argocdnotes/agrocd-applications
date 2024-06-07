@@ -1,0 +1,6 @@
+what is an application ?
+Application is a kuberentes resouece object which represents a deployed application instance in an environment
+
+2 Key pieces of information
+1. Source -- desired state in git
+2. Destination -- reference to the target cluster

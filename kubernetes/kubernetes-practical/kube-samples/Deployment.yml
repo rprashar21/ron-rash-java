@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: front-end-twitter-app
+  template:
+    metadata: # Dictionary
+      name: front-end-pod
+      labels: # Dictionary
+        app: front-end-twitter-app
+    spec:
+      containers: # List
+        - name: front-end-container
+          image: stacksimplify/kubenginx:3.0.0
+          ports:
+            - containerPort: 80
+

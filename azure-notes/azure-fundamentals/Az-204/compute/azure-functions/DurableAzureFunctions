@@ -1,0 +1,13 @@
+There are 4 durable azure functions
+Activity
+Orchestrator
+Entity
+Client
+                     triggers
+Orchestrator trigger ------------> Orchestrators function {orchestrates the activity functions}-->activity functions
+
+when u start ur orchestrator function it creates a control queues for each activity and one worker item queue
+it actuall sends a message to the worker itme queue
+the activty functions receive the message from the worker item quque and exutes the activity function based on internal logic
+it then sends response back to the control queue
+the orchestrator function recives that message from the orchestrator trigger

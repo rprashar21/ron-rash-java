@@ -1,0 +1,44 @@
+How I Cracked the Google India and Amazon Web Services (AWS) Vancouver, Canada Interview.
+
+1. Setting a target for 2-3 months of Preparation.
+It includes refreshing on dsa and system design and preparing a bit on the behavioural aspects.
+Allocating time in the evenings and weekends for preparation and spare time to refresh to not get burnt out.
+
+2. Coding and Problem Solving: Studying DSA strictly following leetcode and doing only medium questions.
+I solved around 100 questions in this round of preparation and leetcode premium is must for
+quick detailed solutions and alternatives to what you came up with.
+Practice all patterns and types of questions
+* Greedy problems
+* Sliding Window
+* Dynamic Programing
+* DFS And BFS in Graphs ( Very imp for google)
+* Backtracking
+* Trees
+* Sorting
+* Stack, Queue, Linked List
+* Bit Manipulation
+
+3. System Design: As we all know there is no one correct answer and after taking almost
+100 system design interviews I figured you need to go principles first in these interviews and
+never try to cram answers from the resources out there. Also all questions asked were new and were not there on the internet.
+* Funtional Requirements
+* Non Funtional Requirements
+* Back of the envelope calculations
+* Sql and NoSql databases and understanding popular databases like Mysql, Mongodb and Cassandra.
+* Kafka, RabbitMq type systems their differences and use cases.
+* Load Balancing, Api Gateway, Service Discovery,CI/CD, Kubernetes etc
+* Strong skills for Database Schema both for sql and Nosql
+* Deploying and Scaling Web Services
+* Writing APIs and security of APIs
+* Understand sharding, gossip, consensus algorithms.
+
+4. Behavioural Aspect:
+Study for the Googlyness and Amazon Leadership principles.
+You need to have solid examples to back up your answers.
+ Questions will always be like “Tell me a time you did this”.
+
+Some surprises which I did not prepare for :
+
+1. Strong understanding of Concurrency and problems associated with it.
+2. Strong understanding of the language you are coding in, for me it was Java.
+3. Great testing and code review skills, was tested in google.

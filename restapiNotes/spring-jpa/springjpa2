@@ -1,0 +1,37 @@
+finder methods
+findByName(String s)
+findByNameAndDesc(String name, String desc)
+findByPriceGreaterThan(Double price)
+findByDescContains(String desc)
+findByPriceBetween(Double price1 ,Double Price2)
+findByDescLike(String desc)
+findByNameIn(List<String> names)
+
+
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5439/jwt_security
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+    org:
+      hibernate:
+        dialect:
+          PostgreSQLDialect:  # this is the dialect
+
+Adjust the spring.datasource.url property to match the database URL you want to connect to.
+In this case, it's jdbc:postgresql://localhost:5432/testdb_container. Update the username and password properties accordingly.
+Set spring.jpa.hibernate.ddl-auto to create. This property instructs Hibernate to create the database schema during application startup.
+By setting these properties, Spring Boot will attempt to create the specified database (testdb_container in this case) if it doesn't exist.
+Ensure that you have PostgreSQL installed and running on your local machine with the correct credentials.
+Note: Be cautious when using spring.jpa.hibernate.ddl-auto=create in a production environment as it can lead to unintended consequences. It's recommended to use a database migration tool like Flyway or Liquibase for managing database schema changes in production.
+

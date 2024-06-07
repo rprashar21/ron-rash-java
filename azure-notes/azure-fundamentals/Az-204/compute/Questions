@@ -1,0 +1,48 @@
+Azure _____ is a monitoring and performance analysis tool for apps.
+application insights
+
+
+Which service within the Azure DevOps suite allows you to create continuous workflows to build, test and deploy code?
+Azure pipelines
+
+Which service within the Azure DevOps suite allows you to quickly create disposable,
+non-production environments with additional tools to control costs?
+Azure Dev Test Labs
+
+you're new to AI, what is the best place to start when using Azure
+
+Microsoft offers lots of different AI services.
+If you're new to AI, then the best place to start is Azure Cognitive Services.
+This is a collection of pre-built artificial intelligence tools.
+These services let you add AI capabilities to applications even if you don't know anything about machine learning.
+
+Which Azure service should you use if you want to provide load balancing for VMs or web apps that are distributed across multiple regions?
+Azure Traffic Manager.
+
+Which Azure management service informs you about problems with the Azure platform itself and upcoming maintenance events?
+Microsoft also provides a dashboard called Service Health where you can find out about problems
+with the Azure platform itself as well as upcoming maintenance events.
+You can even create alerts so you'll be notified of both planned and unplanned outages.
+
+Microsoft also offers a solution called Azure Sphere to make your IoT devices more secure.
+ It includes certified chips, the Azure Sphere operating system, and the Azure Sphere Security Service,
+ all of which provide layers of protection for your IoT devices.
+
+ Azure Policy
+ This is based on policies that you create in a service called, naturally, Azure Policy.
+  For example, if someone in your organization creates a subscription that doesn't
+  have your regulatory policy controls assigned to it, then it will show up in this compliance panel.
+
+ Azure Databricks is a similar service because it runs Spark as well, but it's more user-friendly and easier to manage than HDInsight.
+
+ Azure's oldest analytics services HdInsight
+
+ Containers are somewhat like virtual machines except they don't include the operating system.
+ This makes it easy to deploy them because they're very lightweight compared to virtual machines.
+  In fact, containers run on virtual machines.
+ Microsoft provides a variety of ways to run containers.
+ The simplest way is to use Azure Container Instances. This service lets you run a container using a single command.
+
+Microsoft also provides a dashboard called Service Health where you can find out about problems
+with the Azure platform itself as well as upcoming maintenance events.
+You can even create alerts so you'll be notified of both planned and unplanned outages.

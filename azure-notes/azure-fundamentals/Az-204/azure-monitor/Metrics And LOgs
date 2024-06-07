@@ -1,0 +1,10 @@
+You can launch the following from an action group:
+
+An Azure Automation runbook,az functions,notification from azure event hubs,it service management tool.azure logic app
+
+You cannot launch an Azure Container Instance.
+
+
+Azure Activity Log holds data for 90 days.contains subscription-level events about a resource
+A Log Analytics workspace hold data for  12 years.
+While the Azure Activity Log is free, there is a cost for Log Analytics workspaces.

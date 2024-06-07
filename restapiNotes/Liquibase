@@ -1,0 +1,38 @@
+Liquibase migration scripts are used for managing database schema changes and version control in an application
+ Liquibase is an open-source database schema migration
+
+ Advantages
+ open source
+ can be applied on different envs like prod testing -- different schemas
+ collaborations-
+ version control
+ keep track of ur database schema
+ rollback and roll forward
+ supports multiple dbs
+
+
+ Let's say you're working on a web application that involves an employee management system.
+ Initially, the application has a simple database schema with a single "Employee" table containing columns for ID, Name, and Email. However,
+  you need to introduce a new feature that tracks employee addresses. To accommodate this change, you'll need to modify the database schema.
+
+ Create a Liquibase Change Set:
+ First, you would create a Liquibase change set to define the necessary changes.
+ You can define this change set using XML, YAML, or another supported format. Here's an example of an XML-based change set:
+
+ <changeSet id="1" author="yourname">
+     <addColumn tableName="Employee">
+         <column name="Address" type="VARCHAR(100)"/>
+     </addColumn>
+ </changeSet>
+
+Apply the Database Change:
+Next, you would run Liquibase to apply the change set to the database.
+Liquibase will compare the current state of the database with the defined changes and automatically execute the necessary SQL statements to make the required modifications.
+
+Database Schema Evolution:
+With Liquibase, you can easily track and manage the evolution of your database schema over time. As new features or changes are introduced, you can create additional change sets to apply those modifications.
+ Liquibase will keep track of which changes have been applied and which are pending, ensuring consistency across different environments.
+
+The real-time usefulness of Liquibase becomes evident when working on collaborative projects with multiple developers or
+when deploying changes to different environments (development, testing, production).
+Liquibase ensures that everyone is working with the same database schema version, making it easier to manage and deploy changes consistently.

@@ -1,0 +1,11 @@
+apiVersion: v1 # version on whihc the resource object is part of
+kind: pod    # the kubernetes object whihc is being created
+metadata:  # name,labels,namespace
+  name: nginx-pod
+  labels:
+    app: nginx
+    tier: dev
+spec:
+  containers:
+    - name: container-nginx-name
+      image: nginx

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azure-managed-disk-pvc
+spec:
+  accessModes: #  It's set to "ReadWriteOnce," which means the PVC can be mounted as read-write by a single node.
+    - ReadWriteOnce
+  storageClassName: managed-premium-retain-sc # storage whihc we have create in storage-class.yml
+  resources: # Specifies the resource requirements for the PVC.
+    requests: #  amount of storage for pVc here it is 5 gb
+      storage: 5Gi

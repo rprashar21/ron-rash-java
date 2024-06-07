@@ -1,0 +1,88 @@
+Microsoft Entra ID is a directory service that enables
+you to sign in and access both Microsoft cloud applications and cloud applications
+ that you develop.
+ It is similar Azure Active Directory
+maintain your on-premises Active Directory deployment.
+Microsoft Entra ID is Microsoft's cloud-based identity and access management service helps u  control the identity accounts
+When you connect Active Directory with Microsoft Entra ID it tracks all the suspicios signin
+it detects sign-in attempts from unexpected locations or unknown devices.
+
+Who uses Microsoft Entra Id?
+IT administrators. -- Use to control access to applications and resources
+Developers - to add functionality to the application like sso
+Users - can manage their identities and take maintenance actions like self-service password reset.
+Online service subscribers. Microsoft 365, Microsoft Office 365, Azure,
+and Microsoft Dynamics CRM Online subscribers use thus Microsft Entra Id
+to authenticate their account.
+
+What does it do ??
+Authentication - verify identity to access app and resources ,, include ,, password reset,mfa,banned passwords self service
+Single sign 0n -- one user/pwd for multiple app,now if user leaves org or changes role ,, easy to deactivate or elevate prvilegs
+App Management -- mange cloud and on-premise like Application Proxy, SaaS apps, the My Apps portal, and single sign-on by using Microsoft Entra Id
+Devices- Registration on devices enables devices to be managed through tools like Microsoft Intune.
+Device based control irrespective of account.
+
+Can I connect my on-premises AD with Microsoft Entra ID?
+If you had an on-premises environment running Active Directory and a cloud deployment using Microsoft Entra ID,then we need to maintain 2 diff identity sets
+but we can connect bith Ad and MEi
+One method of connecting Microsoft Entra ID with your on-premises AD is using Microsoft Entra Connect.
+
+What is Microsoft Entra Domain Services?
+lets you run legacy applications in the cloud
+Microsoft Entra Domain Services integrates with your existing Microsoft Entra tenant.
+This integration lets users sign into services and applications connected to the managed domain using their existing credentials
+Microsoft Entra tenant represents an instance of Microsoft Entra service like  your organization's user accounts, groups, permissions,
+and other identity-related configurations.
+
+How does Microsoft Entra Domain Services work?
+When you create a Microsoft Entra Domain Services managed domain, you define a unique namespace
+Two Windows Server known ass domain controllers are then deployed into your selected Azure region aslo konw as replica set
+Azure manages,configures,patches uodates encryption and everything realted to patcehs
+
+Is information synchronized?
+A managed domain performs a one-way synchronization from Microsoft Entra ID to Microsoft Entra Domain Services.
+You can create resources directly in the managed domain, but they aren't synchronized back to Microsoft Entra ID.
+In a hybrid environment Microsoft Entra Connect synchronizes identity information with Microsoft Entra ID,
+which is then synchronized to the managed domain.
+
+
+What's single sign-on?
+Single Identity user is tied to multiple applcautions
+Single sign-on is only as secure as the initial authenticator
+because the subsequent connections are all based on the security of the initial authenticator.
+
+MFA - extra form of identifation {additional security} which is basically a code sent to ur phone
+Mfa requires two or more elements to fully authenticate.
+Something the user knows – this might be a challenge question.
+Something the user has – this might be a code that's sent to the user's mobile phone.
+Something the user is – this is typically some sort of biometric property, such as a fingerprint or face scan.
+
+an attacker who has a user's password would also need to have possession of their phone or their fingerprint to fully authenticate.
+
+MFA vs Single Sign on.
+SSO  an attacker would need only a username and password to authenticate.
+MFA attacker should be enabled wherever possible because it adds enormous benefits to security.
+
+What's Microsoft Entra multifactor authentication?
+Microsoft Entra multifactor authentication enables users to choose an additional form of
+authentication during sign-in, such as a phone call or mobile app notification.
+
+What’s passwordless authentication?
+users often get frustrated with the additional security
+ Passwordless authentication is convenient where ur password is removed an replaced with something u have,u are, and u know
+ Passwordless authentication needs to be set up on a device before it can work.
+ For example, your computer is something you have.
+ Once it’s been registered or enrolled, Azure now knows that it’s associated with you.
+ Now that the computer is known, once you provide something you know or are (such as a PIN or fingerprint),
+  you can be authenticated without using a password.
+
+Microsoft global Azure and Azure Government provides passwordless authentication options integrate with  Microsoft Entra ID:
+1. Windows Hello for Business - information workers that have their own designated Windows PC.
+biometric and PIN are driectly tied to the pc
+With public key infrastructure (PKI) integration and built-in support for single sign-on (SSO)
+Microsoft Authenticator app
+FIDO2 security keys - FIDO (Fast IDentity Online)  latest standard that incorporates the web authentication (WebAuthn) standard
+ is an open standard for passwordless authentication.
+ It allows users to sigin in to their resource s without a username or password by using an
+ external security key or a platform key built into a device.
+  FIDO2 security keys are typically USB devices, but could also use Bluetooth or NFC

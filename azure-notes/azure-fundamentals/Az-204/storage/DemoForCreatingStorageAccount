@@ -1,0 +1,108 @@
+goto stroage accounts
+subscription+rg--> location,
+name --should be unique ,, lowercase eg ronstorageaccount
+performance {standard or premium}
+account kind --> blob, general purpose v1 or v2
+accesstier --hot or cool {archive can be set at blob level and not storage level}
+replication {lrs,zrs,ra-grs,gzrs,ra-gzrs}
+
+In networking we can allow
+public endpoint --> access this storage account from anywhere
+public endpoint{selected networks}--> only from selected networks
+private endpoint --> slect priavte network {this will assign a private ip address from the virtual network that we select and assign it to the storage account}
+all traffic between the storage account and vnet will be secured by a private link
+
+
+------------------Blob Storage------------
+oject storage solution
+access thru rest api ,sdks ,pwershell,clis
+
+url for blob storage is account name
+
+account --> containers--> blob
+conatiners are used to organize the blobs like directories in a file
+
+3types of bob
+Block Blob --> 190.t tib of data, managed individually
+Append Blob --> append operations , logging data for vms
+Page Blob --> stores random access data upto 8tib , stores vhd files which serve as disks for vms
+
+we have storage account name --> ronstorageaccount
+now lets create a container for blobs
++ container {lowecase} roncontainer
+
+---------Azure Files-----
+makes file shares availbale in cloud
+standard is smb server message block protocol
+
+Azure file sync with azure files can be used to cache ur azure files on windows servers for users closely located
+speed access data
+Azure files can now completely replace onprem file servers
+Azure files Ad Authentication means allowing on prem file to be shared
+also hepful in lift and shift datat
+fully managed services
+
+create an azure file
+we have storage account name --> ronstorageaccount
+goto file share --> ronfileshare21 --> quota upto 5129gib
+default is 5tb
+click on the file share resource ,, use options like connect , upload create dir structure
+
+---------Azure Queues-----
+Normally used to store messages
+queue service is made up of many components
+url format ,storage account queue messages{64 kb }
+https://ronstorageaccount.queue.core.windows.net/images-to-process
+
+create a queue
+we have storage account name --> ronstorageaccount
+goto queues share --> ronqueue --> add a message
+
+---------Azure Table Storage-----
+Allows u to store structured  no sql data in cloud
+
+storage --> tables --> entities {name ,email {}
+
+---------Azure Disks -----
+associated with vms ,, like actaul physical disks ,, but these are virtual
+
+types of disk
+ultra disks
+premium ssd
+standard ssd
+standard hdd
+
+99.99999% availability 5 nines
+3 replicas of data stored
+
+azure allows 50k vm disks of a specific type per region in one subscription
+integrated with availabilty sets and zones
+2 types of encryption
+sse --> serverside encryption , provided by azure storage service , is by default
+ade --> azure disk encryption
+
+There are 3 disk roles in Azure. These roles include data disks, OS disks, and temporary disks.
+Data Disks
+Data disks are managed disks that you attach to a virtual machine.
+They're used to store applications and other sorts of data that you need.
+ When you attach a data disk to a VM, it's registered as a SCSI drive.
+You can assign a drive letter to a data disk just like any other physical disk in a physical server.
+Data disks have a max capacity of 32 terabytes, and the number of data disks that you can attach
+ to a virtual machine will be determined by the size of the virtual machine itself.
+
+ Os disks
+When you deploy a virtual machine, it's deployed with a single OS disk attached.
+The OS disk, as you may have guessed, hosts the VM's operating system and boot volume.
+The max capacity of an OS disk is four terabytes.
+
+Temporary Disks
+Temporary disks are probably the most misunderstood of the three disk types.
+ Every VM contains a temporary disk. I should mention, however,
+ that the temporary disk is not a managed disk.
+ The temporary disk is not intended for the storage of important data.
+ Instead, temporary disks are used to host things like page files and swap files.
+
+
+There are four Azure storage services: Blob storage, Table storage, Queue storage, and File storage.
+Azure File storage offers cloud-based SMB file shares in order to reduce rewrites when migrating legacy applications that rely on file shares.
+

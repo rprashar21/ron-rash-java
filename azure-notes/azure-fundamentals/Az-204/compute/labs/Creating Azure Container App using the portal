@@ -1,0 +1,38 @@
+Search for container apps and create an app container env
+Container App Environment is a hosting service for the container app instance
+It is collection of container apps.
+You also have the ability to connect a virtual network to the environment which enables
+the local communication on the network level with other resources hosted on the same network.
+
+Steps
+Type container app in the Azure Portal search bar and click Container Apps under Services:
+Click Create container app in the middle of the screen:
+Resource group: Select the only available resource group from the list
+Container app name: Enter containerapp### (while replacing # with random numbers to get a unique container name)
+Region: Choose West US region from the dropdown list
+On the Container tab of Create Container App window, review the settings without changing anything and click Review + create:
+The checkbox Use quickstart image uses a default container image instead of using a custom image for the container.
+ By default, the HTTP PORT 80 is open on the container.
+
+The container app is given a unique website URL listed under Application Url.
+
+
+2.Click Ingress under Settings from the left blade menu:
+The ingress controller allows you to modify whether you wish to expose the application
+over the internet or keep it internal to the container environment on any specific port.
+
+
+3. Click Continuous deployment under Settings from the left blade menu:
+If you are using Azure Container Registry or Docker Hub,
+you can set up CI/CD workflow to automatically trigger and deploy the latest version of an image to the container app instance.
+
+4. Click on the contaners blade
+The Containers blade menu allows you to modify the container properties including environment
+variables and health probes related to the container.
+ A new revision is created whenever an update is made on the container properties.
+
+ 5. Click Revisions under Application from the left blade menu:
+ The revision is created whenever an update is performed on the container app including,
+ modifying environment variables, updating container image, and modifying container size.
+  The container is reprovisioned and built to ensure successful functionality.
+

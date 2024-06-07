@@ -1,0 +1,46 @@
+# to go inside the jenkins container
+docker exec -ti jenkins-container bash
+whoami --> returns jenkins
+
+Before we run this below script we need to makes sure we have installed maven
+jenkins is running inside the docker conatiner
+we need to install maven inside the jenkins container
+
+steps
+docker container ls -->get the jenkins container id
+docker exec -it -u root <container-id> /bin/bash
+
+once inside the container
+apt-get update --> to uodate
+apt-get install maven
+This is pipeline which has serveral stages ,, it will clone the repo from git hub and do mvninstall and clean builds
+
+pipeline{
+    agent any
+        stages{
+            stage("clean up"){
+                steps{
+                    deleteDir()
+                }
+            }
+            stage("clone rep"){
+                steps{
+                    sh "git clone https://github.com/ronrash/spring-test.git" // this step will createa folder with name spring-test
+                }
+            }
+            stage("build"){
+                steps{
+                    dir("spring-test"){ // this dir function is like cd going inside the dir spring-test
+                        sh "mvn clean install -DskipTests"
+                    }
+                }
+            }
+            stage("test"){
+                steps{
+                    dir("spring-test"){
+                        sh "mvn test"
+                    }
+                }
+            }
+        }
+}

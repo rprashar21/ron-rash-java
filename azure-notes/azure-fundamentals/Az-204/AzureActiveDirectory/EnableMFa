@@ -1,0 +1,41 @@
+Create a group on whichc to apply mfa
+
+LOgin in azure portal as admin --> active directory --> conditional access
+create a new policy --> {mfa deployment policy }--> select the user grps radio button --> done
+
+Under clouds apps --> select apps -> microsoft azure management
+here we are enforcing mfa wherenvere somenone logins in the azure portal
+
+make sure under grants {allow access control }--> grant access is selected --check mfa box --> enable policy --> policy created
+
+Now we can login into any other microsfts resource without mfa ,
+ but if we login into the azure portal mfa will be required
+
+ ========= ========= ========= ========= ========= ========= ========= ========= =========
+Manage User settings
+
+ As an admin we can enforce all users to complet the mfa process ie
+   re-provide contact methods
+   delete app passwords
+   Require mfa on all trusted devices
+
+ ========= ========= ========= ========= ========= ========= ========= ========= =========
+Perform  User settings in MFa
+
+Setup a user to our  account to use mFA -- see above details
+Now the user has mfa but we will setup so that he has to  re-provide contact methods
+
+go to azure active dir--> users--> on right pane in mfa clikc mfa {opens up a new page}
+--> sleet the user --manage his settings --> check the options  re-provide contact methods
+
+so next time when the user logins he will require extra steps along with mfa
+
+ ========= ========= ========= ========= ========= ========= ========= ========= =========
+Reports in MFA
+
+ They are
+  Blocked user History Reports -- histor for bocked users
+  Usage and Fraud Alerts report -- user summary,details,fraudulent reports
+  Usage for ON prem-components
+  Bypass User history
+  server status

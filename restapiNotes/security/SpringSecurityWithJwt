@@ -1,0 +1,20 @@
+
+
+Authorization can be implemented using
+Session Management - Session Id is not self contained.
+It is a reference token.
+During each validation the Gmail server needs to fetch the information corresponding to it.
+A unique session id is created , and fr all the subsequent requests this session id will be maintained and chekked by the server for details about the user to allow
+accessing its reosurces.
+
+JSON Web Token - so the server will know that the user is already authenticated and so the user does not need to send the credentials with each and every request.
+It is digitally signed so if any one modifies it the server will know about it
+3 parts of JWT are seperated by a dot.Also all the information in the 3 parts is in base64 encoded format.
+Header
+Payload
+Signature
+
+
+  At spring startup the spring security  will look for bean securityFilterChain and this bean is responsible for configuring all the  Http security of our application
+
+Spring security - https://www.javainuse.com/webseries/spring-security-jwt/chap3

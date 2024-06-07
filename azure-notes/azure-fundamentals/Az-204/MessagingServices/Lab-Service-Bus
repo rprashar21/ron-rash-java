@@ -1,0 +1,90 @@
+In this lab, you will use the Azure Portal to create a Namespace
+, and you will use Azure CloudShell to create a Topic and Subscription inside your Azure Service Bus namespace.
+
+1. enter Service Bus
+
+2. To begin creating a namespace, in the top-left, click + Create:
+3. Under PROJECT DETAILS, select the following:
+
+Give the details for rg,subsciprion
+
+Namespace name: calabs-sb- (Replace XXXX with some random characters)
+Location: Select West US
+Pricing tier: Select Standard
+
+Basic: Allows you to use Queues, but not Topics.
+Standard: In addition to Topics, you can make use of message Deduplication and Sessions.
+Premium: Similar to Standard, but includes Availability Zone support, Resource Isolation, and larger maximum message size of 1MB.
+
+A namespace in Azure Service Bus is a container for messaging components. A namespace can contain multiple Queues or Topics.
+
+
+
+============Use Azure cloud shell ======
+for that u need a storage-->
+10. To configure the storage for Azure Cloud Shell, click Show advanced settings:
+ set the properties
+
+
+Use the command below to find your resource group name:
+az group list --query '[0].name' --output tsv
+o/p - cal-3760-e32
+
+To list Azure Service Bus namespaces, enter the following in the command prompt:
+az servicebus namespace list -g $(az group list --query '[0].name' --output tsv)
+
+You will see a JSON response showing details of the namespace you created with the Azure Portal.
+
+. To retrieve just the name of the namespace, enter the following:
+az servicebus namespace list --query '[0].name' -g $(az group list --query '[0].name' --output tsv)
+
+To create a Topic in Azure Service Bus, enter the following command:
+az servicebus topic create \
+  -g $(az group list --query '[0].name' --output tsv) \
+  --namespace-name $(az servicebus namespace list --query '[0].name' --output tsv -g $(az group list --query '[0].name' --output tsv)) \
+  --name lab-topic
+
+In response to issuing this command, you will see a JSON representation of a newly created Topic named lab-topic.
+
+A Topic in Azure Service Bus enables one-to-many communication.
+In contrast to Queues, which only allow processing by a single consumer.
+
+In this command, the name of the resource group and the namespace are fetched in subshells.
+ Notice that you have specified the --output option to be tab-separated values (tsv).
+ The default output is JSON, which would quote the string and cause errors.
+
+17. Enter the following command to see how to create a subscription:
+az servicebus topic subscription --help
+You will see listed the available commands for managing Azure Service Bus Subscriptions with the Azure command-line interface.
+
+In Azure Service Bus, consumers receive messages from Subscriptions to Topics, not directly from a Topic.
+Note that a Subscription in Azure Service Bus is not the same as a Subscription in Azure generally.
+
+18. To create a Subscription to your Topic, enter the following command:
+RESOURCE_GROUP=$(az group list --query '[0].name' --output tsv)
+NAMESPACE_NAME=$(az servicebus namespace list --query '[0].name' --output tsv -g $(az group list --query '[0].name' --output tsv))
+TOPIC_NAME=$(az servicebus topic list --namespace-name $NAMESPACE_NAME --resource-group $RESOURCE_GROUP --query '[0].name' --output tsv)
+az servicebus topic subscription create \
+  --resource-group $RESOURCE_GROUP \
+  --namespace-name $NAMESPACE_NAME \
+  --topic-name $TOPIC_NAME \
+  --name lab-subscription
+
+Similarly to when you created the Topic, you will see a JSON representation of your newly created Subscription in response.
+
+This command is making use of variables in Bash.
+The resource group, namespace name, and topic name are fetched and stored in variables prior to creating the Subscription.
+ This has two benefits, it makes the command easier to read,
+ and it means that the resource group and namespace name are only fetched once, making the command faster to execute.
+
+Next, you will view your Topic and Subscription in the Azure Portal.
+
+
+n the left-hand menu, under Entities, click Topics:
+You will see the topic you created with the Azure command-line interface listed.
+
+. To see details about your topic, click lab-topic:
+
+22. Scroll to the bottom of the page, and under Subscriptions, click lab-subscription:
+
+

@@ -1,0 +1,38 @@
+To interact with azure env we have 3 tools
+Azure portal - web based graphical ui , simple web apps , custom dashboards updates continuously and requires no downtime for maintenance activities.
+Azure PowerShell -
+Azure Command Line Interface (CLI)
+
+
+Azure portal - web based graphical ui , simple web apps , custom dashboards updates continuously and requires no downtime for maintenance activities.
+
+Azure Cloud Shell - browser based shell tool -supports both powershell and cli which uses bash
+it requires  no local installation or configuration required.
+
+
+What is Azure PowerShell?
+Azure PowerShell is a shell with which developers, DevOps, and IT professionals can run commands called command-lets
+commands call the Azure REST API to perform management tasks in Azure - can perform individual or in grup
+
+What is the Azure CLI?
+Azure Cli is same as Azure powershell --
+While Azure PowerShell uses PowerShell commands, the Azure CLI uses Bash commands.
+
+
+Azure Arc ?
+Managing hybrid and multi-cloud environments Arc utilize ARm
+simplifies governance and management by handling multi-cloud and on-premises management platform.
+
+What it provides
+Manage your entire environment together by projecting your existing non-Azure resources into ARM.
+Manage multi-cloud and hybrid virtual machines, Kubernetes clusters, and databases as if they are running in Azure.
+Configure custom locations as an abstraction layer on top of Azure Arc-enabled Kubernetes clusters and cluster extensions.
+
+what can it handle outside Azure
+Servers
+Kubernetes clusters
+Azure data services
+SQL Server
+Virtual machines (preview)
+
+

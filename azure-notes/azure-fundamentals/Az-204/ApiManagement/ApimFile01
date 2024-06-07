@@ -1,0 +1,19 @@
+Create An Apim instance
+goto create a resource--> select devops --> select api management
+DEtails
+Subscription ,Resoure Group, location, resource_name,organizatin name,admin_email
+
+Importing an Pi using Open Api
+select the apim resource ---> apis --> openapi --> add an api ,give details
+The apim will hit the backend api
+
+Apim distinguish apis by using suffix so it should be unique
+Apim isntance comes with 2 sample products ,, 1 starter and unlimted
+
+You publish an api by associating it with the product
+
+Different Authentication types with Apim
+OAuth2.0
+Basic Authentication
+Mutual Tls
+Subscription key authentication

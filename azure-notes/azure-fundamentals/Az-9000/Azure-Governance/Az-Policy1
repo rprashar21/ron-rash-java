@@ -1,0 +1,30 @@
+Azure Policy
+Azure Policy is a service in Azure that enables you to create, assign, and manage policies that control or audit your resources
+enforce different rules across your resource configurations
+
+Azure Policy define policies
+u can define both individual and group polices called initiatves
+u set policies on each level subscription resource group resource
+Azure Policies are inherited
+eg : if you set an Azure Policy on a resource group, all resources created within that resource group will automatically receive the same policy
+
+Azure Policy comes with built-in policy and initiative definitions for Storage, Networking, Compute, Security Center, and Monitoring
+eg a policy that allows only a certain size for the virtual machine so when u create a new vm that policy will be invoked
+
+Azure Policy can automatically remediate/correct noncompliant resources and configurations
+eg  if all resources in a certain resource group should be tagged with AppName tag and a value of "SpecialOrders,"
+Azure Policy will automatically apply that tag if it is missing
+
+If you have a specific resource that you don’t want Azure Policy to automatically fix, you can flag that resource as an exception
+
+Azure Policy  integrates with Azure DevOps for continuous integration and delivery pipeline policies
+ that pertain to the pre-deployment and post-deployment phases of your applications.
+
+
+Azure Policy initiatives ??
+grouping related policies together
+eg policy -> Enable Monitoring in Azure Security Center.
+this monitors all available security recommendations for all Azure resource types in Azure Security Center.
+Monitor unencrypted SQL Database in Security Center - policy monitors for unencrypted SQL databases and servers.
+Monitor OS vulnerabilities in Security Center-  policy monitors servers that don't satisfy the configured OS vulnerability baseline.
+Monitor missing Endpoint Protection in Security Center -  policy monitors for servers that don't have an installed endpoint protection agent.

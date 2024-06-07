@@ -1,0 +1,31 @@
+Spring Security is a framework that focuses on providing both authentication and authorization to Java applications.
+ https://www.javainuse.com/boot3/sec/1
+Whenever we expose REST endpoints in Spring Boot, all the incoming requests are always first intercepted by the DispatcherServlet.
+The DispatcherServlet is the front controller in Spring web applications.
+The core responsibility of a DispatcherServlet is to dispatch incoming HttpRequests to the correct handlers.
+
+When we add the spring security dependency, spring security enables the security filter chain.
+ These filters are responsible for Spring Security.
+ So any incoming request will go through these filters and it is here that authentication and authorization takes place.
+
+ Filter Chains in SpringSecurity - Spring Security maintains a filter chain internally
+ Based on the type of requests there are different Authentication Filters like the BasicAuthenticationFilter,UsernamePasswordAuthenticationFilter.
+
+ All the above Filters get called from the FilterChainProxy class.
+ UsernamePasswordAuthenticationFilter -This filter checks if the login url contains '/login' and is a POST request or not. As this is a GET request with url '/login' so this filter does nothing.
+ when its a post request and usercreds are enetered this filter will etxtract the username and pwd and create an authentication object
+
+ AuthenticationManager - This authentication object is used by the auth manager .. so it takes this authobject and returns an auth object , it is an interface
+ impl class is the The ProviderManager has a list of AuthenticationProviders. From it's authenticate method it calls the authenticate method of the appropriate AuthenticateProvider.
+ In response it gets the Principal Authentication Object if the authentication is successful.
+
+ AuthenticationProvider - The AuthenicationProvider is an interface with a single authenticate method. has certain methods and depending upon the  impl it
+ implements Like DaoAuthenticationProvider- has UserDetailsService
+
+ UserDetailsService is an interface - and has certain impls like CachingUserDetailsService,JDBCDaoImpl InMemoryDetailService -- it loads the user object from the db
+ and matches with the incoming object
+
+
+ DefaultLoginPageGeneratingFilter
+ AuthorizationFilter
+ ExceptionTranslationFilter

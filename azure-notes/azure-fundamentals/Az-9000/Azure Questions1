@@ -1,0 +1,68 @@
+1. What is cloud computing and how does it enhance scalability?
+
+Cloud computing allows for scalable IT solutions by providing a flexible infrastructure that can grow or shrink according to demand.
+It enables quick scalability by leveraging resources from the cloud.
+2. What is a hybrid cloud?
+
+A hybrid cloud is a computing environment that combines public and private clouds,
+allowing data and applications to be shared between them. This setup offers flexibility and more deployment options.
+
+3. How do vertical and horizontal scaling differ?
+Vertical scaling (scaling up) increases compute capacity by adding more RAM or CPUs to an existing virtual machine.
+ Horizontal scaling (scaling out) involves adding more instances of resources, such as adding more virtual machines to spread out the load.
+
+4. What is the purpose of disaster recovery and high availability in cloud computing?
+Disaster recovery aims to keep data and assets safe in the event of a disaster,
+while high availability minimizes downtime and ensures that services remain accessible even when issues arise.
+
+5. How does customer responsibility differ between IaaS, PaaS, and SaaS in terms of operating system management?
+In IaaS and on-premises deployments, customers manage the operating systems.
+ In PaaS and SaaS, the cloud provider manages the operating systems,
+ with customers not having access to the OS.
+
+6. What is Azure SQL Database?
+
+Azure SQL Database is a Platform as a Service (PaaS) database engine
+designed to handle database management functions such as patching, backups, and monitoring without user involvement.
+
+7. Which two factors affect Azure costs?
+Azure costs are influenced by resource location and usage,
+ with different regions having varying prices and costs
+ being calculated based on usage meters like CPU time, disk size, and write operations.
+
+8. How can Azure Cost Management help manage expenses?
+Azure Cost Management helps by allowing users to create and manage cost and usage budgets,
+monitor resource demand trends, and forecast future expenditures using historical data.
+
+9. What are resource tags and resource locks in Azure?
+Resource tags categorize costs by runtime environment, aiding in billing management.
+ Resource locks prevent accidental deletion or modification of resources.
+
+10. Describe the purpose of Azure Policy and ARM templates.
+Azure Policy enables the creation, assignment, and management of policies for resource control or audit.
+ ARM templates define infrastructure requirements for consistent and repeatable deployments.
+
+11. What functionalities does Azure Monitor provide?
+
+Azure Monitor collects, analyzes, visualizes, and alerts based on metric and logging data,
+enabling autoscaling and performance monitoring across Azure and on-premises environments.
+
+12. How do management groups, resource groups, and administrative units differ in Azure?
+
+Management groups streamline governance across multiple subscriptions.
+Resource groups organize resources.
+Administrative units delegate administration of Microsoft Entra resources.
+
+13. What is the difference between ExpressRoute connections, Azure VPN Gateway, and Azure Bastion?
+
+ExpressRoute and Azure VPN Gateway connect on-premises networks to Azure.
+ Azure Bastion provides secure and seamless RDP/SSH access to virtual machines.
+
+14. Explain the storage tiers in Azure Blob storage.
+Hot tier is for frequently accessed data, Cool tier for less frequently accessed data with slightly lower availability, and Archive tier for rarely accessed data with the lowest cost but higher access costs.
+
+15. What is the purpose of Azure RBAC and Key Vault?
+Azure RBAC controls access to resources at varying scopes. Key Vault securely stores secrets, encryption keys, and certificates.
+16. Compare public and private cloud characteristics.
+
+In a private cloud, organizations must purchase and maintain hardware but have control over resources and security. A public cloud offers quick provisioning and a pay-for-what-you-use model.

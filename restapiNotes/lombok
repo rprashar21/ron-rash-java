@@ -1,0 +1,18 @@
+Lombok is a Java library that helps reduce boilerplate code by providing annotations to automatically
+generate common code structures such as getters, setters, constructors, equals/hashCode methods, and more.
+
+It provides a level of abstraction and hence the developer should be aware of lombok and ts generated code to understand the underlying implementation.
+
+@GeneratedVlue(stratergy=GenerationType.Auto)--> default value
+identity -- it uses an auto cincrement number
+sequence -- weh have to create a sequence
+uuid --
+table -- based on the tanble
+
+@RequiredArgsConstuructor -- creates a constructor for final and nonnull fields
+https://projectlombok.org/features/constructor
+@RequiredArgsConstructor generates a constructor with 1 parameter for each field that requires special handling.
+ All non-initialized final fields get a parameter, as well as any fields that are marked as @NonNull that aren't initialized where they are declared.
+ For those fields marked with @NonNull, an explicit null check is also generated. The constructor will throw a NullPointerException if any of the parameters intended for the fields marked with @NonNull contain null.
+ The order of the parameters match the order in which the fields appear in your class.
+@AllArgsConstructor generates a constructor with 1 parameter for each field in your class. Fields marked with @NonNull result in null checks on those parameters.

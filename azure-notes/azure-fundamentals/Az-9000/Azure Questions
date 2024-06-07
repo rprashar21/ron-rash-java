@@ -1,0 +1,109 @@
+Cloud computing allows you to scale more quickly
+A hybrid cloud is a computing environment that combines a public cloud and a private
+cloud by allowing data and applications to be shared between them.
+
+You scale vertically to increase compute capacity by adding RAM or CPUs to a virtual machine.
+ Scaling horizontally increases compute capacity by adding instances of resources, such as adding virtual machines to the configuration.
+Disaster recovery keeps data and other assets safe in the event of a disaster.
+High availability minimizes downtime when things go wrong.
+
+Operating systems are managed by customers when using IaaS or an on-premises deployments.
+The operating systems are not accessible in PaaS and SaaS deployments.
+
+In PaaS, the cloud provider is responsible for the operating system, physical datacenter, physical hosts, and physical network.
+ In PaaS, the customer is responsible for accounts and identities.
+
+ Azure SQL Database is a PaaS database engine.
+
+Which two factors affect Azure costs? - resource location and usage
+ Usage meters, such as CPU time, disk size, and write operations, are used to calculate your bill for an Azure resource.
+  Deleting or deallocating a resource means that you will no longer be billed for it.
+ Different regions can have different associated prices.
+ Resources cost the same no matter the time of day or the day of the week.
+
+ The Azure Pricing calculator allows you to estimate and configure according to your specific requirements.
+ You will then receive a consolidated estimated price and a detailed breakdown of the costs associated with each resource
+  you added to your solution.
+
+Azure Cost Management allows you to create and manage cost and usage budgets by monitoring resource demand trends, consumption rates,
+and cost patterns. It also allows you to use historical data to generate reports and forecast future usage and expenditures.
+
+Resource tags can be used to group billing data and categorize costs by runtime environment,
+ such as billing usage for virtual machines running in a production environment.
+
+A resource lock prevents resources from being accidentally deleted or changed.
+Resource tags offer the custom grouping of resources.
+Policies enforce different rules across all resource configurations so that the configurations stay compliant with corporate standards.
+An initiative is a way of grouping related policies together
+
+Azure Policy is a service in Azure that enables you to create, assign, and manage policies that control or audit resources..
+You can use Azure Policy to implement standards for your organization across Azure.
+ Some useful governance actions you can enforce with Azure Policy include: ensuring your team deploys Azure resources only to allowed regions,
+ enforcing the consistent application of taxonomic tags, and requiring resources to send diagnostic logs to a Log Analytics workspace.
+ Azure users can use Azure Blueprints, Azure Policy, resource locks, and Service Trust Portal to help with governance and compliance of their Azure environments.
+
+ARM is the deployment and management service for Azure. It provides a management layer that enables you to create,
+update, and delete resources in an Azure account.
+
+ARM templates define an application's infrastructure requirements for a repeatable deployment that is done in a consistent manner.
+A validation step ensures that all resources can be created in the proper order based on dependencies, in parallel and idempotent.
+
+Azure Advisor analyzes the account usage and makes recommendations based on its set and configured rules.
+Azure Advisor evaluates Azure resources and makes recommendations to help improve reliability, security,
+and performance, achieve operational excellence, and reduce costs.
+
+Azure Service Health allows you keep track of Azure resource, both your specifically deployed resources and the overall status of Azure.
+Azure Service Health is composed of Azure status, the service health service, and Resource
+Service Health notifies you of Azure-related service issues, such as region-wide downtime.
+
+Azure Monitor is a platform that collects metric and logging data, such as CPU percentages. The data can be used to trigger autoscaling.
+Azure Monitor is a platform for collecting, analyzing, visualizing, and alerting based on metrics.
+Azure Monitor can log data from an entire Azure and on-premises environment.
+Application Insights is a feature of Azure Monitor that allows you to monitor running applications,
+automatically detect performance anomalies, and use built-in analytics tools to see what users do on an app.
+
+
+Incorrect: Data Catalog –– This enables data discovery.
+Incorrect: Data Sharing –– This shares data within and between organizations.
+Incorrect: Data Estate Insights –– This accesses data estate health.
+Correct: Data Policy –– This governs access to data and datsets.
+
+A resource is a manageable item that is available through Azure.
+Virtual machines, storage accounts, web apps, databases, and virtual networks are examples of resources.
+
+Management groups can be used in environments that have multiple subscriptions to streamline the application of governance conditions.
+
+Resource groups can be used to organize Azure resources.
+ Administrative units are used to delegate the administration of Microsoft Entra resources,
+ such as users and groups.
+ Accounts are used to provide access to resources.
+
+ Availability zones are primarily for virtual machines, managed disks, load balancers, and SQL databases.
+ You can link virtual networks together by using virtual network peering.
+  Peering enables resources in each virtual network to communicate with each other.
+
+ExpressRoute connections and Azure VPN Gateway are two services that you can use to connect an on-premises network to Azure. Bastion provides a web interface to remotely administer Azure virtual machines by using SSH/RDP.
+Azure Firewall is a stateful firewall service used to protect virtual networks.
+
+Azure Blob storage is an object storage solution that you can use to store massive amounts of unstructured data, such as text or binary data.
+
+The Archive storage tier stores data offline and offers the lowest storage costs, but also the highest costs to rehydrate and access data.
+The Hot storage tier is optimized for storing data that is accessed frequently.
+Data in the Cool access tier can tolerate slightly lower availability,
+but still requires high durability, retrieval latency, and throughput characteristics similar to hot data.
+
+Azure Files offers fully managed file shares in the cloud that are accessible via industry-standard SMB and NFS protocols.
+The objective of defense in depth is to use several layers of protection to prevent information from being accessed or stolen by unauthorized users.
+Azure RBAC allows you to assign a set of permissions to a user or group.
+Resource tags are used to locate and act on resources associated with specific workloads, environments,
+business units, and owners. Resource locks prevent the accidental change or deletion of a resource.
+Key Vault is a centralized cloud service for storing an application secrets in a single, central location.
+
+An Azure RBAC role is applied to a scope, which is a resource or set of resources that the access applies to.
+Resource locks prevent the accidental change or deletion of a resource.
+Resource tags are used to locate and act on resources associated with specific workloads, environments, business units, and owners.
+Policies enforce different rules across resource configurations so that the configurations stay compliant with corporate standards.
+
+
+In a private cloud, hardware must be purchased for start up and maintenance. In a private cloud, organizations control resources and security. Quick provisioning is a characteristic of the public cloud deployment model.
+Paying only for what is used is a characteristic of the public cloud deployment model.

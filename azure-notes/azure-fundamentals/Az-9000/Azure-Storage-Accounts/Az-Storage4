@@ -1,0 +1,39 @@
+Identify Azure data migration options
+
+Azure Migrate is a service to migrate data from ur on premise datacenter to cloud
+Unified migration platform: A single portal to start, run, and track your migration to Azure.
+Range of tools: Discovery and assessment and Azure Migrate: Server Migration.
+Assessment and migration: Azure Migrate HIub where u can asses and migrate ur on permise infra to hub
+
+Integrated tools
+Azure Migrate: Discovery and assessment. Discover and assess on-premises servers running on VMware, physical servers in preparation for migration to Azure
+Azure Migrate: Server Migration. Migrate VMware VMs, Hyper-V VMs, physical servers, other virtualized servers, and public cloud VMs to Azure.
+Data Migration Assistant.  stand-alone tool to assess SQL Servers used for database migrations like an assitant for   painpoints and stuff
+Azure Database Migration Service. Migrate on-premises databases to Azure VMs running SQL Server, Azure SQL Database, or SQL Managed Instances.
+Azure App Service migration assistant. for on premises websites for migration to Azure App Service.
+Use Migration Assistant to migrate .NET and PHP web apps to Azure.
+
+Azure Data Box. Use Azure Data Box products to move large amounts of offline data to Azure.
+Azure Data Box is a physical migration service that helps transfer large amounts of data in a quick, inexpensive, and reliable way
+maximum usable storage capacity of 80 terabytes.
+Data Box is transported to and from your datacenter via a regional carrier
+
+Use Cases
+Data Box is ideally suited to transfer data sizes larger than 40 TBs in scenarios with no to limited network connectivity.
+
+Scenarios
+Onetime migration - when a large amount of on-premises data is moved to Azure.
+Moving a media library from offline tapes into Azure to create an online media library.
+Migrating your VM farm, SQL server, and applications to Azure.
+Moving historical data to Azure for in-depth analysis and reporting using HDInsight.
+Initial bulk transfer - when an initial bulk transfer is done using Data Box (seed) followed by incremental transfers over the network.
+Periodic uploads - when large amount of data is generated periodically and needs to be moved to Azure.
+Here are the various scenarios where Data Box can be used to export data from Azure.
+
+Disaster recovery - when a copy of the data from Azure is restored to an on-premises network. In a typical disaster recovery scenario, a large amount of Azure data is exported to a Data Box. Microsoft then ships this Data Box, and the data is restored on your premises in a short time.
+Security requirements - when you need to be able to export data out of Azure due to government or security requirements.
+Migrate back to on-premises or to another cloud service provider - when you want
+
+Once the data from your import order is uploaded to Azure,
+the disks on the device are wiped clean in accordance with NIST 800-88r1 standards.
+For an export order, the disks are erased once the device reaches the Azure datacenter.

@@ -1,0 +1,80 @@
+remove git init rm -rf .git
+git log --graph --branch --oneline
+
+This is fast forward where we will not see a commit for merging feature to master
+ master --> c1 c2 -->cut a feature branch --> c1, c2 , f1, f2
+now master does not have any commits ,, simply merge the changes into master either by -->git merge feature
+this will create 2 commit on top of master like c1,c2 f1,f2
+or squash with one commit --> git merge --squash feature --> we will have to commit this seprataley
+
+Recursive
+but when we merge feature like this ---> git merge  --no-ff feature --> this will create an extra commit showing our merge to master
+c1,c2,f1,f2 and an extra megre commit like "Megre branch 'feature ' into master"
+
+Now if we have master  ---> m1 m2          m3
+                                feature - m1 m2 f1 f2
+now if we merge feature to master ,, which also has moved on it will do a recursive merge
+git merge --squash feature --> m1 m2 , m3 , "merge feature into master"
+git merge feature --> m1,m2,f1,f2,m3, "merge feature into master"
+
+git merge master team/CCT-1545 --no-ff  -- this will create a merge commit
+So, the above command means that you want to merge the changes from the master branch into the team/mcc branch
+and create a merge commit, even if a fast-forward merge would be possible.
+This approach helps maintain a clear separation of feature development (in the team/mcc branch)
+and the main branch (in this case, master), making it easier to track when specific features were integrated into the main branch.
+
+REBASE--
+
+ so
+git pull --rebase origin team/CCT-1545 -- this will rebase from the same branch
+git pull --rebase master team/CCT-154 -- rebase change from aster to our branch -- rebase will
+git pull  --> combines two actions - git fetch and git merge or git rebase.
+It's used to update your current branch with the latest changes from a remote repository.
+create new commit hashes  but not an extra
+
+git pull --rebase origin team/SCMI resolve conflicts if there are any
+
+git add .
+git commit --amend --no-edit
+git rebase --continue
+
+if there is an error like tip of ur branch
+git push origin --force
+
+rebase to master
+git switch master
+git rebase feature master
+git push origin --force
+
+git rebase
+
+master -- m1 m2 --->m3{new commit is m3} feature branch is cut from m2
+feature   m1 m2 --->f1 f2
+
+after git rebase m3 will be added to the feature branch with new commit ids
+master -- m1 m2 m3
+feature   m1 m2 m3 f1 f2 -- these f1 and f2 and m3 commit ids will change
+
+after git merge --> f1 and f2 commits will be added with ids but this will not creata an extra commit kind of fast forward
+master -- m1 m2 m3 f1 f2
+feature   m1 m2 m3 f1 f2
+
+points to remember git rebase will avoid additional merge commits but create new commit ids or hashes for the same commits
+these commit m3 f1 f2 are will have different hash on different branches.
+
+
+when to apply git rebase
+1.when we have new commits in the master and we need those changes to work with our feature branch
+ie, fetaure relies on changes from master
+2.Rebase master into feature branch, this will affect the ids in ur feature branch
+3. feature is finished - u need fast forward ie no additional commit in master
+
+Rebase re-writes code history.
+
+Git Cherry PIck
+master m1 m2 m3
+feature m1 m2 f1 f2 f3 -->
+
+now if we want a specfic commit from feature -- copy the commit id -- switch to master/whichever branch u want
+git switch master
+git cherry-pic f2<commitid> master m1 m2 m3 f2 {but this f2 will have a diff commit id }

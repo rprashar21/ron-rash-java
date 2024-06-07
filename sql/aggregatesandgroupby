@@ -1,0 +1,14 @@
+group  by allows us to aggregate columns with some category
+
+select col, avg(colm2)
+from table
+group by col;
+
+its should always be followed by a from or where
+it should always be present in the select and in group by or be present in  aggregate
+
+find the customer with most spend
+
+select customer_id ,sum(amount)
+from payment
+group by customer_id;

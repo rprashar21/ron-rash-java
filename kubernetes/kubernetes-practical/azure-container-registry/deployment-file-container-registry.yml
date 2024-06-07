@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acrdemo2ss-deployment
+  labels:
+    app: acrdemo2ss
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acrdemo2ss # name of the pod for which we will create 1 replica set
+  template:
+    metadata:
+      labels:
+        app: acrdemo2ss # name of the pod
+    spec:
+      containers:
+        - name: acrdemo2ss
+          image: acrdemo2ss.azurecr.io/app2/acr-app2:v1   # Update Image Name  we can get this imagename from acr
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+      imagePullSecrets:   # Update Image Pull Secret Name we creted
+        - name: acrdemo2ss-secret  # secret we have created

@@ -1,0 +1,84 @@
+Gradle is cross platform unlike maven which is only for java ,, it can be used for c c++,python javascript
+ It uses a Groovy-based domain-specific language (DSL) or Kotlin for build script configuration,
+Speed is faster as compared to maven uses cache and only new compiled files
+
+Build.gradle -- dependencies
+settings.gradle --> project name and plugin management
+rootProject.name = '' --> artifact id
+
+build.gradle file
+group id is in build.gradle
+uses maven repository
+
+we can create tasks in gradle
+
+Gradle plugins : Java Compilation + testing  + bundling capabilities
+ there are no predefined build lifecycles like in Maven.
+Instead, Gradle uses a task-based model where each task performs a specific action or a group of related actions.
+Gradle also allows you to define your own custom tasks to extend the build process.
+
+gradle build: This command builds the project and produces the artifacts. By default, it executes the assemble task,
+ which compiles the source code, runs the tests, and packages the artifacts into a distributable format.
+
+gradle clean: This command cleans the build directory by removing all generated artifacts,
+such as compiled classes, test reports, and packaged artifacts. By default, it executes the clean task.
+
+gradle test: This command runs the tests for the project. By default, it executes the test task, which runs all the unit tests in the project.
+
+gradle run: This command runs the project's main application. By default, it executes the run task, which runs the main class specified in the build script
+
+gradle tasks: This command lists all available tasks in the project, along with their descriptions and dependencies.
+
+gradle help: This command shows the help information for Gradle, including the available command-line options and some common tasks.
+
+gradle wrapper: This command generates a Gradle wrapper script that allows you to run Gradle builds without installing Gradle on your system.
+ The wrapper script downloads the required Gradle version automatically and uses it to execute the build.
+
+ Different tasks in gradle
+ plugins {
+     id 'java'
+ }
+
+ // Configure project and dependencies
+ repositories {
+     jcenter()
+ }
+
+ dependencies {
+     testImplementation 'junit:junit:4.12'
+ }
+
+ // Define tasks
+ task test {
+     group = 'verification'
+     description = 'Runs unit tests'
+     test {
+         useJUnit()
+     }
+ }
+
+ task build {
+     group = 'build'
+     description = 'Builds the project'
+     dependsOn test
+     doLast {
+         // Perform additional build steps if needed
+         println 'Build completed'
+     }
+ }
+
+ task clean(type: Delete) {
+     group = 'build'
+     description = 'Cleans the project'
+     delete 'build'
+ }
+
+ task package(type: Zip) {
+     group = 'build'
+     description = 'Packages the project'
+     dependsOn build
+     from 'src/main'
+     archiveFileName = 'project.zip'
+     destinationDir = file('build')
+ }
+

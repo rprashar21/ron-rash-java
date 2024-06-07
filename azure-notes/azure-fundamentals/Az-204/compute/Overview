@@ -1,0 +1,27 @@
+
+Azure Blueprints automates the deployment of entire Azure environments.
+A blueprint is a collection of Azure Resource Manager templates plus a few other details,
+such as policies and user permissions. When a blueprint is assigned to a subscription,
+it not only automates the creation of an environment, but it also keeps a record of the deployment.
+This makes it a critical governance tool because it enables the tracking and auditing of deployments.
+
+
+Secure Score in microsoftDefender Cloud
+The secure score indicates the general security health of your Azure resources.
+The more secure your environment is, the higher the percentage score will be.
+
+ Azure logic apps automate tasks with a simple drag-and-drop interface and without the use of code.
+  You can create a logic app using a drag-and-drop interface.
+
+ If you currently have an application running on a Windows or Linux server,
+ then the most straightforward way to migrate it to Azure is to do what's called a "lift and shift" migration.
+  You lift the application from your on-premises server and shift it to a virtual server in the cloud.
+
+Azure Functions, Azure Container Instances, and Azure DevOps are all components of Azure;
+however, they are not the most relevant services for planning the migration from on-premises to the Azure cloud.
+
+Microsoft also offers a solution called Azure Sphere to make your IoT devices more secure.
+It includes certified chips, the Azure Sphere operating system, and the Azure Sphere Security Service,
+all of which provide layers of protection for your IoT devices.
+
+ manage the process of moving on-premise applications to the Azure cloud?

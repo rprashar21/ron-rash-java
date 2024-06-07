@@ -1,0 +1,83 @@
+
+/usr/libexec/java_home -v15 --- this is java home path
+rohitprashar@Rohits-MacBook-Pro ~ % touch ~/.bash_profile; open ~/.bash_profile
+
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-15.jdk/Contents/Home
+
+Source your java file
+rohitprashar@Rohits-MacBook-Pro ~ % source ~/.bash_profile
+
+nrpxzjtzmzjwvspk
+
+intellj shortcuts
+command shift o find a file
+command l -- line number
+
+Command +shift+.  — to see hidden files
+https://tools.hmcts.net/jira/browse/TM-15515
+
+ssh SITCCM01DCTDB02.cpp.nonlive -L 5436:localhost:5432
+
+µ
+root
+RPrashar21r
+mongo "mongodb+srv://cluster0.jyqqo.mongodb.net/node" --username rohit
+mongodb+srv://rohit:JNElP28ushhkWfOb@cluster0.jyqqo.mongodb.net/node?retryWrites=true&w=majority
+
+
+jdbc:h2:mem:testdb
+touch ~/.bash_profile; open ~/.bash_profile
+source .bash_profile
+
+delete the synced_folde
+rm -rf atcm-vagrant/
+
+check running instances
+lsof -i :2100
+
+git push origin HEAD:refs/for/master
+
+https://tools.hmcts.net/jira/secure/RapidBoard.jspa?rapidView=1273&view=detail&selectedIssue=SCRD-1167
+
+python download_tables_from_database.py localhost 5432 pgreadonly pgreadonly referencedataoffences -o baseLineDataSet1
+python download_tables_from_database.py localhost 5432 pgreadonly pgreadonly referencedataviewstore -o newDataSet
+
+TM-15515
+
+export USERSGROUPS_SYSTEM_USER_ID=f0286ef4-728a-45c4-bcb9-6c425738621a
+export REFERENCE_SYSTEM_USER_ID=f0286ef4-728a-45c4-bcb9-6c425738621a
+
+9:38
+git push origin HEAD:refs/for/team/nows
+
+mvn clean install
+to build without test : mvn clean install -DskipTests
+
+
+Two-Factor Authentication Backup Codes
+
+527494
+769217
+989802
+504110
+978180
+995637
+907097
+578454
+768634
+319091
+gpg -d rohitprashar1@cpp.nonlive-pki-embedded.ovpn.gpg > rohitprashar1@cpp.nonlive-pki-embedded.ovpn.txt
+gpg -d Rohit_Prashar.zip3.gpg > LionelMess.AZNL.txt
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0S9jjAo6SoyM421DeSkfeo7oedjBanKY5WGjsXsW6fqZLmUFF9pOoLkOid58Tqm7IZhhlVNVmq29IAqOmgN80jjibPrVZdoSbhy99Z9+l4LEnSG998cpvuVvQFYHDKF820HbRUmNemgY5v4FX32YFSNzSupyj1oZvaBrDvkxLWdx+miqLzhb4n9nMbCEZH71FIKsE9D9e2zBHUQ24VV12WyYhJhjeMKXAxnz1V406Z5rwoe454ON34IWXQeT0rSUwbKrY98PKSkoUaHkvUb6J2CH65ONbK51JEQdQ2/JDmt9FdydUNYiZ6U352kjCIQvC4IQYy0B228KkxV3LrIUFOgU42h95/gQQyrdSGQdmVskBjTHJvBYGszAr6HpwgljZGIPgPRUPOpM1EkLyIf33OEMtA0m4RE0fCCXPDFOQcGUC5gnbGTvtQpM7k8r+NC/TXxLmAGjbQzplmigzlpaR/+VL8kQdghxoaa5VAYCeNtNZOyBAHMm6pHAU1AK+iE0= rohitprashar@Rohits-MacBook-Pro.local
+
+#export ANSIBLE_DIR=/Users/rohitprashar/Workspace/HMCTS/vagrant-new/ansible
+export PATH="/usr/local/opt/libpq/bin:$PATH"
+
+#export PATH=$PATH:~/Desktop/apache-maven-3.8.3/apache-maven/src/bin
+#export MAVEN_OPTS=-Dmaven.wagon.http.ssl.insecure=true
+
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$PATH:~/Desktop/apache-maven/bin
+export MAVEN_OPTS=-Dmaven.wagon.http.ssl.insecure=true
+GIT_SSL_NO_VERIFY=true

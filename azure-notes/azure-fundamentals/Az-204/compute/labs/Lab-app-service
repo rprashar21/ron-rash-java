@@ -1,0 +1,142 @@
+Azure App Service is a platform-as-a-service (PaaS) offering that
+allows you to quickly build, deploy, and scale Web, API, Mobile, and Function apps.
+The App Service platform supports both Windows and Linux for running applications in a variety of languages and frameworks,
+ such as .NET, .NET Core, Java, Ruby, Node.js, PHP, Python, and Docker containers.
+
+ App Service plans are containers for the apps that you deploy in App Service.
+ Free (Windows only): Run a small number of apps for free
+ Shared (Windows only): Run more apps and provides support for custom domains
+ Basic: Run unlimited apps and scale up to three instances with built-in load balancing
+ Standard: The first tier recommended for production workloads.
+ It scales up to ten (10) instances with Autoscaling support and VNet integration to access resources
+ in your Azure virtual networks without exposing them to the internet
+ Premium: Scale up to 20 instances and additional storage over the standard tier
+ Isolated: Scale up to 100 instances, runs inside of an Azure Virtual Network isolated from other customers, and supports private access use cases
+
+
+ -------Create a app service plan -------
+ Search app services plan
+ subsscription--> resiurcegrp-->resource-name->os-->(windows or linux)--region--->pricing tier
+ Standard -- u can see the pricing tire as well
+
+ create the app service
+ The Overview shows how many App(s) / Slots are currently in use.
+ Deployment Slots allow you to have multiple instances of an app running.
+ Every app uses at least one slot for the production app, but additional
+ slots are useful for testing before releasing to production and having a slot to rollback to with no downtime if an issue is found in production.
+ The Overview also displays metrics for CPU, Memory, Data In, and Data Out.
+ You can use these metrics to determine when it might be time to Scale up or Scale out your plan,
+ both of which are available in the blade menu on the left under SETTINGS.
+ To be notified when metrics have exceeded set thresholds,
+ you can configure Alerts. You should also be aware of the Networking settings,
+ which allow you to configure access to resources in an Azure VNet or on-prem,
+ and the File system storage settings, which show you how much storage you have left in your plan.
+
+ --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ Create a web app in the app service plan
+ Go to App service + create weba app
+ give the deyails like
+ subscription :
+ rpresource g
+ resource name
+ App service plan -- the plan u have created
+ location South central Us
+ operating system windows
+ runtime stack .Net
+ Publish --> code or docker container
+
+
+ --------------------- ------------------------------------------------------------------------------------------------------ ------------------------------------------------------------------------------------------------------
+
+ Deployment slots allow you to have separate instances of your application
+ You can organize your workflow by having dedicated testing and staging slots in addition to the default production slot.
+ Once you have vetted a new release in the staging slot, you can swap it into production to avoid having to warm up the production application.
+ By swapping releases into production, the previous release remains in a slot where it can easily be swapped back into production if an issue is found in the new release.
+ Each deployment slot maintains its own configuration and application settings. Deployment slots are available with the standard and premium App Service plans.
+
+ You will create one deployment slot to stage releases in this Lab Step.
+
+ Steps to create a deployment slot
+ 1. Go to App Service
+ 2, Go to Deployment slots --> add slot {give a name --staging}
+ got to the staging deployment and check the url agianst the production url
+ Notice that the URL subdomain is the web app name appended with - and the slot name, -staging in this case.
+ The production slot is special in that there is no slot name appended.
+
+  https://ca-lab-app-219101-staging.azurewebsites.net/
+    https://ca-lab-app-219101.azurewebsites.net/
+
+
+   https://ca-lab-app-219101-staging.azurewebsites.net/
+   https://ca-lab-app-219101.azurewebsites.net/
+
+   the url has
+   https://portal.azure.com/#@labscloudacademy.onmicrosoft.com/resource/subscriptions/6d3ddb69-3bd6-4e8d-904c-41cccfb8c9ef/resourceGroups/cal-1017-cda/providers/Microsoft.Web/sites/ca-lab-app-9129102/slots/staging/appServices
+
+   Key Advantages of deployment solts
+   the ability to swap pre-warmed websites into production, and to easily roll back to the previous version, by repeating the last swap
+    best practice to use deployment slots when deploying a Web App
+
+    different types of swaps
+    Auto Swap: As soon as an application is deployed to a slot it automatically swaps into a target slot.
+    This is not the same as deploying directly to the target because the application gets a warm start,
+    and the previous release of the target slot is preserved if a rollback is required.
+    Swap: The most basic swap type that requires you to manually trigger the swap operation.
+    Swap with preview: This type is similar to a regular swap, but allows you to preview the swap before completing it.
+    Because each slot maintains its own configuration and application settings,
+    the web app may not behave exactly as it did in the originating slot, and that is a good thing.
+
+
+    settings such as SSL certificates, custom domain names, and scale settings do not swap when you swap deployment slots.
+    monitoring and diagnostic settings, framework versions, app settings, and connection strings gets swapped
+     app settings and connection strings can be configured to be sticky and stay with a slot.
+    For example, if you have separate test and production databases, you can configure the database connection string to stick to each slot.
+
+    In this Lab, you will deploy a new release to staging and swap into production.
+     1. Go to App Service
+     2, Go to Deployment slots --> add slot {give a name --staging}
+     3. clikc on the new deployment staging slot created --> under devlopment tools --> go to advanced tools-- click on go
+       this opens the  kudus environment -- click on tools --> zip push deploy
+     4. drag and drop ur files here
+     5. Once the deployment is done  Close the Kudu browser tab.
+     6. Click Browse on the staging slot's Overview blade to navigate to the Web App:
+     The Web App is now warmed up from your initial request.
+     The test-setting message at the top of the page echoes the value of the app setting named test-setting.
+     Currently, it is undefined because you have not configured the test-setting value.
+      You will use this message to verify how app settings behave across swaps.
+    7. Open the staging slot's Configuration blade:
+    The Application Settings are divided into different sections.
+    The Application settings and Connection strings are always swapped by default since the Web App depends on specific
+    framework versions and platform to work correctly.
+    8.under the Application settings section, click + New application setting and enter the following values before clicking OK:
+
+    Name: test-setting
+    Value: blue
+    Deployment Slot Setting: Checked (By default the app setting will swap to the target slot. Checking Slot Setting makes it stick to the source slot.)
+    save the settings
+    9. Deployment blade, click Deployment Slots > Swap:
+
+    when u click on swap
+    give the source -- the destination
+    Perform swap with preview
+    Swap with preview breaks down a normal swap into two phases.
+    In phase one, any slot-specific application settings and connections strings on the destination will be temporarily copied to the source slot.
+    This allows you to test the slot{u can test ur application with production settings } with its final configuration values.
+    From here, you may choose to either cancel phase one to revert to your normal configuration, or proceed to phase two,
+    which would remove the temporary config changes and complete swapping the source to destination slot.
+
+    Phase One Changes
+    These are the deployment slot specific application settings and connection strings from the target deployment
+    slot which will be temporarily applied to the source deployment slot in the first phase of the swap.
+
+    Phase Two Changes
+    This is a summary of the final set of configuration changes on the source and target deployment slots after the swap has completed.
+
+    10. start swap nad then complete the swap
+
+    Summary
+    In this Lab Step, you deployed a Web App to production using Zip file deployment and a staging slot.
+     It is a best practice to use deployment slot swaps to release Web Apps to production with zero downtime and pre-warming.
+     You also saw how slot settings can be used to configure the behavior of Web Apps based on the slot that they occupy.
+

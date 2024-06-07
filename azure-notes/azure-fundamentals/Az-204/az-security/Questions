@@ -1,0 +1,38 @@
+u need to generate a shared access signature token that grants the Read permission to a blob container.
+
+BlobSasBuilder sasBuilder = new BlobSasBuilder()
+ { BlobContainerName = containerClient.Name, Resource = "c" };
+ sasBuilder.ExpiresOn = DateTimeOffset.UtcNow.AddHours(1); sasBuilder.SetPermissions(BlobContainerSasPermissions.Read);
+ Uri sasUri = containerClient.GenerateSasUri(sasBuilder);
+
+
+ The code segment that includes Resource = "c" and sasBuilder.SetPermissions(BlobContainerSasPermissions.Read);
+  will generate the shared access signatures token that grants the Read permission to a blob container.
+
+ The code segment that includes resource = ‘b’ will generate a shared access signatures token at the blob level.
+
+ The code segments that include sasBuilder.SetPermissions(BlobContainerSasPermissions.Create);
+ will generate a shared access signatures token with the Create permission at the blob level.
+
+
+2. create a managed identity for an Azure virtual machine
+user account must have sufficient permissions to create the managed identity.
+principle of least privilege must be used
+
+Virtual Machine Contributor is the least privileged built-in role required to create a managed identity for an Azure VM.
+ Virtual Machine Administrator Login is not sufficient to create a managed identity for an Azure VM.
+ Global Administrator and Security Administrator have excessive permissions to Microsoft Entra ID,
+ which does not follow the principle of least privilege.
+ Global Administrator and Security Administrator do not provide sufficient permissions to the Azure resources.
+
+
+3, To use the custom key stored in KeyVault1,
+the identity assigned to AppConfig1 needs to have GET, WRAP, and UNWRAP permissions to the custom key.
+The DECRYPT and ENCRYPT permissions are not required to use the custom key stored in KeyVault1 in this scenario.
+
+There are two common ways to deploy a multi-container group: use an Azure Resource Manager template or a YAML file.
+An Azure Resource Manager template is recommended when you need to deploy additional
+Azure service resources (for example, an Azure Files share) when you deploy the container instances.
+However, a YAML file does not support the deployment of additional Azure service resources along with container groups in ACI.
+Docker Compose and Azure CLI do not support the deployment of an Azure Files share along with a container group to ACI.
+

@@ -1,0 +1,54 @@
+there are 5 storage services in azure
+Azure blob storage -- text files video , unstrictired data
+Azure files -- azure smb
+Queues -- messages upt millions of messages an 64kb
+Tables -- nosql data
+azure disks -- for storing data for vms
+
+They can be accessed by storage accounts
+
+----------------------
+Azure storage accounts are  accessible from anywhere in the world over HTTP or HTTPS.
+hence they need to be unique
+
+Storage accounts
+Type of storage account determines the storage service and redundancy services
+Locally redundant storage (LRS)
+Geo-redundant storage (GRS)
+Read-access geo-redundant storage (RA-GRS)
+Zone-redundant storage (ZRS)
+Geo-zone-redundant storage (GZRS)
+Read-access geo-zone-redundant storage (RA-GZRS)
+
+General Purpose V2 --> supports all storages services --> and redundacny services
+Recommended for most scenarios using Azure Storage.
+
+Block Blob Storages -- premium performance for block blobs
+Recommended for scenarios with high transaction rates and low storage latency.
+High Transaction Rates
+Definition: A transaction in Azure Blob Storage can be any operation such as uploading, downloading, listing, or deleting blobs.
+High transaction rates mean that the storage system can handle a large number of these operations simultaneously or within a short period.
+example --> Consider a web application that allows users to upload and view photos and videos.
+ If this application has millions of users worldwide,
+  the underlying storage (in this case, Azure Blob Storage) must support a high rate of transactions
+   to handle simultaneous uploads, downloads, and metadata fetches without delays.
+
+Consider a web application that allows users to upload and view photos and videos.
+If this application has millions of users worldwide,
+ the underlying storage (in this case, Azure Blob Storage)
+ must support a high rate of transactions to handle simultaneous uploads,
+ downloads, and metadata fetches without delays.
+
+ Azure Blobs
+ Account--> container --> blob {text,images ,videos ,files }
+ containers are like directoris to store/organize the blobs
+
+ 3 types of blob
+ Block blob -->  contains about 190.7tib of data, contains block of data that can be managed individually
+ Page Blob -->  store random access files upto 8tib of data
+ Append BLob --> used to append data, good for logging data from virtual machines ,
+
+
+
+
+ In Microsoft Azure Storage, Page Blobs provide block-storage that is optimized for random access and frequent updates.

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-load-balancer-service
+spec:
+  type: ExternalName # this means that we will connect to azure db servers
+  externalName: akswebappdbron.mysql.database.azure.com

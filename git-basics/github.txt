@@ -1,0 +1,21 @@
+git init
+git remote add origin url --> origin name of the remote repo or alias to the remote url
+origin  -- alias to the remote url
+
+push a local branch git push origin branch-name
+best is use upstream
+git push -u origin branchname --> git pull -u origin feature-local
+git branch -vv --> to check which are tracked branches
+
+delete a remote branch
+git push origin --delete branch name
+git push origin --delete feature-rebase feature/coding -- delete 2 branches
+
+delete a local branch here im deleting multiple branches
+git branch -D feature-rebase feature/coding login second-branch team/cct-10 team/cct-121 team/git-basics
+
+git branch -a -- list all the branches
+
+Git Fork
+copying a remote repo to my own account, fork on github
+then clone the repo to ur local

@@ -1,0 +1,69 @@
+Policies in API Management allow you to change the behavior of APIs using configuration
+Policies can be used to achieve a wide variety of objectives including rate-limiting and data transformation.
+Policies can be applied at different scopes to simplify configuration. The following scopes are supported:
+
+Global
+Product
+API
+Operation
+
+Policies are inherited from containing scopes by default.
+As an example, if you want a policy for all operations in an API,
+it is most convenient and manageable to apply that policy at the API scope.
+
+You will use policy to transform an XML response to JSON in this lab step.
+This is a useful feature when APIs only support XML but to make them more consumable on the web,
+ API Management can expose them using JSON.
+ You will start by disabling the default authentication and test the XML request from your browser.
+ Then you will create a new operation in the portal and configure a policy to convert the XML response to JSON.
+
+ Steps
+1. Click the Settings tab at the top to view the API settings:
+
+ Notice the API is using HTTPS by default. It also has Subscriptions enabled by default,
+ which is a security setting discussed later in the lab. You will disable it to allow unauthenticated traffic to the API for now.
+
+2. Uncheck Subscription required and click Save.
+Copy the Request URL and navigate to it in a new browser tab:
+https://ca-lab-ron219101.azure-api.net/xml
+
+3.Return to the portal and, from the Design tab, click + Add operation.
+  You will create a new operation using the form view rather than OpenAPI this time.
+
+4.  Set the following values, leaving the others at their defaults, before clicking Save:
+
+  Display name: Enter /xml2json
+  URL: Select GET and enter /xml2json for the path
+
+This operation is not natively supported by httpbin (requests to /xml2json result in 404 not found errors).
+ You will use an inbound policy to rewrite the URL to the desired /xml path
+ and later use an outbound policy to transform the XML response to JSON.
+
+ 5. Click + Add policy in the Inbound processing tile:
+ 6. Click Rewrite URL: This allows you to use a form to create the policy configuration. You can also use the raw XML representation of policies when necessary.
+ 7. For the Backend, select GET and enter /xml as the path:
+ 8 . To view the XML representation of the policy, click the </> in the Inbound processing tile:
+
+ The <base /> policy within each phase allows policies from higher levels (e.g. global, product, or API policy)
+ to inherit down to the operation level.
+
+ You will now add the outbound policy to transform the XML response to JSON.
+ There is no portal form for creating the policy configuration, so you must edit the XML representation.
+ Within the <outbound>...</outbound> section add a line after <base /> and enter the following policy:
+
+ <xml-to-json kind="direct" apply="always" consider-accept-header="false" />
+The xml-to-json policy includes a few attributes that allow you to fine-tune the behavior.
+ In the policy above, the response is always converted to JSON regardless of what HTTP headers are present.
+
+ Click Test, copy the Request URL, and navigate to it in a new browser tab.
+
+ Observe that the response is now returned in JSON:
+
+ https://ca-lab-ron219101.azure-api.net/xml2json
+
+
+ In this lab step, you used API Management policies to convert the XML response from a backend to JSON. To accomplish that, you:
+
+ Created a new operation,
+ Applied an inbound rewrite-uri policy, and
+ Applied an outbound xml-to-json policy.

@@ -1,0 +1,18 @@
+Kafka Ecosystem or higg levell apis
+KafkaConnect SSE Source connector to poll data from external sources
+Kafka Streams - to
+Kafka Sink -- poll or pull data from these kafka to our systems or put in external systems
+
+Kafka Connect has worker brokers to pull data from event sources like twitter,or postgres or any other event sourcing applications
+to our kafal cluster
+same kafka connectors can be used to poll data from these to sink data to our database,or blob storages
+
+
+Source Connectors --  to get data from Common Data Sources
+Sink Connectors  to publis data in common data stores
+they can be part of ur pipeline -- connectors achive falut tolerance ,idempotence distribution and ordering
+
+
+KafkaCOnnectors ,, 80 connectors from available at www.confluent.io/hub
+
+Sink Connector -- Elastic Search Sink Connector

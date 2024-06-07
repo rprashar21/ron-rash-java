@@ -1,0 +1,168 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================================== ============================================================================================================================================
+Discover permissions and consent
+
+Applications that integrate with microsofts identity platform follow authorization model.
+gives users and admins more control of what data can be accessed
+
+Microsoft identity platform implements the OAuth 2.0 authorization protocol
+i.e 3rd party app can access web-hosted resources on behalf of a user
+
+Any web-hosted resource that integrates with the Microsoft identity platform has a resource identifier, or application ID URI.
+eg of Microsoft web-hosted resources
+Microsoft Graph: https://graph.microsoft.com
+Microsoft 365 Mail API: https://outlook.office.com
+Azure Key Vault: https://vault.azure.net
+
+Real life scenario
+Imagine a company uses an app to manage meeting rooms and schedules. The app needs to access the company's calendars to check room availability.
+Here’s how it would typically go:
+The app identifies the necessary permission: It figures out it needs the permission to read calendars (https://graph.microsoft.com/Calendars.Read).
+Sending the request: The app sends a request to Microsoft’s identity platform, specifically to the authorize endpoint. It says, “I need permission to read calendar entries to check room availability.”
+Handling the request: Microsoft checks this request, and if everything looks okay (like the user agreeing and the app being secure), it grants the app a token that allows it to read the calendars.
+Admin consent for more access: Suppose the app also needed to delete calendar entries or make other significant changes. In that case, an admin would need to approve this by going to the administrator consent endpoint and explicitly allowing these additional permissions.
+This whole process ensures that the app gets only the permissions it really needs and that users and admins have control over what the app can do with their data.
+
+In oauth 2.0 permission sets are called scopes , which are permissions and the app specify the
+permissions in the scope query parameter
+eg.
+https://graph.microsoft.com/Calendars.Read is used to request permission to read users calendars in Microsoft Graph.
+
+if the resource identifier is omitted in the scope parameter,
+the resource is assumed to be Microsoft Graph. For example, scope=User.Read is equivalent to https://graph.microsoft.com/User.Read.
+
+
+Permission types
+Delegated Permission - user sign-in where the app acts as a user
+App-0nly access permission - without user signed in , background apps
+Delegated Permisiion -- apps that have a signed-in user present, either the user or an administrator consents to the permissions that the app requests.
+eg an app used by a school to manage student assignments and grades.
+app needs to access the school's email system to send notifications to students about new assignments or grade updates.
+
+User Sign-In: A teacher logs into the app using their school credentials.
+Permission Request: During the login process, the app requests permission to send emails on behalf of the teacher.
+This is a "delegated permission" because the app is asking to perform actions as if it were the teacher.
+Consent: The teacher sees a screen asking them to allow the app to send emails on their behalf. If they agree, the app gets the permission needed.
+Acting on Behalf: Now, when the app sends an email to students about assignments, it does so as if the teacher themselves sent it.
+The email appears to come directly from the teacher's email address.
+
+App-Only Access Permissions Example - without a signed-in user present ,background/daemon apps
+Only an administrator can consent to app-only access permissions.
+
+eg
+Consider a company that uses an app to generate monthly reports on employee productivity.
+This app aggregates data from various systems and does not interact directly with any specific user while performing its tasks.
+
+Background Operation: The app runs automatically on the first day of each month, without any user interaction.
+Admin Setup: Initially, an administrator at the company needs to set up and give permissions to the app.
+These are "app-only permissions" because the app needs to access various resources without acting on behalf of a specific signed-in user.
+Consent by Administrator: The admin consents to permissions like reading employee work data from company databases.
+Only an admin can grant these permissions because they are broad and potentially impact all employee data.
+Running the Tasks: Once it has the necessary permissions,
+the app runs in the background, collects the required data,
+generates reports, and perhaps even sends these reports to management without any employee involvement.
+
+
+===========================================
+Consent Types
+three consent types ,static,admin,dynmaic
+static user consent,
+incremental and dynamic user consent,
+and admin consent
+
+static user consent --u need to  specify all the permissions it needs in the app's configuration
+problems
+app needs to request all the permissions it would ever need upon the user's first sign-in
+app needs to know all of the resources it would ever access ahead of tim
+
+incremental and dynamic user consent,
+request permissions incrementally ,
+ask for a minimum set of permissions upfront and request more over time
+If you require admin privileged permissions or if your app uses dynamic consent,
+you must register all of the permissions in the Azure portal (not just the subset of permissions that require admin consent).
+This enables tenant admins to consent on behalf of all their users.
+
+
+admin consent
+when your app needs access to certain high-privilege permissions
+Admin consent done on behalf of an organization still requires the static permissions registered for the app.
+
+
+=========================
+Requesting individual user consent
+For example, when a user signs in to an app, the app sends a request like the following example.
+
+GET https://login.microsoftonline.com/common/oauth2/v2.0/authorize?
+client_id=6731de76-14a6-49ae-97bc-6eba6914391e
+&response_type=code
+&redirect_uri=http%3A%2F%2Flocalhost%2Fmyapp%2F
+&response_mode=query
+&scope=
+https%3A%2F%2Fgraph.microsoft.com%2Fcalendars.read%20
+https%3A%2F%2Fgraph.microsoft.com%2Fmail.send
+&state=12345
+
+scope parameter is a space-separated list of delegated permissions that the app is requestin
+Each permission is indicated by appending the permission value to the resource's identifier (the application ID URI).
+app needs permission to read the user's calendar and send mail as the user.
+
+
+=========================
+Conditional Access helps users to protect thier apps in the following ways
+
+Multifactor authentication
+Allowing only Intune enrolled devices to access specific services
+Restricting user locations and IP ranges
+
+
+Specifically, the following scenarios require code to handle Conditional Access challenges:
+
+Apps performing the on-behalf-of flow
+Apps accessing multiple services/resources
+Single-page apps using MSAL.js
+Web apps calling a resource
+
+
+Conditional Access examples
+You're building a single-tenant iOS app and apply a Conditional Access policy.
+The app signs in a user and doesn't request access to an API.
+ When the user signs in, the policy is automatically invoked and the user needs to perform multifactor authentication.
+
+
+You're building an app that uses a middle tier service to access a downstream API.
+An enterprise customer at the company using this app applies a policy to the downstream API.
+When an end user signs in, the app requests access to the middle tier and sends the token.
+The middle tier performs on-behalf-of flow to request access to the downstream API.
+At this point, a claims "challenge" is presented to the middle tier. The middle tier sends the challenge back to the app,
+ which needs to comply with the Conditional Access policy.
+
+ eg
+ How It Works
+ Signing In: When you load up your game, you first log in with your username and password. This is you signing in to the app.
+ Access Request to Middle Tier: Once logged in, your game sends a request to the middle tier service to get your latest game statistics.
+ Token Transfer: The middle tier gets this request and says, "Okay, I’ll need a special pass (token) to show the game stats server
+ that I’m asking on behalf of the player."
+
+ On-Behalf-Of Flow: With the token, the middle tier then asks the downstream API (the game stats server) for your stats.
+ Conditional Access Challenge: Here's where it gets a bit tricky. The stats server has special rules set by the company (like parental controls or privacy settings). When the middle tier asks for the stats, the server responds, “I need to make sure the player really allows this. Show me they agree to the game stats rules.”
+ Challenge Sent Back: The middle tier doesn’t have this permission on its own. So, it sends a message back to your game saying, “Hey, we need to confirm you agree to these rules before I can show you the stats.”
+ Compliance with the Policy: You, the player, then agree to the rules (like ensuring you’re of a certain age or have parental approval), and this confirmation is sent back through the middle tier to the game stats server.
+ Access Granted: Finally, once the game stats server is happy that all its rules are followed, it allows the middle tier to access your statistics, and your game stats are shown on your console.
+
+

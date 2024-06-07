@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usrmgmt-web-app
+  labels:
+    app: user-management-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: usrmgmt-web-app-pod # replicas it will create for the pod
+  template:
+    metadata:
+      name: usrmgmt-web-app-pod # name of the pod
+      labels:
+        app: usrmgmt-web-app-pod
+    spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
+      containers:
+        - name: usrmgmt-container-name
+          image: stacksimplify/kube-usermgmt-webapp:1.0.0-MySQLDB
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOSTNAME
+              value: "mysql-load-balancer-service"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "akswebappdbron"
+            - name: DB_USERNAME
+              value: "dbadmin"
+            - name: DB_PASSWORD
+              valueFrom: # get the password from secrets manifest file
+                secretKeyRef:
+                  name: mysql-db-password
+                  key: db-password
+

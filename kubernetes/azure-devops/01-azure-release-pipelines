@@ -1,0 +1,103 @@
+Create Azure Release Pipeline to Deploy Kubernetes Workloads to Dev, QA, Staging and Prod Environments
+
+1. create the name spaces in kubernetes cluster
+ dev qa staging prod -- these can be under on kubernetes cluster or different k8s cluster ,, here we are doing this under one
+
+# List Namespaces
+kubectl get ns
+
+# Create Namespaces
+kubectl create ns dev
+kubectl create ns qa
+kubectl create ns staging
+kubectl create ns prod
+
+# List Namespaces
+kubectl get ns
+
+2 Create Service Connections what are these connections ? These connections are connections to our kubernets cluster namespaces
+ for Dev, QA, Staging and Prod Namespaces in Kubernetes Cluster
+https://dev.azure.com/rohitprashar712/azure-demo-210191/_settings/adminservices
+
+Steps for Dev Service Connection
+Go to Project -> azure-demo-210191 -> Project Settings -> Pipelines -> Service Connections
+Click on New Service Connection
+Choose a service or connection type: kubernetes
+Authentication Method: Azure Subscription
+Username: Azure Cloud Administrator
+Password: Azure Cloud Admin Password
+Cluster: aks-rom-deom (aks-rg1)
+Namespace: dev
+Service connection name: dev-ns-k8s-aks-svc-conn
+Description: Dev Namespace AKS Cluster Service Connection
+Security: Grant access permission to all pipelines (default Checked)
+Click on SAVE
+
+Repeat the steps for qa,staging and prod
+
+step 4 -- create release piplines and add tasks like -- Add artifacts and then deploy to dev namspace or dev env
+first enable the release pipeline underproject settings
+create new release pipeline ,, select a template ,, select an empty job
+Then ad the artifact whihc was done by th eprevious job Continuous deployment trigger
+                                                        Build: _04-Docker-Push-PublishArtifacts
+Add Artifact
+Source Type: Build
+Project: leave to default (azure-demo-210191)
+Source (Build Pipeline): App1-pipeline\04-Docker-Push-PublishArtifacts
+Default Version: Latest (auto-populated)
+Source Alias: leave to default (auto-populated)
+Click on Add
+
+Step 5 --> Add a task to create secret which will allow the image to be pulled from acr
+Add Task: Create Secret
+Display Name: Create Secret to allow image pull from ACR
+Action: create secret
+Kubernetes service connection: dev-ns-k8s-aks-svc-conn
+Namespace: dev
+Type of secret: dockerRegistry
+Secret name: dev-aksdevopsacr-secret
+Docker registry service connection: manual-aksdevopsacr-svc
+Rest all leave to defaults
+Click on SAVE to save release
+Comment: Dev k8s Create Secret task added
+
+Step 6 Add Task: Deploy to Kubernetes -- new task to deploy to kubernetes
+Display Name: Deploy to AKS
+Action: deploy
+Kubernetes Service Connection: dev-ns-k8s-aks-svc-conn
+Namespace: dev
+Strategy: None
+Manifest: Select 01-Deployment-and-LoadBalancer-Service.yml from build artifacts
+
+# Sample Value for Manifest after adding it
+Manifest: $(System.DefaultWorkingDirectory)/_04-custom2-BuildPushToACR-Publish-k8s-manifests-to-AzurePipelines/kube-manifests/01-Deployment-and-LoadBalancer-Service.yml
+Container: aksdevopsacr.azurecr.io/custom2aksnginxapp1:$(Build.BuildId)
+ImagePullSecrets: dev-aksdevopsacr-secret
+Rest all leave to defaults
+Click on SAVE to save release
+Comment: Dev k8s Deploy task added
+
+make sure in ur deployment file u have the correct image repository name which is there in ur azure conatiner riegistry
+
+get ur publci ipd addrees from the logs
+ "status": {
+2023-10-12T14:31:56.6688846Z         "loadBalancer": {
+2023-10-12T14:31:56.6689049Z             "ingress": [
+2023-10-12T14:31:56.6689240Z                 {
+2023-10-12T14:31:56.6689445Z                     "ip": "20.80.117.177"
+2023-10-12T14:31:56.6689649Z                 }
+2023-10-12T14:31:56.6689828Z             ]
+2023-10-12T14:31:56.6690004Z         }
+2023-10-12T14:31:56.6690178Z
+
+
+http://20.80.117.177/ -- u access this and u can see ur deployment is susscessfull
+
+Check ur deployments in dev namespace
+kubectl get pods -n dev
+NAME                                     READY   STATUS    RESTARTS   AGE
+app1-nginx-deployment-67b8d574c9-sdn2w   1/1     Running   0          8m44s
+kubectl get svc -n dev
+NAME                              TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
+app1-nginx-loadbalancer-service   LoadBalancer   10.0.213.73   20.80.117.177   80:30077/TCP   9m4s
+

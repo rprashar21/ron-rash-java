@@ -1,0 +1,34 @@
+Integration Testing
+With the @SpringBootTest annotation, Spring Boot provides a convenient way to start up an application context to be used in a test
+An integration test with Spring fires up a Spring application context that contains all the beans we need.
+This includes framework beans that are responsible for listening to certain URLs,
+serializing and deserializing to and from JSON and translating exceptions to HTTP.
+These beans will evaluate the annotations that would be ignored by a simple unit test.
+The Spring Boot Test Starter comes with Mockito and AssertJ as testing libraries.
+
+
+
+Testing the web/presentation layer using
+The @WebMvcTest annotation in Spring Boot is used for testing a specific controller by loading only the necessary components for testing the web layer.
+
+MockMvc and @MockBean are two important components in Spring Boot testing that facilitate unit testing of controllers.
+mockMvc -  class provided by spring which allows us to simulate http request and response for our controller
+mockBean - helps us to mock the servie class{mocking the business logic } which itself has a lot of dependencies which does not need to be mocked
+,,so that we can test the controller in isolations
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private PersonService personService;
+Our web controllers bear many responsibilities, such as listening to the HTTP request, validating the input, calling the business logic,
+serializing the output, and translating the Exceptions to a proper response. We should write tests to verify all these functionalities.
+
+Spring Boot automatically provides beans like an ObjectMapper to map to and from JSON and a MockMvc instance to simulate HTTP requests.
+
+// Testing the service layer
+In the example above, @ExtendWith(MockitoExtension.class) enables Mockito's extension for the MyTestClass.
+It allows the use of annotations such as @Mock to create mock objects and @InjectMocks to inject the mocks into the class under test (MyClass).
+
+With @ExtendWith(MockitoExtension.class) in place,
+ you can use Mockito's features like mocking dependencies, defining mock behaviors, and verifying interactions within your test methods.

@@ -1,0 +1,94 @@
+there are 5 storage services in azure
+Azure blob storage -- text files video , unstrictired data
+Azure files -- azure smb
+Queues -- messages upt millions of messages an 64kb
+Tables -- nosql data
+azure disks -- for storing data for vms
+
+They can be accessed by storage accounts
+
+ Azure Blobs
+ Account--> container --> blob {text,images ,videos ,files }
+ containers are like directoris to store/organize the blobs
+
+ 3 types of blob
+ Block blob -->  contains about 190.7tib of data, contains block of data that can be managed individually
+ Page Blob -->  store random access files upto 8tib of data
+ Append BLob --> used to append data, good for logging data from virtual machines
+
+
+========================================================================================================================================================
+Azure files
+Makes file sharing available in the cloud
+Use industry standard SMB Server Message Block Protocol
+You can mount files from windows,linux/mac or onprem
+You can use Azure file Sync service with Azure Files to cache ur azure files on windows server {speed data }
+Azure files can now completely replace traditional on prem file servers and also Azure Files Ad authentication allows access control
+Helpful when lift and shift applications from onprem to cloud for apps that use azure files share to store app data
+
+Management thre Azure cli,powershell,portal  azure storage explorer ,, fuly managed by microsft
+
+Createing an azure file share
+Create a storage account
+got to storage account say name is rohits-storage-account --> from overview go to templates file shares --> create file share {give name}
+
+
+==========================================================================================================================
+Azure Queues
+Store large number of messages
+Used in distributed apps
+
+Components
+Url Format -- Storage Account -- Queue -- Messages
+                       <storage-account>                       <queue>
+Url Format --> https://mystorageaccount.queue.core.windows.net/images-to-process
+
+Create a queue
+got to storage account say name is rohits-storage-account --> from overview go to templates queue  --> create queues  {give name}
+
+==========================================================================================================================
+Azure Tables
+Allows u to store nosql data
+Key/value
+
+It is perfect for structured data as well
+
+url is https://mystorageaccount.table.core.windows.net/<table>
+A table is collection of entities
+doesnt enforce a relationship between the entities
+A single entity can store all kinds of data
+
+Entity os similar to a table row --> 1mb of data, has properties , 252 properties for each entity
+
+Account --table --entity {name,email,}{name,email,id-proof}{name,college}
+
+There is a premimu table experience in Cosmos db
+
+==========================================================================================================================
+Azure Managed Disks
+Similar to a physical disk on prem servers but its virtualized
+Its a block level storage volume    uses in azure vm and managed by azure
+99.999    5 9s availability
+50k VM disks of a specific type is allowed in a region in each subscription
+
+Create a Managed Disk
+Specify the size
+Specify the type
+
+Types of Disk
+Ultra Disks
+Standard HDD
+Standard SSD
+Premium SSD
+
+2 types of encryption
+SSE - Server Side , performed by azure storage service and is enabled by default for all managed disks,provides encryption at rest and also snapsjots
+ADE - Azure Disk -- enable on os and data disks for vm, on windows vms ,, disks are encrypted using Bit locker technology,on LInux Vms DM-encrypt tech
+
+3 Disk Roles in Azure
+DATA DISK - attached to vms called managed disks, store app data,registered as SCSI drive, max capacity of 32 TB
+OS DISK - when u deploy a vm ,its deployed with a single OS Disk Attached, hosts vm os and boot volume, max capacity is 4 tb
+TEMP DISK - every vm has a temp disk , not a managed disk ,not for storage, only for hosting(page file and swap files),
+              data maybe lost during vm redeployment and
+             linux temp disks are /dev/sdb
+

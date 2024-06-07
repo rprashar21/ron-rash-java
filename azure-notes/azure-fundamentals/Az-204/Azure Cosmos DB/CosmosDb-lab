@@ -1,0 +1,109 @@
+Azure Cosmos DB is a fully-managed, globally-distributed, multi-model database.
+Databases in Cosmos DB are enterprise-ready and highly-available offering up to 99.999% availability SLA.
+ different types of models and database supported by Cosmos DB
+ Azure table  storage ->> key-value
+ Gremlin  ->>    Graph
+ Cassandra ->> Column Family Type
+ MongoDB (document)
+
+ The underlying storage architecture is NoSQL using JSON documents and not a relational database system.
+  There is also a Spark connector to use Cosmos DB for real-time big data analytics.
+
+Lab
+you will create a Cosmos DB database that supports the NoSQL API
+To create the database, you will first create a Cosmos DB account that holds databases of a specific model and API type
+
+1. In the search bar at the top of the Azure Portal, enter cosmos. Click Azure Cosmos DB under Services:
+2. Create an Azure Cosmos DB account -- we need to select an api
+   different apis - 1. az cosmos db for nosql  2. az cosmos db for postgres 3. az cosmos db for apache cassandra,gremlin, table, mongodb
+
+   we will select az cosmos db for nosql
+
+   Give necessary details like
+   susbsription-group,name,provisioned thruput etc
+
+   https://learn.microsoft.com/en-gb/azure/cosmos-db/throughput-serverless
+
+
+   By default, databases in a Cosmos DB account are accessible over the internet.
+   The Virtual networks tab contains settings that allow you to configure the Cosmos DB databases to
+   be only accessible from within an Azure virtual network or specific subnets. You won't need that functionality for this Lab.
+
+3. Got o the resource --> click Quick Start blade
+The Quick start blade gives sample code for various drivers to connect to the NoSQL database.
+Data is stored  in containers --> containers are like tables
+Add a container
+Create 'Items' container with 400 Request Units per second (RU/s) throughput capacity, for up to 400 reads/sec.
+ To see your container, go to Data Explorer and find the ToDoList database.
+
+ This means that a time it can support 400 reads per second -- means 400 custers are performing the same request at a point f time
+ When the allocated RUs are exhausted due to higher demand:
+ Throttling occurs when the number of requests exceeds the allocated throughput capacity (RUs) for the container
+ Cosmos DB will start to throttle excessive requests, which means it temporarily rejects some requests to stay within the set throughput limits.
+ The client application will receive HTTP 429 error codes, which signify "Too Many Requests."
+
+4. Click on Data Explorer.
+   The Data Explorer is where you can configure databases and collections in the Azure Portal.
+5. Click New Database to create a database in the account:
+Database id: stocks
+Provision throughput: Unchecked
+
+You will store fake stock ticker data in the database.
+ The Provision throughput setting allows RUs to be shared across multiple collections in a database
+ compared to setting the number of RUs available to each collection in the database.
+ Provisioning throughput is useful when you have many collections and do not require a guaranteed
+ throughput level for any collection.
+ Provisioning throughput can help respond to unexpected spikes in any particular collection.
+  You will only use one collection in this Lab, so there is no need to provision throughput.
+
+In this Lab Step, you learned how to create Cosmos DB accounts and databases.
+ You also learned about Request Units, and how they are the common currency for charges in Cosmos DB.
+
+The Azure Portal, Azure CLI, Azure PowerShell module, and Azure REST API can all be used for creating Cosmos DB accounts and databases.
+
+================ ================ ================ ================ ================ ================ ================
+
+In the stocks database create a container{table} called ticker
+In the New Container blade, fill the form with the following information, leaving the rest as default, then click OK:
+
+Database id: Choose Use existing and select stocks from the drop-down menu
+Container id: Enter ticker
+Partition key: Enter /id
+Container throughput (autoscale): Choose Autoscale
+Container Max RU/s: Enter 1000
+
+In this lab step, you used the Azure Portal to create a container inside your Cosmos DB NoSQL database.
+
+
+================ ================ ================ ================ ================ ================ ================
+While most of the time you'll access Cosmos DB through a platform such as .Net Core, Python and others,
+it's beneficial to know the syntax that powers CosmosDB NoSQL API.
+ Many companies use Cosmos DB because it allows you to query JSON documents using SQL, giving you some of the strengths of both SQL and NoSQL.
+
+In this Lab Step, you'll practice using the Data Explorer to insert and edit items into the container you created.
+Use query tab to perform some sql queries
+
+Notice that you get the same results. I
+In case you're familiar with SQL, it's good to know that while there are some syntactical differences
+between regular SQL and Cosmos DB SQL, your SQL knowledge will be applicable when working with Cosmos DB SQL.
+https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/query/
+
+In this Lab Step, you used the Data Explorer to insert JSON items into a Cosmos DB NoSQL container. You also used SQL queries to view data in the container.
+
+================ ================ ================ ================ ================ ================ ================
+While Cosmos DB allows you to query JSON items using SQL syntax,
+ you will still update and delete items in a Cosmos DB SQL database like you would
+  with other NoSQL databases, as update SQL syntax is not supported in Cosmos DB SQL.
+  In this Lab Step, you will practice updating and deleting items using the Cosmos DB Data Explorer.
+
+   In the Data Explorer blade, click stocks > ticker > Items:
+   2. In the Items tab, click the only item:
+   3. Change "Price": 9.37 to "Price": 15.50 and click Update:
+
+   That's all it takes to update an item in the Data Explorer.
+    Notice that you update an item similar to how you would any other JSON object. This is part of the benefit of using Cosmos DB.
+     In the menu at the top, click Delete and then Delete:
+
+
+
+

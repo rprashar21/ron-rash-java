@@ -1,0 +1,32 @@
+What are the problems with MySQL Pod & Azure Disks?
+How we are going to solve them using Azure MySQL Database?
+
+Hih durablity and availabilty ,, we dont have to use configmaps and azure disks which in turn
+makes it very complex to handle
+
+best to focus on ur applicatiina and not the db part leave it to azure
+
+Architecture
+users/internet ----> webapp-loadbancer-->webapppod -->mysql0-externalName Service---> azure mysqldb
+
+Use Azure Database for MySQL and for  AKS Workloads/Pods
+Create Azure Database for MySQL servers
+Go to Azure Database for MySQL servers
+and create azure database servcers
+
+Database Name - akswebappdb
+
+akswebappdbron
+akswebappdbron.mysql.database.azure.com
+
+Step-04: Create Kubernetes externalName service Manifest and Deploy
+01-mysql-externalName-service.yml
+
+step 5  create a web app deployment
+02-webapp-deployment.yml
+
+kubectl get services
+kubectl get deployments
+kubectl get pods
+
+kubectl logs -f <pd>

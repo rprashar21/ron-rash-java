@@ -1,0 +1,53 @@
+Describe Azure storage redundancy?
+Azure Storage always stores multiple copies of your data
+
+The factors that help determine which redundancy option you should choose.
+How your data is replicated in the primary region.
+Whether your data is replicated to a second region that is geographically distant to the primary region, to protect against regional disasters.
+Whether your application requires read access to the replicated data in the secondary region if the primary region becomes unavailable.
+
+Redundancy in the primary region
+Date replication is done 3 times in primary region.
+2 options locally redundant storage (LRS) and zone-redundant storage (ZRS).
+
+Locally redundant storage LRS  lowest-cost redundancy option and offers the least durability
+ data is replicated 3 times in a datacenter.
+ 11 nines of durability (99.999999999%)
+
+
+ Zone-redundant storage -
+ data is replicated 3 times within the avail zone in the primary region
+ data is replicated asynchronously ocross 3 avail zones in the primary region
+ offers 12 nines (99.9999999999%)
+ data is still accessible for both read and write operations even if a zone becomes unavailable
+ if zone is unavailable Azure undertakes networking updates, such as DNS repointing which may affect acces of data before updates are finished
+
+ Redundancy in a secondary region
+ For applications requiring high durability
+ Now this will be based ib Azure region pairs where 2nd region is 300 miles away
+
+ 2 options
+ geo-redundant storage (GRS) and geo-zone-redundant storage (GZRS)
+ By default, data in the secondary region isn't available for read or write access unless there's a failover to the secondary region.
+ After the failover has completed, the secondary region becomes the primary region, and you can again read and write data.
+
+ Failovers
+ data is replicated to the secondary region asynchronously,a failure that affects the primary region
+ may result in data loss if the primary region can't be recovered.
+
+The interval between the most recent writes to the primary region
+and the last write to the secondary region is known as the recovery point objective (RPO)
+RPO is point in  time when the data is recovered , rpo is 15 mins but bo sla
+
+Geo-redundant storage -> 3 times asynchronously in primary region and single async in secondary region using lrs
+offers durability of 16 nines (99.99999999999999%)
+
+Geo-zone-redundant storage - data is replicated across 3 avil zones and one avail zone in secondary region
+
+GZRS for applications requiring maximum consistency, durability, and availability, excellent performance, and resilience for disaster recovery.
+. For read access to the secondary region,
+enable read-access geo-redundant storage (RA-GRS) or read-access geo-zone-redundant storage (RA-GZRS).
+
+Remember that the data in your secondary region may not be up-to-date due to RPO.
+
+

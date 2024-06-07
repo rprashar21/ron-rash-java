@@ -1,0 +1,142 @@
+apiVersion: v1 -- This is the kubernetes api  being used
+kind: pod  -> this defines the resource which is being created
+metadata:   --> information about our pod
+  name: nginx-pod  --> name of the pod which will be created
+  labels:  --> assign labels to our pods which will be used for identifying pods latser
+    app: nginx
+    tier: dev
+  namespace: ns-dev
+spec:   --> Describes the desired state of our pods ,
+  containers: --> specifies the array of containers to run inside the pod ,, here we have one
+    - name: container-nginx-name --> name of our container
+      image: nginx   -> name of our image
+      ports:
+       -containerPort: 80 --> application inside a pod is runnig on this port 80
+
+kubectl get pods    ---> to see the pods
+kubectl get pods -o wide --> to see additional details
+kubectl describe pod <pod-name> ---> to see details like node assignment , image
+kubeclt delete pod <pod-name>
+
+What does the READY column in the output of the kubectl get pods command indicate?
+running containers in a pod / total containers in a pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+ name: my-nginx
+ labels:
+  app: nginx
+  tier: dev
+spec:
+ containers:
+  - name: redis
+    image: redis
+    ports:
+     - containerPort: 80
+
+kubectl apply -f redis.yml
+
+
+Pods are the smallest deployable unit where our containers are deployed.
+One to one relationship with containers ,,
+it can have multiple different containers like a frontendPod can have 2 separate containers for a 2 diff frontend applications
+there are helper containers -- DataPuller,Pushers Proxies  --> these containers cannot exist independantly and hence they are need sometimes
+
+Create a pod in declarative way
+kubectl run <desired-pod-name> --image <Container-Image>
+kubectl run my-first-pod --image stacksimplify/kubenginx:1.0.0
+
+what does this command do ??
+kubernetes will create a pod ,, pull the image from docker and create a container inside the pod and start it
+
+to access our application from outside we need to create a loadbalancer service
+Expose pod with a service (Load Balancer Service) to access the application externally (from internet)
+
+Creating a pod
+kubectl run my-first-pod --image stacksimplify/kubenginx:1.0.0
+
+Expose Pod as a Service
+kubectl expose pod <Pod-Name>  --type=LoadBalancer --port=80 --name=<Service-Name>
+kubectl expose pod my-first-pod --type=LoadBalancer --port=80 --name=loadbalancerservice
+
+manifest file for a
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp1-loadbalancer
+  labels:
+    app: myapp1 --> this should match the label of the pod
+spec:
+  type: LoadBalancer  -->Specifies the type of Service. In this case, it's "LoadBalancer," which means that the Kubernetes cluster should provision an external load balancer to route traffic to the Service.
+  selector:  identifies which pods it should route traffic to in this case the pod name is myapp1
+    app: myapp1
+  ports: -->  Specifies an array of port mappings for the Service.
+    - port: 80  -->Sets the port on which the Service will listen. In this case, it's port 80, which is a common HTTP port.
+      targetPort: 80 --> port on which y container is running, incoming traffic should run on this port
+
+The external load balancer will be provisioned to distribute incoming traffic on port 80 to the Pods with the label "app: myapp1."
+
+# Get Service Info
+kubectl get service
+kubectl get svc
+
+# Describe Service
+kubectl describe service my-first-service
+
+# Access Application
+http://<External-IP-from-get-service-output>
+
+Interact with Pods
+# Get Pod Name
+kubectl get pod-name
+
+# Dump Pod logs
+kubectl logs <pod-name>
+kubectl logs my-first-pod
+
+# Stream pod logs with -f option and access application to see logs
+kubectl logs <pod-name>
+kubectl logs -f my-first-pod
+
+what is running inside our pod now ??
+it is a nginx container , lets interact with that
+# Connect to Nginx Container in a POD
+kubectl exec -it <pod-name> -- /bin/bash
+kubectl exec -it my-first-pod -- /bin/bash
+
+# Execute some commands in Nginx container
+ls
+cd /usr/share/nginx/html
+cat index.html
+exit
+
+# Sample Commands
+kubectl exec -it my-first-pod -- env
+kubectl exec -it my-first-pod -- ls
+kubectl exec -it my-first-pod -- cat /usr/share/nginx/html/index.html
+kubectl -it exec pod-name sh --> attach sh to the pod
+ls   --> now execute commands in this pod
+
+
+
+Get yaml configuration for our pod and service
+# Get pod definition YAML output
+kubectl get pod my-first-pod -o yaml
+
+# Get service definition YAML output
+kubectl get service my-first-service -o yaml
+
+
+# Get all Objects in default namespace
+kubectl get all
+
+# Delete Services
+kubectl delete svc my-first-service
+
+# Delete Pod
+kubectl delete pod my-first-pod
+
+# Get all Objects/resoureces  in default namespace
+kubectl get all

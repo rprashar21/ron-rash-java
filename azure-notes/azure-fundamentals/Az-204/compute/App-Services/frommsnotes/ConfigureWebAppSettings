@@ -1,0 +1,79 @@
+“WEBSITE_LOCAL_CACHE_OPTION”: “Always”
+“WEBSITE_LOCAL_CACHE_SIZEINMB”: “1500”
+
+Create application settings that are bound to deployment slots.
+Explain the options for installing SSL/TLS certificates for your app.
+Enable diagnostic logging for your app to aid in monitoring and debugging.
+Create virtual app to directory mappings.
+
+
+=============== Configure application settings ===========
+app settings are variables passed as environment variables to the application code.
+For Linux apps and custom containers, App Service passes app settings to the container using the --env flag to set the environment variable in the container.
+
+App Service  ==> App Management page ==> configuration ---> application settings
+
+We can keep our local pwsd or setting in web.config or appsettings.json ,, but appsettings in app service will override these settings
+
+To Add app settings --> select New application setting
+give the name and value
+
+In a default, or custom, Linux container any nested JSON key structure in the app setting  should be like
+ ApplicationInsights:InstrumentationKey needs to be configured in App Service as ApplicationInsights__InstrumentationKey for the key name.
+ In other words, any : should be replaced by __ (double underscore).
+
+ ======Editing application settings in bulk===
+ select the Advanced edit button update and edit in json format like below
+
+ [
+   {
+     "name": "<key-1>",
+     "value": "<value-1>",
+     "slotSetting": false
+   },
+   {
+     "name": "<key-2>",
+     "value": "<value-2>",
+     "slotSetting": false
+   },
+   ...
+ ]
+===========Configure connection strings ==
+for .net application values in  App Service override the ones in Web.config.
+for non .net application u may wnat to use connections strings becoz they are encrypted
+e.g = certain Azure database types are backed up along with the app only if you configure
+a connection string for the database in your App Service app.
+
+
+==========Configure general settings==================================================
+
+Inside configuration -- general settings u can give common settings for ur app
+Stack settings: stack to run the app, u can also give an optional start-up command or file.
+Platform settings : settings for the hosting platform
+                    eg 32 0r 64 bit
+                    WebSocket protocol: For ASP.NET SignalR or socket.io
+                    Always On: app loaded even when no traffic is there, by default it is disabled and app is unloaded after 2o mins
+                               it is required for webjobs
+                    Managed IIS pipeline : set to classic for an app tht reuires older version of iis
+                    HTTP version: Set to 2.0 to enable support for HTTP/2 protocol.
+                    ARR affinity: In a multi-instance deployment, client is routed to same instance for that session.
+                    You can set this option to Off for stateless applications.
+Debugging :  Enable debbugging for app, off after 48 hours
+Client certificates: require client certificates in mutual authentication. TLS mutual authentication is used
+
+====================Configure path mappings==============================
+By configuring these path mappings, you can effectively manage how your application
+ handles different types of requests and integrates external storage,
+ enhancing the flexibility and scalability of your application on Azure App Service.
+
+What is IIS ?
+Internet Information Server -- a web server to host web app built in asp.net or windows os
+
+Configuration > path mappings
+Windows apps (uncontainerized)
+For Windows apps, you can customize the IIS handler mappings and virtual applications and directories.
+
+
+
+===========Enable diagnostic logging
+

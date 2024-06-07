@@ -1,0 +1,37 @@
+Azure ExpressRoute
+connect on-premises networks into the Microsoft cloud over a private connection called as ExpressRoute Circuit.
+like azure and microsoft ffice 365
+allows you to connect offices, datacenters, or other facilities to the Microsoft cloud.
+ Each location would have its own ExpressRoute circuit.
+ ExpressRoute connections don't go over the public Internet
+
+ Benefits
+ Connectivity to Microsoft cloud services across all regions
+ Dynamic routing between your network and Microsoft via Border Gateway Protocol (BGP).
+
+ ExpressRoute enables direct access to the following services in all regions:
+
+ Microsoft Office 365
+ Microsoft Dynamics 365
+ Azure compute services, such as Azure Virtual Machines
+ Azure cloud services, such as Azure Cosmos DB and Azure Storage
+
+ Global connectivity
+ say you had an office in Asia and a datacenter in Europe, both with ExpressRoute circuits connecting them to the Microsoft network
+
+ ExpressRoute connectivity models
+ CloudExchange colocation - refers to your datacenter, office, or other facility being physically co-located at a cloud exchange,like ISP
+  you can request a virtual cross-connect to the Microsoft cloud
+ Point-to-point Ethernet connection - using a point-to-point connection to connect your facility to the Microsoft
+ Any-to-any connection -  you can integrate your wide area network (WAN) with Azure eg between your datacenter and any branch offices.
+ Directly from ExpressRoute sites -ExpressRoute Direct provides dual 100 Gbps or 10-Gbps connectivity,
+ which supports Active/Active connectivity at scale.
+
+ Co-location refers to your datacenter, office, or other facility being physically co-located at a cloud exchange,like ISP
+ you can request a virtual cross-connect to the Microsoft cloud.
+
+With ExpressRoute, your data doesn't travel over the public internet,
+so it's not exposed to the potential risks associated with internet communications.
+ ExpressRoute is a private connection from your on-premises infrastructure to your Azure infrastructure.
+ Even if you have an ExpressRoute connection, DNS queries, certificate revocation list checking,
+ and Azure Content Delivery Network requests are still sent over the public internet.

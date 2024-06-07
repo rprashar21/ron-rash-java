@@ -1,0 +1,113 @@
+ Managed identities eliminate the need for developers to manage the credentials stored in azure key vault
+ Applications can use managed identities to obtain Microsoft Entra tokens without having to manage any credentials.
+for example i want to build and app using azure app services that access azure storage without having to manage any credentials
+
+Types of managed identities
+System assigned-- tied to the resource,lifecycle depends upon the the resource ,if theresource is deleted the identity is deleted
+
+USer-assigned- not tied to the resource ,separatley managed , can be assigned to multiple resources.
+
+Internally, managed identities are service principals of a special type, which are locked to only be used with Azure resources.
+When the managed identity is deleted, the corresponding service principal is automatically removed.
+
+=====================================================================================================================================================================
+Characteristics of managed identities
+
+Characteristic	 System-assigned managed identity	                                                      User-assigned managed identity
+Creation	    Created as part of an Azure resource                                                        Created as a stand-alone Azure resource
+              (  for example, an Azure virtual machine or Azure App Service)
+Lifecycle	    Shared lifecycle with the Azure resource that the managed identity is created with.           Independent life-cycle. Must be explicitly deleted.
+               When the parent resource is deleted, the managed identity is deleted as well.
+Sharing across Azure resources	Can't be shared, it can only be associated with a single Azure resource.	Can be shared, the same user-assigned managed identity can be associated with more than one Azure resource.
+
+
+========================================================================================================================================================================================================
+
+When to use managed identities ?
+
+Use managed identities if you want to build an app using Azure App Services that accesses Azure Storage without having to manage any credentials.
+or
+
+build an app using azure vms,app service,kubernest,container,storage connecting to storage another app,azure resource,apim etc
+
+====================================================================================================
+
+How a system-assigned managed identity works with an Azure virtual machine
+
+====================================================================================================
+To create, or enable, an Azure virtual machine with the system-assigned managed identity
+ your account needs the Virtual Machine Contributor role assignment
+
+Enable system-assigned managed identity during creation of an Azure virtual machine
+
+az vm create --resource-group myResourceGroup \
+    --name myVM --image win2016datacenter \
+    --generate-ssh-keys \
+    --assign-identity \  system assigned identity
+    --role contributor \  role is contributor
+    --scope mySubscription \  subscription name
+    --admin-username azureuser \
+    --admin-password myPassword12
+
+Enable system-assigned managed identity on an existing Azure virtual machine
+az vm identity assign -g myResourceGroup -n myVm
+
+========================================================================================================================================================================================================
+
+User Assigned Identity
+Create the user-assigned identity
+Assign the identity to a virtual machine
+
+your account needs the
+Virtual Machine Contributor and
+Managed Identity Operator role assignments
+
+Create a user-assigned identity
+az identity create -g <resource-group-name> -n myUserAssignedIdentity --> <user-assigned identity name>
+
+Assign a user-assigned managed identity during the creation of an Azure virtual machine
+az vm create \
+--resource-group <RESOURCE GROUP> \
+--name <VM NAME> \
+--image Ubuntu2204 \
+--admin-username <USER NAME> \
+--admin-password <PASSWORD> \
+--assign-identity <USER ASSIGNED IDENTITY NAME> \
+--role <ROLE> \
+--scope <SUBSCRIPTION>
+
+Assign a user-assigned managed identity to an existing Azure virtual machine
+
+az vm identity assign \
+    -g <RESOURCE GROUP> \
+    -n <VM NAME> \
+    --identities <USER ASSIGNED IDENTITY>
+
+
+    Sdks for managed Identities
+.NET
+JAva
+PYthon
+======================================== ================================================================================
+Acquire an access token
+The default method is  DefaultAzureCredential.
+Azure Identity library supports a DefaultAzureCredential type
+DefaultAzureCredential is intended to simplify getting started with the SDK
+
+
+// When deployed to an azure host, the default azure credential will authenticate the specified user assigned managed identity.
+
+String managedIdentityClientId = "<your managed identity client Id>"; // Replace with your actual client ID
+
+        // Create a credential using the DefaultAzureCredentialBuilder and specify the client ID for the user-assigned managed identity
+        DefaultAzureCredential credential = new DefaultAzureCredentialBuilder()
+            .managedIdentityClientId(managedIdentityClientId)
+            .build();
+
+        // Create a BlobClient to interact with a blob
+        BlobClient blobClient = new BlobClientBuilder()
+            .endpoint("https://myaccount.blob.core.windows.net/mycontainer/myblob") // Replace with your actual endpoint
+            .credential(credential)
+            .buildClient();
+
+        // From here, you can u

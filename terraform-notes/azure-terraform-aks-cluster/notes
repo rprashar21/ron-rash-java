@@ -1,0 +1,51 @@
+1.Create SSH Keys for AKS Linux VMs
+Declare Windows Username, Passwords for Windows nodepools.
+This needs to be done during the creation of cluster for
+ 1st time itself if you have plans for Windows workloads on your cluster
+Understand about Datasources and Create Datasource for Azure AKS latest Version
+Create Azure Log Analytics Workspace Resource in Terraform
+Create Azure AD AKS Admins Group Resource in Terraform
+Create AKS Cluster with default nodepool
+Create AKS Cluster Output Values
+Provision Azure AKS Cluster using Terraform
+Access and Test using Azure AKS default admin --admin
+Access and Test using Azure AD User as AKS Admin
+
+
+#Create SSH Keys for AKS Linux VMs why this is needed ??
+when we create linux node pools in our cloud servers we have to access those for that we
+need create a ssh keys to login which is a secure service to login
+
+commands to create the ssh keys
+# Create Folder
+mkdir $HOME/.ssh/aks-prod-sshkeys-terraform
+
+# Create SSH Key
+ssh-keygen \
+    -m PEM \
+    -t rsa \
+    -b 4096 \
+    -C "azureuser@myserver" \
+    -f ~/.ssh/aks-prod-sshkeys-terraform/aksprodsshkey \
+    -N mypassphrase
+
+# List Files
+ls -lrt $HOME/.ssh/aks-prod-sshkeys-terraform
+
+This basically generates a private key and a public key .. the public key is kept in the server and the private in our own machine
+
+2. create azure windows/ linux variables and add them to the variabes.tf files
+# V2 Changes
+# SSH Public Key for Linux VMs
+variable "ssh_public_key" {
+  default = "~/.ssh/aks-prod-sshkeys-terraform/aksprodsshkey.pub"
+  description = "This variable defines the SSH Public Key for Linux k8s Worker nodes"
+}
+
+3. Create Datasource for Azure AKS latest Version
+What are datasources ?
+Data sources allow Terraform to use information defined outside of Terraform,
+defined by another separate Terraform configuration, or modified by functions.
+
+Use Azure AKS versions datasource API to get the latest version of aks  and use it
+az aks get-versions --location centralus -o table
