@@ -1,0 +1,57 @@
+A federated entity in Azure refers to a concept where multiple organizations or systems,
+each maintaining their own identity and access management, collaborate and share resources securely.
+Federated entities enable seamless and secure authentication and authorization across different domains
+or organizations without the need to centrally manage all identities. Here are the key points about federated entities in Azure
+
+Key features
+Identity Federation:
+Single Sign-On (SSO):
+Trust Relationships:
+Security Tokens:
+
+
+Use Cases: Common use cases include:
+
+Enterprise collaboration where employees from one company need to access applications or resources in another company.
+Integration of cloud services with on-premises directories.
+Enabling external partners, suppliers, or customers to access corporate resources.
+
+
+Scenario
+You have a web application, and you need to store some data in an Azure Storage account.
+Your application users belong to different organizations, each managing their own user identities.
+
+With Federated Entity:
+Identity Providers: Each organization uses its own identity provider (like Azure Active Directory or another identity system).
+Federation Setup: You set up a federated trust between your application's Azure AD and each organization's identity provider.
+
+
+User Authentication: When a user from Organization A logs into your application, they authenticate with their own organization's identity provider.
+Token Exchange: The identity provider issues a security token asserting the user's identity and permissions.
+Access Azure Storage: Your application uses this token to authorize the user and allow them to interact with the Azure Storage account.
+
+
+Example:
+Organization A has its own Active Directory (AD).
+Your Application is configured to trust Organization A's AD.
+
+User Login:
+An employee from Organization A tries to log into your application.
+They are redirected to Organization A's login page and authenticate using their corporate credentials.
+
+Federated Authentication:
+Upon successful authentication, Organization A's AD issues a security token for the user.
+The token is sent back to your application.
+
+Token Validation:
+Your application validates the token to ensure it is from a trusted source (Organization A's AD).
+
+Access Storage:
+The user wants to dump some data into Azure Storage.
+Your application uses the user's token to get an access token for Azure Storage.
+With the access token, your application authorizes the user to perform operations (like uploading data) in the Azure Storage account.
+
+Benefits:
+Single Sign-On: Users from different organizations can use their existing credentials.
+Simplified Management: You don't need to manage separate user accounts.
+Secure Access: Tokens ensure secure and controlled access to resources.

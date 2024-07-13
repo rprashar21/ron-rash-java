@@ -1,0 +1,10 @@
+Partition key -- partition where the item is stored in cosmos db
+
+
+Question
+ The database will have a 'UserOrders' container, where each item represents an order made by a user.
+ Given that user queries will always retrieve the entire order history of a specific user and
+ there are millions of users with varying number of orders, you need to ensure that these queries are as efficient as possible.
+
+ Answer
+ Using the UserID as the partition key means that all orders from a specific user are stored together in the same partition

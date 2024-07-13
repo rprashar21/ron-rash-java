@@ -1,0 +1,49 @@
+In Azure App Service, the total number of deployment slots you can use depends on _____. pricing tieer of the app service plan
+
+Azure App Service supports _____ testing by allowing you to set a different percentage of traffic for each slot.
+canary
+
+What is a deployment slot in Azure App Service?
+a testing environment that is as close as possible to your production environment
+
+
+The most common deployment source for an Azure App Service staging slot is _____.
+a Git repository
+
+If you enable "_____" on an Azure App Service deployment slot, then every time you push a new version of your app to that slot, it will automatically swap it with whichever slot you specify.
+auto swap
+
+
+Which Azure CLI command creates an App Service plan
+az appservice plan create
+
+
+Which Azure CLI command deploys a web app?
+az webapp deployment source config
+
+By default, Azure App Services uses _____ to build an app that is set up for continuous deployment.?
+Github actions
+
+
+Azure cli commands
+create reaource grp
+az group create \
+  --resource-group rg1
+  --location West Us
+
+az appservice plan create --name <appservicename> --rsource-group rg1 --location west us --sku f1
+
+az webapp create
+    --name <webappname>
+    --resource-group
+    --plan <appservicename>
+
+az webapp deployment source config --repo-url ""
+   --branch master
+   --manual-integration
+   --name webappname
+   --resource-group rg1
+
+When you redeploy a VM, it moves the VM to a new node within the Azure infrastructure and then powers it back on,
+ retaining all your configuration options and associated resources.
+

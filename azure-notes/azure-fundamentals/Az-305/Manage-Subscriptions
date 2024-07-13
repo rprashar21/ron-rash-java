@@ -7,7 +7,9 @@ user access administrator -- only allowed to manage user access,but no access to
 
 Assign roles to users
 Go to any resourcegrp or subscription
-click on accesscontrol(IAM) --> add role assignment --> select the role {owner,contributor,reader,user accessa admin}--> choose the user
+click on accesscontrol(IAM) -->
+add role assignment -->
+select the role {owner,contributor,reader,user accessa admin}--> choose the user
 
 
 

@@ -1,0 +1,11 @@
+Application Insights can collect data from applications in Azure,
+ running on-premise, or on other clouds.
+ The integration with Azure Web Apps makes it exceptionally easy to use in Azure.
+
+
+ Question
+  You need to find an effective monitoring solution to do the following:
+  Monitor performance of Azure Service Environment 1 and the on-premise database servers.
+  Provide alerts when communication between the on-premise database and Azure Service Environment 1 is disrupted.
+  Provide quantitative data regarding customer usage.
+

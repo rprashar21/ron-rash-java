@@ -1,0 +1,7 @@
+Azure Key Vault provides a way to store credentials and other secrets with increased security.
+But your code needs to authenticate to Key Vault to retrieve them.
+Managed identities for Azure resources help to solve this problem by giving Azure services an automatically
+managed identity in Azure Active Directory (Azure AD).
+You can use this identity to authenticate to any service that supports Azure AD authentication,
+including Key Vault, without having to display credentials in your code."
+https://docs.microsoft.com/en-us/azure/key-vault/general/tutorial-net-create-vault-azure-web-app

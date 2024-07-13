@@ -1,0 +1,9 @@
+e-commerce platform that has been experiencing latency issues during peak shopping hours.
+Your application is powered by Azure CDN, and you've identified that an inefficient use of connections might be the root cause of these issues.
+
+ans is Increasing the TTL for content ensures that once content is cached,
+  it remains in the cache for longer periods.
+  This means during peak shopping hours, most user requests will be served directly from the cache
+  rather than going back to the origin server, reducing the number of active connections to the origin and thus reducing latency.
+
+  other ans like

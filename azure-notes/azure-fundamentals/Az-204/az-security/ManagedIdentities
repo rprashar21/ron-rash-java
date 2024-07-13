@@ -25,10 +25,11 @@ Sharing across Azure resources	Can't be shared, it can only be associated with a
 
 When to use managed identities ?
 
-Use managed identities if you want to build an app using Azure App Services that accesses Azure Storage without having to manage any credentials.
+Use managed identities if you want to build an app using Azure App Services
+that accesses Azure Storage without having to manage any credentials.
 or
 
-build an app using azure vms,app service,kubernest,container,storage connecting to storage another app,azure resource,apim etc
+build an app using azure vms,app service,kubernets,container,storage connecting to storage another app,azure resource,apim etc
 
 ====================================================================================================
 

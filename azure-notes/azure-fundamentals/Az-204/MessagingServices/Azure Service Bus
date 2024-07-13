@@ -1,7 +1,8 @@
 Azure Service Bus is a messaging service in micorsoft often called as pub/sub
 supports queues and topics
 
-Service bus is used for communication between applications and services.by communicating messages between application using these message services
+Service bus is used for communication between applications and services.
+by communicating messages between application using these message services
 applications can be decoupled
 
 Azure Service Bus is a messaging service from Microsoft.

@@ -80,7 +80,8 @@ Steps
      public long Length { get; set; }
  }
  The returned Upload object is what is used for the output bind to Table Storage.
- The binding uses the PartitionKey and RowKey properties to create the partition and row key of the entity stored in the table.
+ The binding uses the PartitionKey and RowKey properties to create the partition
+ and row key of the entity stored in the table.
   A timestamp will automatically be added by the table.
   Notice how the trigger and output binding are entirely described in the function.json file.
    There is no code in run.csx that indicates there is any binding taking place.

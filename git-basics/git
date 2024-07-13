@@ -6,6 +6,11 @@ git config --global user.email
 then push
 git push -u origin dev/CCT-1912
 
+git checkout existing-branch
+git checkout -b feature-branch
+git push -u origin feature-branch
+git branch --set-upstream-to=origin/current-branch
+
 
 git pull --rebase origin team/SCMI
 git commit -m "SCMI-1303"

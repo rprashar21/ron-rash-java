@@ -2,7 +2,7 @@ ApplicationRegistration
 Saas Providers and Developers often develop and deploy cloud resources,
 
 Before Integrating these app/services with Azure Ad they need to be first registered with Ad
-The developer must first give info about teh app to the Azure Ad
+The developer must first give info about the app to the Azure Ad
 like url where app is located
 url to send replies to
 url that identifes the app

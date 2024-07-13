@@ -1,6 +1,7 @@
 Developers are most often facing challenges to store and manage secrets and credentials
  while building a solution for an organization.
- Azure Key Vault offers a secure implementation of a secret management solution with a wide range of capabilities to support the development needs.
+ Azure Key Vault offers a secure implementation of a secret management solution with a wide range
+  of capabilities to support the development needs.
   It eliminates the need for developers to handle secret management.
 
 While building web-based solutions, including API, and web applications,

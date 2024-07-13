@@ -1,0 +1,7 @@
+https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy
+
+
+Locally redundant storage (LRS) copies your data synchronously
+ three times within a single physical location in the primary region.
+ LRS is the least expensive replication option,
+  but isn't recommended for applications requiring high availability or durability.

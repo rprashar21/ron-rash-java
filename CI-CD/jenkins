@@ -1,6 +1,6 @@
 jenkins is a tool for running ci/cd
 
-configure jenkins using a docker 0r in aws or in azure
+configure jenkins using a docker or in aws or in azure
 
 jenkins configure global environements.
 

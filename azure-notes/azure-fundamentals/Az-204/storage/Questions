@@ -17,3 +17,12 @@ Regarding Microsoft Azure Storage, Table storage offers a NoSQL data store
 Which type of storage within Azure Storage is optimized for random access files that are frequently updated?
 
 You would use a Shared Access Signature to provide access to a client that can't be trusted with the account key.
+
+Elastic pools in sql dbs allow to gropu multiple dbs with variable demands and limiting cost to customers
+The dbs are on a single Azure Sql db server sharing set no of resources wlastic Database Transaction Units (eDTUs)) at a set price.
+
+Ques
+Which tool can copy blobs from one Azure Storage container to another container programmatically,
+and delete data from the source container once the copy is complete?
+
+Ans - Microsoft Azure Storage Data Movement Library

@@ -9,7 +9,8 @@ Consumption Plan - default, pay-as-u-go, only pay for compute resource running u
                    function host are added removed based on no of incoming events
                    Event driven . They scale automatically based on periods of hig load
                    1.5 gb memory with one cpu -- all function apps share this
-Premium Plan -   pre-warmed workers which run the app with no delay,runs on pwerful instances ,connect to virtuak networks
+Premium Plan -   pre-warmed workers which run the app with no delay,
+                  runs on pwerful instances ,connect to virtuak networks
 Dedicated Plan - if ur using any app service plan u can use this as well . best for long running scenarios , Durable functions cannot be used.
 
 2 other hoisting plans where control and isolation is best
@@ -32,7 +33,8 @@ Azure Functions use scale controller to monitor whether to sacle in or out.
 eg Azure Queue trigger -- scales based on queue length and age of oldest message
 
 input bindings
-Webhooks,event hubs,blob stroage queie,timer ---> increase no of events --scale controller -- increase funct app instances
+Webhooks,event hubs,blob stroage queie,timer ---> increase no of events
+--scale controller -- increase funct app instances
 the platfrom may scale to 0 if nothing is there
 
 Scaling behaviors

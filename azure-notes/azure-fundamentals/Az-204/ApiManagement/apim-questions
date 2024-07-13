@@ -1,0 +1,6 @@
+When configuring Azure API Management, what are two specific benefits of authorization code OAuth grants?
+
+The method of transmitting requests between a browser, client, authorization server, and resource server
+allows the client to submit credentials to a trusted third party rather than the specific application handling the authorization request.
+It also avoids transmitting the access token through the client browser, which limits the potential risk of the client's
+token being stolen/copied by a malicious user.

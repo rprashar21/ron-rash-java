@@ -76,7 +76,8 @@ In this lab step, you configured a metric alert to listen for the CPU usage of a
 
  In this Lab Step, you created an App Service plan. You learned about the different pricing tier features and saw how to monitor an App Service plan.
 
- It is worth pointing out that App Service plans can be automatically created when you create different types of apps. This Lab has separated the creation of the App Service plan to highlight:
+ It is worth pointing out that App Service plans can be automatically created when you create different types of apps.
+ This Lab has separated the creation of the App Service plan to highlight:
 
  The App Service architecture where multiple apps go inside a single App Service plan
  Different tiers available for App Service plans

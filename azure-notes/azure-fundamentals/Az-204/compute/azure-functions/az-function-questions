@@ -1,0 +1,10 @@
+
+ You want the function to be triggered when new data is inserted into an Azure Cosmos DB
+ and then have the function send a message to an Azure Service Bus Queue. ?
+
+ ans - A Cosmos DB Trigger is designed to respond to changes in Azure Cosmos DB
+
+ remaining choices are incorrect
+A Timer Trigger could periodically check for new data, but would cause delay as  new data insertions in Azure Cosmos DB,
+An HTTP Trigger would require an external call every time new data is inserted
+A Service Bus Queue Trigger would be responding to messages being added to the Service Bus Queue, not initiating messages to it

@@ -51,4 +51,5 @@ If this application has millions of users worldwide,
 
 
 
- In Microsoft Azure Storage, Page Blobs provide block-storage that is optimized for random access and frequent updates.
+ In Microsoft Azure Storage,
+ Page Blobs provide block-storage that is optimized for random access and frequent updates.

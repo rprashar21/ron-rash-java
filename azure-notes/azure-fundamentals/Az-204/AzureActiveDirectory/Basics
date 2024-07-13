@@ -1,0 +1,21 @@
+What is an Azure AD Tenant?
+Azure Active Directory (Azure AD) Tenant is a dedicated and trusted instance of Azure AD that an
+ organization receives when it creates a relationship with Microsoft.
+  It is a directory service designed to handle identity and access management for users, applications, and other resources.
+  
+Imagine a company named "ABC-CORP Ltd." When ABC-CORP decides to use Azure services,
+ they create an Azure AD tenant specifically for their organization. This tenant includes:
+
+User Accounts: All the employees of ABC-CORP are added to this tenant, each with their unique user accounts.
+Groups: ABC-CORP creates groups (e.g., HR, IT, Sales) within the tenant to manage permissions and access to different resources.
+Applications: ABC-CORP registers its internal applications in this tenant so that employees can sign in using their corporate credentials.
+Access Control: Policies are defined to control who can access which resources and under what conditions
+ (e.g., multi-factor authentication requirements).  
+ 
+ 
+How It Works
+User Sign-In: When an employee of ABC-CORP logs into an Azure service, Azure AD authenticates the user against the ABC-CORP AD tenant.
+Resource Access: If the user tries to access a resource (e.g., a web app registered in the Azure AD tenant),
+Azure AD verifies if the user has the necessary permissions and grants access accordingly.
+Application Integration: If ABC-CORP uses third-party applications, they can be integrated with Azure AD for single sign-on (SSO),
+ providing a seamless login experience.

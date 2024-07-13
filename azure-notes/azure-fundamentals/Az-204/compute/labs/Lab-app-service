@@ -19,11 +19,12 @@ The App Service platform supports both Windows and Linux for running application
  subsscription--> resiurcegrp-->resource-name->os-->(windows or linux)--region--->pricing tier
  Standard -- u can see the pricing tire as well
 
- create the app service
+ create the app service plan look a the overview tab
  The Overview shows how many App(s) / Slots are currently in use.
  Deployment Slots allow you to have multiple instances of an app running.
  Every app uses at least one slot for the production app, but additional
- slots are useful for testing before releasing to production and having a slot to rollback to with no downtime if an issue is found in production.
+ slots are useful for testing before releasing to production
+ and having a slot to rollback to with no downtime if an issue is found in production.
  The Overview also displays metrics for CPU, Memory, Data In, and Data Out.
  You can use these metrics to determine when it might be time to Scale up or Scale out your plan,
  both of which are available in the blade menu on the left under SETTINGS.
@@ -33,7 +34,11 @@ The App Service platform supports both Windows and Linux for running application
  and the File system storage settings, which show you how much storage you have left in your plan.
 
  --------------------------------------------------------------------------------------------------------------------------------------------------------
+Azure App Service Web Apps, or simply Web Apps, are the instances of your websites and web applications hosted in Azure App Service.
+ For most scenarios, Web Apps is the best choice for hosting websites and web applications in Azure.
+  Each Web App is deployed into an App Service plan. Web Apps are DevOps-ready, and can be deployed using a variety of continuous deployment tools.
 
+Step 2
  Create a web app in the app service plan
  Go to App service + create weba app
  give the deyails like
@@ -46,14 +51,25 @@ The App Service platform supports both Windows and Linux for running application
  runtime stack .Net
  Publish --> code or docker container
 
+ There are commands to Stop and Restart the application.
+  The underlying virtual machines are not stopped or restarted, so other apps in the same App Service plan are not impacted by these commands.
+ There are also commands to Get and Reset the publish profile,
+  which is used when deploying applications directly from Microsoft's Visual Studio integrated development environment (IDE).
+  The table below the command bar also includes FTP information that can be used to deploy Web Apps and access logs for the application.
+  Below that are shortcuts to other menu items in the App Service blade, including App Service Advisor that can make recommendations based on your application's CPU, memory, and connections history.
+  Lastly, there are a handful of charts for monitoring key metrics. There is usually a few minutes of delay before metrics are displayed in the charts.
+
 
  --------------------- ------------------------------------------------------------------------------------------------------ ------------------------------------------------------------------------------------------------------
-
+Step 3 creating a deployment slot for ur staging environment
  Deployment slots allow you to have separate instances of your application
  You can organize your workflow by having dedicated testing and staging slots in addition to the default production slot.
- Once you have vetted a new release in the staging slot, you can swap it into production to avoid having to warm up the production application.
- By swapping releases into production, the previous release remains in a slot where it can easily be swapped back into production if an issue is found in the new release.
- Each deployment slot maintains its own configuration and application settings. Deployment slots are available with the standard and premium App Service plans.
+ Once you have vetted a new release in the staging slot,
+ you can swap it into production to avoid having to warm up the production application.
+ By swapping releases into production, the previous release remains in a
+ slot where it can easily be swapped back into production if an issue is found in the new release.
+ Each deployment slot maintains its own configuration and application settings.
+ Deployment slots are available with the standard and premium App Service plans.
 
  You will create one deployment slot to stage releases in this Lab Step.
 
@@ -64,8 +80,8 @@ The App Service platform supports both Windows and Linux for running application
  Notice that the URL subdomain is the web app name appended with - and the slot name, -staging in this case.
  The production slot is special in that there is no slot name appended.
 
-  https://ca-lab-app-219101-staging.azurewebsites.net/
-    https://ca-lab-app-219101.azurewebsites.net/
+  https://ca-lab-app-219101-staging.azurewebsites.net/ -- this is the staging url
+    https://ca-lab-app-219101.azurewebsites.net/   -- this is the prodcution url
 
 
    https://ca-lab-app-219101-staging.azurewebsites.net/
@@ -73,6 +89,8 @@ The App Service platform supports both Windows and Linux for running application
 
    the url has
    https://portal.azure.com/#@labscloudacademy.onmicrosoft.com/resource/subscriptions/6d3ddb69-3bd6-4e8d-904c-41cccfb8c9ef/resourceGroups/cal-1017-cda/providers/Microsoft.Web/sites/ca-lab-app-9129102/slots/staging/appServices
+
+In this Lab Step, you created a deployment slot for the Web App to use for staging releases to the production slot.
 
    Key Advantages of deployment solts
    the ability to swap pre-warmed websites into production, and to easily roll back to the previous version, by repeating the last swap
@@ -82,7 +100,9 @@ The App Service platform supports both Windows and Linux for running application
     Auto Swap: As soon as an application is deployed to a slot it automatically swaps into a target slot.
     This is not the same as deploying directly to the target because the application gets a warm start,
     and the previous release of the target slot is preserved if a rollback is required.
+
     Swap: The most basic swap type that requires you to manually trigger the swap operation.
+
     Swap with preview: This type is similar to a regular swap, but allows you to preview the swap before completing it.
     Because each slot maintains its own configuration and application settings,
     the web app may not behave exactly as it did in the originating slot, and that is a good thing.

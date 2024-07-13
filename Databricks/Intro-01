@@ -1,0 +1,32 @@
+HDFS - hadoop distributed file system -> storing large amounts of data across multiple servers/machines
+       breaks data into blocks for high availabilty and reliabilty.
+
+
+MapReduce --> Parallel processing of these data -- to get the final result
+
+
+Hadoop issues -- hadoop relies on disk based storage,ie. high disk i/o operation slow process.
+                 Apache spark is in memory processing framework.
+                 coding in hadoop is difficult
+
+
+Apache Spark -- In memory processing, easy to use , sdk with java scala SQl, 100x faster than  MapReduce
+                Apis in multiple langauage
+
+
+WHat is databricks ?
+It is an analytics platform for data analysis,engineering,science and machine learning workflows
+Web platform for Apache spark
+Has many apis for diff programming languages
+
+
+Data LakeHouse Platform
+manage large sets of data with acid and perform analysis machine larening and scine
+
+Workspace for Databricks
+MachineLearning - platform for building,training deploying machine learning modules
+                  Ml Practitioners and Data Scinetists
+Databricks Sql -  Platform for quering data in data lake house platforms
+                  run queries,visulize data , perform analsis task.
+                  Used By data Analysts and Sql Developers
+Data Sciene and Engineering - data engineers/scientist can perform building pipelines develop science models
