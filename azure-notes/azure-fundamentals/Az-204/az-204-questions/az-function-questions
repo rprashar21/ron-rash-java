@@ -8,3 +8,16 @@
 A Timer Trigger could periodically check for new data, but would cause delay as  new data insertions in Azure Cosmos DB,
 An HTTP Trigger would require an external call every time new data is inserted
 A Service Bus Queue Trigger would be responding to messages being added to the Service Bus Queue, not initiating messages to it
+
+
+https://learn.microsoft.com/en-us/azure/azure-web-pubsub/reference-functions-bindings?tabs=csharp
+
+Q You are a developer at your company.
+  You need to edit the workflows for an existing Logic App.
+  What should you use?
+  A. the Enterprise Integration Pack (EIP)
+  B. the Logic App Code View Most Voted
+  C. the API Connections
+  D. the Logic Apps Designer Most Voted
+
+  The Logic Apps Designer provides a visual interface that allows you to design and edit workflows easily.

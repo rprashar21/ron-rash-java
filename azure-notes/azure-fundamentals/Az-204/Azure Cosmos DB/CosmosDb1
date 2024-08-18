@@ -9,7 +9,7 @@ cassandra
 Cosmos Db is global and supports multi-model
 primary data is written in multiple regions
 MongodB Api
-Gemlin for graphs -- relationships , strore info about entites
+Gremlin for graphs -- relationships , strore info about entites
 Postgres for relational db
 Casandra -- column-family database model
 
@@ -29,7 +29,7 @@ Bounded Staleness --> 2nd most popular,reads may lag behind writes for a small a
 
 =====================================================================================================
 Indexing
-consistent  - whwnere an item is updated
+consistent  - whnere an item is updated
 lazy     -- updating in quiter periods
 none     -- no update
 

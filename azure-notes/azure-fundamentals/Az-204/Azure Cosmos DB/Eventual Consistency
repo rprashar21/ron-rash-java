@@ -1,0 +1,49 @@
+
+https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction
+
+https://blog.jonathanoliver.com/idempotency-patterns/
+
+Compensating Transaction pattern ??
+Eventual consistency performs a  series of steps, the Compensating Transaction pattern is used to undo the work that the steps performed.
+ data is sometimes spread across various data sources in different geographic location
+
+
+Solution
+compensating transaction -- undo the work done by eventual consisteny in the same order.
+             replace the current state with the state the system was in at the start of the operation
+
+  How to preform the compensating transaction  ??
+As the original operation proceeds, the system records information about each step,
+including how to undo the work that the step performs.
+If the operation fails at any point, the workflow rewinds back through the steps it has completed
+
+
+2 imp points
+ compensating transaction might not have to undo in same reverse order and might undo some steps in parallel
+
+Example
+
+Customers use a travel website to book itineraries.
+His itenary is like this
+
+Seattle to London and then on to Paris and then to Seattle
+
+Main Operations                                              compensatory logic
+Book a seat on flight F1 from Seattle to London.          cancel flight to london
+Book a seat on flight F2 from London to Paris.            cancel flight to paris
+Book a seat on flight F3 from Paris to Seattle.            cancel flight to Seattle
+Reserve a room at hotel H1 in London.                     cancel hotel in london
+Reserve a room at hotel H2 in Paris.                     cancel hotlel in Paris
+
+Suppose the customer books flights F1, F2, and F3 but can't reserve a room at hotel H1.
+ It's preferable to offer the customer a room at a different hotel in the same city rather than canceling the flights.
+  The customer can still decide to cancel. In that case, the compensating transaction runs and undoes the bookings for flights F1, F2, and F3.
+   But the customer should make his decision, not the system.
+
+
+Data Consistency Primer. The Compensating Transaction pattern is often used to undo operations that implement the eventual consistency model.
+This primer provides information about the benefits and trade-offs of eventual consistency.
+Idempotency Patterns. In a compensating transaction, it's best to use idempotent commands.
+
+
+

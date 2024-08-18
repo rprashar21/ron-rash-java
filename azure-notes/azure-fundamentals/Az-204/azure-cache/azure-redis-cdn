@@ -2,6 +2,7 @@ Any time an application receives a request, there's a chance that the operations
  with that request might take additional time to execute.
 A common way to deal with these types of longer-running operations is to add them to a queue,
 which is then processed later and maybe even by a different server altogether.
+
 This type of deferment strategy is called task queuing and Azure Cache for Redis serves this purpose well by acting as a distributed queue.
 
 f you need to invalidate the data in your Redis cache use flush command

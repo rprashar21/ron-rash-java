@@ -3,7 +3,7 @@ Instantiate both public and confidential client apps from code.
 Register an app with the Microsoft identity platform.
 Create an app that retrieves a token by using the MSAL.NET library.
 
-Basicaly it is used to get tokesn from microsoft azure resources
+Basicaly it is used to get token from microsoft azure resources
 
 MSAL.js	JavaScript/TypeScript frameworks such as Vue.js, Ember.js, or Durandal.js
 MASAL.NET for .net apps

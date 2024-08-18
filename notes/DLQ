@@ -1,0 +1,17 @@
+https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-dead-letter-queues
+
+What is a dlq
+A DLQ (Dead Letter Queue) is a specialized queue in a messaging system that stores messages
+ that cannot be processed by the intended recipient, typically due to errors or exceptions.
+ When a message cannot be processed, it is moved to a DLQ for further analysis, debugging, and potential reprocessing.
+
+
+ How can a DLQ occur in an event-driven system?
+
+ In an event-driven system, a DLQ can occur when an event is published to a topic or queue,
+ but the intended listener or consumer is unable to process the event. This can happen due to various reasons, such as:
+
+ Deserialization errors: The event payload cannot be deserialized correctly by the listener, causing the event to be rejected.
+ Business logic errors: The listener encounters an error while processing the event, such as a null pointer exception or a database connection issue.
+ Network or infrastructure issues: The listener is unavailable or unreachable due to network connectivity problems or server crashes.
+ Message format or schema errors: The event payload does not conform to the expected format or schema, causing the listener to reject the event.

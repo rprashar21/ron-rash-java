@@ -41,3 +41,6 @@ and allows for custom scaling options to handle high demand efficiently
 
 Question: Which security measures can you implement to secure HTTP-triggered Azure Functions in an e-commerce application?
 Use API keys, Azure Active Directory (AAD) authentication, OAuth tokens, and implement HTTPS for secure communication.
+
+
+Choose the best Azure service to automate your business processes

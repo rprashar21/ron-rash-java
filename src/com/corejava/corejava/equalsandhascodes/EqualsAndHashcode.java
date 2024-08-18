@@ -25,7 +25,7 @@ public class EqualsAndHashcode {
         Employee e2 = new Employee(1,"donny");
 
         System.out.println("shaloow compare "+(e1==e2));
-        System.out.println("shaloww compare "+(e1.equals(e2)));
+            System.out.println("shaloww compare "+(e1.equals(e2)));
 
         System.out.println(e1.hashCode()+" "+e2.hashCode());
     }

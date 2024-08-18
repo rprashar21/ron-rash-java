@@ -1,5 +1,17 @@
+
 Azure Service Bus is a messaging service in micorsoft often called as pub/sub
 supports queues and topics
+
+
+ azure service bus
+
+    why azure service bus --> supports fifo thru queues and topics ,, use features like sessions
+                              to make sure messages are processed in exact order
+                              maintains sequence of transactions
+                              supports transactions
+                              supports dead letter queues ,retries and duplicate detections
+
+    Azure Storage Queue -- no order ,no transaction, simple scenarioes
 
 Service bus is used for communication between applications and services.
 by communicating messages between application using these message services

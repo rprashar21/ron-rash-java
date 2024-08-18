@@ -11,7 +11,8 @@ Consumption Plan - default, pay-as-u-go, only pay for compute resource running u
                    1.5 gb memory with one cpu -- all function apps share this
 Premium Plan -   pre-warmed workers which run the app with no delay,
                   runs on pwerful instances ,connect to virtuak networks
-Dedicated Plan - if ur using any app service plan u can use this as well . best for long running scenarios , Durable functions cannot be used.
+Dedicated Plan - if ur using any app service plan u can use this as well .
+best for long running scenarios , Durable functions cannot be used.
 
 2 other hoisting plans where control and isolation is best
 ASE - App service env is an app service feature ,, provides a full isolated,dedicated env at high scale -- manual
@@ -61,7 +62,7 @@ function.json file
      {
          "type": "bindingType",
          "direction": "in",     Indicates whether the binding is for receiving data into the function or sending data from the function.
-            "name": "myParamName",
+           "name": "myParamName",
                      // ... more depending on binding
      }
     ]

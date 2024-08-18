@@ -28,6 +28,7 @@ REBASE--
  so
 git pull --rebase origin team/CCT-1545 -- this will rebase from the same branch
 git pull --rebase master team/CCT-154 -- rebase change from aster to our branch -- rebase will
+git pull --rebase master team/CCT-154
 git pull  --> combines two actions - git fetch and git merge or git rebase.
 It's used to update your current branch with the latest changes from a remote repository.
 create new commit hashes  but not an extra
