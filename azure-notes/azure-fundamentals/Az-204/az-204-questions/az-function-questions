@@ -21,3 +21,11 @@ Q You are a developer at your company.
   D. the Logic Apps Designer Most Voted
 
   The Logic Apps Designer provides a visual interface that allows you to design and edit workflows easily.
+
+
+  Timer trigger
+  You have a Timer Trigger Function that uses "0 15,30,45 0 * * *" as it's timer setting. How often will the function run?
+  CRON uses a "{second}{minute}{hour}{day}{month}{day-of-week}"
+  The first "0" means that it runs when the second equals 0. The second "15,30,45" means when the minutes equal 15, 30 and 45.
+  The third "0" means at midnight. So the answer is at 12:15, 12:30, and 12:45 every day
+  * means every

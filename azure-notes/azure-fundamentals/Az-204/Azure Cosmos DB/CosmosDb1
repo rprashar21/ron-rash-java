@@ -1,17 +1,25 @@
 
+Cosmos Db is global and supports multi-model
+primary data is written in multiple regions
+underlying architecture is no sql supports json , enntreprise ready
+
+when u create cosmos db account u need to choose from the below apis
+gremlin api, cassandra ,core
+nosql api for mongdb
+
 With Cosmos DB, you can provision throughput at two levels:
-Containers
-Databases
+Database and container level
+provision thruput is like sharing the rus{request units among diff collections in db , when on particular collection needs more they get more rus}
 
 Which Cosmos DB API supports the column-family database model?
 cassandra
 
-Cosmos Db is global and supports multi-model
-primary data is written in multiple regions
-MongodB Api
-Gremlin for graphs -- relationships , strore info about entites
+Which CosmosDB API format works best with document (JSON) data?
+Core Sql--> supports nomral json data
+MongodB Api -- uses document in BSON format which is binary format and not text based
+Gremlin for graphs -- relationships , strore info about entites--allows users to make graph queries and stores data as edges and vertices
 Postgres for relational db
-Casandra -- column-family database model
+Casandra -- column-family database model, column oriented schema
 
 ==================================================================================================================================================================================================================================================================
 Consistency Levels on Cosmos DB
@@ -61,7 +69,7 @@ Delegate Container - to process a batch of chnages ,, in our case the leaderboar
 
 Change feed processor handle errors , if u wnat to get notified about notifications configure lifecycle notifications
 
-Change Feed Estimator -- To know when to scale up ur cmpute instance use the change feed estimator
+Change Feed Estimator -- To know when to scale up ur compute instance use the change feed estimator
 
 To have more control use the pull model
 
@@ -75,13 +83,21 @@ The compute instance: A compute instance hosts the change feed processor to list
 Depending on the platform, it might be represented by a virtual machine (VM), a kubernetes pod,
 an Azure App Service instance, or an actual physical machine.
    The compute instance has a unique identifier that's called the instance name throughout this article.
-The delegate: The delegate is the code that defines what you, the developer, want to do with each batch of changes that the change feed processor reads.
+The delegate: The delegate is the code that defines what you, the developer,
+want to do with each batch of changes that the change feed processor reads.
+
+
+When using the Cosmos DB change feed processor, which component is used to coordinate processing across multiple workers?
+lease container
+========================================================== * ======================================================================
+
 
 
 When choosing a partition key for a Cosmos DB container, which of the following are true? (Select 2 answers).
 If you have a write-heavy application, then you should choose a partition key that spreads the data out evenly across the partitions.
 For example, you wouldn’t want to choose a datestamp field as the partition key because every day,
-it would write all new data to the same partition, and the next day, it would do the same. Instead, you should choose a partition key that would have a wide range of values for write requests, such as a user ID or a device ID.
+it would write all new data to the same partition, and the next day, it would do the same.
+Instead, you should choose a partition key that would have a wide range of values for write requests, such as a user ID or a device ID.
 
 If you have a read-heavy application, then you should decide on your partition key by looking at what the most common queries will be.
 For example, if most of the queries will request data about a single user,

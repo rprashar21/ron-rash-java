@@ -6,4 +6,18 @@ ans is Increasing the TTL for content ensures that once content is cached,
   This means during peak shopping hours, most user requests will be served directly from the cache
   rather than going back to the origin server, reducing the number of active connections to the origin and thus reducing latency.
 
-  other ans like
+
+campaign involves serving static assets like images and stylesheets to a multitude of regions. To ensure that the assets are delivered promptly and efficiently to end-users across the globe, you decide to leverage Azure CDN. The client also requires the assets to be accessed via a custom domain for branding purposes.
+
+$resourceGroup = "myResourceGroup"
+$location = "East US"
+$profileName = "myCDNProfile"
+$endpointName = "myCDNEndpoint"
+$customDomain = "assets.myClientBrand.com"
+
+
+New-AzCdnProfile -ResourceGroupName $resourceGroup -Location $location -ProfileName $profileName -Sku Standard_Akamai
+New-AzCdnEndpoint -ResourceGroupName $resourceGroup -ProfileName $profileName -Name $endpointName -Location $location -OriginName "webappname" -OriginHostName "webappname.azurewebsites.net"
+New-AzCdnCustomDomain -ResourceGroupName $resourceGroup -ProfileName $profileName -EndpointName $endpointName -CustomDomainName $customDomain -HostName "webappname.azurewebsites.net"
+
+https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside

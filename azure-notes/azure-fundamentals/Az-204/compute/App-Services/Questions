@@ -1,0 +1,35 @@
+ARR affinity: In a multi-instance deployment, ensure that the client is routed to the same instance for the life of the session
+              ou can set this option to Off for stateless applications
+
+Q. You have five applications installed on a single App Service Plan.
+ Each application has two deployment slots - production and staging.
+ You have scaled the plan out to three instances. How many VMs are running to support this?
+
+Ans When you create an app in App Service, it is put into an App Service plan.
+ When the app runs, it runs on all the VM instances configured in the App Service plan.
+  If multiple apps are in the same App Service plan, they all share the same VM instances.
+  If you have multiple deployment slots for an app, all deployment slots also run on the same VM instances.
+  In this way, the App Service plan is the scale unit of the App Service apps. If the plan is configured to run five VM instances,
+  then all apps in the plan run on all five instances.
+   If the plan is configured for autoscaling, then all apps in the plan are scaled out together based on the autoscale settings
+
+
+ Q --> u have an Azure App Service, with a WebJob.
+ The WebJob is supposed to run continuously, but sometimes stops running as the App Service is
+ unloaded when there are not enough incoming visitors. What can you do to ensure the App Service is never unloaded?
+
+ Enable Always On setting on the General Settings page
+ Always On: Keeps the app loaded even when there's no traffic.
+  When Always On is not turned on (default), the app is unloaded after 20 minutes without any incoming requests.
+  The unloaded app can cause high latency for new requests because of its warm-up time.
+  When Always On is turned on, the front-end load balancer sends a GET request to the application root every five minutes.
+  The continuous ping prevents the app from being unloaded.
+
+
+You can set the specific version of Python in Configuration > General Settings.
+
+
+Using Azure Spot Virtual Machines allows you to take advantage of our unused capacity at a significant cost savings.
+At any point in time when Azure needs the capacity back, the Azure infrastructure will evict Azure Spot Virtual Machines.
+Therefore, Azure Spot Virtual Machines are great for workloads that can handle interruptions like batch processing jobs, dev/test environments,
+ large compute workloads, and more

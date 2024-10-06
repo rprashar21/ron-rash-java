@@ -100,11 +100,16 @@ git stash apply
 git stash list  -- shows a list of stashed changes
 git stash apply 1
 
+to see changes from ur stashed list
+ git stash show -p stash@{n}
+
 add messages to ur stashes
 git stash push -m "latest changes"
 git stash list
 git stash pop 0  --> apply and remove the stashed changes
 git stash clear --> clears the entire stash
+
+
 
 
 

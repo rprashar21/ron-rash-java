@@ -1,0 +1,21 @@
+Microsoft Graph is the gateway to data and intelligence in Microsoft 365
+All of the data contained in Microsoft 365, including documents, calendar, email, Teams, and people.
+
+How many input bindings is an Azure Function allowed to have
+
+azure function scan have 0-any number of bindings
+
+You don't have to check if the resource exists, you simply declare that it should exist in arm templates
+ARM templates allow you to create and deploy an entire Azure infrastructure declaratively.
+For example, you can deploy not only virtual machines but also the network infrastructure, storage systems, and any other resources you may need.
+
+
+
+What is the Azure CLI command to download application log files to the local disk?
+az webapp log download
+
+
+The API Management Gateway includes a powerful feature called Policies. What is the main function of policies?
+
+Policies allow you to modify the behavior of the API using configuration instead of code.
+A policy can change both the inbound request and the outbound response.

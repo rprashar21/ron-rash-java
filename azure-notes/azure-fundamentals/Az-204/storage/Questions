@@ -2,7 +2,8 @@ Which blob access storage tier would you use when dealing with a large amount of
 Hot
 
 
-What Azure storage method allows you to take a “point-in-time” version of your blob storage account, and supports both managed and unmanaged disks?
+What Azure storage method allows you to take a “point-in-time” version of your blob storage account,
+and supports both managed and unmanaged disks?
 ans is Snapshots
 A blob snapshot is a read-only version of a blob that is captured at a point in time
 Once a snapshot has been created, it can be read, copied, or deleted, but not modified
@@ -27,4 +28,8 @@ Which tool can copy blobs from one Azure Storage container to another container 
 and delete data from the source container once the copy is complete?
 
 Ans - Microsoft Azure Storage Data Movement Library
+
+LRS: 3 copies in a single data center within a single region.
+ZRS: 3 copies across three availability zones within a single region.
+GZRS: 6 copies, with 3 copies in one region (across three zones) and 3 additional copies in a secondary region (across three zones).
 

@@ -58,7 +58,19 @@ An event type filter is used to send only certain event types to the endpoint.
 A subject filter is used to specify a starting or ending value for the subject.
 Topics is not a type of filter; the event grid topic provides an endpoint where the source sends events.
 
-Messages can be peeked at in the queue without removing them from the queue by calling the PeekMessages method of the QueueClient class.
- The Peek method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.
- The ReceiveMessages method of the QueueClient class removes them from the queue.
- The ReceiveMessageAsync method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.
+============
+Question -- You are developing a serverless application to process events from a third-party service. The third-party service sends events to a webhook URL whenever there are status changes in their system. Your task is to ensure that these events trigger an Azure Function to process them accordingly.
+
+            Which of the following is the most efficient way to implement this?
+Anseer - >Set up an Azure Function with an HTTP Trigger, and provide the function's URL as the webhook URL to the third-party service to receive and process the status change events directly.
+
+Webhooks are typically user-defined HTTP callbacks used to invoke behavior in another system.
+The third-party service sends events to a provided URL (webhook) whenever relevant events occur in their system, such as status changes.
+
+The remaining choices are incorrect for the following reasons:
+
+A Timer Trigger would need to periodically poll the third-party service, which is not as efficient as directly receiving the events via a webhook. This method could also lead to delays in processing events.
+A Queue Trigger relies on messages being enqueued in a specific Azure Storage Queue, and there is no indication that the third-party service can enqueue messages to Azure Storage directly.
+An HTTP Trigger is the most suitable as it can directly receive HTTP requests, making it ideal for receiving webhook events. By providing the URL of an HTTP-triggered function as the webhook URL to the third-party service, events can be received and processed as soon as they are sent, adhering to webhook best practices.
+A Blob Trigger would be useful if the third-party service wrote information to Azure Blob Storage, but there is no indication of this in the given scenario.
+

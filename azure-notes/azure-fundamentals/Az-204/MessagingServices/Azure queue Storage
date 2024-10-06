@@ -1,0 +1,15 @@
+Azure Storage Queue is a simple, highly scalable, cost-effective message queue service that allows
+for asynchronous communication between different services. Given the scenarios you've described,
+ let's evaluate the suitability of Azure Storage Queue for each service:
+
+
+ FIFO (First-in, first-out): While Azure Storage Queue does not guarantee strict FIFO ordering,
+ in practice, it often delivers in this manner. However, Service Bus or another solution might be more
+  appropriate for mission-critical applications where strict FIFO is a necessity.
+
+  Unlimited TTL: Azure Storage Queue supports this. Messages in Azure Storage Queue have a default TTL of 7 days,
+  but you can set it to any period or effectively disable it (by setting a very long period)
+
+
+  Preventing duplicate messages: Azure Storage Queue does not have built-in deduplication capabilities
+  e maximum message size for Azure Storage Queue is 64 KB for a single message.

@@ -1,0 +1,48 @@
+A global corporation that has recently acquired a smaller company.
+The smaller company's employees need to access specific Azure resources within the parent corporation's Azure subscription.
+these users have not yet been onboarded into the parent company's primary Microsoft Entra tenant.
+ To avoid any operational disruptions, you have been tasked with ensuring these users get seamless
+ access without compromising security or creating additional Microsoft Entra tenants.
+
+ Set up an access package in Microsoft Entitlement Management and provide the acquired company's users access to the necessary Azure resources.
+
+ Microsoft Entitlement Management in Microsoft Entra provides fine-grained access management for internal and external users.
+ By setting up an access package, organizations can define a set of Azure resources, and users can request access to them
+ The process can include approval workflows, and the access can be time-limited, ensuring that users only have access for as long as they need it
+
+
+  remaining choices are incorrect
+
+  Microsoft Entra External Identities is a feature that allows organizations to invite users
+  from outside their tenant (like partners or collaborators) into their Microsoft Entra as guest users.
+   While this can be a solution, it might not provide the granular control and governance that comes with Microsoft Entitlement Management,
+
+ Managed identities are typically used for service-to-service authentication, not user authentication.
+  They are suitable for Azure services to communicate with other services securely without managing credentials.
+
+  Azure AD B2C (Business to Consumer) is primarily designed for customer-facing applications
+  where you have external users signing in to use the services. It is not tailored for inter-company collaboration or resources sharing.
+
+  example
+  Imagine you are building an e-commerce website where customers can sign up,
+  browse products, and make purchases.
+  You want to allow users to sign in using their existing social media accounts (like Google, Facebook, or Microsoft accounts)
+  or create a new account specifically for your website.
+
+  Customer Sign-In: Azure AD B2C is used to manage the authentication and user profiles for all customers who sign up on your e-commerce platform.
+  External Users: These customers are external users (not employees of your company)
+                 who interact with your application to access services like browsing products, making purchases, and managing their orders.
+
+
+  Azure AD B2B is used
+  where employees or partners from different organizations need to collaborate or access shared resources (for that, Azure AD or Azure AD B2B is used).
+  Imagine two companies, Company A and Company B, need to collaborate on a project.
+   Company A uses Microsoft 365 for document management, email, and other services,
+   and they want to give specific employees from Company B access to a shared SharePoint site where both companies can work together.
+
+
+   Azure B2B: Focuses on inter-company collaboration.
+   Azure B2C: Focuses on customer-facing applications.
+   Microsoft Entra External Identities: Unifies external identity management for both B2B and B2C.
+   Managed Identities: Provides secure identity management for Azure services without user intervention.
+   Microsoft Entitlement Management: Automates and governs access to resources, especially useful in large organizations.

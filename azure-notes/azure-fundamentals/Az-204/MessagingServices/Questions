@@ -1,0 +1,31 @@
+1. Considering the need for enhanced security and limited network exposure,
+ you've decided to set up a private endpoint for your WebHook. However, while configuring the
+ Azure Event Grid private endpoint, you need to ensure that it's correctly and securely connected to your WebHook.
+
+ Establish a private endpoint for the Event Grid topic within your VNet.
+    Use Azure Private DNS to link the private endpoint to the WebHook's internal IP, ensuring secure, private communication.
+
+    remaining choices are incorrect for the following reason
+
+ 2. Messages can be peeked at in the queue without removing them from the queue by calling the PeekMessages method of the QueueClient class.
+     The Peek method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.
+     The ReceiveMessages method of the QueueClient class removes them from the queue.
+     The ReceiveMessageAsync method of the QueueClient class is used with Azure Service Bus, not Azure Queue Storage.
+
+
+ In Azure Event Hubs, the Event Hubs REST API provides operations for working with two resources:
+  Azure Resource Manager and Event Hubs service. Which statement describes a scenario when the Azure Resource Manager REST APIs are useful?
+
+  They are useful in scenarios that enable global authentication.
+
+  Azure Resource Manager are APIs that perform resource manager operation enabled at global auth level rather than namespace/enity/container level
+
+
+  Question
+  ======================================*==============================================
+
+  Azure Event Hub is determined by the number of Throughput units you reserve for it.
+  You can set between 1 and 20 throughput units for the Event Hub.
+   How fast does 1 throughput unit represent for data coming in to an Event Hub?
+
+   1 MB per second or 1000 events per second (whichever comes first)

@@ -1,0 +1,15 @@
+ 1.Due to the nature of flash sales on the platform,
+  there are unpredictable bursts of incoming requests,
+  and you are concerned about overwhelming the function.
+  You decide to ensure your function is optimized to handle such bursts without running into scalability issues.
+
+  host.json file contains global configuration options that affect the behavior of the function app.
+
+  "dynamicThrottlesEnabled" is set to true, it allows the function to respond to throttle events from the dynamic concurrency feature.
+   This is useful in scenarios where there are sudden and unpredictable bursts of incoming requests,
+    as the function can automatically adjust based on current conditions.
+
+  maxOutstandingRequests -- maximum number of outstanding requests that can be held at any given time
+  functionTimeout - specifies the duration a function is allowed to run before it's timed out
+  maxConcurrentRequests - no of reuquest that can be run by the function concurrently
+

@@ -1,0 +1,50 @@
+1. enable low-latency, full-duplex communication channels, the application relies on WebSockets.
+Your task is to ensure that WebSockets support is enabled for the Azure App Service hosting the chat application.
+
+commands   for azure app service
+
+// for configuration cli commands in web app in azure app service
+az webapp config set --name ChatApp --resource-group MyResourceGroup --websockets-enabled true
+
+2. setting up a new environment for a web application that connects to a MySQL database.
+  az webapp config set --name <nameof the webap > --resource-group <resource group name>
+   --connection-strings '{"MySqlConnectionString" :{"value": "my-connection-string", "type": "MySql"}}'}'
+
+  az webapp config set command allows you to set configuration properties in azure app service
+
+  az webapp config set --name <app_name> --resource-group <resource_group> --php-version 8.0
+or
+ az webapp config set --name <nameof the webap > --resource-group <resource group name>
+   --connection-strings '{"MySqlConnectionString" :{"value": "my-connection-string", "type": "MySql"}}'}'
+
+scenario : If your web app is running on a specific version of the .NET Core runtime and you need
+ to update it to a newer version, you would use this command to change the configuration.
+
+  az appservice web config is invalid
+
+  az webapp config appsettings set  ---> command sets application settings for a web app ,,
+  they are basically key value pairs such as env variable or connection
+  az webapp config appsettings set --name <app_name> --resource-group <resource_group> --settings <key>=<value>
+ If your web app needs to read a database connection string or an API key from its environment, you would use this command to set those values.
+
+
+ ====================================================================================================
+
+ az webapp config set --name ChatApp --resource-group MyResourceGroup --websockets-enabled true
+ to enable WebSockets for an Azure App Service,--websockets-enabled true this is the command
+
+
+
+ =================
+ Question is Your application needs to leverage a third-party API for user authentication and authorization.
+  You have been provided the API's endpoint, client ID, and client secret.
+  You aim to configure your Azure App Service to integrate this API for user authentication.
+
+ In the Azure portal, navigate to the App Service, under 'Configuration',
+ add an application setting named 'AUTH_API_ENDPOINT' with the provided endpoint value,
+ then add 'API_CLIENT_ID' and 'API_CLIENT_SECRET' with the corresponding values.
+
+ other choices
+ 'Authentication / Authorization' feature in Azure App Service allows for integrating authentication providers like Microsoft Entra ID, Facebook, and Google.
+  'Deployment Center' is used for continuous deployment from source control solutions, such as GitHub or Azure Repos
+  'VNET Integration' allows an App Service to access resources in a virtual network but doesn't handle third-party API authentication and authorization

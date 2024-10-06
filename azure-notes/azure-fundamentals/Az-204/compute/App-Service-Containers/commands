@@ -1,0 +1,51 @@
+# Variables
+ACR_NAME="myContainerRegistry" # Replace with your desired ACR name
+RESOURCE_GROUP="myResourceGroup" # Replace with your resource group name
+LOCATION="eastus" # Replace with your preferred location
+
+# Create the resource group (if it doesn't exist)
+az group create --name $RESOURCE_GROUP --location $LOCATION
+
+# Create the ACR
+az acr create --resource-group $RESOURCE_GROUP --name $ACR_NAME --sku Basic --location $LOCATION
+
+
+// from ur azure cli login to acr
+
+build a container image
+
+login to the acr
+az acr login --name $ACR_NAME
+
+build # Build the Docker image locally
+# Build the Docker image locally
+IMAGE_NAME="myapp" # Replace with your desired image name
+VERSION="v1" # Replace with your version/tag
+
+
+build and push the image to the repository immediately
+az acr build --regsitry $ACR_NAME --image $IMAGE_NAME:$VERSION
+
+Push the Image to Azure Container Registry
+
+tag an image name
+docker tag $IMAGE_NAME:$VERSION $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
+
+docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
+
+
+ Deploy the Container Image to Azure App Service
+
+ create an appservice plan
+ az appservice plan create --name <app-service-name> --resource-group $RESOURCE_GROUP --sku B1 --is-linux
+
+ # Create a web app in Azure App Service
+ az webapp create --resource-group $RESOURCE_GROUP --plan $APP_SERVICE_PLAN
+                   --name $WEBAPP_NAME --deployment-container-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
+
+ Configure the web app to use the container registry
+ az webapp conif container set  --name $WEBAPP_NAME
+  --resource-group $RESOURCE_GROUP
+  --docker-custom-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
+  --docker-registry-server-url https://$ACR_NAME.azurecr.io
+

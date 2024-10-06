@@ -1,0 +1,39 @@
+You have successfully containerized your application within an Azure Container Registry,
+created an image of your application and pushed it into the container registry.
+You have also created an AKS cluster. Now you want to deploy the containerized application onto your AKS cluster.
+
+Get credentials to authenticate kubectl commands sent to the Kubernetes cluster
+Create a manifest file declaring the required Kubernetes resources.
+Create the resources in the cluster
+
+Which three steps do you need to complete? (Choose 3 answers)
+
+
+install an aks cluster
+az aks install-cli
+
+Create an AKS cluster
+az aks create --resource-group myResourceGroup --name myAKSCluster --node-count 2 --generate-ssh-keys --attach-acr $ACRNAME
+
+
+Connect to cluster using kubectl
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+
+kubectl get nodes
+
+
+az container create --resource-group MyResourceGroup --name my-test-app --image companyrepo:my-test-app:v1.2 --os-type Linux
+You should use the command 'az container create' to provision the Docker container to run in Azure Container Instance.
+ You then must specify both the image and version using the flag --image, then the OS using --os-type.
+
+https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli#create-a-service-principal
+https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-application?tabs=azure-cli
+
+
+url for azure container registry ??
+myprivateacr.azurecr.io
+
+Install Azure CLI: Azure CLI is needed to interact with Azure services, including AKS.
+Install kubectl: This command-line tool is used to interact with the Kubernetes cluster,
+and is often installed along with the Azure CLI using the command az aks install-cli.
+Use kubectl apply: The kubectl apply -f myapp.yaml command applies the YAML manifest file to deploy the application to the AKS cluster.

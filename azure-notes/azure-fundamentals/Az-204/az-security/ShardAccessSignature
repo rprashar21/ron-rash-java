@@ -1,18 +1,54 @@
 Tool for accessing storage account for a limted period of time, can share with clients
-Shaed Access Signature is a signed uri for accessing storage account for a limted period of time, can share with clients
+Shared Access Signature is a signed uri for accessing storage account for a limted period of time, can share with clients
+
+Type of SAS	                             Type of authorization
+User delegation SAS (Blob storage only)	 Microsoft Entra ID
+Service SAS	                             Shared Key
+Account SAS	                             Shared Key
+
 
 3 types of SAS
 User Assigned sas -- secured with microsoft identity -- share access to blob storages
 Service sas-- secured with storage account key -- delegate access to all storage service , blobs,table,queues,files
 account sas  -- secured with storage account key -- delegate access to all storage service , blobs,table,queues,files
-               one or more storage services
+               for one or more storage services
+
+service level opertaions -- get/set service properties and get/set operations
 
 Microsoft recommends that you use Microsoft Entra credentials instead of account keys as they can be compromised easliy
 whe ur app requires access to blob storage use Microsoft Entra credentials to create a user delegation SAS for security
 
+==============================*===================================* ==============================*===================================*
+
+A shared access signature can take one of the following two forms
+
+Adhoc Sas (User Delegation Sas and Account Sas ) -- When u create an Adhoc Sas the start time, end time is specified in the uri.
+Service Sas with Stored Access Policy --> Stored Access Policy is defined on the Resouce ie blob or table or file or queue
+
+How can you create a shared access signature and modify the expiry date and time after it's already been created?
+You create the sas with stored access policy --> can be used to manage constraints for one or more service shared access signatures
+When u create a sas with the stored access policy then the sas will inherit the start/end/ time plus the permission of the stored access policy on the resource
 
 How shared access signatures work??
-This is a shaed access signature
+This is a shared access signature
+
+==============================*===================================* ==============================*===================================*
+
+Sas token can be signed with a user delegation key (that is it is create wth microsoft entra credentials).
+how to get this key ??
+A Microsoft Entra security principal must be assigned an Azure role that includes
+the Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey action
+
+
+==============================*===================================* ==============================*===================================*
+
+Sas token is string uri generated at client side
+SAS token is not tracked by Azure Storage in any way. You can create any number of sas tokens on the client side
+
+client access storage accounts based on these sas tokens ,, the service checks if the sas token is valid
+otherwise u get a 403 error
+
+          <storage blob account url>           <blob-name>
  https://medicalrecords.blob.core.windows.net/patient-images/patient-116139-nq8z7f.jpg
  ?sp=r&st=2020-01-20T11:42:32Z&se=2020-01-20T19:42:32Z&spr=https&sv=2019-02-02&sr=b&sig=SrW1HZ5Nb6MbRzTbXCaPm%2BJiSEn15tC91Y4umMPwVZs%3D
 
@@ -28,12 +64,12 @@ This is a shaed access signature
 
  Bestpractices
  securely distribute a SAS and prevent man-in-the-middle attacks, always use HTTPS.
- mist secure is user delegation
+ must secure is user delegation
  set your expiration time to the smallest useful value
  rule of minimum-required privileges.
 
 
-===============================================
+=============================================== ===============================================
 When to use ??
 Use a SAS when you want to provide secure access to resources in your storage account to any client
  who doesn't otherwise have permissions to those resources.
@@ -50,14 +86,30 @@ A lightweight service authenticates the client as needed and then generates a SA
 
  Many real-world services might use a hybrid of these two approaches
  When you copy a blob
-
-
-
-
-
  at resides in a different storage account, you must use a SAS to authorize access to the source blob.
  When you copy a file to another file that resides in a different storage account
  When you copy a blob to a file, or a file to a blob, you must use a SAS to authorize access to the source object,
  even if the source and destination objects reside within the same storage account.
 
  questions
+
+
+ A Shared Access Signature (SAS) provides delegated access to Azure Storage resources.
+ You can specify what operations are allowed, on which resources, and for how long.
+ A SAS URL is ideal for scenarios like this, where a third party needs time-limited,
+ direct access to specific resources without needing to manage Azure credentials.
+ The remaining choices are incorrect for the following reasons:
+
+ Sharing the storage account key would provide the partner company access to everything in the storage account, not just the specific videos.
+  This poses a security risk and doesn't limit the duration of access.
+ Creating a new Microsoft Entra user and assigning it a role requires the partner company to manage Azure credentials.
+ Although this provides role-based access control, it adds unnecessary complexity, which is against the requirements.
+
+
+ How can you create a shared access signature and modify the expiry date and time after it's already been created?
+
+ Create the shared access signature using a stored access policy
+ When you associate a service SAS with a stored access policy,
+ the SAS inherits the constraints-the start time,
+ expiry time, and permissions-defined for the stored access policy.
+  You can modify the stored access policy at any time after the SAS has been created.

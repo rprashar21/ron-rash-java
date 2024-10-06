@@ -82,8 +82,10 @@ Standard SSD
 Premium SSD
 
 2 types of encryption
-SSE - Server Side , performed by azure storage service and is enabled by default for all managed disks,provides encryption at rest and also snapsjots
-ADE - Azure Disk -- enable on os and data disks for vm, on windows vms ,, disks are encrypted using Bit locker technology,on LInux Vms DM-encrypt tech
+SSE - Server Side , performed by azure storage service and is enabled by
+          default for all managed disks,provides encryption at rest and also snapsjots
+ADE - Azure Disk -- enable on os and data disks for vm, on windows vms ,,
+           disks are encrypted using Bit locker technology,on LInux Vms DM-encrypt tech
 
 3 Disk Roles in Azure
 DATA DISK - attached to vms called managed disks, store app data,registered as SCSI drive, max capacity of 32 TB

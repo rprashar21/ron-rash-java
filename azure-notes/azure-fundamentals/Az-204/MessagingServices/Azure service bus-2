@@ -1,0 +1,30 @@
+Azure service Bus
+
+1. message sessions - guarnatees fifo , implements request-response patterns
+       2. auto-forwarding - chain queue/subscription to another queue/subsription , when auto -forwarding is enable automatically
+                            removes message from fist queuue/subs and put in destunation queu
+       3. Dead-lettering - second subqueue called dlq ,, msgs which are not processed are put into dlq , u can remove inspect ,resubmit the
+                       msg later
+       4. Scheduled delivery - u can submit a message to the queue/topic for being scheduled like process a messages at certain time
+       5. Message deferral - when there is a msg in queue/topic but cannot be processed currently due to some circumstance ,,u can
+                             defer that msg to a lter point
+       6. transactions -- gouping of operation to be executed in a single execution
+       7. filters/actions - filter msgs for queue and topics -- rule with filter condtions
+       8. auto-delete on idle - specify an idle interval after which queue is automatically deleted -- minduration is 5 ins
+       9. duplicate detection --
+       10. batch deletion of messages
+       11. security -- serbvice bus supports --> sas,rbac,manage identiteis amqp and hhtp/rest
+       12, Geo-disaster recovery - Geo-disaster recovery enables data processing to continue operating in a different region or datacenter.
+
+
+  system must ensure that orders are processed in a sequence corresponding to their priority level.
+  High-priority orders should be processed before standard orders, even if they arrive later.
+
+  Use Sessions
+
+  The competing consumers pattern using Azure Service Bus topics and subscriptions is a powerful feature
+  for distributing messages across multiple consumers, but it does not inherently ensure that messages are processed
+  in a strict sequence based on a custom-defined priority level.
+
+  Scheduled messages in Azure Service Bus allow messages to be made available for processing at a specific time.
+  This does not address the requirement to process messages based on priority,

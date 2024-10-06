@@ -1,7 +1,7 @@
-Steps
+Steps to deploy a container to app service
 
-Create an instance of Azure Container registry
-Build a container image
+Create an instance of Azure Container registry ACR
+Build a container image --{ur application maybe react or java17 buit into an image and the push it to acr  }
 Upload it to a conatiner registry
 Deploy it from the conatiner registry to Azure app service
 Connect and test ur app

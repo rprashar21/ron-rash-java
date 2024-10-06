@@ -1,0 +1,11 @@
+What is the URL for the Azure App Service Kudu companion app?
+https://(app-name).scm.azurewebsites.net
+
+
+Your Azure Web App is currently throwing a 500 server error when viewed.
+You'd like to see more detail on the error. In order to accomplish this, what app setting do you need to set, and to what value?
+
+ASPNETCORE_ENVIRONMENT="Development"
+
+The development environment can enable features that shouldn't be exposed in production.
+If the environment isn't set, it defaults to Production,

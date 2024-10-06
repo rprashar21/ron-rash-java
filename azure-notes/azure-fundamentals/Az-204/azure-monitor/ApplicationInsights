@@ -1,3 +1,7 @@
+Application insights is an alternative to diagnostic logs
+performance and detailed messages  for prod and preprod envs
+to make use of Application Insights, you have to include specific code within your app, using the App Insights SDK.
+
 When the app is not performing and we need to check which component is causing issue use Application Insights
 configure to send data to app insgihts from the app.
 

@@ -9,3 +9,25 @@ Application Insights can collect data from applications in Azure,
   Provide alerts when communication between the on-premise database and Azure Service Environment 1 is disrupted.
   Provide quantitative data regarding customer usage.
 
+
+The telemetry data in Application Insights, you notice that during these peak times,
+the server response time occasionally spikes beyond acceptable limits.
+You decide to proactively address this by setting up an automated alert to
+notify the operations team whenever the server response time crosses a certain threshold during peak hours.
+
+Answer
+Set up a log search alert that triggers when the average server response time in the last 15 minutes during peak hours exceeds the defined threshold.
+
+log search alerts. They can be set up based on custom metrics, including response times.
+ By creating a log search alert, you can precisely specify criteria like "average response time over the last 15 minutes"
+  and further filter the data for peak hours, making this a suitable solution for the scenario described.
+
+The remaining choices are incorrect for the following reasons:
+
+URL Ping Tests monitor the availability of endpoints, but not specifically the average response time.
+ While they can provide some insights into the response times, they are designed primarily to check availability.
+Multi-step web  tests are designed to monitor multi-page navigation processes.
+ They're more suited for monitoring processes like sign-up forms or shopping carts, and not specifically for average server response times.
+While custom telemetry processors can be used to filter or process telemetry data,
+setting up a custom processor for this specific task is overcomplicating the process.
+Using built-in metrics and alerting features is more straightforward and effective.

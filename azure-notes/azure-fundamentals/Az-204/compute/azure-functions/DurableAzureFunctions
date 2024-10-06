@@ -1,8 +1,46 @@
 There are 4 durable azure functions
-Activity
-Orchestrator
-Entity
-Client
+Activity -- They perform actual work in a Durable Functions workflow.
+
+
+Orchestrator -- they define the workflow of your durable function app using procedural code.
+[FunctionName("OrderProcessing")]
+public static async Task<string> RunOrchestrator([OrchestrationTrigger] IDurableOrchestrationContext context)
+{
+    var prices = await context.CallActivityAsync<List<decimal>>("GetPrices");
+    var total = await context.CallActivityAsync<decimal>("CalculateTotal", prices);
+    await context.CallActivityAsync("SendInvoice", total);
+    return $"Order processed. Total: ${total}";
+}
+ orchestrator function  coordinates getting prices, calculating the total, and sending an invoice
+
+Entity -->  represent state and operations on small pieces of state in your application.
+
+[FunctionName("Counter")]
+public static void Counter([EntityTrigger] IDurableEntityContext ctx)
+{
+    switch (ctx.OperationName.ToLowerInvariant())
+    {
+        case "add":
+            ctx.SetState(ctx.GetState<int>() + ctx.GetInput<int>());
+            break;
+        case "get":
+            ctx.Return(ctx.GetState<int>());
+            break;
+    }
+}--> entity function represents a counter that can be incremented and read.
+
+Client --  client function are entry points for creating an instance of a Durable Functions orchestration.
+[FunctionName("StartOrderProcessing")]
+public static async Task<HttpResponseMessage> HttpStart(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestMessage req,
+    [DurableClient] IDurableOrchestrationClient starter)
+{
+    string instanceId = await starter.StartNewAsync("OrderProcessing", null);
+    return starter.CreateCheckStatusResponse(req, instanceId);
+}
+This function starts the "OrderProcessing" orchestration when it receives an HTTP POST request.
+
+
                      triggers
 Orchestrator trigger ------------> Orchestrators function {orchestrates the activity functions}-->activity functions
 

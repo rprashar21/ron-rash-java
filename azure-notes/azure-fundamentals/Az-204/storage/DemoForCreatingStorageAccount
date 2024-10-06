@@ -9,7 +9,8 @@ replication {lrs,zrs,ra-grs,gzrs,ra-gzrs}
 In networking we can allow
 public endpoint --> access this storage account from anywhere
 public endpoint{selected networks}--> only from selected networks
-private endpoint --> slect priavte network {this will assign a private ip address from the virtual network that we select and assign it to the storage account}
+private endpoint --> slect priavte network {this will assign a private ip address from the virtual
+network that we select and assign it to the storage account}
 all traffic between the storage account and vnet will be secured by a private link
 
 

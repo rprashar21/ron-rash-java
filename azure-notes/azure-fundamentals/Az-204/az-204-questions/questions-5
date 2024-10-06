@@ -1,0 +1,81 @@
+1. https://docs.microsoft.com/en-us/azure/azure-functions/functions-custom-handlers
+   function.json
+
+   “enableForwardingHttpRequest” should be set to true to forward the HTTP request to your custom handler.
+
+ 2."responseOverrides": { "401": {...} }: This specifies what happens when the server returns a 401 Unauthorized status code.
+   "statusCode": "302": The 302 status code indicates a redirection, which usually happens when a user needs to be redirected to a login page.
+   "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer": This path appears to redirect the user to the
+   Azure AD login page with a query parameter that points to where the user should be redirected after logging in.
+
+ 3.You have the following requirements to create an Azure Resource Manager templates to deploy Azure resources
+
+   • Store the templates in Azure for later deployment.
+   • Enable versioning of the templates.
+   • Manage access to the templates by using Azure RBAC.
+   • Ensure that users have read-only access to the templates.
+   • Allow users to deploy the templates.
+
+   You need to store the templates in Azure.
+
+   https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-specs-create-linked?tabs=azure-cli
+
+   ANS IS --> az ts create --> creates a template spec
+
+  4. https://learn.microsoft.com/en-us/azure/azure-web-pubsub/reference-functions-bindings?tabs=csharp
+
+  Q 5 To deploy Azure Functions to Kubernetes with custom scaling, follow these steps:
+
+   Use the func kubernetes deploy command to deploy the Azure Function to Kubernetes.
+   The ScaledObject is used to manage scaling.
+   You can control how often KEDA checks for messages in the Azure Service Bus Queue
+   using the --polling-interval option. This adjusts the frequency of the scaling check.
+
+  6. Users upload photos to a web service which then stores the photos in Azure
+     Storage Blob storage. The storage account type is General-purpose V2.
+     When photos are uploaded, they must be processed to produce and save a mobile-friendly version of the image.
+     The process to produce a mobile-friendly version of the image must start in less than one minute.
+     You need to design the process that starts the photo processing.
+     Solution: Trigger the photo processing from Blob storage events.
+     Does the solution meet the goal?
+
+     Blob Storage Events:
+
+     Azure Blob Storage can generate events whenever a new file (like a photo) is uploaded. You can use these events to trigger other actions automatically.
+     Event Grid or Blob Storage Trigger:
+
+     You can use Azure Event Grid to listen for blob events, such as when a new photo is added. Once the event is detected,
+     it can trigger an Azure Function, Logic App, or another service to start processing the photo. This process can begin almost immediately (within seconds).
+     Meets Timing Requirement:
+
+     The solution requires the photo processing to start within less than a minute.
+     Blob storage events are near-instantaneous, so the processing will start well within the required timeframe.
+     Scalability and Cost Efficiency:
+
+     Event-driven architecture is scalable and cost-effective. You only pay for the resources when events occur (e.g., when new photos are uploaded).
+     Conclusion:
+     Yes, triggering the photo processing using Blob storage events is a suitable solution that meets the goal.
+
+
+  7. You develop and deploy an Azure App Service API app to a Windows-hosted deployment slot named Development.
+     You enable auto swap on the Production deployment slot
+     You need to ensure that scripts run and resources are available before a swap operation occurs.
+   Sol: Update the web.config file to include the applicationInitialization configuration element.
+
+   Specify custom warm-up.
+   Some apps might require custom warm-up actions before the swap.
+    The applicationInitialization configuration element in web.config lets you specify custom initialization actions.
+     The swap operation waits for this custom warm-up to finish before swapping with the target slot.
+      Here's a sample web.config fragment.
+      <system.webServer>
+      <applicationInitialization>
+      <add initializationPage="/" hostName="[app hostname]" />
+      <add initializationPage="/Home/About" hostName="[app hostname]" />
+      </applicationInitialization>
+      </system.webServer>
+
+  8. You need to validate the client certificate in the web app
+     client certifcate location  -- will be in the http request header
+     encoding type -> base64
+
+      You can use pre-swap and post-swap operations (like running scripts) to prepare the environment before and after the swap.

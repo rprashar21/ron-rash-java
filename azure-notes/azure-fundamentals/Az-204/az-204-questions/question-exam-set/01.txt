@@ -1,0 +1,159 @@
+1. Which service should you use to automatically trigger a background task when new data is received in a queue?
+
+Azure WebJobs is a feature of Azure App Service that allows you to run background tasks in the same context as a web app, API, or mobile app.
+WebJobs SDK provides a framework for creating background tasks that can be triggered automatically by certain events,
+ such as new data being added to an Azure Queue or Blob Storage.
+WebJobs run in the same App Service as the main application, sharing resources and configuration.
+webjobs are free run in app service with the main application sharing resource and configuration
+background tasks
+
+Example Scenario:
+If you want to automatically trigger a background task every time a message is added to Azure Queue Storage,
+you can configure WebJobs to invoke a function whenever a new item appears in the queue.
+
+2. Your company has an Azure subscription.
+   You need to deploy a number of Azure virtual machines to the subscription by using Azure Resource Manager (ARM) templates. The virtual machines will be included in a single availability set.
+   You need to ensure that the ARM template allows for as many virtual machines as possible to remain accessible in the event of fabric failure or maintenance.
+   Which of the following is the value that you should configure for the platformFaultDomainCount property?
+
+   A. 10
+   B. 30
+   C. Min Value
+   D. Max Value
+
+   max value -- to keep as many virtual machines running as possible during hardware failure or maintenance,
+   set the platformFaultDomainCount to the maximum value
+   set the platformUpdateDomainCount to 20
+
+ 3. You are creating an Azure Cosmos DB account that makes use of the SQL API. Data will be added to the account every day by a web application.
+    You need to ensure that an email notification is sent when information is received from IoT devices, and that compute cost is reduced.
+    You decide to deploy a function app.
+    Consumption Plan
+    SendGrid Binding: This allows Azure Functions to send emails using SendGrid when new information is received.
+    Consumption plan will reduce the cost and SendGrid is used to send emails from azure functions.
+
+ 4.You are building a software-as-a-service (SaaS) application that analyzes DNA data that will
+   run on Azure virtual machines (VMs) in an availability zone. The data is stored on managed disks attached to the VM.
+   The performance of the analysis is determined by the speed of the disk attached to the VM.
+   • The application must be able to quickly revert to the previous day’s data if a systemic error is detected.
+   • The application must minimize downtime in the case of an Azure datacenter outage.
+
+   PREMIMUM SSD AND ZRS
+
+ 5. You are implementing a software as a service (SaaS) ASP.NET Core web service that will run as an Azure Web App. The web service will use an on-premises
+    SQL Server database for storage. The web service also includes a WebJob that processes data updates. Four customers will use the web service.
+    ✑ Each instance of the WebJob processes data for a single customer and must run as a singleton instance.
+    ✑ Each deployment must be tested by using deployment slots prior to serving production data.
+    ✑ Azure costs must be minimized.
+    ✑ Azure resources must be located in an isolated network.
+    You need to configure the App Service plan for the Web App.
+    How should you configure the App Service plan? To answer, select the appropriate settings in the answer area.
+
+   : 4 instances (one for each customer, so each WebJob runs as a singleton)
+   To support deployment slots and VNet Integration, and to minimize costs, you can use the Premium (P1v2 or higher) tier.
+
+   6. Create azure webapp with continuss delivery wuth Github
+          Steps                      command
+         1. azure login               az login
+         2. create resource group     az group create --location US-WEST --name $groupName
+         3. create appservice plan    az appservice plan create —-name $appserviceplanname —resource-group $groupName
+         4. create the webapp         az webapp create --name $webapname --plan $appserviceplanname —resource-group $groupName
+            (it uses appservice name and resourcegrp )
+
+         # we have created our website udner a app service plan and group
+         Continuous Delivery with GitHub. Example:
+         az webapp deployment source config --name $webapname --resource-group $groupName --repo-url $gitrepo --branch master --git-token $token
+
+    in ur subscrition select the subscription
+
+   Scenarios:
+   Event Hub Scenario: data ingestion,millions of events ingest
+
+   You have an IoT solution that streams telemetry data from devices in real-time.
+   You want to process this data using Azure Functions for real-time analytics.
+
+   Event Grid Scenario: event based routing servce reacting to certain events
+     You want to automatically trigger a function to resize an image whenever a new image is uploaded to an Azure Blob Storage container.
+
+   SendGrid Scenario:
+
+   After a user signs up on your website, you want to trigger an Azure Function to send a welcome email using SendGrid.
+
+   Service Bus Scenario:
+   You have an e-commerce application that receives orders.
+   You want to ensure that each order is processed in sequence by an Azure Function triggered by messages in the Service Bus queue.
+
+7.You develop and deploy an Azure App Service API app to a Windows-hosted deployment slot named
+Development. You create additional deployment slots named Testing and Production. You enable auto
+swap on the Production deployment slot.
+You need to ensure that scripts run and resources are available before a swap operation occurs.
+Solution: Update the web.config file to include the applicationInitialization configuration element. Specify
+custom initialization actions to run the scripts.
+
+yes custom warmup time and   applicationInitialization
+The applicationInitialization
+configuration element in web.config lets you specify custom initialization actions. The swap operation
+waits for this custom warm-up to finish before swapping with the target slot
+
+another way is
+Enable Slot Swap with Preview: This ensures that the application is warmed up in the target slot (Testing or Development) before the swap.
+You can verify that resources are available and any necessary scripts or checks are executed before the final swap occurs.
+Use the App Service deployment slot settings to ensure your app is warmed up and ready before the swap happens.
+
+
+8. To start the photo processing within less than one minute, you should use a trigger-based solution, such as:
+
+Azure Function with a Blob Trigger: This can automatically start processing when a new photo is uploaded to Blob Storage,
+ensuring that the process begins quickly (within seconds).
+Alternatively, you can use Event Grid to trigger an Azure Function or Logic App whenever a blob is uploaded
+
+9. webapp with tls auth
+   client certifcate header - http request
+   endcoding tyope =  base64
+
+10. How do you grant an Azure Functions Java app access to Azure Key Vault while ensuring no code changes,
+perpetual warm instances, VNet connectivity, and automatic removal of authentication on deletion?
+
+1. Azure Managed Identity allows the Azure Function to access Azure resources,
+such as the Key Vault, without managing credentials in the application code. When you enable the managed identity,
+Azure automatically handles the identity for the Azure Function.
+
+2. after enabling the managed identity, assign it a Key Vault access policy.
+ This grants the Azure Function's managed identity permissions (such as Get and List) to access secrets in the Key Vault.
+
+3. Deploy the Azure Function to the Premium plan:
+
+Q You develop an HTTP triggered Azure Function app to process Azure Storage blob data. The app is
+  triggered using an output binding on the blob.
+  The app continues to time out after four minutes. The app must process the blob data.
+  You need to ensure the app does not time out and processes the blob data.
+
+Ans use
+ The Durable Function async pattern breaks the process into smaller,
+ manageable tasks, which helps in processing large blobs efficiently over time, while still adhering to Azure's timeout limits.
+
+and
+
+Queue-triggered functions can handle long-running tasks asynchronously, so the function processing the blob data won't time out.
+Service Bus queues provide a reliable mechanism for decoupling the HTTP trigger from the long-running blob processing task.
+
+`real time scenario`
+User uplpoads a photo and has to be store in azure blob storages
+step
+1.user uploads a photo  an HTTP-triggered Azure Function is called and will return 202 accepted
+2. Instead of processing the image directly in this function (which may take too long),
+the function sends a message containing the image details (such as the blob URL) to an Azure Service Bus queue.
+ function immediately returns a success response (202 Accepted),
+
+3.  A queue-triggered Azure Function is listening to the Service Bus queue.
+   it will process the image  and do the conversion (resizing, applying filters), and then stores it back in Azure Blob Storage.)
+
+   Why this works
+   The long-running image processing task is handled asynchronously in the background.
+   The system is scalable, as Service Bus can handle a large volume of image processing requests in parallel.
+
+
+ Q A user uploads a photo to the uploaded-photos container in Azure Blob Storage.
+   The Blob Trigger automatically triggers the Azure Function.
+   The function processes the image to create a mobile-friendly version.
+   The processed image is saved in the processed-photos container.

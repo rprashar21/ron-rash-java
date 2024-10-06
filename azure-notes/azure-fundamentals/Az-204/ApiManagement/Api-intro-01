@@ -1,0 +1,18 @@
+All requests from client applications first reach the API gateway, which then forwards them to respective backend services.
+Each API represents a set of operations available to app developers.
+
+
+Products -Products in API Management bundle one or more APIs and can be either open or protected. protected ones require a subscription key ,
+          subscription key can be automatic or require admin approval.
+Groups - groups manage the visibilty of products
+             2 type Developers - Authenticated developer  and Guests - Unauthenticated developer portal users, such as prospective customers
+           with only read access
+
+Developers - developer is a member of one or more groups, and can subscribe to the products that grant visibility to those groups
+          developers subscribe to the products and  they're granted the primary and secondary key for the product
+
+Workspaces - allow decentralized API development teams to manage and productize their own APIs,
+            central API platform team maintains the API Management infrastructure
+            every workspace contains APIs, products, subscriptions, and related entities that are accessible only to the workspace collaborators
+            access is controlled thru RBAC
+Policies

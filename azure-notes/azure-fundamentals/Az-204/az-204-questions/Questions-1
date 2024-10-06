@@ -8,11 +8,18 @@ for a specified period of time (90 days in this case) before they are permanentl
 You want to implement Azure Search to allow the application to search the index by using various criteria to locate documents related to accommodation.
 You want the application to allow customers to search the index by using regular expressions. ?
 
+class SearchParamater {
+QueryType
+}
+
 Configure the QueryType property of the SearchParameters class
 QueryType Property gets or sets a value that specifies the syntax of the search query.
 You can write queries against Azure Search based on the rich
 Lucene Query Parser syntax for specialized query forms: wildcard, fuzzy search, proximity search,
 regular expressions are a few examples.
+
+You can set the QueryType property of the SearchParameters class to use the Lucene Query Parser syntax,
+which supports advanced search options like regular expressions, wildcard, fuzzy search, and proximity search.
 
 3. You are a developer at your company.
    You need to update the definitions for an existing Logic App.
@@ -57,7 +64,9 @@ regular expressions are a few examples.
   ✑ Sign outs must be processed as fast as possible.
   What should you do?
 
-  Add a subject prefix to sign-out events. Create an Azure Event Grid subscription. Configure the subscription to use the subjectBeginsWith filter
+  Add a subject prefix to sign-out events.
+  Create an Azure Event Grid subscription.
+   Configure the subscription to use the subjectBeginsWith filter
 
   Explanation:
   Add a Subject Prefix to Sign-Out Events:

@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 public class ListExample {
 
     public static void main(String[] args) {
+
+
+        System.out.println(String.format());
         List<StudentNew> studentNewList = Arrays.asList(new StudentNew("rohit",32,"C"),
                 new StudentNew("rahul",33,"B"),new StudentNew("pallavi",33,"D"),new StudentNew("priya",70,"B"));
 

@@ -1,4 +1,4 @@
-Azcopy commandline tool for copying uploading deleting files or blobs between storage accounts
+Azcopy commandline tool for copying uploading deleting files or blobs between storage accounts or same storage accounts
 azcopy copy --> to copy
 azcopy remove --> remove a blob r file
 

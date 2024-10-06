@@ -8,3 +8,41 @@ Question
 
  Answer
  Using the UserID as the partition key means that all orders from a specific user are stored together in the same partition
+
+
+Question .There are four replicas of a multi-tier application separated into four resource groups with the following specifications:
+Each resource group is in a separate region - East US, West US, West Central US, and South Central US.
+Each resource group includes a replica of a three-tier application replica comprised of five VMs: two front-end VMs, two mid-tier application VMs, and one back-end database VM.
+You want to increase the resilience of your database solution by replacing the database hosted on
+an ARM virtual machine with Cosmos DB. You want to offer a consistent experience for each customer while minimizing the latency of your responses.
+
+Strong Consistency -- will return the most recent version of an item.
+ therefore it will be slow and will be very difficualt to achieve in a distributed env
+Eventual -- not recent version ,, can be old,lowest latency ,worst consisteny and for nosql dbs
+Consisten Prefix -- same but with  ,, nevers ee out of order writes latency and cost go up
+session -- Session consistency guarantees consistency for each client session.
+           So the client will never see data older than what they have written during a session
+            never worry about conflicts between multiple clients
+           lwowest latency reads and writes. It’s also by far the most popular consistency level chosen by Cosmos DB customers.
+
+Bounded staleness -  reads may lag behind writes by a limited amount of time. same strong consistency,
+               but it allows you to distribute your database across regions and has lower latency.
+               This is the second most popular consistency level chosen by customers.
+
+===========================*========================*=============
+Can you create another database named Db2 inside Account1 for the graph data?
+NO each account can only contain one type of data
+
+The API determines the type of account to create.
+ Azure Cosmos DB provides five APIs: Core (SQL) and
+ MongoDB for document data,
+ Gremlin for graph data, Azure Table, and Cassandra. Currently, you must create a separate account for each API.
+
+
+ ===================== ==============      ========
+ When creating a Cosmos DB account, you indicate which consistency level you would like to follow:
+ Strong, Bounded Staleness, Session, Consistent Prefix and Eventual.
+ How can a developer force Strong consistency on a query when the database itself is Eventual consistency?
+
+ Set the ConsistencyLevel property of QueryRequestOptions when making the query.
+ it has get/set ConsistencyLevelProperty

@@ -7,9 +7,7 @@ This type of deferment strategy is called task queuing and Azure Cache for Redis
 
 f you need to invalidate the data in your Redis cache use flush command
 
-Cache aside - a strategy in which data items are loaded into the cache only as needed
-
-
+Cache aside - a strategy in which data items are loaded into the cache only as needed improves performance of the app
 
 A content delivery network, which is also known as a CDN,
 is a network of distributed servers that's used to more efficiently deliver content to end users.

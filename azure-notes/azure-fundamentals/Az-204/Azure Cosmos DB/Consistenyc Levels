@@ -1,0 +1,7 @@
+
+Consistency Level	Consistency Guarantee	                                   Latency	              Example Use Case
+Strong	            Always returns the latest committed version	               Highest	              Banking transactions, financial systems
+Bounded Staleness	Consistent prefix with a bounded delay or versions	        High	              News feeds, collaborative document editing
+Session	Consistency within a single user session	                            Moderate	          Shopping carts, user profiles
+Consistent Prefix	Never out-of-order reads	                              Lower	                 Chat applications, event sourcing
+Eventual	Eventually consistent, no immediate consistency	                   Lowest	             Social media “likes”, non-critical telemetry data

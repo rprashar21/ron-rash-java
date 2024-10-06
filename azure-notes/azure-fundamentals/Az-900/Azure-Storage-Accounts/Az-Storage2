@@ -3,7 +3,8 @@ Azure Storage always stores multiple copies of your data
 
 The factors that help determine which redundancy option you should choose.
 How your data is replicated in the primary region.
-Whether your data is replicated to a second region that is geographically distant to the primary region, to protect against regional disasters.
+Whether your data is replicated to a second region that is geographically distant to the primary region,
+ to protect against regional disasters.
 Whether your application requires read access to the replicated data in the secondary region if the primary region becomes unavailable.
 
 Redundancy in the primary region
