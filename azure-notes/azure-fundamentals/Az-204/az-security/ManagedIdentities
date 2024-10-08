@@ -84,6 +84,14 @@ az vm identity assign \
     -n <VM NAME> \
     --identities <USER ASSIGNED IDENTITY>
 
+# Set the VM name and resource group
+$vmName = "YourVMName"
+$resourceGroup = "YourResourceGroupName"
+
+# Enable system-assigned managed identity on the VM
+Set-AzVM -ResourceGroupName $resourceGroup -Name $vmName -IdentityType SystemAssigned
+
+
 
     Sdks for managed Identities
 .NET

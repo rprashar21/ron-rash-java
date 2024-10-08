@@ -12,7 +12,8 @@ If you want to automatically trigger a background task every time a message is a
 you can configure WebJobs to invoke a function whenever a new item appears in the queue.
 
 2. Your company has an Azure subscription.
-   You need to deploy a number of Azure virtual machines to the subscription by using Azure Resource Manager (ARM) templates. The virtual machines will be included in a single availability set.
+   You need to deploy a number of Azure virtual machines to the subscription by using Azure Resource Manager (ARM) templates.
+   The virtual machines will be included in a single availability set.
    You need to ensure that the ARM template allows for as many virtual machines as possible to remain accessible in the event of fabric failure or maintenance.
    Which of the following is the value that you should configure for the platformFaultDomainCount property?
 
@@ -68,6 +69,11 @@ you can configure WebJobs to invoke a function whenever a new item appears in th
 
    Scenarios:
    Event Hub Scenario: data ingestion,millions of events ingest
+   can stream millions of events per second, with low latency, from any source to any destination.
+   event source --->   Ingest -->  Process --->                       Model and serve
+   streaming data                  real time streamprocessing (Azure stream analytics)
+   log files,weather   Event HUb    data analytcis ,microservice, batch analytcis
+   daat, business apps
 
    You have an IoT solution that streams telemetry data from devices in real-time.
    You want to process this data using Azure Functions for real-time analytics.
@@ -76,10 +82,9 @@ you can configure WebJobs to invoke a function whenever a new item appears in th
      You want to automatically trigger a function to resize an image whenever a new image is uploaded to an Azure Blob Storage container.
 
    SendGrid Scenario:
-
    After a user signs up on your website, you want to trigger an Azure Function to send a welcome email using SendGrid.
 
-   Service Bus Scenario:
+   Service Bus Scenario:{queueu and topics} messaging service
    You have an e-commerce application that receives orders.
    You want to ensure that each order is processed in sequence by an Azure Function triggered by messages in the Service Bus queue.
 
@@ -102,7 +107,6 @@ Use the App Service deployment slot settings to ensure your app is warmed up and
 
 
 8. To start the photo processing within less than one minute, you should use a trigger-based solution, such as:
-
 Azure Function with a Blob Trigger: This can automatically start processing when a new photo is uploaded to Blob Storage,
 ensuring that the process begins quickly (within seconds).
 Alternatively, you can use Event Grid to trigger an Azure Function or Logic App whenever a blob is uploaded

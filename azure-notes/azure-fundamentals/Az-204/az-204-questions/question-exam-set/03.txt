@@ -1,0 +1,15 @@
+1. You develop code by using a language that is not supported
+by the Azure Function App host. The code language supports HTTP primitives.
+You must deploy the code to a production Azure Function App environment.
+You need to configure the app for deployment.
+What configuration parameters should u use
+
+Docker container - for publishing use
+
+runtime stack - PowerShell core -
+When creating a function app in Azure for custom handlers, we recommend you select .NET Core as the
+stack. A "Custom" stack for custom handlers will be added in the future.
+PowerShell Core (PSC) is based on the new .NET Core runtime.
+
+Version - 7.0
+
