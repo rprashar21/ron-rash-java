@@ -13,11 +13,21 @@
 invokes function instances concurrently to process them.
 By default, the batch size is 16
 
-2. Eventual Consistency: updates are propagated,user might see wrong updates,social media likes
-   Consistent prefix -- writes are in order , might be delay , chat app or message queues
+2. Eventual Consistency: no order and stale data
+                         updates are propagated aysnchronously,
+                          Users might see stale or out-of-order data temporarily eg social media likes
+                          Not suitable for ticket reservations due to risk of overbooking
+   Consistent prefix -- Writes are guaranteed to be seen in the correct order but my lag , reads may lag
+                        reads might be delay , chat app or message queues whre messages may arrive late
    Session Consistency: Guarantees that within a single user session, the user will always read their own most recent updates
                          shopping cart or profile update
+   Bounded stalenesw - Guarantees that reads never lag behind writes by more than a specified amount of time (e.g., 5 seconds)
+     or a number of versions. Ensures consistency and ordering but within a defined window of delay.
+    ideal for  global ordering of operations but u can tolerate slightly stale data within a controlled time or version lag.
+    eg scenarios are Leaderboards, financial trading, or distributed reservation systems
 
+    Strong Consistency: Guarantees that reads always return the most recent write. All replicas are kept perfectly synchronized, and every read reflects the latest committed write.
+                        banking transcations
 3. what are the Two possible ways to achieve the goal of running a static generation script before the website starts serving traffic:
 
    B. Add a PreBuild target in the website's csproj project file that runs the static content generation script.

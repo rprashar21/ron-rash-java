@@ -1,0 +1,75 @@
+Event
+An event is a lightweight notification about something that happened, without expectations on how it will be handled.
+
+Types of Events:
+Discrete Events:
+
+Report a specific change in state (e.g., "a file was created").
+Provide information about what happened but don't include the data that triggered it.
+Example: A system notifies that a file was uploaded but doesn't include the file itself.
+Best for serverless solutions that need to scale.
+
+Series of Events:
+Report a sequence of related conditions, often time-ordered.
+Require multiple events to analyze a situation.
+Example: A sequence of temperature readings from a sensor to analyze trends.
+Key Difference: Discrete events notify something happened, while a series of events gives a sequence for analysis.
+
+Message
+Contains Data: A message includes the actual data that triggered it, unlike events that only notify something happened.
+Expectation of Action: The publisher expects the consumer to process the message and take specific actions.
+Contract: There is a contract or agreement between the sender and receiver on how the message will be handled.
+Example: A service sends a message with file content, expecting the consumer to save it as a file and confirm when it's done.
+
+A message contains the data and expects specific processing, while an event just notifies about something happening.
+
+Azure Event Grid
+fully managed (PAAS instance) pub/sub model
+Publish-Subscribe Model: Publishers send events, but have no expectation of how they will be handled.
+Subscribers choose which events to respond to.
+Event-Driven Architecture: Enables reactive programming and serverless design
+Reliability: Ensures at least once delivery of events.
+Integration: Works with Azure and third-party services, simplifying event consumption without constant polling.
+Dynamically scalable
+Low cost
+Serverless
+Allows Event Grid to run on your Kubernetes clusters, either on-premises or in the cloud.
+
+Scenarios
+Automating Image Processing
+Scenario: A company uploads thousands of images to an Azure Blob Storage container daily.
+Solution: Event Grid can trigger a function whenever a new image is uploaded. The function processes the image (e.g., resizing, watermarking) and stores the processed image back in Azure Storage. No need for constant polling.
+Benefit: Automatically reacts to new uploads without manual intervention or polling.
+
+Monitoring Virtual Machines
+Scenario: A company manages a large number of Azure virtual machines and needs to take action when a VM is started or stopped.
+Solution: Event Grid can send events when a VM is started, stopped, or deleted.
+These events can trigger automated workflows (e.g., backup, sending alerts, or logging activities).
+Benefit: Automated, event-driven VM management without manual monitoring.
+
+Serverless Workflow Automation
+Scenario: An e-commerce site needs to automate order fulfillment workflows, such as updating inventory when a customer places an order.
+Solution: Event Grid triggers different Azure functions when an order is placed, updating inventory, notifying shipping services,
+and sending confirmation emails.
+Benefit: Efficient order handling with serverless, event-driven automation.
+
+Real-Time IoT Data Processing
+Scenario: A company has IoT devices deployed in multiple locations, sending data about temperature, humidity, and equipment status.
+Solution: Event Grid can route the IoT device data to different Azure services (like Event Hubs or Azure Functions)
+ to process and analyze the data in real time.
+Benefit: Event-driven data pipelines for real-time analytics without manual intervention.
+
+Integration Between Multiple Applications
+Scenario: A business needs to integrate multiple services, such as CRM systems, billing systems, and customer support systems.
+Solution: Event Grid can notify the CRM system when a new customer is added and trigger workflows that create billing profiles and customer support records in other systems.
+Benefit: Seamless integration between applications, ensuring all systems stay up-to-date.
+
+Security Automation
+Scenario: A company wants to monitor Azure resources for potential security breaches, like the deletion of a critical resource.
+Solution: Event Grid can trigger security alerts or remediation actions (e.g., resource restoration or alerting administrators) when critical resources are deleted or modified.
+Benefit: Enhanced security automation with real-time notifications and actions.
+
+Log Monitoring and Alerting
+Scenario: An enterprise wants to monitor application logs for specific events, like failures or errors, and respond automatically.
+Solution: Event Grid can send notifications based on certain log entries (from Azure Monitor Logs) to trigger actions, such as restarting services or sending alerts to the operations team.
+Benefit: Real-time log monitoring and automated responses to critical issues.

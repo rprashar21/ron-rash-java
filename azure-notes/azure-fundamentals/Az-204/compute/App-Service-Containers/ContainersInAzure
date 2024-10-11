@@ -2,3 +2,67 @@ Containers in the container group are always restarted with an Always policy in 
 Running containers using a managed identity would simplify the access to external Azure resources but doing so has no effect on when a container restarts.
  When the processes in the container fail (terminating with a nonzero exit code), they will not restart and will only run once at most.
  Init containers are meant to perform initialization logic for app containers, running to completion before the application containers start.
+
+
+
+ Steps to build and push an image
+ 1. Create a Resource Group            ::   az group create --name myResourceGroup --location eastus
+ 2. create a azure container registry  ::   az acr create --resource-group myResourceGroup --name myacrregistry --sku Basic
+    --sku pricing tier this  can be basic sstandard or premium
+ 3. Verify ACR Creation                :: az acr list --resource-group myResourceGroup --output table
+
+ Step 2: Log in to the ACR   :: az acr login --name myacrregistry
+
+Step 3  Build the Docker Image Locally
+ Ensure you have a Dockerfile: Make sure your project has a Dockerfile that specifies how the image should be built.
+ Build the Docker image: Build your Docker image locally using this command:
+ docker build -t myapp:v1 .
+  -t myapp:v1: This tags your image with the name myapp and the version v1.
+  .: This indicates that the Dockerfile is in the current directory.
+
+  Tag the Docker Image for ACR
+  After the image is built locally, you need to tag the image with the ACR login server URL,
+  which allows you to push it to the Azure Container Registry.
+  az acr show --name myacrregistry --query loginServer --output tsv
+
+  myacrregistry.azurecr.io.  -> $acrname.azurecr.io
+
+  myacrregistry.azurecr.io.  -> $acrname.azurecr.io
+
+  tag the image to the repository
+  docker tag myapp:v1 myacrregistry.azurecr.io/myapp:v1
+
+  myacrregistry.azurecr.io: This is the ACR login server URL.
+  myapp:v1 name and version of my image
+
+
+  ==================
+  Steps for Deploying a Docker Container to Azure App Service Using ACR
+
+  1 Create an Azure App Service Plan
+   An App Service Plan defines the region, pricing tier, and features for your web app.
+
+   az appservice plan create --name myAppServicePlan --resource-group $RESOURCE_GROUP --sku B1 --is-linux
+
+   --sku b1  Specifies the pricing tier. B1 is a basic tier.
+   --is-linux containerized apps require linux
+
+ Step 2: Create a Web App in Azure App Service
+ Now, create the web app that will host your container.
+   az webapp create --resource-group $RESOURCE_GROUP \
+                    --plan myAppServicePlan \
+                    --name $WEBAPP_NAME \
+                    --deployment-container-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
+
+Step 3: Configure the Web App to Use the Azure Container Registry
+login az acr login --name $Acrname
+
+az webapp config container set --name $WEBAPP_NAME \
+                               --resource-group $RESOURCE_GROUP \
+                               --docker-custom-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION \
+                               --docker-registry-server-url https://$ACR_NAME.azurecr.io \
+                               --docker-registry-server-user $(az acr credential show --name $ACR_NAME --query username -o tsv) \
+                               --docker-registry-server-password $(az acr credential show --name $ACR_NAME --query passwords[0].value -o tsv)
+
+
+

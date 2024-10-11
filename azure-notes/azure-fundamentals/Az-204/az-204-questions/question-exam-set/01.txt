@@ -68,6 +68,7 @@ you can configure WebJobs to invoke a function whenever a new item appears in th
     in ur subscrition select the subscription
 
    Scenarios:
+
    Event Hub Scenario: data ingestion,millions of events ingest
    can stream millions of events per second, with low latency, from any source to any destination.
    event source --->   Ingest -->  Process --->                       Model and serve
@@ -77,7 +78,7 @@ you can configure WebJobs to invoke a function whenever a new item appears in th
 
    You have an IoT solution that streams telemetry data from devices in real-time.
    You want to process this data using Azure Functions for real-time analytics.
-
+--------------------------------
    Event Grid Scenario: event based routing servce reacting to certain events
      You want to automatically trigger a function to resize an image whenever a new image is uploaded to an Azure Blob Storage container.
 

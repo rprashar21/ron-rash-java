@@ -136,3 +136,4 @@ N -- backwards
 search and replace
 :%s/searchfor/replaceword/gc -- g--global c-confirm
 :%s/searchfor/replaceword/g -- directly replaces doesn't ask
+:%s/ERROR/DEBUG/g

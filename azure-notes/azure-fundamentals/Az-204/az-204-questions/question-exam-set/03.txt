@@ -13,3 +13,101 @@ PowerShell Core (PSC) is based on the new .NET Core runtime.
 
 Version - 7.0
 
+
+2.: await context.CallEntityAsync(input[errindex],"error")
+  Orchestration signals and calls an entity
+
+3. To implement the Azure Durable Function for an online ordering process that calls an external
+ API to gather product discount information, the correct function types are:
+  A and D - Orchestrator and Activuty
+
+   A. Orchestrator - this function manages the entire workflow,calls other functions ,coordinates the overall process
+                    ensure error retry logic, coordinate long-running workflows in a specific sequence, ie correct order odf operations
+ • B. Entity  - managing stateful objects, manages states not process
+ • C. Client -  clinet function calls the durable function ie orchestration ie starts the orchestration
+ • D. Activity - performs specific task, (like calling an external api ,performs statless tasks )
+
+
+4. Azure Resource Manager test toolkit - determines if templates follow recommended practices
+   Arm Test Toolkit - Template Validation, Best Practices Enforcement: ,
+                      Pre-deployment Testing ,Customizable Rules:
+    before deploying a new infrastructure in azure u can use arm to test if it follows above
+    prevents deployment failures , errors or misconfiguration
+
+    What-if operation  - preview the changes that will happen after deployment of the template before hand
+
+  5.  configuring retry policies in an Azure Function app's host.json
+      requirements are
+      Retry until either a successful run or until 10 run attempts occur.
+      Ensure there are at least 20 seconds between attempts for up to 15 minutes
+
+      ans
+      {
+        "retry": {
+          "strategy": "fixedDelay",
+          "maxRetryCount": 10,
+          "minimumInterval": "00:00:20",
+          "maximumInterval": "00:15:00"
+        }
+      }
+
+  6. To implement the Azure Function for voting that uses Durable Entities to track the
+     vote count while minimizing latency, here's how you should complete the code:
+     1. DurableEntityClient This client is used to interact with Durable Entities,
+     2. SignalEntityAsync - Since we want to signal the Durable Entity to increment the vote count, the appropriate method is SignalEntityAsync
+
+  revision label vs mode
+  revison mode can be single or multiple
+  single - Only one active revision/version is allowed at a time. Each new deployment replaces the old revision automatically.
+ Multiple Revision Mode: Multiple revisions can be active simultaneously, and you can control how much traffic is routed to each revision
+
+  Let's say you are deploying an app called MyApp with multiple revisions for different testing environments:
+
+  Revision A is the initial production version.
+  Revision B is a new version you are testing with a few customers (canary deployment).
+  You might assign the following labels:
+
+  prod for Revision A (your stable production version).
+  canary for Revision B (your testing version).
+  Then, you could configure your app to route traffic like this:
+
+  90% of traffic goes to the prod label (Revision A).
+  10% of traffic goes to the canary label (Revision B).
+  Labels make it easy to switch traffic between versions without worrying about underlying revision IDs.
+
+ 7. You plan to develop an Azure Functions app with an HTTP trigger. The app must support the following requirements:
+    • Event-driven scaling
+    • Ability to use custom Linux images for function execution
+     maximum amount of time that the app function can take to respond to incoming requests.
+
+    premium plan and unlimited
+
+ 8. You are developing an ASP.NET Core app hosted in Azure App Service.
+    The app requires custom claims to be returned from Microsoft Entra ID for user authorization.
+    The claims must be removed when the app registration is removed.
+    You need to include the custom claims in the user access token
+
+    Solution - Add the roles to the appRoles attribute in the app manifest
+
+    what are custom claims— basically, extra information about the user—added to the token when they log in
+    In Azure, when you register your app, there’s a file called the app manifest. Think of this as a configuration file for your app in Azure.
+    Inside this file, you can define roles (like "Admin" or "User") under the appRoles section.
+   Once you define roles in this manifest, Azure will automatically add these roles as claims in the token whenever a user logs into your app.
+   if you remove the app registration, these roles and the custom claims will also be removed automatically.
+
+ 9.u deploy an Azure Container Apps app and disable ingress on the container app.
+   Users report that they are unable to access the container app. You investigate and observe that the app has scaled to 0 instances.
+   CloudCertified Practice Tests
+   You need to resolve the issue with the container app.
+   Solution: Enable ingress, create an HTTP scale rule, and apply the rule to the container app. Does the solution meet the goal?
+   • A.Yes • B.No
+   yes
+   Enable ingress: This means allowing external traffic to reach the app.
+   Create an HTTP scale rule: This would allow the app to scale based on incoming HTTP requests.
+   Apply the scale rule: Ensuring the container app scales when there's traffic.
+
+ 10. pdate the metadata of the blobs.
+  Add metadata to the dictionary by calling the Add method
+    metadata.Add("docType", "textDocuments");
+    SetMetadataAsync
+    SetPropertiesAsync();

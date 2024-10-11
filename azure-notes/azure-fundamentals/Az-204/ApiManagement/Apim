@@ -1,17 +1,15 @@
-Questions
-You need to limit the maximum number of API calls allowed from a single source for a specific time interval.
-What will u use ? --> POlicy
-API publishers can change API behavior through configuration using policies.
-Policies are a collection of statements that run sequentially on the request or response of an API.
 
-A product has one or more APIs, a usage quota, and the terms of use and cannot be used to restrict the number of API calls.
-API consumers to Subscriptions are the most common way for access APIs published through an API Management instance.
-API is a representation of a back-end API and needs to be configured with a policy to implement a rate limit.
+You've already implemented the API, which includes endpoints for submitting audio files
+and retrieving transcribed text. You decide to use the Swagger format to document the API within Azure APIM.
 
- define policies to multiple scopes.
- You need to enforce a policy evaluation order. -
-the <base /> element
-The <base /> element provides the ability to enforce policy evaluation order.
-The <when /> element is part of the choose policy and is evaluated in order of its appearance within the policy
-follow-redirects attribute is part of the forward request policy, so it does not have any impact on the policy evaluation order.
-The condition attribute is part of the retry policy, so it does not have any impact on the policy evaluation order.
+
+Generate a Swagger file from your codebase, and then import this file into APIM;
+ next, enrich the documentation with examples directly in the Swagger file before the import.
+
+ Swagger (OpenAPI) is a tool specifically designed for documenting APIs.
+ By generating a Swagger file from the codebase, you ensure that the documentation is consistent
+ with the actual API implementation. Enriching this file with detailed examples before importing
+  it into APIM ensures that all necessary details are included and presented clearly,
+   providing a complete and accurate documentation set from the start.
+
+   https://learn.microsoft.com/en-us/azure/ai-services/speech-service/swagger-documentation
