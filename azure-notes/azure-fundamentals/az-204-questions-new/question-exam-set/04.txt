@@ -1,0 +1,19 @@
+1.
+A .NET application needs to receive a message each time an Azure virtual machine finishes processing data. The messages must NOT persist after being processed by the receiving application.
+You need to implement the .NET object that will receive the messages.
+Which object should you use?
+• A. QueueClient - point to pint communitcaion,once processed the message is deleted, interacts with azure service bus queue
+• B. SubscriptionClient -  allows multiple receivers to receive the same message (publish/subscribe model
+• C. TopicClient -send messages to an Azure Service Bus topic, where they can be received by multiple subscribers. again pub/sub model
+• D. CloudQueueClient -  used with Azure Storage Queues less rich features
+
+2. You are maintaining an existing application that uses an Azure Blob GPv1 Premium storage account.
+    Data older than three months is rarely used.
+   Data newer than three months must be available immediately. Data older than a year must be saved but does not need to be available immediately.
+   You need to configure the account to support a lifecycle management rule that moves blob data to archive storage for data not modified in the last year.
+   Which three actions should you perform in sequence?
+
+   1.Upgrade the storage account to GPv2 - bcoz GPv1 does not support tierin
+   data tiering between hot, cool, and archive is supporte
+   2. Copy the data to be archived to a Standard GPv2 storage account and then delete the data from the original storage account
+   3.Change the storage account access tier from hot to cool
