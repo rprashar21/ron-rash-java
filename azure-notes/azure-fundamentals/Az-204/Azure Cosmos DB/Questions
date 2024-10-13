@@ -12,7 +12,8 @@ Question
 
 Question .There are four replicas of a multi-tier application separated into four resource groups with the following specifications:
 Each resource group is in a separate region - East US, West US, West Central US, and South Central US.
-Each resource group includes a replica of a three-tier application replica comprised of five VMs: two front-end VMs, two mid-tier application VMs, and one back-end database VM.
+Each resource group includes a replica of a three-tier application replica comprised of five VMs: two front-end VMs, two mid-tier application VMs,
+ and one back-end database VM.
 You want to increase the resilience of your database solution by replacing the database hosted on
 an ARM virtual machine with Cosmos DB. You want to offer a consistent experience for each customer while minimizing the latency of your responses.
 
@@ -29,6 +30,10 @@ Bounded staleness -  reads may lag behind writes by a limited amount of time. sa
                but it allows you to distribute your database across regions and has lower latency.
                This is the second most popular consistency level chosen by customers.
 
+Session Consistency is Best for Your Scenario
+Global Distribution :  users who are connecting to the nearest data center.
+cusstomer experience : Each customer likely has their own session (or connection) to the database, and Session Consistency ensures that within a session,
+  a user always sees their most recent updates.
 ===========================*========================*=============
 Can you create another database named Db2 inside Account1 for the graph data?
 NO each account can only contain one type of data

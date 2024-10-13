@@ -17,3 +17,101 @@ Which object should you use?
    data tiering between hot, cool, and archive is supporte
    2. Copy the data to be archived to a Standard GPv2 storage account and then delete the data from the original storage account
    3.Change the storage account access tier from hot to cool
+
+ 3. what is a correlationId
+ For example, in an order processing system, each order could have a unique CorrelationId
+ that ties together multiple events related to that order, such as "order placed," "order processed," and "order shipped."
+ Let's say you're building an order processing system with the following steps:
+
+ Scenario
+ A customer places an order, and the order details are published to a Service Bus topic.
+ Each step in the order processing pipeline (like payment, shipping, and inventory updates) can publish its own message related to the order.
+ Each message related to that order shares the same CorrelationId (which could be the OrderId).
+ Now, if the shipping service is only interested in messages related to shipping,
+ you can create a subscription to the topic with a CorrelationId filter.
+ This ensures that the shipping service only processes messages with the CorrelationId of a particular order.
+
+ Imagine an order processing system where:
+
+ An order is placed (message A with CorrelationId: Order123).
+ A payment confirmation is sent (message B with CorrelationId: Order123).
+ An inventory check is done (message C with CorrelationId: Order123).
+
+ 4. You develop and deploy a web application to Azure App Service. The application accesses data stored in an Azure Storage account. The account contains several containers with several blobs with large amounts of data. You deploy all Azure resources to a single region.
+    You need to move the Azure Storage account to the new region. You must copy all data to the new region.
+    What should you do first?
+    • A. Export the Azure Storage account Azure Resource Manager template
+    • B. Initiate a storage account failover
+    • C. Configure object replication for all blobs
+    • D. Use the AzCopy command line tool
+    • E. Create a new Azure Storage account in the current region
+    • F. Create a new subscription in the current region
+
+  Ans  Export the ARM template (Answer A): Export the ARM template of your existing storage account.
+
+  5. You are developing an application to collect the following telemetry data for delivery drivers
+    first name, last name, package count, item id, and current location coordinates. The app will store the data in Azure Cosmos DB.
+     You need to configure Azure Cosmos DB to query the data.
+     Api shoud be sql api and partition key should be itmeid this would group all telemetry related to a specific item into a single partition.
+     API: SQL API (for rich queries and structured data)
+
+ 6. You are developing a .Net web application that stores data in Azure Cosmos DB. The application must use the Core API and allow millions of reads and writes.
+    The Azure Cosmos DB account has been created with multiple write regions enabled. The application has been deployed to the East US2 and Central US regions.
+    You need to update the application to support multi-region writes.
+    What are two possible ways to achieve this goal
+
+    A. Update the ConnectionPolicy class for the Cosmos client and populate the PreferredLocations property based on the geo-proximity of the application.
+    • B. Update Azure Cosmos DB to use the Strong consistency level. Add indexed properties to the container to indicate region.
+    • C. Update the ConnectionPolicy class for the Cosmos client and set the UseMultipleWriteLocations property to true.
+    • D. Create and deploy a custom conflict resolution policy.
+    • E. Update Azure Cosmos DB to use the Session consistency level. Send the SessionToken
+    property value from the FeedResponse object of the write action to the end-user by using a cookie.
+
+    AC
+    A. allows your application to dynamically connect to the closest region,
+    which is crucial when using multi-region writes, as it minimizes latency and improves performance.
+    C.it allows the client to send writes to any region configured to accept them, helping to balance the load and improve availability.
+
+ 7. You are developing a solution to store documents in Azure Blob storage. Customers upload documents to multiple containers. Documents consist of PDF, CSV,
+    Microsoft Office format and plain text files.
+    The solution must process millions of documents across hundreds of containers. The solution must meet the following requirements:
+    >> Documents must be categorized by a customer identifier as they are uploaded to the storage account. >> Allow filtering by the customer identifier.
+    >> Allow searching of information contained within a document
+    >> Minimizecosts.
+    You create and configure a standard general-purpose v2 storage account to support the solution.
+    You need to implement the solution
+
+    Search and filter by cutomer identifier -> Azure Blob Index Tags
+    You can assign Blob Index Tags to each invoice blob. For example:
+    customerId: "CUST123"
+    invoiceMonth: "October"
+
+    Search information inside documents - Azure Cognitive Search Blob Index Tags, which search by metadata,
+   cognitive search -  fully managed search-as-a-service tool, u can seacrh contents of a dicument like pdf or word cos or dbs
+
+   Blob index - Think of it like putting labels on files so you can quickly search for them by specific tags (like customer IDs).
+   Azure Cognitive Search: as a super-powered search engine that looks inside the files for specific content, not just their names.
+
+
+
+ 8. You need to delete all snapshots of the blob storage a account. You must not delete the blob storage account itself.
+                                                          How should you complete the code segment?
+
+ First Dropdown: DeleteSnapshotsOption
+ Second Dropdown: OnlySnapshots
+
+ Box 1: delete_snapshots -
+ # Delete only the snapshot (blob itself is retained) blob_client.delete_blob(delete_snapshots="only")
+
+ 9. ur developing an application that monitors data added to an Azure Blob storage account
+ GetChanges()
+ ContiniuationToken
+
+10. Query for Cosmoms Db -
+The image is asking for the correct query to display sales data grouped by the marketing campaign,
+ which displays unique ads every second day.
+ Sales are stored in Azure Cosmos DB, and the query needs to show the number of sales (using count) grouped by two-day intervals.
+
+ SELECT): count(c.whenFinished) DateTimeBin(c.whenFinished, 'day', 2)
+(GROUP BY): DateTimeBin(c.whenFinished, 'day', 2)
+DateTimeBin function  groups the dates into specified intervals

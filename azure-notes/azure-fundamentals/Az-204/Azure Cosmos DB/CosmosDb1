@@ -3,13 +3,41 @@ Cosmos Db is global and supports multi-model
 primary data is written in multiple regions
 underlying architecture is no sql supports json , enntreprise ready
 
-when u create cosmos db account u need to choose from the below apis
-gremlin api, cassandra ,core
-nosql api for mongdb
+% core apis for cosmos db are
+Core SQL API: Best for structured data and rich queries. Json data also is tsored
+Scenario: Customer database for e-commerce.
+u need to run complex queries for  to find all customers who purchased specific products, filter them by location, and calculate their total spending.
+
+MongoDB API: Perfect for MongoDB workloads.
+Scenario: Social media app needing global distribution.
+you need to scale globally to handle millions of users across different regions.
+
+
+Cassandra API: Ideal for large, distributed datasets.
+Scenario: IoT real-time analytics platform.
+IoT platform where thousands of sensors continuously send data about temperature, humidity, and device health.
+This data is time-series in nature and needs to be stored in a wide-column format for real-time analytics.
+
+
+Gremlin API: Best for graph-based data (complex relationships).
+Scenario: Recommendation engine for a networking platform.
+You’re building a professional networking platform where users can connect with others based on their existing connections.
+gremlin api will aloow u to
+find the shortest paths between users and suggest new connections
+
+Table API: Good for key-value storage and simple lookups.
+Scenario: Application logging system for storing logs.
+Your web application generates millions of logs every day for tracking events like user activity, errors, and performance metrics
+The Table API is perfect for key-value storage, where each log entry can be stored as a row with a partition key (e.g., log type)
+and a row key (e.g., timestamp or log ID).
 
 With Cosmos DB, you can provision throughput at two levels:
 Database and container level
 provision thruput is like sharing the rus{request units among diff collections in db , when on particular collection needs more they get more rus}
+
+If you have dynamic traffic and need flexibility, database-level provisioning makes sense because the RUs can be shared among containers as needed.
+If you have predictable workloads and want guaranteed performance for each container,
+ container-level provisioning is a better choice, as it avoids any impact between containers.
 
 Which Cosmos DB API supports the column-family database model?
 cassandra
@@ -50,41 +78,30 @@ create a container with indexing poicy and autoscaled thruput
 =====================================================================================================
 
 Cosmos db Change feed processor
-Some action is performed every time there is change in the contianer/ some data is updated in the container
-eg a game which updates the scores in the cosmos db container, now u need a leaderboard
-Rohit - 89
-Swati - 98
-Shabaz - 87
-Now everytime the  new score is updated the leaderboard gets updated , this can be done using the change feed
-Whenever there  is  change in the cosmos db container there is update in the change feed processor.
+Change Feed Processor(a mechanism) is used to process real-time changes in a Cosmos DB container.
+used to track changes (inserts and updates)
+listens to a container and produces a change feed—a log of all the modifications happening in the container.
+change feed can be processed by your application or service to react to those changes
 
-You can get updates from the change feed processor using the push or the pull model.
-Azurefunctions use the change feed processor behind the scenes
+Change feed estimator -
+Monitors the progress of the change feed processor
 
-The change feed processor has 4 components
-Monitored Container Component - The container u monitor for changes
-Lease Container - keeps track of what has been processed and also co-ordinates processing between multiple intances
-Compute Instance - host where u run ur change feed processing app like a vm ,docker running ur application
-Delegate Container - to process a batch of chnages ,, in our case the leaderboard
+Components of the Change Feed Processor:
 
-Change feed processor handle errors , if u wnat to get notified about notifications configure lifecycle notifications
-
-Change Feed Estimator -- To know when to scale up ur compute instance use the change feed estimator
-
-To have more control use the pull model
+Monitored Container: This is where your original data (like orders or transactions) is stored.
+Any new inserts or updates are tracked by the change feed.
+Lease Container: This is where the state (progress) of the change feed is stored.
+It coordinates which worker (compute instance) processes which part of the change feed, making sure changes are processed only once.
+Compute Instance: The machine or environment that hosts the change feed processor (this can be a VM, a Kubernetes pod, an App Service, etc.)
+ and listens for changes.
+Delegate: This is your custom code that defines what should happen when a change (like a new order) is detected.
+For example, updating the inventory system, sending notifications, or updating another database.
 
 
-The change feed processor has four main components:
-The monitored container: The monitored container has the data from which the change feed is generated.
- Any inserts and updates to the monitored container are reflected in the change feed of the container.
-The lease container: The lease container acts as state storage and coordinates processing the change feed across multiple workers.
- The lease container can be stored in the same account as the monitored container or in a separate account.
-The compute instance: A compute instance hosts the change feed processor to listen for changes.
-Depending on the platform, it might be represented by a virtual machine (VM), a kubernetes pod,
-an Azure App Service instance, or an actual physical machine.
-   The compute instance has a unique identifier that's called the instance name throughout this article.
-The delegate: The delegate is the code that defines what you, the developer,
-want to do with each batch of changes that the change feed processor reads.
+Scenario 1: Updating Inventory After an Order
+use the change feed processor to monitor the Orders container in Cosmos DB.
+When a new order is inserted, the change feed will pick it up and trigger the delegate code, which will automatically
+update the inventory system to reduce the available stock for the ordered items
 
 
 When using the Cosmos DB change feed processor, which component is used to coordinate processing across multiple workers?

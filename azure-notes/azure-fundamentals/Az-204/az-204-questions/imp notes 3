@@ -1,0 +1,62 @@
+Imagine you are running a web application in a Kubernetes cluster.
+Your web app is split into different services (like a frontend service, a backend service, and a database service).
+These services need to be exposed to the internet so that users can access them, but you want to control the routing of the traffic
+(i.e., which request goes to which service) and also secure the traffic with HTTPS (SSL/TLS).
+
+Box 1: Helm
+What it is: Helm is like a package manager for Kubernetes. Just like how you can use apt or yum to install software on Linux,
+Helm helps you install applications and services on Kubernetes easily.
+
+How it helps in this scenario: In this case, you want to install nginx-ingress,
+which is a tool that helps control how traffic enters your Kubernetes cluster and routes it to the right service.
+Instead of manually installing and configuring nginx-ingress, you can use Helm to install it with one simple command.
+
+Simple Example: Helm makes it easier to install nginx-ingress like this:
+
+hat it is: An Ingress Controller is a special software that manages how external traffic (from the internet) gets routed into your Kubernetes cluster. Think of it as a smart traffic director that decides which service (frontend, backend, etc.) gets the incoming request.
+
+How it helps in this scenario: Once the nginx-ingress (installed via Helm) is set up, it acts as the Ingress Controller for your cluster. It will handle requests based on the routing rules you configure, like sending all requests to /frontend to the frontend service and /backend to the backend service.
+
+Simple Example: If you configure an Ingress rule to route traffic, it might look like this:
+
+yaml
+Copy code
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+spec:
+  rules:
+  - host: "myapp.example.com"
+    http:
+      paths:
+      - path: /frontend
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+In this example, the Ingress Controller will route traffic going to myapp.example.com/frontend to your frontend service.
+
+In Simple Terms:
+Helm helps you easily install software like nginx-ingress, which manages how traffic comes into your cluster.
+kubectl is the tool you use to interact with Kubernetes and find out information about your services and pods.
+Ingress Controller manages and routes external traffic based on rules you set, ensuring that requests go to the right service within your app.
+Summary:
+Helm installs nginx-ingress (the traffic controller).
+kubectl helps you find the IP of your services and pods.
+Ingress Controller routes and manages traffic coming from the internet into your Kubernetes services.
+With this setup, your web app can handle traffic securely and efficiently, making sure it goes to the right service within your Kubernetes cluster.
+
+
+
+=========================
+What is coredns
+Imagine you have multiple services running in your Kubernetes cluster: a frontend service and a backend service.
+The frontend needs to call the backend by its service name. CoreDNS steps in to translate the backend service name into the correct IP address,
+allowing seamless communication between these services.
+
+CoreDNS is like the address book of your Kubernetes cluster. Whenever a service (or pod) needs to talk to another service,
+it asks CoreDNS, "What’s the IP address for this service name?"
+CoreDNS then looks it up and tells the service how to reach its destination.
