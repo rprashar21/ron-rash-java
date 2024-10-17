@@ -22,7 +22,7 @@ This data is time-series in nature and needs to be stored in a wide-column forma
 Gremlin API: Best for graph-based data (complex relationships).
 Scenario: Recommendation engine for a networking platform.
 You’re building a professional networking platform where users can connect with others based on their existing connections.
-gremlin api will aloow u to
+gremlin api will allow u to
 find the shortest paths between users and suggest new connections
 
 Table API: Good for key-value storage and simple lookups.
@@ -31,6 +31,9 @@ Your web application generates millions of logs every day for tracking events li
 The Table API is perfect for key-value storage, where each log entry can be stored as a row with a partition key (e.g., log type)
 and a row key (e.g., timestamp or log ID).
 
+========================================================================================================
+Thruput
+
 With Cosmos DB, you can provision throughput at two levels:
 Database and container level
 provision thruput is like sharing the rus{request units among diff collections in db , when on particular collection needs more they get more rus}
@@ -38,10 +41,10 @@ provision thruput is like sharing the rus{request units among diff collections i
 If you have dynamic traffic and need flexibility, database-level provisioning makes sense because the RUs can be shared among containers as needed.
 If you have predictable workloads and want guaranteed performance for each container,
  container-level provisioning is a better choice, as it avoids any impact between containers.
-
+============================================================================================================================================================
 Which Cosmos DB API supports the column-family database model?
 cassandra
-
+============================================================================================================================================================
 Which CosmosDB API format works best with document (JSON) data?
 Core Sql--> supports nomral json data
 MongodB Api -- uses document in BSON format which is binary format and not text based
@@ -85,6 +88,12 @@ change feed can be processed by your application or service to react to those ch
 
 Change feed estimator -
 Monitors the progress of the change feed processor
+Change Feed Estimator
+What it is: The Change Feed Estimator gives you insights into the backlog of unprocessed documents in the change feed.
+Scenario: If a large batch of documents is failing to process, the Estimator can show how far behind the system is,
+helping you decide if more compute power is needed.
+Usage: Helps in monitoring how much data is left to process, especially useful in case of performance bottlenecks.
+
 
 Components of the Change Feed Processor:
 
@@ -133,3 +142,6 @@ Session consistency guarantees consistency for each client session.
 Bounded staleness guarantees that reads may lag behind writes by a limited amount of time.
 
 Eventual consistency guarantees that if no new writes are made to an item, then eventually all of the replicas will have the same value for that item.
+
+
+

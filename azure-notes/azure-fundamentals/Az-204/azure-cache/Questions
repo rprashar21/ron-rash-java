@@ -1,1 +1,95 @@
 Redis Cluster supports up to 10 shards to create 1.2 TB of memory
+
+https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching#managing-concurrency-in- a-cache
+
+1. A company is developing a gaming platform. Users can join teams to play online and see leaderboards that include player statistics.
+The solution includes an entity named Team.
+You plan to implement an Azure Redis Cache instance to improve the efficiency of data operations for entities that rarely change.
+You need to invalidate the cache when team data is changed.
+
+ IDatabase cache = connection.GetDatabase();
+Connection refers to a previously configured ConnectionMultiplexer.
+cache.StringSet("teams",")
+To specify the expiration of an item in the cache, use the TimeSpan parameter of StringSet.
+cache.StringSet("key1", "value1", TimeSpan.FromMinutes(90));
+
+2.You are developing and deploying several ASP.NET web applications to Azure App Service. You plan to save session state information and HTML output.
+  You must use a storage mechanism with the following requirements:
+  >> Share session state across all ASP.NET web applications.
+  >> Support controlled, concurrent access to the same session state data for multiple readers and a single writer.
+  >> Save full HTTP responses for concurrent requests.
+  You need to store the information.
+  Proposed Solution: Deploy and configure Azure Cache for Redis. Update the web applications.
+  Does the solution meet the goal?
+   yes
+
+3. You are developing an ASP.NET Core website that uses Azure FrontDoor. The website is used to build custom weather data sets for researchers. Data sets are downloaded by users as Comma Separated Value (CSV) files. The data is refreshed every 10 hours.
+   Specific files must be purged from the FrontDoor cache based upon Response Header values.
+   You need to purge individual assets from the Front Door cache.
+   Which type of cache purge should you use?
+   • A. single path Ans --> : Purge individual assets by specifying the full path of the asset
+   • B. wildcard --> would purge multiple assets based on a pattern
+   • C. root domain - would purge all assets under the root domain whihc is too braod
+
+   what is azure front door?
+ The cache in Azure Front Door temporarily stores copies of your website's content (like images, videos, or downloadable files)
+ in various locations across the world.
+ When users access your site, instead of fetching the content from your server (which might be far away),
+  Azure Front Door delivers it from the nearest cache location.
+
+ 4. Redis Premimun feature
+    data structure to store collections of related items - set
+    data structure to store collections of most recent  items - list
+
+ 5 Cache override -- override the caching rules by the original server and implemt rules of the caching server
+                    it does not override noc cache rule from the server,ie if server say no cache ,, content will not be cached
+   bypass -- skip caching
+   Set if Missing -- it will honor the original servers caching rule ,, but if not present it will use its own rules
+
+   cache every unique url
+   every unique URL, including query strings (e.g., example.ashx?q=test1), is treated as a separate asset in the cache.
+   So, if two requests have different query strings (like q=test1 and q=test2), they are cached separately with their own time-to-live (TTL).
+
+   Bypass Caching for Query Strings
+   Every request for example.ashx?q=test1 or example.ashx?q=test2 will go back to the origin server, and nothing will be cached.
+
+   Ignore Query Strings (Default Mode)
+   First Request: example.ashx?q=test1 is fetched from the origin server and cached.
+   Subsequent Request: example.ashx?q=test2 will return the same cached asset from example.ashx?q=test1 until the cache expires.
+
+ 6.You are developing a web application that uses Azure Cache for Redis. You anticipate that the cache will frequently fill and that you will need to evict keys.
+   You must configure Azure Cache for Redis based on the following predicted usage pattern: A small subset of elements will be accessed much more often than the rest.
+   You need to configure the Azure Cache for Redis to optimize performance for the predicted usage pattern.
+   Which two eviction policies will achieve the goal?
+   A. noeviction
+   • B. allkeys-lru---> ans ---> it will evict keys which are  least recently used keys
+   • C. volatile-lru--> ans --> it will evict keys which are  least recently used keys with a ttl . key that have ttl
+   • D. allkeys-random
+   • E. volatile-ttl
+   • F. volatile-random
+
+ 7. You are building a web application that performs image analysis on user photos and returns metadata containing objects identified. The image analysis is very costly in terms of time and compute resources. You are planning to use Azure Redis Cache so duplicate uploads do not need to be reprocessed.
+    In case of an Azure data center outage, metadata loss must be kept to a minimum.
+    You need to configure the Azure Redis cache instance.
+    Which two actions should you perform? Each correct answer presents part of the solution.
+    NOTE: Each correct selection is worth one point.
+    • A. Configure Azure Redis with AOF persistence. append only file -- captures changes more frequently, as every operation is recorded,
+                                                     reducing the potential for data loss in case of failure
+    • B. Configure Azure Redis with RDB persistence. redis db backup creates snapshots on  regular intervals, 5 or 20 mins , ightwieht but can have major dataloss
+    • C. Configure second storage account for persistence.
+    • D. Set backup frequency to the minimum value. -- corerct answer is AD or BD
+
+
+ 8.You are developing an Azure App Service web app.
+   The web app must securely store session information in Azure Redis Cache.
+   You need to connect the web app to Azure Redis Cache.
+   Which three Azure Redis Cache properties should you use? Each correct answer presents part of the solution.
+   NOTE: Each correct selection is worth one point.
+   • A. Access key -- primary or secondary key for authenticatiog connection to redis
+   • B. SSL port -- ensures that the connection between your web app and Redis Cache is encrypted
+   • C. Subscription name
+   • D. Location
+   • E. Host name - to connect to the redis
+   • F. Subscription id
+
+   ABE

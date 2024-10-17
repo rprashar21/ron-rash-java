@@ -51,3 +51,24 @@ The API determines the type of account to create.
 
  Set the ConsistencyLevel property of QueryRequestOptions when making the query.
  it has get/set ConsistencyLevelProperty
+
+Here’s a short and simple explanation of each feature within the context of an Azure Cosmos DB Change Feed Processor:
+
+1. Dead Letter Queue
+What it is: A Dead Letter Queue is used to store failed messages or documents that couldn’t be processed, preventing continuous retries.
+Scenario: If a specific document in a batch keeps failing, it will be moved to the Dead Letter Queue so the rest of the batch can be processed, avoiding endless retries.
+Usage: In your case, it would stop the failing document from causing repeated retries, allowing other documents to be processed.
+2. Lease Container
+What it is: The Lease Container tracks the progress of processing the change feed by multiple workers.
+Scenario: Multiple Azure Functions (or processors) read from the change feed, and the Lease Container ensures
+that each worker only processes its own portion of data, avoiding duplication.
+Usage: It manages the coordination of reading batches of documents across multiple workers.
+3. Life Cycle Notifications
+What it is: Life Cycle Notifications allow you to track the start and completion of change feed processing for each batch.
+Scenario: You can log or trigger actions when a batch starts or finishes processing, such as logging progress or handling completion events.
+Usage: Useful for tracking processing progress or triggering specific actions after each batch is processed.
+4. Change Feed Estimator
+What it is: The Change Feed Estimator gives you insights into the backlog of unprocessed documents in the change feed.
+Scenario: If a large batch of documents is failing to process, the Estimator can show how far behind the system is,
+helping you decide if more compute power is needed.
+Usage: Helps in monitoring how much data is left to process, especially useful in case of performance bottlenecks.

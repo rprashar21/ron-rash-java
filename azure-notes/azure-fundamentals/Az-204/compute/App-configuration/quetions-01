@@ -1,0 +1,16 @@
+You develop an ASP.NET Core app that uses Azure App Configuration. You also create an App Configuration containing 100 settings.
+The app must meet the following requirements:
+• Ensure the consistency of all configuration data when changes to individual settings occur. • Handle configuration data changes dynamically without causing the application to restart. • Reduce the overall number of requests made to App Configuration APIs.
+You must implement dynamic configuration updates in the app.
+What are two ways to achieve this goal? Each correct answer presents part of the solution. NOTE: Each correct selection is worth one point.
+• A. Create and register a sentinel key in the App Configuration store. Set the refreshAll parameter of the Register method to true.
+• B. Increase the App Configuration cache expiration from the default value.
+• C. Decrease the App Configuration cache expiration from the default value.
+• D. Create and configure Azure Key Vault. Implement the Azure Key Vault configuration provider.
+• E. Register all keys in the App Configuration store. Set the refreshAll parameter of the Register
+method to false.
+• F. Create and implement environment variables for each App Configuration store setting.
+
+AB -
+senitle key is  special configuration key used to detect when any setting has changed.
+By setting refreshAll to true, you ensure that when the sentinel key changes, all configuration settings are refreshed at once
