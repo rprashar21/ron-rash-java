@@ -1,4 +1,0 @@
-Federated  Trusted IPs would allow office workers to bypass MFA,
- and the conditional access policy will allow remote workers to log in via devices joined to Microsoft Entra ID
-
- https://learn.microsoft.com/en-us/entra/identity/conditional-access/controls

@@ -1,0 +1,41 @@
+1. Which of the following steps is necessary to secure a custom domain using a certificate?
+Upload a private certificate to the App Service, ensuring that it meets all the requirements for private certificates
+
+2.You are developing a solution for a public facing API.
+  The API back end is hosted in an Azure App Service instance. You have implemented a RESTful service for the API back end.
+  You must configure back-end authentication for the API Management service instance.
+  Solution: You configure Basic gateway credentials for the Azure resource.
+  Does the solution meet the goal?
+
+  API Management allows to secure access to the back-end service of an API using client certificates.
+
+3. You are developing a web app that is protected by Azure Web Application Firewall (WAF). All traffic to the web app is routed through an Azure Application
+   Gateway instance that is used by multiple web apps. The web app address is contoso.azurewebsites.net. All traffic must be secured with SSL. The Azure Application Gateway instance is used by multiple web apps.
+   You need to configure the Azure Application Gateway for the web app.
+   Which two actions should you perform
+   A. In the Azure Application Gateway's HTTP setting, enable the Use for App service setting.
+   * B. Convert the web app to run in an Azure App service environment (ASE).
+   CloudCertified Practice Tests
+   * C. Add an authentication certificate for contoso.azurewebsites.net to the Azure Application Gateway.
+   * D. In the Azure Application Gateway's HTTP setting, set the value of the Override backend path option to contoso22.azurewebsites.net.
+
+   AC
+
+4.You create and publish a new Azure App Service web app.
+  User authentication and authorization must use Azure Active Directory (Azure AD). You need to configure authentication and authorization.
+  What should you do first?
+  • A. Add an identity provider.
+  • B. Map an existing custom DNS name.
+  • C. Create and configure a new app setting.
+  • D. Add a private certificate.
+  • E. Create and configure a managed identity
+
+  Add and identity provider
+
+5.You must grant a virtual machine (VM) access to specific resource groups in Azure Resource Manager.
+You need to obtain an Azure Resource Manager access token.
+  Solution: Use an X.509 certificate to authenticate the VM with Azure Resource Manager.
+  Does the solution meet the goal?
+  • A.Yes • B.No
+  Answer: B
+  Instead run the Invoke-RestMethod cmdlet to make a request to the local managed identity for Azure resources endpoint.

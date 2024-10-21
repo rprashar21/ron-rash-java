@@ -1,0 +1,36 @@
+What is an app service ?
+Paas Offering 0r hhtp based service to deploy web applications, mobile apps,desktops easily scalable like changing ram,cores
+
+webapps running on an appservice plan
+az webapp list-runtimes --os-type linux
+
+
+Limitations
+App Service on Linux does have some limitations:
+
+
+An App Service plan is the scale unit of the App Service apps.
+
+If the plan is configured to run five VM instances, then all apps in the plan run on all five instances.
+If the plan is configured for autoscaling, then all apps in the plan are scaled out together based on the autoscale settings.
+
+
+when to scale up or down ?
+The app is resource-intensive.
+You want to scale the app independently from the other apps in the existing plan.
+The app needs resource in a different geographical region.
+
+================================================ ================================================================================================
+
+only for dev and test purpose
+Shared Compute -- free/shared, all apps run on same vm, all app are allocated some cpu quota, resources cannot scale out
+Dedicated compute: basic standard premiumv2,v3 - run on dedicated vms,app share same vm within a plan , can scale out
+Isolated -- dedicated vmm with dedicated azure vn, max scale and network isolation
+
+The App Service plan is the scale unit of the App Service apps
+
+Which of the following statements are true:
+An app runs on all the VM instances configured in the App Service plan.
+If multiple apps are in the same App Service plan, they all share the same VM instances.
+All deployment slots also run on the same VM instances as the app in given App Service plan
+You can improve app's performance if you put it in a new, empty App Service plan

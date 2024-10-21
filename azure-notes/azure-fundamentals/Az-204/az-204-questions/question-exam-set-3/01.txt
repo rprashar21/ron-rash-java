@@ -1,0 +1,37 @@
+1.As a cloud solutions developer, you're working with an existing codebase that uses Azure's legacy Storage SDK.
+During a service disruption at the primary data center, you need to configure the Azure Storage client to retry any failed requests
+on the secondary location using RA-GRS storage.
+
+Which LocationMode option from the Microsoft.Azure.Storage.RetryPolicies.LocationMode class should you use?
+LocationMode.PrimaryThenSecondary allows requests to first try the primary location and then retry at the secondary location if necessary.
+
+2.You establish an API Management (APIM) gateway and incorporate an existing App Services API app within it.
+ Your goal is to limit each client application to a maximum of 1000 calls to the API on an hourly basis.".
+  Which policies could achieve this requirement?
+
+  rate-limit-by-key and quota-by-key can limit numbers of requests
+  <rate-limit-by-key calls="1000" renewal-period="3600" counter-key="@(context.Subscription.Id)" />
+
+  <quota-by-key calls="1000" renewal-period="3600" counter-key="@(context.Subscription.Id)" />
+
+3. Stateless applications are easier to scale horizontally.
+ Because each request is processed independently, you can easily add more instances of the application to handle more requests.
+
+4. Specify the correct parameter for ServiceBusSender.SendMessagesAsync() if text is of type string.
+   new ServiceBusMessage(Encoding.UTF8.GetBytes(text))
+
+ 5.In your organization, you are working on an ASP.NET web application that is hosted on a development server
+  within the company's internal network. Before transitioning the application to the production server,
+  you must gather performance data from various global locations. What action should you take?
+
+  Implement a URL ping test using Application Insights.
+  Application Insights provides the ability to monitor, detect, and diagnose performance issues,
+  including those related to geographic locations
+  URL ping test specifically allows you to test the responsiveness of a web application from different regions,
+  along with capturing performance metrics from multiple geographies.
+
+ 6. What are the Azure CDN configuration propagation times for Standard (Verizon):
+     10 minutes
+
+ 7.In ASP.NET Core 3, in which file do you configure Authentication and Authorization?
+ Startup.cs

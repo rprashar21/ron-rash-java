@@ -1,0 +1,36 @@
+Scenario Overview:
+You're storing delivery driver profile information in Azure AD using an Azure Function that's called from a corporate website.
+ID Token:
+
+It's a JSON Web Token (JWT) containing information about the user.
+Used for identifying users in your application.
+Sent securely in HTTP requests between parts of the same application.
+It's signed (for authenticity) but not encrypted.
+
+
+Validating ID Tokens:
+When your application receives an ID token, it must:
+
+Verify the signature to ensure it's authentic.
+Check certain claims in the token to ensure it's valid.
+
+
+Important Claims:
+
+Oid (Object ID):
+
+This is the key claim for identifying users or service principals.
+It's a unique, unchanging identifier for the user or service making the request.
+Same user will have the same oid across different applications in the same Azure AD tenant.
+Useful for authorization and as a database key.
+
+
+Aud (Audience):
+
+Identifies who the token is intended for (usually your application's ID).
+Your app should check this to ensure the token was meant for it.
+
+
+Idp (Identity Provider):
+
+Tells you who authenticated the user (e.g., Azure AD, live.com for personal Microsoft accounts).

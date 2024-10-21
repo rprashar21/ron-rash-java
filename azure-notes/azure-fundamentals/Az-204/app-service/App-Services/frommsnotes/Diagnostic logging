@@ -38,12 +38,11 @@ Azure portal - To stream logs in the Azure portal, navigate to your app and sele
 Azure CLI use the below command
 az webapp log tail --name appname --resource-group myResourceGroup
 
-How to accesss log files ??
-if u have configured Azure Blob Storage option   you need a client tool that works with Azure Storage.
-linux/container apps: https://<app-name>.scm.azurewebsites.net/api/logs/docker/zip
-Windows apps: https://<app-name>.scm.azurewebsites.net/api/dump
-
-For Linux/container apps, the ZIP file has logs for  docker host and  docker container
-for a scaled-out app, the ZIP file contains one set of logs for each instance.
-In the App Service file system, log files are in  /home/LogFiles directory.
+Which of the following statements are true for application logging?
+Only .NET application logs can be written to the blob storage
+You can use other Azure services for logging and monitoring
+App Service file system (Filesystem) will turn itself off in 12 hours
+Blob storage is for long-term logging
+Logs can be reatained for specified amount of days
+For logs stored in the App Service file system, you can download the ZIP file in the browser
 

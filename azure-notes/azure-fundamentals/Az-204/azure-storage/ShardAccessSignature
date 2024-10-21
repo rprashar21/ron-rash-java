@@ -27,16 +27,26 @@ Service Sas with Stored Access Policy --> Stored Access Policy is defined on the
 
 How can you create a shared access signature and modify the expiry date and time after it's already been created?
 You create the sas with stored access policy --> can be used to manage constraints for one or more service shared access signatures
-When u create a sas with the stored access policy then the sas will inherit the start/end/ time plus the permission of the stored access policy on the resource
+When u create a sas with the stored access policy then
+the sas will inherit the start/end/ time plus the permission of the stored access policy on the resource
 
 How shared access signatures work??
 This is a shared access signature
 
 ==============================*===================================* ==============================*===================================*
 
-Sas token can be signed with a user delegation key (that is it is create wth microsoft entra credentials).
-how to get this key ??
-A Microsoft Entra security principal must be assigned an Azure role that includes
+
+Simple Example:
+Role Assignment:
+Assign a role (like Storage Blob Data Contributor) to a user or an  application in Azure AD.
+Request the Key:
+The user logs in using their Azure AD credentials and requests the User Delegation Key for a storage account.
+Generate SAS:
+The user uses this key to generate a SAS token that allows temporary access to the blobs based on their permissions.
+
+This  User Delegation Key allows you to create SAS tokens using Azure AD authentication rather than storage account keys.
+The security principal needs to have a role with generateUserDelegationKey permission.
+
 the Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey action
 
 
@@ -51,6 +61,9 @@ otherwise u get a 403 error
           <storage blob account url>           <blob-name>
  https://medicalrecords.blob.core.windows.net/patient-images/patient-116139-nq8z7f.jpg
  ?sp=r&st=2020-01-20T11:42:32Z&se=2020-01-20T19:42:32Z&spr=https&sv=2019-02-02&sr=b&sig=SrW1HZ5Nb6MbRzTbXCaPm%2BJiSEn15tC91Y4umMPwVZs%3D
+
+ https://medicalrecords.blob.core.windows.net/patient-images/patient-116139-nq8z7f.jpg?sp=r&st=2020-01-20T11:42:32Z&se=2020-01-20T19:42:32Z
+ &spr=https&sig=SrW1HZ5Nb6MbRzTbXCaPm%2BJiSEn15tC91Y4umMPwVZs%3D
 
  sp=r	Controls the access rights.
          values add, c for create, d for delete, l for list, r for read, or w for write.

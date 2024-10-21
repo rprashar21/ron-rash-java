@@ -1,0 +1,138 @@
+case study qustion
+
+
+Here's a summarized version of the case study questions:
+
+Corporate Website:
+How can you secure the website using SSL and HTTPS?
+How to minimize storage costs while ensuring data replication across regions?
+How to fix the CryptographicException related to file access?
+
+Azure Database for PostgreSQL:
+How to always use the latest connection string stored in Azure Key Vault?
+How to securely manage the database connection string?
+
+Azure Service Bus and Azure Event Grid:
+How to route Event Grid events for queue-based load leveling?
+How to continue routing events from Service Bus to Event Grid?
+
+Security:
+How to manage SSL certificates and credentials securely?
+What measures are needed for file access control?
+
+Compliance:
+How to meet GDPR requirements for auditing file updates?
+
+Issues:
+How to resolve the CryptographicException error on the corporate website?
+How to address the function timeout error for RequestUserApproval?
+How to fix the 400 Bad Request error in the Logic App call to RequestUserApproval?
+
+Corporate website -
+While testing the site, the following error message displays: CryptographicException: The system cannot find the file specified.
+
+Function app -
+You perform local testing for the RequestUserApproval function. The following error message displays: 'Timeout value of 00:10:00 exceeded by function: RequestUserApproval'
+The same error message displays when you test the function in an Azure development environment when you run the following Kusto query:
+FunctionAppLogs -
+| where FunctionName = = "RequestUserApproval"
+
+Logic app -
+You test the Logic app in a development environment. The following error message displays:
+'400 Bad Request'
+Troubleshooting of the error shows an HttpTrigger action to call the RequestUserApproval function.
+
+
+Scenario: Corporate website -
+While testing the site, the following error message displays: CryptographicException: The system cannot find the file specified.
+Step 1: Generate a certificate.
+Step 2: Upload the certificate to Azure Key Vault.
+Step 3: Add the certificate thumbprint to the WEBSITE_LOAD_CERTIFICATES app setting.
+This ensures that the web application can access and load the certificate from Azure Key Vault.
+Step 4: Import the certificate to Azure App Service.
+Reference:
+
+Question 2 for the case studuy
+2. You need to configure the Account Kind, Replication, and Access tier options for the corporate website's Azure Storage account.
+  Account Type--> StorageV2(General Purpose V2) - Basic storage account type for blobs, files, queues, and tables.
+  Tier -- cool to minimize cost
+  replication will gzrs -copies your data synchronously three times within a single physical location in the primary region using LRS.
+  It then copies your data asynchronously to a single physical location in the secondary region.
+
+3. QuestionYou need to ensure that all messages from Azure Event Grid are processed. What should you use?
+   • A. Azure Event Grid topic
+   • B. Azure Service Bus topic
+   • C. Azure Service Bus queue  ans
+
+4. You need to configure the integration for Azure Service Bus and Azure Event Grid.
+   How should you complete the CLI statement? To answer, select the appropriate options in the answer area.
+   Box 1: eventgrid -
+   To create event subscription use: az eventgrid event-subscription create
+   Box 2: event-subscription -
+   Box 3: servicebusqueue -
+   Scenario: Azure Service Bus and Azure Event Grid
+   Azure Event Grid must use Azure Service Bus for queue-based load leveling.
+   Events in Azure Event Grid must be routed directly to Service Bus queues for use in buffering.
+   Events from Azure Service Bus and other Azure services must continue to be routed to Azure Event Grid for processing.
+
+ 5. You need to correct the RequestUserApproval Function app error. What should you do?
+ How to address the function timeout error for RequestUserApproval?
+ What should you do?
+ • A. Update line RA13 to use the async keyword and return an HttpRequest object value.
+ • B. Configure the Function app to use an App Service hosting plan. Enable the Always On setting
+ of the hosting plan.
+ • C. Update the function to be stateful by using Durable Functions to process the request payload.
+ • D. Update the functionTimeout property of the host.json project file to 15 minutes.
+
+ answer is c
+
+ 6. You need to configure security and compliance for the corporate website files.
+    Which Azure Blob storage settings should you use? To answer, select the appropriate options in the answer area.
+
+    restrict file access -> rbac
+    role-based access control (RBAC)
+    Azure Storage supports authentication and authorization with Azure AD for the Blob and Queue
+    services via Azure role-based access control (Azure RBAC).
+    Scenario: File access must restrict access by IP, protocol, and Azure AD rights.
+
+     storage account type -
+    Scenario: The website uses files stored in Azure Storage
+    Auditing of the file updates and transfers must be enabled to comply with General Data Protection Regulation (GDPR).
+
+ 7.You need to investigate the Azure Function app error message in the development environment.
+   What should you do?
+   • A. Connect Live Metrics Stream from Application Insights to the Azure Function app and filter the metrics.
+   • B. Create a new Azure Log Analytics workspace and instrument the Azure Function app with Application Insights.
+   • C. Update the Azure Function app with extension methods from Microsoft.Extensions.Logging to log events by using the log instance.
+   • D. Add a new diagnostic setting to the Azure Function app to send logs to Log Analytics.
+
+A Azure Functions offers built-in integration with Azure Application Insights to monitor functions.
+  The following areas of Application Insights can be helpful when evaluating the behavior, performance, and errors in your functions:
+  Live Metrics: View metrics data as it's created in near real-time.
+
+ 8. You need to correct the Azure Logic app error message.
+    Which configuration values should you use? To answer, select the appropriate options in the answer area.
+
+    authenticallevel --> function
+   If you have an Azure function where you want to use the system-assigned identity, first enable authentication for Azure functions
+   System-Assigned Identity: system-assigned identity is unique to each logic app.it will be tied to the lifecycle of the logic app
+   use case - Best for scenarios where each logic app requires a unique identity for accessing resources.
+
+   User-Assigned Identity : created independantly , not tied to the system
+   you want to reuse the same identity across multiple logic apps,
+
+ 9. need to authenticate the user to the corporate website as indicated by the architectural diagram.
+    Which two values should you use? Each correct answer presents part of the solution.
+    NOTE: Each correct selection is worth one point.
+    • A. ID token signature - ID token and access token must be validated to ensure the token's integrity.
+    • B. ID token claims
+    • C. HTTP response code
+    • D. Azure AD endpoint URI -when redirecting to the Azure AD sign-in page
+                                 specifies the URL where users are authenticated and where the application sends authentication requests
+    • E. Azure AD tenant ID
+
+    B. ID token claims - ID token claims contain essential information about the authenticated user,
+                        such as their identity, email, and other attributes.
+                         claims are part of the JWT (JSON Web Token) issued by Azure AD after successful authentication.
+    E. Azure AD tenant ID-- Azure AD tenant ID is a unique identifier for your organization's active directory
+                            tenant ID ensures that users are authenticating against your organization's directory.

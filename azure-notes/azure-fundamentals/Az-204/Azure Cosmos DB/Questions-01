@@ -1,0 +1,34 @@
+Retail Store Locations -
+You must perform a point-in-time restoration of the retail store location data due to an unexpected and accidental deletion of data.
+Azure Cosmos DB queries from the Azure Function exhibit high Request Unit (RU) usage and contain multiple, complex queries that exhibit high point read latency for large items as the function app is scaling.QuestionYou need to reduce read latency for the retail store solution.
+What are two possible ways to achieve the goal? Each correct answer presents a complete solution. NOTE: Each correct selection is worth one point.
+• A. Create a new composite index for the store location data queries in Azure Cosmos DB. Modify the queries to support parameterized SQL and update the Azure Function app to call the new queries.
+• B. Provision an Azure Cosmos DB dedicated gateway. Update the Azure Function app connection string to use the new dedicated gateway endpoint.
+• C. Configure Azure Cosmos DB consistency to session consistency. Cache session tokens in a new Azure Redis cache instance after every write. Update reads to use the session token stored in Azure Redis.
+• D. Provision an Azure Cosmos DB dedicated gateway. Update blob storage to use the new dedicated gateway endpoint.
+• E. Configure Azure Cosmos DB consistency to strong consistency. Increase the RUs for the container supporting store location data.
+
+AB
+
+Retail store locations -
+Azure Functions must process data immediately when data is uploaded to Blob storage.
+Azure Functions must update Azure Cosmos DB by using native SQL language queries.
+Audit store sale transaction information nightly to validate data, process sales financials, and reconcile inventory.
+
+You need to audit the retail store sales transactions.
+
+ A. Update the retail store location data upload process to include blob index tags.
+ Create an Azure Function to process the blob index tags and filter by store location.
+• B. Process the change feed logs of the Azure Blob storage account by using an Azure Function. Specify a time range for the change feed data.
+• C. Enable blob versioning for the storage account. Use an Azure Function to process a list of the blob versions per day.
+• D. Process an Azure Storage blob inventory report by using an Azure Function. Create rule filters on the blob inventory report.
+• E. Subscribe to blob storage events by using an Azure Function and Azure Event Grid. Filter the events by store location.
+
+blob tags - enable more efficient querying of blob data without needing to download or parse the blob contents.
+change feed provides a log of all changes to blobs in your storage account.
+It allows for efficient processing of only the changes (new or modified data) within a specific time range.
+
+Blob Versioning -  is more about data protection than efficient auditing.
+Option D (inventory reports) is not timely enough for nightly audits.
+Option E (Event Grid) is more suited for real-time processing than scheduled audits.
+

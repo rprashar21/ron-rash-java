@@ -10,7 +10,7 @@ az webapp config set --name ChatApp --resource-group MyResourceGroup --websocket
   az webapp config set --name <nameof the webap > --resource-group <resource group name>
    --connection-strings '{"MySqlConnectionString" :{"value": "my-connection-string", "type": "MySql"}}'}'
 
-  az webapp config set command allows you to set configuration properties in azure app service
+  az webapp config set ---> This command allows you to set configuration properties in azure app service
 
   az webapp config set --name <app_name> --resource-group <resource_group> --php-version 8.0
 or

@@ -30,6 +30,45 @@ that accesses Azure Storage without having to manage any credentials.
 or
 
 build an app using azure vms,app service,kubernets,container,storage connecting to storage another app,azure resource,apim etc
+ how your app uses managed identities with Azure Key Vault and Azure Storage:
+
+1.Create the Managed Identity:
+
+  When you enable managed identity for your Azure App Service,
+  Azure gives it a unique identity. Think of it as a special account that your app can use to access other services.
+
+  you give this identity permission to access Azure Key Vault and Azure Storage. For example:
+  In Azure Key Vault, you allow the identity to read secrets (like connection strings for your storage account).
+  In Azure Storage, you allow the identity to access data (e.g., read/write files).
+
+2. Store Secrets in Azure Key Vault:
+
+3. App Uses Managed Identity to Access Key Vault:
+when your app runs, it uses its managed identity to authenticate with Azure Key Vault.
+The app asks Azure Key Vault for the secret (e.g., the connection string for Azure Storage).
+Azure Key Vault checks if the app’s managed identity has the right permissions to access the secret. If it does, it gives the secret back to the app.
+
+code
+
+public class App {
+    public static void main(String[] args) {
+        // Set up the SecretClient using managed identity (DefaultAzureCredential)
+        SecretClient secretClient = new SecretClientBuilder()
+            .vaultUrl("https://<your-key-vault-name>.vault.azure.net")
+            .credential(new DefaultAzureCredentialBuilder().build())
+            .buildClient();
+
+        // Retrieve the storage account connection string from Key Vault
+        String storageConnectionString = secretClient.getSecret("StorageConnectionString").getValue();
+
+        // Now, use the storageConnectionString to access your Azure Storage
+        System.out.println("Storage Connection String: " + storageConnectionString);
+        // You can use the connection string here to interact with Azure Storage (e.g., upload/download files)
+    }
+}
+DefaultAzureCredential: This automatically uses the managed identity of the app when it's deployed in Azure App Service.
+SecretClient: Connects to Azure Key Vault using the managed identity to retrieve the secret (StorageConnectionString).
+Storage Access: You can use the connection string obtained from Key Vault to interact with Azure Storage securely.
 
 ====================================================================================================
 
@@ -119,4 +158,3 @@ String managedIdentityClientId = "<your managed identity client Id>"; // Replace
             .credential(credential)
             .buildClient();
 
-        // From here, you can u

@@ -1,0 +1,28 @@
+1.Where the setting for cloning existing App Service web app is located?
+devlopement settings
+
+w.fix cors issue
+az storage cors add --services blob --methods GET POST --origins 'http://localhost:5000' --allowed-headers '*'
+ --exposed-headers '*' --max-age 200 --account-name myStorageAccount
+
+ 3. Enable AppServiceAppLogs under Diagnostics settings and set the destination to send logs to Log Analytics.
+
+4. Always on -->feature makes sure the web app is always running
+
+ 5. Web server and Application logging are support blob storage and app service file system.
+
+ 6.stream HTTP logs for myApp in myResourceGroup resource group, using Cloud Shell?
+ az webapp log tail --name myApp --resource-group myResourceGroup --provider http
+
+7. App Service Certificate provides automated certificate management, renewal, and export options for private certificates.
+
+8. How apps are charged in Shared App Service plan:
+Each app is charged for CPU quota
+
+9.In which of the following app configuration settings categories would you set the language and SDK version?
+General Settings is used to configure stack, platform, debugging, and incoming client certificate settings.
+
+10. When should you isolate your app into a new App Service plan?
+The app is resource-intensive.
+You want to scale the app independently from the other apps in the existing plan.
+The app needs resource in a different geographical region.

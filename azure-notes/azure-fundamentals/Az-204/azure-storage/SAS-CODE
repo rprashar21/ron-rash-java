@@ -1,0 +1,41 @@
+
+
+string accountName = "<storage-account-name>";
+string containerName = "<container-name>";
+string blobName = "<blob-name>";
+
+var credential = new DefaultAzureCredential();
+var blobServiceClient = new BlobServiceClient(new Uri($"https://{accountName}.blob.core.windows.net", credential));
+
+// Get a user delegation key for the Blob service that's valid for 24 hours
+
+var delegationKey = await blobServiceClient.GetUserDelegationKey(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(1));
+//  this is when dont want a user delegation key and a shared one is fine
+var sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+// BUILD THE BLOB SAS BUILDER
+var sasBuilder = new BlobSasBuilder()
+{
+    BlobContainerName = containerName,
+    BlobName = blobName,
+    Resource = "b",
+    StartsOn = DateTimeOffset.UtcNow,
+    ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
+    Protocol = SasProtocol.Https
+};
+// setting the permissions to get read and write
+sasBuilder.SetPermissions(BlobSasPermissions.Read | BlobSasPermissions.Write);
+
+// Use the key to get the SAS token
+string sasToken = sasBuilder.ToSasQueryParameters(delegationKey, accountName).ToString();
+
+
+// account shared key
+var sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+
+var sasBuilder = new AccountSasBuilder()
+{
+    Services = AccountSasServices.Blobs | AccountSasServices.Queues,
+    ResourceTypes = AccountSasResourceTypes.All,
+    ExpiresOn = DateTimeOffset.UtcNow.AddDays(3),
+    Protocol = SasProtocol.Https
+};

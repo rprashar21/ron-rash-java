@@ -1,0 +1,5 @@
+ Create azure webapp with continuss delivery wuth Github
+
+ az login
+ az group create --name <group-name> --location EastUs
+ az appservice plan create

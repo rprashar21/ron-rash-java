@@ -1,0 +1,13 @@
+containers apps
+1. You are developing several microservices to run on Azure Container Apps for a company. External TCP ingress traffic from the internet has been enabled for the microservices.
+The company requires that the microservices must scale based on an Azure Event Hub trigger. You need to scale the microservices by using a custom scaling rule.
+Which two Kubernetes Event-driven Autoscaling (KEDA) trigger fields should you use? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. metadata
+• B. type
+• C. authenticationRef
+• D. name
+• E. metricType
+
+meatadata -you define the specific properties related to the trigger type
+type -  type field specifies the type of KEDA trigger you are using
