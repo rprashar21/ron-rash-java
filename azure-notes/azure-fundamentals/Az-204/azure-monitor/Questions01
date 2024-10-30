@@ -1,0 +1,57 @@
+1.In Application Insights, what does the Users tool specifically count?
+People using the app
+
+2.In Application Insights, if a single person uses different browsers or machines, how are they counted in the Users tool?
+As more than one user
+
+Paths of the user
+Question - Which feature in Azure Insights would you utilize to analyze these factors?
+
+User Flows - shows navigation patterns of the user
+cohorts - Cohorts are used to group and analyze sets of users, sessions, events, or operations that have something in common
+Impact --> to analyze how  load times and user properties/behaviour and characteristics  affect conversion rates in various parts of the app
+retention  --> how many users return to your app and how often they engage with specific tasks or goals
+Users -- no of users people used ur app
+Funnels - track users jpurney thru the web app and see where the users leave or stop using the app
+
+3. In your organization, you are working on an ASP.NET web application that is hosted on a development
+server within the company's internal network.
+Before transitioning the application to the production server,
+ you must gather performance data from various global locations. What action should you take
+
+ Implement a URL ping test using Application Insights
+ URL ping test specifically allows you to test the responsiveness of a web application from different regions.
+  test is used to test endpoint availability.
+  Custom TrackAvailability test is used for authentication purpose
+  Standard test is similar to the URL ping test, but it includes additional information.
+
+4. You have a running application and you want to control the rate of data ingestion without redeploying the application.
+ Which sampling method would you use?
+
+ Ingestion Sampling -- controls ingestion of data
+ fixed-rate sampling -- java app used for fine-grained control over telemetry data
+ adaptive sampling adjusts the volume of telemetry sent. controls high-volume applications to avoid exceeding data quotas.
+
+ 5. Where in Application Insights does the following code send data to?
+ telemetry.TrackEvent("WinGame");
+TrackEvent method is used to log custom events,  Custom Events
+
+Custom events in Application Insights are  interactions such as button selections or task completions.
+
+6 . What tool should you use in Application Insights to monitor page views?
+events tool -page view
+user tool - count people using the app
+
+7. real-time querying and alerting on dimensions of metrics, and more responsive dashboards
+Pre-aggregated metrics are also called standard metrics
+Log-based metrics are aggregated at query time and require more processing to produce results.
+
+8.Your web application must be able to scale on demand. Which Azure Application Insights data model should you use?
+An Application Insights metric
+
+9.You have a very old Azure function app and you want to integrate it with Application Insights
+to save informational log data. Which tasks should you perform?
+
+Manually enable Application Insights in the function app.
+Store the name of the instrumentation key in an app setting named APPINSIGHTS_INSTRUMENTATIONKEY.
+Call the LogInformation method of the ILogger class.

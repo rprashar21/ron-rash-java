@@ -1,0 +1,30 @@
+Static website hosting is a feature that you have to enable on the storage account.
+
+ blob storage container named $web is created by default
+ files in this container are case-senstative and have only read access
+
+ If the server returns a 404 error, and you haven't specified an error document
+ when you enabled the website, then a default 404 page is returned to the user.
+
+ Data is replicated to secondary regions asynchronously.
+
+ Changing the anonymous access level of the $web container affects the primary blob service endpoint
+ but does not impact the primary static website endpoint, which remains publicly accessible.
+
+ You can configure a custom domain with a static website by using Azure Content Delivery Network (Azure CDN).
+ Azure CDN provides consistent low latencies to your website from anywhere in the world.
+ You can configure a custom SSL certificate with a static website by using Azure CDN
+ You can configure the host header for a static website by using Azure CDN - Verizon Premium.
+
+ Why am I getting an HTTP 404 error from a static website
+ File names and extensions in the url of a static website are case-sensitive even though they're served over HTTP.
+ Azure CDN endpoint isn't yet provisioned.
+ Wait up to 90 minutes after you provision a new Azure CDN for the propagation to complete.
+
+ Questions
+ How can u diable the website for maintenance
+ Disable the static website feature in the storage account
+
+ Encrypt in transition --> Azure cdn
+ redundancy -- gzrs
+ container name $web

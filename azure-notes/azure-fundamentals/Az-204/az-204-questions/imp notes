@@ -1,4 +1,7 @@
-Azure Files is like a shared folder that you can access from anywhere in your Azure environment. It’s stored in Azure Storage and works with a standard protocol (SMB) that many systems use for file sharing. By “mounting” this file share to your container, you’re connecting it to the container so that the data is saved even if the container restarts. It’s like attaching an external hard drive to keep your files safe, even if your main computer shuts down.
+Azure Files is like a shared folder that you can access from anywhere in your Azure environment.
+It’s stored in Azure Storage and works with a standard protocol (SMB) that many systems use for file sharing.
+ By “mounting” this file share to your container, you’re connecting it to the container so that the data is saved even if the container restarts.
+ It’s like attaching an external hard drive to keep your files safe, even if your main computer shuts down.
 
 Key Concepts Explained
 Container Images:

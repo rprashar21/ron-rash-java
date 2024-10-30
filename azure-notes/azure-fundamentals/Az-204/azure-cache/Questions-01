@@ -1,0 +1,36 @@
+1.Which of the following would you store in Azure Cache for Redis?
+Storing session state in Azure Cache for Redis is one of the common patterns / use cases
+
+2.whihc feature in azure redis cache links 2 premimumm instance
+Geo-replication  allowing data written to the primary cache to be replicated to the secondary linked cache
+
+3.Data eviction in redis cache
+Explicit Removal - data eviction is triggered by specific events
+fifo - older data is less likely to be accessed and tasks are handled sequentially
+
+4. set the expiration time for a key named userData to one minute and only apply the command if the key does not exist
+EXPIRE userData 60 NX no key exist
+
+5.web application that requires a highly scalable, fast, and premium method to store session state information.
+transient network failures, provide advanced features, and support concurrent access to the same session state data
+
+Cache for Redis at Premium Tier
+
+Cache for Redis at Standard Tier same as above but cost effective
+
+5.can you configure the eviction policy to target the least recently used keys first when the memory limit is met
+volatile: if expiration is set; lru - least recently used
+
+set a variable named "userData" to the value "JohnDoe123" and ensure that this value expires after one hour.
+Redis commands you would use to achieve this
+6. SET userData JohnDoe123
+   EXPIRE userData 3600
+
+7.  expire time resolution when applying a time to live (TTL) to a key in Redis?
+1-millisecond
+
+Private Caching is best suited for scenarios where data is specific to individual instances or users,
+and speed is a priority. It's simpler but may lead to inconsistencies between different instances.
+A single-user application that requires rapid access to user-specific data.
+A desktop application that needs to store temporary files locally for quick retrieval.
+A personal finance tool that caches individual user's financial data on their device for quick access.

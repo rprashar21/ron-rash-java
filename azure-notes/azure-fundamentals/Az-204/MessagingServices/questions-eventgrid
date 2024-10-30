@@ -1,0 +1,22 @@
+1.You are developing an application that uses Azure Blob storage.
+The application must read the transaction logs of all the changes that occur to the blobs
+and the blob metadata in the storage account for auditing purposes. The changes must be in the order in which they
+occurred, include only create, update, delete, and copy operations and be retained for compliance reasons.
+You need to process the transaction logs asynchronously.
+What should you do?
+• A. Process all Azure Blob storage events by using Azure Event Grid with a subscriber Azure Function app.
+• B. Enable the change feed on the storage account and process all changes for available events.
+• C. Process all Azure Storage Analytics logs for successful blob events.
+• D. Use the Azure Monitor HTTP Data Collector API and scan the request body for successful blob
+events.
+Answer: B
+
+2.You develop an app that allows users to upload photos and videos to Azure storage. The app uses a storage REST API call to upload the media to a blob storage account named Account1. You have blob storage containers named Container1 and Container2.
+  Uploading of videos occurs on an irregular basis.
+  You need to copy specific blobs from Container1 to Container2 when a new video is uploaded.
+  What should you do?
+  • A. Copy blobs to Container2 by using the Put Blob operation of the Blob Service REST API
+  • B. Create an Event Grid topic that uses the Start-AzureStorageBlobCopy cmdlet
+  • C. Use AzCopy with the Snapshot switch to copy blobs to Container2
+  • D. Download the blob to a virtual machine and then upload the blob to Container2
+  B event grid will monitor for specific vents and Start-AzureStorageBlobCopy will start copying data

@@ -1,0 +1,69 @@
+1. Where would you specify the logging settings for these Azure Functions?
+The logging configurations for Azure Functions are set in the host.json file
+
+2.Write a cron  30th minute of every two hours, for the first 15 days of the summer months (June, July, and August),
+on weekdays (Monday through Friday).
+{seconds}{min}{hour}{day}{month}{dayofweek}
+0 30 */2 1-15 6-8 1-5
+
+3.which http method to get a function key? Post and to create OUt
+https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}
+/providers/Microsoft.Web/sites/{name}/{scope}/{host-or-function-name}/listkeys?api-version=2022-03-01
+
+4.Which triggers in Azure Functions are supported on Consumption plan:
+
+Table storage and Notification Hubs are not valid triggers. RabbitMQ and Kafka are not supported on Consumption plan.
+Table storage, Mobile Apps, Notification Hubs, SendGrid, and Twilio are not valid triggers.
+
+5. Which of the following can be input binding in an Azure Function:
+You can only read from objects that store data, not queues
+blob storage ,cosmos db ,mobile apps ,signalr table
+
+not Event Grid,Event Hubs,HTTP & webhooks,IoT Hub
+
+6 sample inout and output binding
+Blob("samples-workitems/{queueTrigger}", FileAccess.Read) is an input binding (Read)
+Blob("samples-workitems/{queueTrigger}", FileAccess.Write) is an output binding (Write)
+
+7.Suppose you're working for an e-commerce company that has high traffic and they're dealing with large amounts of customer orders.
+ The company wants to keep a track of every order received in real-time and then send an automated confirmation email to the customer.
+  Which Azure service would you choose to trigger your Azure function? Fill in the triggers and bindings in the following code:
+  the Azure function could be triggered by the Service Bus where each order corresponds to a message in a Service Bus Queue or Topic.
+  The function could then use the SendGrid output binding to send a confirmation email to the customer.
+
+   [ServiceBusTrigger("<queue-name>", Connection = "ServiceBusConnectionString")]
+      Order order,
+
+      [SendGrid(ApiKey = "SendGridApiKey")]
+      out SendGridMessage message,
+
+output binding in an Azure Function:
+event grid ,Event Hubs,HTTP & webhooks
+Mobile Apps,Notification Hubs,Queue storage
+
+except Timer and IoT Hub.
+
+8.The requirement is to have a custom handler web server that starts up in less than 60 seconds.
+Go HTTP server with a startup time of 50 seconds
+Ruby on Rails server with a startup time of 55 seconds
+
+9. configure custom handler
+Modify host.json to include the customHandler property with the executable path and arguments.
+Set "FUNCTIONS_WORKER_RUNTIME": "custom" in local.settings.json.
+
+10. createa  consumption plan
+// create a group and then a storage account and then a function app
+az group create --name grp1 --location eastus
+az storage account create --name $storageName --location $location --resource-group $resourceGroupName --sku Standard_LRS
+az functionapp create --resource-group $resourceGroupName --consumption-plan-location
+$location --runtime node --functions-version 3 --name $functionAppName --storage-account $storageName
+
+
+11.Which of the following Azure Functions hosting plans is best when predictive scaling and costs are required?
+Dedicated Plan
+
+HTTP triggers get new instances at most every second. Non-HTTP triggers get them at most every 30 seconds.
+
+
+
+

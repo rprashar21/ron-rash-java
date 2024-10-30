@@ -1,0 +1,60 @@
+You have an App Service plan named asp1 based on the Free pricing tier.
+You plan to use asp1 to implement an Azure Function app with a queue trigger. Your solution must minimize cost.
+You need to identify the configuration options that will meet the requirement
+
+Always on and basci tier -- Free and Shared tiers do not support "Always On," but the basic one does
+
+2. A company requires a function that can process incoming files automatically.
+They upload images regularly into a storage service, and they want those images to be resized automatically.
+ Which Azure service could you use to trigger this function? Fill in the triggers and bindings in the following code:
+
+This scenario is perfect for a Blob Storage trigger. The function could be triggered whenever a new blob (image) is added to the Blob Storage.
+Inside the function, you could use an image processing library to resize the images.
+
+[FunctionName("ResizeImage")]
+public static void Run(
+    [BlobTrigger("<container-name>/{name}", Connection = "BlobStorageConnectionString")]
+    Stream inputImage,
+
+    [Blob("<container-name>/{name}", FileAccess.Write, Connection = "BlobStorageConnectionString")]
+    Stream outputImage,
+
+    string name,
+    ILogger log)
+{
+    // Read the input image
+    // Resize the image
+    // Write the resized image to output image
+}
+
+3.You are tasked with developing an Azure Function that will be triggered by Azure Blob storage.
+The function should only be triggered when .jpg files are added to a container named images.
+Which of the following filter criteria for path in the function.json file would meet the requirement?
+
+images/{name}.jpg
+
+4. You've been assigned a project where your task is to design an Azure function that activates automatically every 10 minutes.
+ This function has to interact with a vast amount of unstructured data such as text or binary data from a source,
+ perform necessary computations, and subsequently modify another source with the outcome.
+
+ trigger - timer trigger
+ input bunding -- blob bcoz there is  unstructured data such as text or binary data
+ output binding -- blob bcoz there is  unstructured data such as text or binary data
+
+cron expression {seconds}{min}{hour}{day}{month}{dayofweek}
+ [functionName("ProcessData")]
+ public static void run(
+ [TimerTrigger(0 */10 * * * * )] TimerInfo myTimer,
+
+// input binding
+ [Blob("<container-name>/<blob-name>",FileAccess.Read, Connection = "" )] Stream inputData,
+ // output binding
+ [Blob("<container-name>/<blob-name>",FileAccess.Write, Connection = "" )] Stream outputData,
+
+ ){
+     // Read data from input
+     // Process the data
+     // Write the processed data to output
+
+
+ }

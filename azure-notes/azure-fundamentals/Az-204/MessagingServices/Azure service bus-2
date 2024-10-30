@@ -1,6 +1,6 @@
 Azure service Bus
 
-1. message sessions - guarnatees fifo , implements request-response patterns
+       1. message sessions - guarnatees fifo , implements request-response patterns
        2. auto-forwarding - chain queue/subscription to another queue/subsription , when auto -forwarding is enable automatically
                             removes message from fist queuue/subs and put in destunation queu
        3. Dead-lettering - second subqueue called dlq ,, msgs which are not processed are put into dlq , u can remove inspect ,resubmit the

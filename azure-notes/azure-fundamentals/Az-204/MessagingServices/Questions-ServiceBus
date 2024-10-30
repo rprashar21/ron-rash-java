@@ -1,0 +1,80 @@
+1.Azure Service Bus creates a first-in, first-out (FIFO) guarantee?
+To create a first-in, first-out (FIFO) guarantee in Service Bus, use sessions.
+Message Sessions
+
+2.Once the error has been logged and the necessary maintenance team has been alerted,
+the message must be removed so that the monitoring system will not attempt to log it again
+
+Azure Service Bus supports "Receive and Delete" mode, where messages are immediately consumed and removed from the queue.
+
+3. For which cases parameter could be of type string?
+QueueClient.SendAsync(new Message(param)
+ServiceBusSender.SendMessagesAsync(new ServiceBusMessage(param)
+EventHubProducerClient.SendAsync(new EventData(param))
+
+EventData and ServiceBusMessage support both string and byte[],
+Message is for byte[] only. Prefer byte[] for EventData.
+
+4. Your application requires an event-based architecture that can handle millions of events per second with low latency.
+ Additionally, the solution must provide support for custom topics and a maximum queue size of 30 GB.
+ Which Azure messaging service would you choose?
+ Azure event grid because it also
+ Both Event Grid and Event Hub can handle millions of events per second.
+  However, only Event Grid provides support for custom topics
+
+5.You are designing a notification system using Azure Service Bus. Messages contain the following properties:
+
+  Temperature: the temperature reading.
+  Location: the location of the reading.
+  You need to create a subscription that handles messages that are not generated from South America
+  and not above 40 degrees. Which filter type should you implement?
+ Answer SqlFilter - for complex queries
+
+  A Correlation Filter is suitable for matching messages based on specific properties without complex logic. I
+
+6.What strategies would minimize latency for a queue with small or moderate throughput when using a single client?
+Use asynchronous operations
+Disable client-side batching and batched store access
+Set a high prefetch count
+
+7.What strategies would minimize latency for a queue with small or moderate throughput when using a multiple clients?
+Use asynchronous operations
+Disable client-side batching and batched store access
+Set the prefetch count to 0
+
+8.Service Bus namespace in Azure need to retrieve the primary connection string for the "RootManageSharedAccessKey"
+authorization rule within the namespace named "mynamespace" and the resource group named "myresourcegroup".
+
+az servicebus namespace authorization-rule keys list
+--name RootManageSharedAccessKey
+--namespace-name mynamespace
+--resource-group myresourcegroup
+--query primaryConnectionString
+
+9. creating a service bus
+az servicebus namespace create --name $namespace --resource-group $resourceGroup --location eastus
+az servicebus queue create --name myqueue --namespace-name $namespace --resource-group $resourceGroup
+
+10.Which strategies would be effective for a queue with a large number of senders
+Set a high prefetch count. Fetch multiple messages at once instead of one at a time. reduce round trip
+Use asynchronous operations. sender and reciver will not have to wait for each other
+Enable batched store access.Sends or receives multiple messages in a single operation.reduce network calls
+Use a single factory per process for each sender. reduces connection factory .Lowers connection overhead and simplifies management, especially with many senders
+
+11.
+ The application is designed to connect patients with doctors for online consultations. The application needs to follow this workflow:
+
+   A patient selects the medical specialty they need consultation in (e.g., Cardiology, Dermatology).
+   Consultation requests are sent to all available doctors in that specialty.
+   Only consultation requests for the selected specialty will appear for the doctor.
+   The first doctor to accept the consultation removes it from the list of available consultations
+
+Create a single Service Bus Namespace. A single namespace is sufficient to manage all the topics and subscriptions
+A single Service Bus topic is ideal.
+   Create a Service Bus Subscription for each medical specialty for which a doctor can receive messages. This allows doctors to subscribe to topics that are relevant to their specialty
+
+
+12.You are developing a logging system that captures all messages in Azure Service Bus for auditing purposes.
+The system will be used in the future and should not accept any messages at the moment.
+
+FalseRuleFilter will always be false . it will not accept any message as of now

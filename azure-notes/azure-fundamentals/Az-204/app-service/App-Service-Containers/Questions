@@ -1,12 +1,12 @@
-You have successfully containerized your application within an Azure Container Registry,
+1.You have successfully containerized your application within an Azure Container Registry,
 created an image of your application and pushed it into the container registry.
 You have also created an AKS cluster. Now you want to deploy the containerized application onto your AKS cluster.
+which three steps do you need to complete? (Choose 3 answers)
 
+Answer
 Get credentials to authenticate kubectl commands sent to the Kubernetes cluster
 Create a manifest file declaring the required Kubernetes resources.
 Create the resources in the cluster
-
-Which three steps do you need to complete? (Choose 3 answers)
 
 
 install an aks cluster
@@ -37,3 +37,14 @@ Install Azure CLI: Azure CLI is needed to interact with Azure services, includin
 Install kubectl: This command-line tool is used to interact with the Kubernetes cluster,
 and is often installed along with the Azure CLI using the command az aks install-cli.
 Use kubectl apply: The kubectl apply -f myapp.yaml command applies the YAML manifest file to deploy the application to the AKS cluster.
+
+ACI (Azure Container Instances)	- A serverless platform for running containers without managing infrastructure.
+                                 Suitable for simple or short-lived workloads.
+ 	                            Image processing task that spins up containers for each upload or batch data processing tasks.
+Container Groups	Group multiple containers in ACI that share the same lifecycle, network, and storage.
+                    They run together and can communicate over localhost.
+                    A web application with frontend and backend containers that need to start and run together.
+ACR (Azure Container Registry)	A private registry for securely storing and managing Docker container images,
+u store your application container image in ACR.
+You deploy the container using ACI when a new job or task is triggered.
+If your application has multiple components, you can use a Container Group in ACI to deploy them together, ensuring they share the same environment and resources

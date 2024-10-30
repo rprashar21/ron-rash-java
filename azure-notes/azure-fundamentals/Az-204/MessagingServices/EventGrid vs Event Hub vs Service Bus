@@ -60,8 +60,8 @@ Solution: Event Grid can route the IoT device data to different Azure services (
 Benefit: Event-driven data pipelines for real-time analytics without manual intervention.
 
 Integration Between Multiple Applications
-Scenario: A business needs to integrate multiple services, such as CRM systems, billing systems, and customer support systems.
-Solution: Event Grid can notify the CRM system when a new customer is added and trigger workflows that create billing profiles and customer support records in other systems.
+Scenario: A bces, such as CRM systems, billing systems, and customer support systems.
+Solution: Event Grid can notify the CRM system when usiness needs to integrate multiple servia new customer is added and trigger workflows that create billing profiles and customer support records in other systems.
 Benefit: Seamless integration between applications, ensuring all systems stay up-to-date.
 
 Security Automation

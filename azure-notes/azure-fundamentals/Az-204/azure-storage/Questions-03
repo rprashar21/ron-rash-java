@@ -1,0 +1,39 @@
+1.You need to retrieve and update the metadata of blobs in an Azure storage account using a .Net library.
+ Which functions would you use:
+
+ GetPropertiesAsync to get the properties of the metadat
+ SetMetadataAsync to set metadata
+
+2.You're building an ASP.Net Core app to interact with Azure Blob containers using Entra ID and role-based access.
+ What permission should you set for the Azure Storage API?
+ user_impersonation -allows the application to act as the user, inheriting their roles and permissions for blob access.
+
+3.Which access tier is considered to be offline and can't be read or modified
+archive
+
+4.How frequently are Azure Storage lifecycle management policy rules evaluated?
+Once a day
+
+5.Azcopy supports both SAS and OAuth authentication for data transfer between two Azure Blobs.
+
+6.copy a blob from one container to another in Azure Blob Storage?
+await targetBlob.StartCopyFromUriAsync(sourceBlob.Uri);
+
+7.Which of the following standard HTTP headers are supported for both containers and blobs when setting properties by using REST?
+Last-Modified and ETag are supported on both containers and blobs.
+Content-Length and Cache-Control are only supported on blobs
+
+8.Azure tool and command would you use to ensure both blob containers have completely identical data?
+azcopy sync --recursive source and destination our in sync
+
+9. Which of the following methods can be used to move blobs from one container to another?
+azure portlal, azcopy .Net SDK. , Powershell ,AZ CLI
+
+10. BlobContainerClient manipulates both containers and blobs.
+BlobUriBuilder provides a way to modify the contents of a Uri instance to point to
+ different Azure Storage resources like an account, container, or blob
+BlobClient class is limited to manipulating blobs.
+
+11. What are the two versions of client-side encryption available in the Azure Blob Storage and Queue Storage client libraries?
+Version 1 uses Cipher Block Chaining (CBC) mode with AES
+ Version 2 uses Galois/Counter Mode (GCM) mode with AES

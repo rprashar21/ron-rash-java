@@ -1,0 +1,52 @@
+1. You are tasked with granting access to 10 new operations exclusively to a select group of 200 beta developers around the world.
+ How can you enable these developers to test the new operations using the existing API URL?
+
+ Implement header-based versioning. this allows different versions of the API to be accessed through the same URL
+
+2. Your organization offers web services to third-party clients.
+These services require non-anonymous access, authentication through OpenID Connect, and are accessed via APIs.
+ To ensure secure Entra ID authentication, you decide to base it on a specific value embedded in the request query parameter.
+  Which policy within Azure API Management should you enforce to meet this requirement?
+
+  validate-jwt
+
+3. What rule should be used to cache this URL: https://myapi.azure-api.net/items/123456?
+<cache-lookup><vary-by-query-parameter /></cache-lookup>
+URL has no parameters to cache on, the whole URL is used
+
+What rule should be used to cache this URL: https://myapi.azure-api.net/items?id=123456?
+<cache-lookup><vary-by-query-parameter>id</vary-by-query-parameter></cache-lookup>
+Use id to store the value.
+
+4. A 403 Forbidden error is either an IP filter policy or an exceeded quota. Since policy rules haven't been modified, it must be a quota issue.
+
+5.You have JSON endpoint that expects JSON payload. The client sends XML payload. What policy should be applied?
+xml-to-json-policy in inbound section
+
+6. API needs to forward the user ID associated with the subscription key to the back-end service.which policy
+inbound
+<policies>
+    <inbound>
+        <set-header name="x-user-id" exists-action="override">
+            <value>@(context.Subscription.Id)</value>
+        </set-header>
+    </inbound>
+</policies>
+
+7. Which of the following API Management policies would one use if one wants to apply a policy based on a condition?
+choose policy
+
+forward-request policy forwards the incoming request to the backend service specified in the request context.
+return-response policy aborts pipeline execution and returns either a default or custom response to the caller.
+
+8. 401 Access Denied -- You have to pass a valid subscription key.
+
+9.u have JSON endpoint. The client expects XML response. What policy should be applied?
+    json-to-xml-policy in outbound section
+
+10. When attempting to access an API through Microsoft's API Management,
+a developer receives a 401 Access Denied error.
+ What could be the possible reasons for this error, and how can it be fixed? Select the correct options.
+
+ Include the Ocp-Apim-Subscription-Key header in the HTTP request
+ Add the API to product in Azure Portal

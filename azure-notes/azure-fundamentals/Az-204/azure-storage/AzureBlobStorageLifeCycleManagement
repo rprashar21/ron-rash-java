@@ -42,7 +42,7 @@ this was the question
 az storage account management-policy create --account-name ronstorageaccount --policy policy.json --resource-group ron-rg
 
 
-Blob versoning ,, if turned on it will save a copy of the blob everytime blob is modified ,, in that way u can go to a previous version of blob
+Blob versioning ,, if turned on it will save a copy of the blob everytime blob is modified ,, in that way u can go to a previous version of blob
 
 Bobl Subtypes
 Blob base

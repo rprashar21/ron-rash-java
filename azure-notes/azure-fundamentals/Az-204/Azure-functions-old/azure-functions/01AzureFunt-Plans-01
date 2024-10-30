@@ -18,6 +18,46 @@ best for long running scenarios , Durable functions cannot be used.
 ASE - App service env is an app service feature ,, provides a full isolated,dedicated env at high scale -- manual
 Kubernetes(direct or Azure Arc) - same on kubernetes platfrom  -- event driven
 
+Azure Virtual Network (VNet) for secure and reliable network connectivity to Azure resources.
+Premium plan: EP1, EP2, EP3
+Standard App Service plan: S1
+Premium App Service plan: P1V2, P2V2, P3V2, P1V3, P2V3, P3V3
+Isolated App Service plan: I1, I2, I3, I1V2, I2V2, I3V2
+Does not support:
+
+Free App Service plan: F1
+Shared App Service plan: D1
+Basic App Service plan: B1, B2, B3
+
+
+
+Consumption Plan	Serverless, auto-scaling, pay-per-use,
+cold starts possible	Event-driven or infrequent workloads
+Image processing triggered by blob uploads
+
+Premium Plan	Serverless, no cold starts, VNET support, and dedicated instances
+                Consistent performance, secure VNET access
+                Real-time order processing in an e-commerce site
+
+Dedicated (App Service) Plan	Runs on an App Service Plan with manual scaling and long-running support
+	                  Long-running functions or existing App Service usage	Data aggregation that takes a long time
+
+Kubernetes-based Plan (AKS)	Runs on AKS, full Kubernetes control
+Integration into microservices or advanced scaling
+ IoT data processing within a microservices architecture
+
+App Service Plan	Runs on dedicated instances with full control, supports always-on, and long-running functions
+When consolidating resources for web apps and functions, or when predictable workloads need consistent performance	Running a batch processing job that takes longer than 10 minutes, or using shared resources between web apps and functions
+
+Explanation for App Service Plan:
+Description: Runs on a dedicated App Service Plan, providing full control over scaling, instance size, and always-on capability.
+ Functions run continuously, avoiding cold starts, and are suitable for long-running tasks.
+When to Use: Ideal for consolidating resources when you already have web apps running on an App Service Plan or when you need to run long-running functions that exceed the timeout limits of other plans.
+Example Scenario:
+Data Processing Job: A batch job that processes data every night and runs for over 10 minutes.
+ The App Service Plan ensures the function runs without timing out.
+Shared Resources for Web Apps and Functions: Deploying functions alongside a web app on the same App Service Plan to manage inventory or order processing tasks efficiently using shared resources.
+
 
 Function app timeout duration
 property - functionTimeout in host.json --> function needs to respond within this time

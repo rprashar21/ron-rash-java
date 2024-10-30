@@ -1,21 +1,4 @@
-Steps to deploy a container to app service
 
-Create an instance of Azure Container registry ACR
-Build a container image --{ur application maybe react or java17 buit into an image and the push it to acr  }
-Upload it to a conatiner registry
-Deploy it from the conatiner registry to Azure app service
-Connect and test ur app
-
-what is a Docker container ??
-A self-contained software environment that includes an application and all of its dependencies
-
-Most containers deployed to Azure App Service use the _____ operating system.
-Linux
-
-For you to deploy a container on Azure App Service, the pricing tier for your service plan has to be at least _____.
-BAsic
-
-Azure Container registry  provides a central location for storing container images.
 
 ------------------------------------------------------------------------------------------
 Conatiner related service in Azure
@@ -103,4 +86,5 @@ Docker is a software containerization platform
 Dcokerfile is a text file that contains the commands necessary to build an image
 Azure Container registry  allows you to store and manage your container images in a central location.
 Azure Kubernetes Service container orchestration service
-Microservice an application development strategy in which each part of an application is deployed as a completely self-contained component
+Microservice an application development strategy in which each part of an application
+is deployed as a completely self-contained component

@@ -32,3 +32,13 @@ Blob Versioning -  is more about data protection than efficient auditing.
 Option D (inventory reports) is not timely enough for nightly audits.
 Option E (Event Grid) is more suited for real-time processing than scheduled audits.
 
+
+3.You must connect to a No-SQL globally-distributed database by using the .NET API. You need to create an object to configure and execute requests in the database. Which code segment should you use?
+  • A. new Container(EndpointUri, PrimaryKey);
+  • B. new Database(EndpointUri, PrimaryKey);
+  • C. new CosmosClient(EndpointUri, PrimaryKey);
+
+  ans is c
+
+
+

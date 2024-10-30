@@ -1,5 +1,16 @@
-1. Which of the following steps is necessary to secure a custom domain using a certificate?
-Upload a private certificate to the App Service, ensuring that it meets all the requirements for private certificates
+To secure a custom domain using a certificate in Azure App Service, you generally need to:
+
+Purchase an SSL/TLS certificate from a trusted certificate authority (CA).
+Upload the certificate to Azure App Service.
+Bind the certificate to your custom domain in the Azure portal.
+
+SSL (Secure Sockets Layer) and TLS (Transport Layer Security)
+are cryptographic protocols designed to provide secure communication over a computer network
+
+Azure App Service also offers free managed certificates, which can automatically secure your custom domain without requiring
+you to purchase or upload a certificate manually.
+
+
 
 2.You are developing a solution for a public facing API.
   The API back end is hosted in an Azure App Service instance. You have implemented a RESTful service for the API back end.
@@ -9,7 +20,8 @@ Upload a private certificate to the App Service, ensuring that it meets all the 
 
   API Management allows to secure access to the back-end service of an API using client certificates.
 
-3. You are developing a web app that is protected by Azure Web Application Firewall (WAF). All traffic to the web app is routed through an Azure Application
+3. You are developing a web app that is protected by Azure Web Application Firewall (WAF).
+ All traffic to the web app is routed through an Azure Application
    Gateway instance that is used by multiple web apps. The web app address is contoso.azurewebsites.net. All traffic must be secured with SSL. The Azure Application Gateway instance is used by multiple web apps.
    You need to configure the Azure Application Gateway for the web app.
    Which two actions should you perform
@@ -30,7 +42,7 @@ Upload a private certificate to the App Service, ensuring that it meets all the 
   • D. Add a private certificate.
   • E. Create and configure a managed identity
 
-  Add and identity provider
+  Add and identity provider AE
 
 5.You must grant a virtual machine (VM) access to specific resource groups in Azure Resource Manager.
 You need to obtain an Azure Resource Manager access token.
@@ -39,3 +51,6 @@ You need to obtain an Azure Resource Manager access token.
   • A.Yes • B.No
   Answer: B
   Instead run the Invoke-RestMethod cmdlet to make a request to the local managed identity for Azure resources endpoint.
+
+6. when configuring a tls a client certificate is available thru httprequest.clientCertificate
+7. GetCertiicateAsync is the method from the certifcateClinet class

@@ -4,6 +4,7 @@ ARR affinity: In a multi-instance deployment, ensure that the client is routed t
 Q. You have five applications installed on a single App Service Plan.
  Each application has two deployment slots - production and staging.
  You have scaled the plan out to three instances. How many VMs are running to support this?
+3 VMs are running to support this setup.
 
 Ans When you create an app in App Service, it is put into an App Service plan.
  When the app runs, it runs on all the VM instances configured in the App Service plan.

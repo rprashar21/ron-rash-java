@@ -13,7 +13,7 @@ They can be accessed by storage accounts
 
  3 types of blob
  Block blob -->  contains about 190.7tib of data, contains block of data that can be managed individually
- Page Blob -->  store random access files upto 8tib of data
+ Page Blob -->  store random access files upto 8tb of data,store virtual hard drive (VHD) files and serve as disks for Azure virtual machines.
  Append BLob --> used to append data, good for logging data from virtual machines
 
 

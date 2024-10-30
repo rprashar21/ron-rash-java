@@ -3,7 +3,7 @@
  Azure Event Grid private endpoint, you need to ensure that it's correctly and securely connected to your WebHook.
 
  Establish a private endpoint for the Event Grid topic within your VNet.
-    Use Azure Private DNS to link the private endpoint to the WebHook's internal IP, ensuring secure, private communication.
+   Use Azure Private DNS to link the private endpoint to the WebHook's internal IP, ensuring secure, private communication.
 
     remaining choices are incorrect for the following reason
 
@@ -29,3 +29,5 @@
    How fast does 1 throughput unit represent for data coming in to an Event Hub?
 
    1 MB per second or 1000 events per second (whichever comes first)
+
+1. Azure Event Hub is ideal for storing high-volume data like high-risk transaction records for future scrutiny.

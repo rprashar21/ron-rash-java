@@ -1,0 +1,17 @@
+BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("mycontainer");
+BlobClient blobClient = containerClient.GetBlobClient("myblob");
+
+BlobProperties properties = await blobClient.GetPropertiesAsync();;
+
+// perform the update
+BlobUploadOptions options = new BlobUploadOptions
+{
+    Metadata = new Dictionary<string, string>
+    {
+        { "key", "value" }
+    },
+   Conditions = new BlobRequestConditions { IfMatch = properties.Value.ETag }
+};
+
+await blobClient.UploadAsync(BinaryData.FromString("data"), options);

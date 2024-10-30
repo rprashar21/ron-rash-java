@@ -1,0 +1,113 @@
+Question #3
+Your company has an Azure Kubernetes Service (AKS) cluster that you manage from an Azure AD-joined device. The cluster is located in a resource group.
+Developers have created an application named MyApp. MyApp was packaged into a container image. You need to deploy the YAML manifest file for the application.
+Solution: You install the Azure CLI on the device and run the kubectl apply `"f myapp.yaml command. Does this meet the goal?
+NO
+becasue first u need to 1. install azure cli 2. Get Credentials for the AKS Cluster 3. and the apply the deployment file
+
+get creds
+az aks get-credentials --resource-group <resource-group-name> --name <aks-cluster-name>
+az aks get-credential --resource-group myresourcegroup --name mycluster
+
+
+FROM: Specifies the base image.
+WORKDIR: Sets the directory where the app files will reside.
+COPY: Copies all necessary files into the container.
+RUN: Executes the PowerShell script during the build process.
+CMD: Runs the application when the container starts.
+
+2. You are preparing to deploy a Python website to an Azure Web App using a container.
+  The solution will use multiple containers in the same container group. The
+   Dockerfile that builds the container is as follows:
+   the user name and password for the registry is admin.
+   The Web App must always run the same version of the website regardless of future builds.
+   You need to create an Azure Web App to run the website
+
+   az appservice plan create --name <>  --SKU B1 --hyper-v -  basic plan to support containers
+
+Web App must always run the same version
+   az webapp create --plan websitePlan --deployment-container-image-name images.azurecr.io/website:v1.0.0
+
+   user name and password for the registry is admin.
+   az webapp config container set --docker-registry-server-url https://images.azurecr.io
+     --docker-registry-server-user admin
+    --docker-registry-server-password admin
+
+3.You develop a containerized application. You plan to deploy the application to a new Azure Container
+instance by using a third-party continuous integration and continuous delivery (CI/CD) utility.
+  The deployment must be unattended and include all application assets.
+  The third-party utility must only be able to push and pull images from the registry.
+   The authentication must be managed by Azure Active Directory (Azure AD). The solution must use the principle of least privilege.
+  You need to ensure that the third-party utility can access the registry.
+  Which authentication options should you use
+
+  Service principal -
+  acpush - acrpush allows 3rd party to only push and pull
+
+  what is service principal
+  service principal is basically a managed identity ie,
+  It acts as a "service account" that applications can use to authenticate and interact with Azure resources without requiring user credentials.
+  Suppose you have an application deployed on Azure Kubernetes Service (AKS) that needs to access an Azure SQL Database.
+  u create a service principal object with the appropriate permissions to access the database.
+  application uses this service principal to authenticate and securely access the database without needing user credentials.
+
+  Service principal
+  Service Principal: MyServicePrincipal
+  -------------------------------------------
+  | Client ID (appId):     7c9e6679-7425-40de-944b-e07fc1f90ae7
+  | Tenant ID:             12345678-90ab-cdef-1234-567890abcdef
+  | Object ID:             2a7a8e8b-934d-4b1d-9080-14cc2f4bb4d6
+  | Authentication Method: Client Secret or Certificate
+  | Assigned Roles:        Contributor
+  -------------------------------------------
+This gives you the key identifiers and attributes used to manage and authenticate the service principal.
+
+Summary:
+A service principal consists of a Client ID, Tenant ID,
+Object ID, and an authentication method (either a Client Secret or Certificate).
+ It is assigned roles to define what resources it can access.
+ It’s mainly a collection of identifiers and credentials that allow applications to authenticate securely without user intervention.
+
+4. You develop a Python application for image rendering that uses GPU resources to optimize rendering processes. You deploy the application to an Azure
+   Container Instances (ACI) Linux container.
+   The application requires a secret value to be passed when the container is started. The value must only be accessed from within the container.
+   You need to pass the secret value.
+   What are two possible ways to achieve this goal? Each correct answer presents a complete solution. NOTE: Each correct selection is worth one point.
+   • A. Create an environment variable Set the secureValue property to the secret value.
+   • B. Add the secret value to the container image. Use a managed identity.
+   • C. Add the secret value to the application code Set the container startup command.
+   • D. Add the secret value to an Azure Blob storage account. Generate a SAS token.
+   • E. Mount a secret volume containing the secret value in a secrets file.
+
+   AE
+
+ 5.You develop a containerized application. The application must be deployed to an existing Azure Kubernetes Service (AKS) cluster from an Azure Container Registry (ACR) instance. You use the Azure command-line interface (Azure CLI) to deploy the application image to AKS.
+   Images must be pulled from the registry. You must be able to view all registries within the current Azure subscription. Authentication must be managed by Microsoft Entra ID and removed when the registry is deleted. The solution must use the principle of least privilege.
+   You need to configure authentication to the registry.
+   Which authentication configuration should you use? To answer, select the appropriate configuration values in the answer area,
+
+   authenticaion method - system-assigined identity
+   rbac will be acrpull
+
+ 6.You are developing several microservices to run on Azure Container Apps for a company. External TCP ingress traffic from the internet has been enabled for the microservices.
+   The company requires that the microservices must scale based on an Azure Event Hub trigger. You need to scale the microservices by using a custom scaling rule.
+   Which two Kubernetes Event-driven Autoscaling (KEDA) trigger fields should you use? Each correct answer presents part of the solution.
+   NOTE: Each correct selection is worth one point.
+   • A. metadata
+   • B. type
+   • C. authenticationRef
+   • D. name
+   • E. metricType
+   AB
+
+ 7. contentuploadservice(aci ) contentanlayssisservice
+ You need to investigate the http server log output to resolve the issue with the ContentUploadService.
+ Which command should you use first?
+ • A. az webapp log --command is used for managing logs in Azure Web Apps
+ • B. az ams live-output  command is related to Azure Media Services and is used for monitoring live streaming outputs.
+ • C. az monitor activity-log -command retrieves the Azure Activity Log, which provides information about the operations performed on Azure resources, but it does not show application-specific logs like HTTP server logs within a container
+ • D. az container attach -connect to a running Azure Container Instance (ACI) and view the logs in real time
+
+
+
+

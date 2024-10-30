@@ -4,6 +4,13 @@ Lease status --locked
 Lease state -- leased
 Lease duration -- infinite
 
+A lease is a temporary lock on a blob (or container) that prevents other clients from modifying
+or deleting it until the lease expires or is released.
+Acquire Lease: A client requests and obtains a lease on a blob, ensuring exclusive access.
+Renew Lease: If a client wants to extend the duration of the lease, it can renew it before it expires (only applicable for fixed duration leases).
+Release Lease: The client voluntarily releases the lease, allowing other clients to access the blob.
+Break Lease: The lease can be forcibly broken, which makes the blob available for access before the lease expires or is released.
+
 Metadata is optional
 
 Azure storage client libraries to make changes to the azure programtically

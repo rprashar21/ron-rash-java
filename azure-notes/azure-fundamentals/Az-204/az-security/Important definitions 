@@ -1,0 +1,48 @@
+what is service principal
+  service principal is basically a managed identity ie,
+  It acts as a "service account" that applications can use to authenticate and interact with Azure resources without requiring user credentials.
+  Suppose you have an application deployed on Azure Kubernetes Service (AKS) that needs to access an Azure SQL Database.
+  u create a service principal object with the appropriate permissions to access the database.
+  application uses this service principal to authenticate and securely access the database without needing user credentials.
+
+  Service principal
+  Service Principal: MyServicePrincipal
+  -------------------------------------------
+  | Client ID (appId):     7c9e6679-7425-40de-944b-e07fc1f90ae7
+  | Tenant ID:             12345678-90ab-cdef-1234-567890abcdef
+  | Object ID:             2a7a8e8b-934d-4b1d-9080-14cc2f4bb4d6
+  | Authentication Method: Client Secret or Certificate
+  | Assigned Roles:        Contributor
+  -------------------------------------------
+This gives you the key identifiers and attributes used to manage and authenticate the service principal.
+
+Summary:
+A service principal consists of a Client ID, Tenant ID,Object ID, and an authentication method (either a Client Secret or Certificate).
+It is assigned roles to define what resources it can access.
+It’s mainly a collection of identifiers and credentials that allow applications to authenticate securely without user intervention.
+
+tenanat Id - The Azure AD tenant itself (organization’s directory)
+             it applies to all the objects within a particalar organization
+             it has a global scope
+             used when an app identifies itself within a tenant
+             az login --tenant 12345678-90ab-cdef-1234-567890abcdef
+             (Logging in to Azure with a specific Tenant ID)
+
+object id -- group or user or app within the tenant
+          Used to identify and manage a specific object, such as assigning permissions to a service principal or user
+          You want to assign the Contributor role to a service principal.
+          az role assignment create --assignee-object-id 2a7a8e8b-934d-4b1d-9080-14cc2f4bb4d6 --role Contributor
+          (Assigning a role to an object using its Object ID)
+
+client id -- specific to an appllication
+When you configure an app for Azure AD authentication, you specify the Client ID so that Azure AD knows which application is trying to authenticate.
+
+Service princiapl is a combination of these
+You create a Service Principal for a CI/CD pipeline to deploy resources in Azure.
+It uses the Client ID and Client Secret to authenticate and perform tasks automatically.
+A Service Principal is configured through its Client ID and managed using its Object ID for various tasks like access control and permission
+
+
+
+
+

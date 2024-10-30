@@ -1,48 +1,38 @@
 Diagnostic logging means detailed logging to improve the overall feature of the application.
-Application,webserver,detail tracing,deployment logging
 
-Application Logging (Filesystem) or Application Logging (Blob), or both.
- The Filesystem option is for temporary debugging purposes, and turns itself off in 12 hours.
- The Blob option is for long-term logging, and needs a blob storage container to write logs to.
+Type	                     Platform	     Location	                        Purpose
+Application Logging          Windows/Linux	 File System / Azure Blob Storage	Logs from application code (errors, info, etc.)
+Web Server Logging	         Windows only	 File System / Azure Blob Storage	Logs raw HTTP request data (W3C format)
+Detailed Error Logging	     Windows only	 File System	                    Captures detailed errors for failed requests
+Deployment Logging	         Windows/Linux	 Azure DevOps/Deployment Center     Logs deployment activities
 
-Type	            Platform	Location	                                  Description
-applicationloging   win/linux   app service file system /azure blob storage  appliction code
-webserver           win          file/blob                                    Raw HTTP request data in the W3C extended log file forma
-Detailed error logging            file system
 
- Level	Included categories
- Disabled	None
- Error	Error, Critical
- Warning	Warning, Error, Critical
- Information	Info, Warning, Error, Critical
- Verbose      	Trace, Debug, Info, Warning, Error, Critical (all categories)
+Filesystem: Temporary logging for debugging purposes; automatically turns off after 12 hours.
+Blob Storage: Suitable for long-term logging; requires a blob storage container to store logs.
 
- Enable application logging linux /containers
-  App Service log --> Application logging option to filesystem
-  specify Quota (mb) -disk quota
-  Retention Period (Days) - no of days
+When to Use:
+Filesystem: For short-term debugging.
+Blob Storage: For persistent storage and historical log analysis.
 
-Enable web server logging
-select Storage to store logs on blob storage, or File System to store logs on the App Service file system.
-specify Retention Period (Days) - no of days
+Filesystem:
+Temporary storage; logs auto-delete after 12 hours.
+Useful for real-time troubleshooting; download logs as ZIP files
 
 Add log messages in code a .net application use class S
 System.Diagnostics.Trace.TraceError("If you're seeing this, something bad happened");
 
+Streaming and Accessing Log
+az webapp log tail --name <webappname> --resource-group <resource-group-name>
 
-Before you stream logs in real time, enable the log type that you want.
-Any information written to files ending in .txt, .log, or .htm that are stored
-in the /LogFiles directory (d:/home/logfiles) is streamed by App Service.
 
-Azure portal - To stream logs in the Azure portal, navigate to your app and select Log stream.
-Azure CLI use the below command
-az webapp log tail --name appname --resource-group myResourceGroup
+Logs stored in /LogFiles directory can be downloaded.
+
 
 Which of the following statements are true for application logging?
 Only .NET application logs can be written to the blob storage
 You can use other Azure services for logging and monitoring
 App Service file system (Filesystem) will turn itself off in 12 hours
 Blob storage is for long-term logging
-Logs can be reatained for specified amount of days
+Logs can be retained for specified amount of days
 For logs stored in the App Service file system, you can download the ZIP file in the browser
 

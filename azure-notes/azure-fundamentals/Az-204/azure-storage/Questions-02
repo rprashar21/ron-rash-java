@@ -1,4 +1,5 @@
-You are developing an application. You have an Azure user account that has access to two subscriptions. You need to retrieve a storage account key secret from Azure Key Vault.
+You are developing an application. You have an Azure user account that has access to two subscriptions.
+You need to retrieve a storage account key secret from Azure Key Vault.
 In which order should you arrange the PowerShell commands to develop the solution?
 To answer, move all commands from the list of commands to the answer area and arrange them in the correct order. Select and Place:
 
@@ -10,7 +11,11 @@ To specify the subscription that's associated with the key vault you'll be loggi
 Step 3: Get-AzStorageAccountKey -
 You must get that storage account key.
 Step 4: $secretvalue = ConvertTo-SecureString <storageAccountKey> -AsPlainText -Force Set-AzKeyVaultSecret -VaultName <vaultName> -Name <secretName> -SecretValue $secretvalue
-After retrieving your secret (in this case, your storage account key), you must convert that key to a secure string, and then create a secret with that value in your key vault.
+After retrieving your secret (in this case, your storage account key), you must convert that key to a secure string, a
+nd then create a secret with that value in your key vault.
 Step 5: Get-AzKeyVaultSecret -
 Next, get the URI for the secret you created. You'll need this URI in a later step to call the key vault and retrieve your secret. Run the following PowerShell command and make note of the ID value, which is the secret's URI:
 Get-AzKeyVaultSecret ג€"VaultName <vaultName>
+
+
+put method allows u to add properties and metadat info in headers

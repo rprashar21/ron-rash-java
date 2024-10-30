@@ -4,7 +4,7 @@ primary data is written in multiple regions
 underlying architecture is no sql supports json , enntreprise ready
 
 % core apis for cosmos db are
-Core SQL API: Best for structured data and rich queries. Json data also is tsored
+Core SQL API: Best for structured data and rich queries. You will see json data returned here
 Scenario: Customer database for e-commerce.
 u need to run complex queries for  to find all customers who purchased specific products, filter them by location, and calculate their total spending.
 

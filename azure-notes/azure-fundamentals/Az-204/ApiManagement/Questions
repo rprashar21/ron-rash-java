@@ -1,0 +1,38 @@
+1. rate-limit -- no of call allowed per api
+quota by call renewal-period ="0"> means infinte time it should be in seconds
+<rate-limit calls="2000" renewal-period =""300">
+
+if the question mentions you need to generate a throttling key
+unit in seconds and kb
+limit the calls to 10 every minute, with a total of 100 calls and 100 MB of bandwidth per hour.
+<rate-limit-by-key calls="10" renewal-period="60" counter-key="@(context.Request.Headers.GetValueOrDefault(\"Authorization\",\"").AsJwt()?.Subject)" />
+<quota-by-key calls="100" bandwidth="100000" renewal-period="3600" counter-key="@(context.Request.Headers.GetValueOrDefault(\"Authorization\",\"").AsJwt()?.Subject)" />
+
+
+2. What rule should be used to cache this URL: https://myapi.azure-api.net/items?id=123456?
+<cache-lookup><vary-by-query-parameter>id</vary-by-query-parameter></cache-lookup>
+Use id to store the value.
+items is not valid query parameter.
+
+<cache-lookup-value value="id" /> this is not the answer as this is used to
+cache-lookup-value is for retrieving cached value by name.
+
+3. The user ID of the client must first be detected and saved.
+Then, the response must be cached specifically for that saved user ID.
+What types of policies should be used to accomplish this task?
+Both indound and outbound policies should be used
+<inbound>
+<set-variable> ---> policy is used to save the user ID,
+<cache-lookup> ----> policy with a custom key is used to check if a cached response exists for that user ID.
+</inbound>
+
+ <outbound> used to store the response of the cache
+ <cache-store> policy with a custom key is used to cache the response specifically for the saved user ID.
+
+4. Generate OpenAPI specification for the REST API.
+
+5. What rule should be used to cache this URL: https://myapi.azure-api.net/me?
+This looks like user endpoint, Authorization header could be used.
+<cache-lookup><vary-by-header>Authorization</vary-by-header></cache-lookup>
+
+

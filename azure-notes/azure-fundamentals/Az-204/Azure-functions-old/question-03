@@ -1,0 +1,40 @@
+1. JSON payloads . This payload data is then intended to be stored in a database that is optimal
+for storing large amounts of structured, non-relational data, such as metadata, user data, and diagnostic data
+trigger -- http and output bindin is table
+[FunctionName("ProcessPayload")]
+public static async Task<IActionResult> Run(
+    [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+    HttpRequest req,
+
+    [Table("<table-name>", Connection = "StorageConnectionAppSetting")]
+    IAsyncCollector<dynamic> outputTable,
+
+2.an application that requires data to be processed immediately
+# Create a resource group
+az group create --name $resourceGroupName --location $location
+
+# Create an Azure Storage Account
+az storage account create --name $storageName --location $location --resource-group $resourceGroupName --sku Standard_LRS
+
+# Create a premium plan
+az functionapp plan create --name $planName --resource-group $resourceGroupName --location $location --sku EP1
+
+# Create a function app with the premium plan
+az functionapp create --resource-group $resourceGroupName
+--plan $planName --name $functionAppName --storage-account $storageName --runtime node --functions-version 3
+
+3.Suppose you are asked to create a function app in Azure where you want to have dedicated compute
+resources and you don't want the function app to be paused during periods of inactivity
+create afunction app with App service plan and
+
+# Create an App Service plan
+az appservice plan create --name $planName --resource-group $resourceGroupName --location $location --sku S1
+
+# Create a function app with the App Service plan
+az functionapp create --resource-group $resourceGroupName
+--plan $planName --name $functionAppName
+--storage-account $storageName --runtime node --functions-version 3
+
+
+# Set the function app to always be on
+az functionapp config set --name $functionAppName --resource-group $resourceGroupName --always-on true

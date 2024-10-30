@@ -44,7 +44,7 @@ docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
                    --name $WEBAPP_NAME --deployment-container-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
 
  Configure the web app to use the container registry
- az webapp conif container set  --name $WEBAPP_NAME
+ az webapp conig container set  --name $WEBAPP_NAME
   --resource-group $RESOURCE_GROUP
   --docker-custom-image-name $ACR_NAME.azurecr.io/$IMAGE_NAME:$VERSION
   --docker-registry-server-url https://$ACR_NAME.azurecr.io

@@ -1,0 +1,34 @@
+# First Stage: Build Stage
+# Use .NET Core SDK image to build the application
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+
+# Set the working directory to /app for the build process
+WORKDIR /app
+
+# Copy the solution file to the container
+COPY *.sln .            # Copy solution file to the /app directory
+
+# Copy the project file(s) into a 'checkout' folder in the container
+COPY checkout/*.csproj ./checkout/  # Copy project file to /app/checkout
+
+# Restore all dependencies defined in the .csproj file
+RUN dotnet restore       # Run dotnet restore to download dependencies
+
+# Copy the remaining application source code files
+COPY checkout/. ./checkout/  # Copy all files from local checkout/ to container's /app/checkout
+
+# Publish the application in Release mode to the 'out' directory
+RUN dotnet publish -c Release -o out   # Compile and publish to /app/checkout/out
+
+# Second Stage: Runtime Stage
+# Use a lighter ASP.NET Core runtime image to run the application
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
+
+# Set the working directory for the runtime stage to /app
+WORKDIR /app
+
+# Copy the published application from the build stage to the runtime stage
+COPY --from=build /app/checkout/out ./  # Copy built files from the build stage
+
+# Set the entry point to run the application using the 'dotnet' command
+ENTRYPOINT ["dotnet", "checkout.dll"]   # Start the app by running checkout.dll

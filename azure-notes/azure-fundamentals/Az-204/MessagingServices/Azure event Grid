@@ -59,10 +59,13 @@ A subject filter is used to specify a starting or ending value for the subject.
 Topics is not a type of filter; the event grid topic provides an endpoint where the source sends events.
 
 ============
-Question -- You are developing a serverless application to process events from a third-party service. The third-party service sends events to a webhook URL whenever there are status changes in their system. Your task is to ensure that these events trigger an Azure Function to process them accordingly.
+Question -- You are developing a serverless application to process events from a third-party service.
+ The third-party service sends events to a webhook URL whenever there are status changes in their system.
+ Your task is to ensure that these events trigger an Azure Function to process them accordingly.
 
             Which of the following is the most efficient way to implement this?
-Anseer - >Set up an Azure Function with an HTTP Trigger, and provide the function's URL as the webhook URL to the third-party service to receive and process the status change events directly.
+Anseer - >Set up an Azure Function with an HTTP Trigger, and provide the function's URL as the webhook URL to the third-party
+service to receive and process the status change events directly.
 
 Webhooks are typically user-defined HTTP callbacks used to invoke behavior in another system.
 The third-party service sends events to a provided URL (webhook) whenever relevant events occur in their system, such as status changes.
