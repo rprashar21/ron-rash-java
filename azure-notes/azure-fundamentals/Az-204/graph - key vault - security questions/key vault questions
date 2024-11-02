@@ -1,0 +1,43 @@
+kvName="<your-unique-keyvault-name>"
+rgName="myResourceGroup"
+locationName="EastUS"
+certName="ExampleCertificate"
+
+# Create a key vault
+az keyvault create --name $kvName --resource-group $rgName --location $locationName
+
+# Add a certificate to Key Vault using default policy
+az keyvault certificate create --vault-name $kvName -n $certName -p "$(az keyvault certificate get-default-policy)"
+
+
+2.Azure Key Vault protects data when it's traveling between Azure Key Vault and clients. What protocol does it use for encryption?
+Transport Layer Security
+
+3.Your company is preparing to deploy an application on an Azure Linux virtual machine (VM) named myLinuxVM,
+and there is a requirement to configure Azure Disk Encryption.
+You have created a resource group named myResourceGroup in the East US region.
+
+  To achieve the desired configuration, you need to use a key encryption key (KEK)
+  to protect the encryption secret and enable the Key Vault for both disk encryption and template deployments.
+
+  az keyvault create --name "<keyvault-id>" --resource-group "myResourceGroup" --location "eastus"
+  az keyvault update --name "<keyvault-id>" --resource-group "MyResourceGroup" --enabled-for-disk-encryption "true"
+  az keyvault update --name "<keyvault-id>" --resource-group "MyResourceGroup" --enabled-for-template-deployment "true"
+  az keyvault key create --name "myKEK" --vault-name "<keyvault-id>" --kty RSA --size 4096
+  az vm encryption enable -g "MyResourceGroup" --name "myLinuxVM" --disk-encryption-keyvault "<keyvault-id>" --key-encryption-key "myKEK"
+
+4.application must be able to encrypt keys before storing them,
+ decrypt keys when retrieving them, and also have the ability to retrieve key information
+ WRAP
+ UNWRAP
+  GET
+
+5. How to create an access policy for your key vault that grants certificate permissions to your user account?
+az keyvault set-policy --name <your-key-vault-name> --upn user@domain.com --certificate-permissions delete get list create purge
+
+6.Which of the below methods of authenticating to Azure Key Vault is recommended for most scenarios?
+
+Managed identities
+
+
+

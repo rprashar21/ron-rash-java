@@ -1,0 +1,51 @@
+1.application needs to authenticate users via Microsoft Entra ID.
+ What value should be set for the Microsoft Graph > User.Read permission in the Azure Portal to meet this requirement?
+
+ Delegated - allows the application to authenticate users and read their basic profile on their behalf.
+ "Delegated" allows the application to access Azure Blob Storage on behalf of the authenticated users.
+
+2. MSAL libraries that supports single-page web apps
+ MSAL.js
+
+3. You are tasked to build an application that will run on mobile devices and web browsers.
+Which application builder should you use?
+
+PublicClientApplicationBuilder - User-facing apps without the ability to securely store secrets
+
+4.correct order to protect an API in Azure API Management with Microsoft Entra ID:
+Register the backend API application in Microsoft Entra ID.
+Register the web App (website containing summarized results) in Microsoft Entra ID so that it can call the backend API.
+Allow permissions between the website app to call the backend API app. Add the configurations in Microsoft Entra ID.
+Enable OAuth 2.0 user authorization and add the validate-jwt policy to validate the OAuth token for API calls.
+
+5. Which of the following authorization flows are primarily utilized by Public client applications:
+Authorization code
+On-behalf-of
+Implicit
+Device code
+Integrated Windows
+Interactive
+Username/password
+
+6. redirect URI or reply URL, following successful authorization of the app and the granting of an
+Authorization Server -authorization Server is the specific component in the OAuth process that directs the user to the designated location
+after the app has been successfully authorized and an authorization code or access token has been granted.
+
+7.[Authorize(Roles = "Employee")] roles = employees
+  [Authorize(Roles = "Manager")] roles = manger
+  public class EmployeeController : Controller
+  {
+      public IActionResult Index() => Content("Employee Controller");
+  }
+
+  public class SalesController : Controller
+  {
+      [Authorize(Policy = "ReatailPolicy")]
+      public IActionResult ManageSales() => Content("Sales Management");
+  }
+
+  public class DepartmentController : Controller
+  {
+      [Authorize(Policy = "AreaPolicy")]
+      public IActionResult ManageDepartment() => Content("Department Management");
+  }

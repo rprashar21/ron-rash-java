@@ -22,7 +22,7 @@ It is assigned roles to define what resources it can access.
 It’s mainly a collection of identifiers and credentials that allow applications to authenticate securely without user intervention.
 
 tenanat Id - The Azure AD tenant itself (organization’s directory)
-             it applies to all the objects within a particalar organization
+             it applies to all the objects within a particular organization
              it has a global scope
              used when an app identifies itself within a tenant
              az login --tenant 12345678-90ab-cdef-1234-567890abcdef
@@ -35,7 +35,8 @@ object id -- group or user or app within the tenant
           (Assigning a role to an object using its Object ID)
 
 client id -- specific to an appllication
-When you configure an app for Azure AD authentication, you specify the Client ID so that Azure AD knows which application is trying to authenticate.
+When you configure an app for Azure AD authentication,
+ you specify the Client ID so that Azure AD knows which application is trying to authenticate.
 
 Service princiapl is a combination of these
 You create a Service Principal for a CI/CD pipeline to deploy resources in Azure.

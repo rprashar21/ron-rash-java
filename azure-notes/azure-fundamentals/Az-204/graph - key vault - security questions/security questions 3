@@ -1,0 +1,28 @@
+Q
+integrate authentication and authorization working with the Microsoft identity platform for Web API
+1.Register app
+2.Configure app with code sample
+3.Validate access token
+4.Configure secrets & certificates
+5. Configure permission & call API of choice
+6. Control access to web API (authorization)
+7. Store token cache
+
+2.if the resource identifier is omitted in the scope parameter, the resource is assumed to be Microsoft Graph.
+
+3. u need to implement authentication for two applications: a web application and an API.
+Only users from a specific Entra ID tenant should be able to access both applications.
+ Which of the following account types should you select to meet the security requirements?
+
+ Accounts in this organizational directory only (Single tenant)
+
+ Confidential clinet flow
+ Client credentials
+ On-behalf-of
+ Integrated Windows
+ Username/password
+
+4. In Microsoft Entra ID, all applications must register to delegate identity and access managemen
+
+5.In the context of the Microsoft Identity platform, what is the function of the scope parameter?
+It indicates the type of resource being requested.

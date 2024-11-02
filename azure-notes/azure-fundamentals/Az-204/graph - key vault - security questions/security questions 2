@@ -1,0 +1,36 @@
+1. application needs to authorize users based on their group membership in the organization.
+Configure the groupMembershipClaims attribute in the application manifest.
+
+2. What happens if a user attempts to access Microsoft Key Vault with scope=User.Read in the Microsoft Identity platform?
+The request fails because  User.Read will assume wrong resource type
+Use https://vault.azure.net/.default instead
+
+3. Delegated permission - signed in user
+App-only access permission - no signed in user
+
+4. You are developing a web application using ASP.Net Core.
+The application needs to authenticate users via Microsoft Entra ID and
+also needs to access Azure Blob Storage on behalf of the authenticated users.
+What settings should you set in API permissions pane to allow this?
+
+Microsoft Graph > User.Read
+Microsoft Graph: Set User.Read to "Delegate" to allow application to read the user's profile only when the user is signed in.
+Azure Storage > user_impersonation
+Azure Storage: Set user_impersonation to "Delegate" to allow the application to access Azure Storage only when the user is signed in.
+
+4. you're tasked with implementing mandatory multi-factor authentication for all users. What is the most appropriate step to take
+Activate security defaults in Microsoft Entra ID.
+This feature provides a basic level of security, including mandatory multi-factor authentication for all users, at no additional cost
+
+5. You want to implement a policy that triggers multi-factor authentication
+(MFA) when a sign-in is deemed risky. Which two actions should you perform?
+Upgrade the staff accounts to Microsoft Entra ID Premium P2.
+establish a new risk-based conditional access policy in Microsoft Entra ID.
+
+6. Microsoft Entra ID B2C - users can sign in using their social media credentials like Instagram, Reddit, or Google
+ B2C supports authentication through a variety of social media platforms and email accounts,
+ making it the most suitable choice for this scenario.
+
+7. difference between AppRoles and Groups
+AppRoles are specific to an application and are removed with the app registration,
+Groups are tenant-specific and persist even after the app is removed.

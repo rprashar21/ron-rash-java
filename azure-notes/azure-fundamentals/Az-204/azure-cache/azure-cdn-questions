@@ -21,3 +21,17 @@ standard verizon - Best for media-heavy applications,live streaming and
 Microsoft: For basic, cost-effective CDN needs with Azure integration.
 Akamai: When you need enhanced performance, global scale, and advanced security features.
 Verizon: For media-rich applications and scenarios requiring optimized streaming and media delivery.
+
+What are the Azure CDN configuration propagation times for Standard (Verizon):
+10 mins
+
+What are the Azure CDN configuration propagation times for Standard (Akamai):
+1 min
+
+What does purging NOT affect in a CDN?
+Local browser caches.
+
+In Azure CDN, purging a file removes it from the cache, allowing updated caching rules to be applied.
+Deleting refers to removing the file from the origin server, not the cache, and won't reset the cache duration.
+
+The number of CDN profiles that can be created is limited by the type of Azure subscription.

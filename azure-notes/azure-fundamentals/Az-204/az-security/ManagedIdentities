@@ -3,7 +3,7 @@
 for example i want to build and app using azure app services that access azure storage without having to manage any credentials
 
 Types of managed identities
-System assigned-- tied to the resource,lifecycle depends upon the the resource ,if theresource is deleted the identity is deleted
+System assigned-- tied to the resource,lifecycle depends upon the the resource ,if the resource is deleted the identity is deleted
 
 USer-assigned- not tied to the resource ,separatley managed , can be assigned to multiple resources.
 

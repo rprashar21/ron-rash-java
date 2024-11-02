@@ -18,7 +18,8 @@ What rule should be used to cache this URL: https://myapi.azure-api.net/items?id
 <cache-lookup><vary-by-query-parameter>id</vary-by-query-parameter></cache-lookup>
 Use id to store the value.
 
-4. A 403 Forbidden error is either an IP filter policy or an exceeded quota. Since policy rules haven't been modified, it must be a quota issue.
+4. A 403 Forbidden error is either an IP filter policy or an exceeded quota.
+Since policy rules haven't been modified, it must be a quota issue.
 
 5.You have JSON endpoint that expects JSON payload. The client sends XML payload. What policy should be applied?
 xml-to-json-policy in inbound section

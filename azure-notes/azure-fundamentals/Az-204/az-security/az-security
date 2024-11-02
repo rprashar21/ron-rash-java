@@ -4,7 +4,8 @@ these users have not yet been onboarded into the parent company's primary Micros
  To avoid any operational disruptions, you have been tasked with ensuring these users get seamless
  access without compromising security or creating additional Microsoft Entra tenants.
 
- Set up an access package in Microsoft Entitlement Management and provide the acquired company's users access to the necessary Azure resources.
+ Set up an access package in Microsoft Entitlement Management and provide
+ the acquired company's users access to the necessary Azure resources.
 
  Microsoft Entitlement Management in Microsoft Entra provides fine-grained access management for internal and external users.
  By setting up an access package, organizations can define a set of Azure resources, and users can request access to them

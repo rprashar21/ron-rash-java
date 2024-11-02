@@ -34,3 +34,7 @@ and speed is a priority. It's simpler but may lead to inconsistencies between di
 A single-user application that requires rapid access to user-specific data.
 A desktop application that needs to store temporary files locally for quick retrieval.
 A personal finance tool that caches individual user's financial data on their device for quick access.
+
+8. Combines simplicity, speed, scalability, supports concurrent access, and is optimized for cost,
+making it suitable for handling transient network failures .
+Cache for Redis at Standard Tier -

@@ -1,0 +1,37 @@
+1. Write a query that get fields displayName, givenName, postalCode,
+identities from the profile of user with id 87d349ed-44d7-43e1-9a83-5f2406dee5bd (v1.0) ?
+
+GET https://graph.microsoft.com/v1.0/users/87d349ed-44d7-43e1-9a83-5f2406dee5bd?$select=displayName,givenName,postalCode,identities
+
+2. The correct way to ensure that the app can read both the calendars owned
+by the signed-in user and the calendars that other users have shared with the signed-in user is to use the Calendars.Read.Shared permission.
+
+3. The application must be restricted to performing read operations solely on the resources belonging to the authenticated user.
+ You have already granted the User.Read permission.
+ How should you set up the permission constraint in Microsoft Graph to meet this requirement?
+ ans Leave the constraint part blank.
+
+4.  retrieve the most recent activities for a user
+GET /me/activities/recent
+PATCH /me/activities/{activityId}
+
+The PUT method replaces a resource with a new one.
+The POST method creates a new resource.
+The PATCH method does update a resource with a new value.
+
+5 how user can obtain the metadata of their own photo in Graph?
+https://graph.microsoft.com/v1.0/me/photo/
+
+6.How a user can obtain their own photo in Graph?
+https://graph.microsoft.com/v1.0/me/photo/$value
+
+7.Which of the following headers is mandatory in the response from Microsoft Graph
+request-id
+
+8.What is the proper way to select displayName field of current user
+https://graph.microsoft.com/v1.0/me?$select=displayName
+
+9.Which of the following permissions require admin consent?
+AppCatalog.Submit
+BusinessScenarioConfig.Read.OwnedBy
+Users.Read.All
