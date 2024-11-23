@@ -35,4 +35,7 @@ Both indound and outbound policies should be used
 This looks like user endpoint, Authorization header could be used.
 <cache-lookup><vary-by-header>Authorization</vary-by-header></cache-lookup>
 
+6. revision vs version
+revision - this allows u to add operations without any breaking changes to a webapi
+version - allows u to expose changes for an api , needs publishing
 

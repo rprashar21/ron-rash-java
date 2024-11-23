@@ -1,0 +1,46 @@
+1.You need to configure Azure CDN for the Shipping web sit
+tier - standard
+profile - akamia
+optimization -- dynamic site acceleration
+
+2. You need to correct the VM issues.
+backup and restore- azure back up
+Azure Backup
+Accelerated networking
+
+3.You need to secure the Shipping Function app.
+
+Box 1: Function - Authorization
+Box 2: JSON based Token (JWT)
+Azure AD uses JSON based tokens (JWTs) that contain claims
+Box 3: HTTP -
+How a web app delegates sign-in to Azure AD and obtains a token
+User authentication happens via the browser. The OpenID protocol uses standard HTTP protocol
+messages.
+
+4.You need to secure the Shipping Logic App.
+  What should you use?
+  • A. Azure App Service Environment (ASE)
+  • B. Integration Service Environment (ISE) ans
+  • C. VNet service endpoint
+  • D. Azure AD B2B integration
+
+ You can access to Azure Virtual Network resources from Azure Logic Apps by using integration service
+ environments (ISEs).
+
+ 5.You need to support the message processing for the ocean transport workflow
+ Step 1: Create an integration account in the Azure portal
+ You can define custom metadata for artifacts in integration accounts and get that metadata during
+ runtime for your logic app to use. For example, you can provide metadata for artifacts, such as partners,
+ agreements, schemas, and maps - all store metadata using key-value pairs.
+ Step 2: Link the Logic App to the integration account
+ A logic app that's linked to the integration account and artifact metadata you want to use.
+ Step 3: Add partners, schemas, certificates, maps, and agreements
+ Step 4: Create a custom connector for the Logic App.
+
+ 6.You need to support the requirements for the Shipping Logic App.
+   What should you use?
+   • A. Azure Active Directory Application Proxy
+   • B. Site-to-Site (S2S) VPN connection
+   • C. On-premises Data Gateway ans
+   • D. Point-to-Site (P2S) VPN connection

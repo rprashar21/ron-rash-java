@@ -1,0 +1,103 @@
+1.
+You are developing a .Net web application that stores data in Azure Cosmos DB. The application must use
+the Core API and allow millions of reads and writes.
+The Azure Cosmos DB account has been created with multiple write regions enabled. The application has
+been deployed to the East US2 and Central US regions.
+You need to update the application to support multi-region writes.
+What are two possible ways to achieve this goal? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+CloudCertified Practice Tests
+• A. Update the ConnectionPolicy class for the Cosmos client and populate the PreferredLocations
+property based on the geo-proximity of the application.
+• B. Update Azure Cosmos DB to use the Strong consistency level. Add indexed properties to the
+container to indicate region.
+• C. Update the ConnectionPolicy class for the Cosmos client and set the
+UseMultipleWriteLocations property to true.
+• D. Create and deploy a custom conflict resolution policy.
+• E. Update Azure Cosmos DB to use the Session consistency level. Send the SessionToken
+property value from the FeedResponse object of the write action to the end-user by using a
+cookie.
+Answer: CD
+
+2.
+You are updating an application that stores data on Azure and uses Azure Cosmos DB for storage. The
+application stores data in multiple documents associated with a single username.
+The application requires the ability to update multiple documents for a username in a single ACID
+operation.
+You need to configure Azure Cosmos DB.
+Which two actions should you perform? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. Create a collection sharded on username to store documents.
+• B. Configure Azure Cosmos DB to use the Gremlin API.
+• C. Create an unsharded collection to store documents.
+• D. Configure Azure Cosmos DB to use the MongoDB API.
+CD
+
+3.You plan to develop two apps named App1 and App2 that will use the change feed functionality to track
+  changes to containers. App1 will use the pull model and App2 will use the push model.
+  You need to choose the method to track the most recently processed change in App1 and App2.
+  Which component should you use?
+  Components
+ App1 --> Continuation Token
+ App2 --> lease container
+
+4.You are developing a Java application that uses Cassandra to store key and value data. You plan to use a
+  new Azure Cosmos DB resource and the Cassandra
+  API in the application. You create an Azure Active Directory (Azure AD) group named Cosmos DB Creators
+  to enable provisioning of Azure Cosmos accounts, databases, and containers.
+  The Azure AD group must not be able to access the keys that are required to access the data.
+  You need to restrict access to the Azure AD group.
+  Which role-based access control should you use?
+  • A. DocumentDB Accounts Contributor
+  • B. Cosmos Backup Operator
+  • C. Cosmos DB Operator
+  • D. Cosmos DB Account Reader
+  Answer: C
+  Azure Cosmos Db operator
+
+  notes
+  Example of In-partition query:
+  Consider the below query with an equality filter on DeviceId. If we run this query on a container
+  partitioned on DeviceId, this query will filter to a single physical partition.
+  SELECT * FROM c WHERE c.DeviceId = 'XMS-0001'
+
+  In order to be an in-partition query, the query must have an equality filter that includes the
+  partition key:
+  SELECT * FROM c WHERE c.DeviceId > 'XMS-0001'
+
+5.You are developing a Java application to be deployed in Azure. The application stores sensitive data in
+  Azure Cosmos DB
+  You need to configure Always Encrypted to encrypt the sensitive data inside the application.
+  A. Create a new container to include an encryption policy with the JSON properties to be
+  encrypted.
+  • B. Create a customer-managed key (CMK) and store the key in a new Azure Key Vault instance.
+  • C. Create a data encryption key (DEK) by using the Azure Cosmos DB SDK and store the key in
+  Azure Cosmos DB.
+  • D. Create an Azure AD managed identity and assign the identity to a new Azure Key Vault
+  instance.
+  Correct Answer: B
+
+6. You need to configure key rotation and enable key expiry notifications.
+Which two actions should you perform? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. Create and configure a new Azure Event Grid instance.
+• B. Configure Azure Key Vault alerts.
+• C. Create and assign an Azure Key Vault access policy.
+• D. Create and configure a key rotation policy during key creation.
+Correct Answer: AD
+Question #64Topic 4
+
+
+7. for cosmos db set the ttl to -1 - the change feed will remain util the date is delted
+                         ttl to 0 -- means change feed will persist data forever
+                         tt  to 1 -- not possible
+
+
+cosmos db create
+az cosmosdb create
+-n $account name
+-g $groupname
+--capabilities EnableTbale
+--default-consistency everntual
+
+az cosmosdb table create

@@ -41,6 +41,8 @@ forward-request policy forwards the incoming request to the backend service spec
 return-response policy aborts pipeline execution and returns either a default or custom response to the caller.
 
 8. 401 Access Denied -- You have to pass a valid subscription key.
+   403 forbidden -set usage by key
+   llimt rate by key is 429 prevent traffice spikes by limting call rates
 
 9.u have JSON endpoint. The client expects XML response. What policy should be applied?
     json-to-xml-policy in outbound section

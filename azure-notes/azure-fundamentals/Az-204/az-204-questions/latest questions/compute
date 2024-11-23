@@ -1,0 +1,8 @@
+1.
+to config
+az webapp log config --name <webapp> --resource-group <rg-name> --docker-container-logging filesysystem
+
+tail the logs
+az webapp log tail --name <webapp > --resource-group <rg-name>
+
+2.

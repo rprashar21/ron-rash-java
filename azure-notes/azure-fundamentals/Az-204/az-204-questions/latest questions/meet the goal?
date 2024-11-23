@@ -1,0 +1,147 @@
+1.You develop and deploy an Azure App Service API app to a Windows-hosted deployment slot named
+  Development. You create additional deployment slots named Testing and Production. You enable auto
+  swap on the Production deployment slot.
+  You need to ensure that scripts run and resources are available before a swap operation occurs.
+  Solution: Enable auto swap for the Testing slot. Deploy the app to the Testing slot.
+  Does the solution meet the goal?
+  • A. No
+  • B. Yes
+
+  no - Instead update the web.config file to include the applicationInitialization configuration element. Specify
+       custom initialization actions to run the scripts.
+
+2.When photos are uploaded, they must be processed to produce and save a mobile-friendly version of the
+  image. The process to produce a mobile-friendly version of the image must start in less than one minute.
+  You need to design the process that starts the photo processing.
+  Solution: Use the Azure Blob Storage change feed to trigger photo processing.
+  Does the solution meet the goal?
+  no --> Instead catch the triggered event, so move the photo processing to an Azure Function triggered from the
+         blob upload.
+         or use an event grid trigger
+
+  3.You deploy an Azure Container Apps app and disable ingress on the container app.
+    Users report that they are unable to access the container app. You investigate and observe that the app
+    has scaled to 0 instances.
+    CloudCertified Practice Tests
+    You need to resolve the issue with the container app.
+    Solution: Enable ingress, create an HTTP scale rule, and apply the rule to the container app.    NO this does not meet the goal
+    Solution: Enable ingress and configure the minimum replicas to 1 for the container app. yes thus meets the goal
+
+4.ou are developing a website that will run as an Azure Web App. Users will authenticate by using their
+  Azure Active Directory (Azure AD) credentials.
+  You plan to assign users one of the following permission levels for the website: admin, normal, and
+  reader. A user's Azure AD group membership must be used to determine the permission level.
+  You need to configure authorization.
+  Solution: Configure the Azure Web App for the website to allow only authenticated requests and require
+  Azure AD log on.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No
+  Answer: B
+  Instead in the Azure AD application's manifest, set value of the groupMembershipClaims option to All.
+
+5.You are developing a medical records document management website. The website is used to store
+  scanned copies of patient intake forms.
+  If the stored intake forms are downloaded from storage by a third party, the contents of the forms must
+  not be compromised.
+  You need to store the intake forms according to the requirements.
+  Solution:
+  1. Create an Azure Key Vault key named skey.
+  2. Encrypt the intake forms using the public key portion of skey.
+  3. Store the encrypted data in Azure Blob storage.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No
+
+  2 option for above question
+   Create an Azure Cosmos DB database with Storage Service Encryption enabled.
+  2. Store the intake forms in the Azure Cosmos DB database.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No ans
+
+6.You develop Azure solutions.
+  You must grant a virtual machine (VM) access to specific resource groups in Azure Resource Manager.
+  You need to obtain an Azure Resource Manager access token.
+  Solution: Use the Reader role-based access control (RBAC) role to authenticate the VM with Azure
+  Resource Manager.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No
+  Answer: B
+  Instead run the Invoke-RestMethod cmdlet to make a request to the local managed identity for Azure
+  resources endpoint.
+
+7.You are developing and deploying several ASP.NET web applications to Azure App Service. You plan to
+  save session state information and HTML output.
+  You must use a storage mechanism with the following requirements:
+  ✑ Share session state across all ASP.NET web applications.
+  ✑ Support controlled, concurrent access to the same session state data for multiple readers and a single
+  writer.
+  ✑ Save full HTTP responses for concurrent requests.
+  You need to store the information.
+  Proposed Solution: Enable Application Request Routing (ARR).
+  Does the solution meet the goal?
+  • A. Yes
+  CloudCertified Practice Tests
+  • B. No
+  Answer: B use cache instead
+Deploy and configure Azure Cache for Redis. yes
+
+8.You are developing an Azure solution to collect point-of-sale (POS) device data from 2,000 stores located
+  throughout the world. A single device can produce 2 megabytes (MB) of data every 24 hours. Each store
+  location has one to five devices that send data.
+  You must store the device data in Azure Blob storage. Device data must be correlated based on a device
+  identifier. Additional stores are expected to open in the future.
+  You need to implement a solution to receive the device data.
+  Solution: Provision an Azure Service Bus. Configure a topic to receive the device data by using a
+  correlation filter.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No
+  Answer:B
+
+
+9.You are developing an Azure Service application that processes queue data when it receives a message
+  from a mobile application. Messages may not be sent to the service consistently.
+  You have the following requirements:
+  >> Queue size must not grow larger than 80 gigabytes (GB).
+  >> Use first-in-first-out (FIFO) ordering of messages.
+  >> Minimize Azure costs.
+  You need to implement the messaging solution.
+  Solution: Use the .Net API to add a message to an Azure Service Bus Queue from the mobile application.
+  Create an Azure Windows VM that is triggered from
+  Azure Service Bus Queue. no
+  Don't use a VM, instead create an Azure Function App that uses an Azure Service Bus Queue trigger.
+
+ solution Create an Azure Function App that uses an Azure Service Bus Queue trigger. yes
+
+
+10.You are developing an Azure solution to collect point-of-sale (POS) device data from 2,000 stores located
+   throughout the world. A single device can produce
+   2 megabytes (MB) of data every 24 hours. Each store location has one to five devices that send data.
+   You must store the device data in Azure Blob storage. Device data must be correlated based on a device
+   identifier. Additional stores are expected to open in the future.
+   You need to implement a solution to receive the device data.
+   Solution: Provision an Azure Event Hub. Configure the machine identifier as the partition key and enable
+   capture. no
+   Provision an Azure Service Bus. Configure a topic to receive the device data by using a
+   correlation filter. no
+   Use the .Net API to add a message to an Azure Service Bus Queue from the mobile application.
+   Create an Azure Function App that uses an Azure
+   Service Bus Queue trigger. yes
+   You can create a function that is triggered when messages are submitted to an Azure Storage queue.
+
+
+
+11.You are implementing an application by using Azure Event Grid to push near-real-time information to
+   customers.
+   You have the following requirements:
+   • You must send events to thousands of customers that include hundreds of various event types.
+   • The events must be filtered by event type before processing.
+   • Authentication and authorization must be handled by using Microsoft Entra ID.
+   • The events must be published to a single endpoint.
+   You need to implement Azure Event Grid.
+   Solution: Publish events to an event domain. Create a custom topic for each customer. yes
+   Solution: Publish events to a custom topic. Create an event subscription for each customer. no
+   Solution: Publish events to a system topic. Create an event subscription for each customer. no
