@@ -1,0 +1,78 @@
+1.You need to add code at line AM09 to ensure that users can review content using ContentAnalysisService.
+  How should you complete the code
+  oauth2Permissions": ["login"]
+  oauth2AllowImplicitFlow":true
+
+2.You need to ensure that network security policies are met
+ssl certifcte - valid root certificate
+proxy type - azure app gateway
+
+3.You need to add YAML markup at line CS17 to ensure that the ContentUploadService can access Azure
+  Storage access keys.
+  How should you complete the YAML markup
+
+  volumeMounts
+  example
+  volumeMounts:
+  - mountPath: /mnt/secrets
+
+  name: secretvolume1
+  volumes:
+  - name: secretvolume1
+  secret:
+  mysecret1: TXkgZmlyc3Qgc2VjcmV0IEZPTw
+
+4.You need to add code at line AM10 of the application manifest to ensure that the requirement for
+  manually reviewing content can be met
+  Box 1: sid -
+  Sid: Session ID, used for per-session user sign-out. Personal and Azure AD accounts.
+  Box 2: email -
+  Scenario: All completed reviews must include the reviewer's email address for auditing purposes.
+
+ 5.You need to monitor ContentUploadService according to the requirements.
+   Which command should you use?
+   • A. az monitor metrics alert create ג€"n alert ג€"g ג€¦ - -scopes ג€¦ - -condition "avg Percentage
+   CPU > 8"
+   • B. az monitor metrics alert create ג€"n alert ג€"g ג€¦ - -scopes ג€¦ - -condition "avg Percentage b is the
+   CPU > 800"
+   • C. az monitor metrics alert create ג€"n alert ג€"g ג€¦ - -scopes ג€¦ - -condition "CPU Usage > 800"
+   • D. az monitor metrics alert create ג€"n alert ג€"g ג€¦ - -scopes ג€¦ - -condition "CPU Usage > 8"
+
+   b
+
+6. You need to investigate the http server log output to resolve the issue with the
+   ContentUploadService.
+   Which command should you use first?
+   A. az webapp log
+   • B. az ams live-output
+   • C. az monitor activity-log ans
+   • D. az container attach
+
+7. You need to ensure that validation testing is triggered per the requirements.
+if event.eventType === respoitoryUpdated
+   event.data.target === service ==="contentanalysisservice"
+   event.imageCollection .contains contosoimages
+
+8.You need to deploy the CheckUserContent Azure Function. The solution must meet the security
+  and cost requirements.
+  Which hosting model should you use?
+  • A. Premium plan
+  • B. App Service plan ---> ans
+  • C. Consumption plan
+
+9.You need to store the user agreements.
+  Where should you store the agreement after it is completed?
+  • A. Azure Storage queue
+  • B. Azure Event Hub ---?> ans
+  • C. Azure Service Bus topic
+  • D. Azure Event Grid topic
+
+10.You need to implement the bindings for the CheckUserContent function.
+Box 1: [BlobTrigger(..)]
+Box 2: [Blob(..)]
+
+11.You need to configure the ContentUploadService deployment.
+A. Add the following markup to line CS23: type: Private --> ans
+• B. Add the following markup to line CS24: osType: Windows
+• C. Add the following markup to line CS24: osType: Linux
+• D. Add the following markup to line CS23: type: Public

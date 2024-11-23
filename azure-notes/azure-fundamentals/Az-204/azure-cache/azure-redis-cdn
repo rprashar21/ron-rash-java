@@ -30,8 +30,8 @@ pricing tiers
 Plans for azure cache
 Basic --->single node,250mb--53 gb No sla
 Standard -->  2 nodes,high sla
-Premium -->high thruput,low latency, it has redis moudules
-
+Premium -->high thruput,low latency,
+enterprise - it has redis moudules
 To load data on demand into the cache from a large database use data cache pattern.
 
 

@@ -1,0 +1,155 @@
+1.You need to secure the Azure Functions to meet the security
+requirements.
+Which two actions should you perform? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. Store the RSA-HSM key in Azure Key Vault with soft-delete and purge-protection features
+enabled.
+• B. Store the RSA-HSM key in Azure Blob storage with an immutability policy applied to the
+container.
+• C. Create a free tier Azure App Configuration instance with a new Azure AD service principal.
+• D. Create a standard tier Azure App Configuration instance with an assigned Azure AD managed
+identity.
+• E. Store the RSA-HSM key in Azure Cosmos DB. Apply the built-in policies for customer-managed
+keys and allowed locations.
+Answer: AD
+Scenario: All Azure Functions must centralize management and distribution of configuration data for
+
+2.
+You need to implement the Azure Function for delivery driver profile information.
+Which configurations should you use? To answer, select the appropriate options in the answer area.
+NOTE: Each correct selection is worth one point.
+Ans
+Azure Identity library -
+Store delivery driver profile information in Azure Active Directory (Azure AD) by using an Azure Function
+called from the corporate website.
+Azure Key Vault
+We recommend that you use a managed identity for applications deployed to Azure.
+The preceding authentication scenarios are supported by the Azure Identity client library and integrated
+with Key Vault SDKs.
+
+3..QuestionYou need to grant access to the retail store location data for the inventory service
+  development effort.
+  What should you use?
+  • A. Azure AD access token
+  • B. Azure RBAC role
+  • C. Shared access signature (SAS) token Ans
+  • D. Azure AD ID token
+  • E. Azure AD refresh token
+
+4.You need to reliably identify the delivery driver profile information.
+  How should you configure the system? To answer, select the appropriate options in the answer area.
+  Jwt TYpe -- id
+  payload claim value is oid
+
+5.You need to secure the Azure Functions to meet the security
+  requirements.
+  Which two actions should you perform? Each correct answer presents part of the solution.
+  NOTE: Each correct selection is worth one point
+   A. Store the RSA-HSM key in Azure Key Vault with soft-delete and purge-protection features
+  enabled.
+  • B. Store the RSA-HSM key in Azure Blob storage with an immutability policy applied to the
+  container.
+  • C. Create a free tier Azure App Configuration instance with a new Azure AD service principal.
+  • D. Create a standard tier Azure App Configuration instance with an assigned Azure AD managed
+  identity.
+  • E. Store the RSA-HSM key in Azure Cosmos DB. Apply the built-in policies for customer-managed
+  keys and allowed locations.
+  Answer: AD
+
+6.QuestionYou need to reduce read latency for the retail store solution.
+  What are two possible ways to achieve the goal? Each correct answer presents a complete solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Create a new composite index for the store location data queries in Azure Cosmos DB. Modify
+  the queries to support parameterized SQL and update the Azure Function app to call the new
+  queries.
+  • B. Provision an Azure Cosmos DB dedicated gateway. Update the Azure Function app connection
+  string to use the new dedicated gateway endpoint.
+  • C. Configure Azure Cosmos DB consistency to session consistency. Cache session tokens in a new
+  Azure Redis cache instance after every write. Update reads to use the session token stored in
+  Azure Redis.
+  • D. Provision an Azure Cosmos DB dedicated gateway. Update blob storage to use the new
+  dedicated gateway endpoint.
+  • E. Configure Azure Cosmos DB consistency to strong consistency. Increase the RUs for the
+  container supporting store location data.
+  Answer: BC
+
+7.Question
+You need to audit the retail store sales transactions.
+  What are two possible ways to achieve the goal? Each correct answer presents a complete solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Update the retail store location data upload process to include blob index tags. Create an
+  Azure Function to process the blob index tags and filter by store location.
+  • B. Process the change feed logs of the Azure Blob storage account by using an Azure Function.
+  Specify a time range for the change feed data.
+  • C. Enable blob versioning for the storage account. Use an Azure Function to process a list of the
+  blob versions per day.
+  • D. Process an Azure Storage blob inventory report by using an Azure Function. Create rule filters
+  on the blob inventory report.
+  • E. Subscribe to blob storage events by using an Azure Function and Azure Event Grid. Filter the
+  events by store location.
+  Answer: BE
+  Scenario: Audit store sale transaction information nightly to validate data, process sales financials, and
+  reconcile inventory.
+  "Process the change feed logs of the Azure Blob storage account by using an Azure Function. Specify a
+  time range for the change feed data": Change feed support is well-suited for scenarios that process data
+  based on objects that have changed. For example, applications can:
+  Store, audit, and analyze changes to your objects, over any period of time, for security, compliance or
+  intelligence for enterprise data management.
+  "Subscribe to blob storage events by using an Azure Function and Azure Event Grid. Filter the events by
+  store location": Azure Storage events allow applications to react to events, such as the creation and
+  deletion of blobs. It does so without the need for complicated code or expensive and inefficient polling
+  services. The best part is you only pay for what you use.
+  Blob storage events are pushed using Azure Event Grid to subscribers such as Azure Functions, Azure
+  Logic Apps, or even to your own http listener. Event Grid provides reliable event delivery to your
+  applications through rich retry policies and dead-lettering.
+
+8. U need to implement event routing for retail store location data.
+  source is Azure Blob Storage
+  reciver is azure evnt grid
+  handleer is azure logic
+  Box 1: Azure Blob Storage -
+  Azure event publishers and event handlers are at the core of the Event Grid routing-service. Event Grid
+  listens to Azure event publishers, such as Blog Storage, then reacts by routing specific events to Azure
+  event handlers, such as WebHooks. You can easily control this entire process at a granular level through
+  event subscriptions and event filters.
+  Box 2: Azure Event Grid -
+  Azure Event Grid is a highly scalable event-routing service that listens for specific system events, then
+  reacts to them according to your precise specifications. In the past, event handling has relied largely on
+  polling ג€" a high latency, low-efficiency approach that can prove prohibitively expensive at scale.
+  Box 3: Azure Logic App -
+  Event Grid's supported event handlers currently include Event Hubs, WebHooks, Logic Apps, Azure
+  Functions, Azure Automation and Microsoft Flow.
+
+9.You need to implement the retail store location Azure Function
+bindng -- http --> bindingi direction is input trigger is blob storage
+Scenario: Retail store locations: Azure Functions must process data immediately when data is uploaded
+to Blob storage.
+Box 1: HTTP -
+Binding configuration example: https://<storage_account_name>.blob.core.windows.net
+Box 2: Input -
+Read blob storage data in a function: Input binding
+Box 3: Blob storage -
+The Blob storage trigger starts a function when a new or updated blob is detected.
+Azure Functions integrates with Azure Storage via triggers and bindings. Integrating with Blob storage
+
+10.
+You need to implement the corporate website.
+How should you configure the solution
+Plan -- standard
+Service -azure service web app
+A Web App is a web application that is hosted in an App Service. The App Service is the managed service
+in Azure that enables you to deploy a web application and make it available to your customers on the
+Internet in a very short amount of time.
+
+11. You need to implement a solution to resolve the retail store location data issue
+  A. Soft delete
+• B. Change feed
+• C. Snapshots
+• D. Versioning
+• E. Object replication
+• F. Immutability
+ABD
+Scenario: You must perform a point-in-time restoration of the retail store location data due to an
+unexpected and accidental deletion of data.
+Before you enable and configure point-in-time restore, enable its prerequisites for the storage account:
+soft delete, change feed, and blob versioning.

@@ -1,0 +1,42 @@
+1.You need to configure Azure Cosmos DB
+consistency level -strong
+api - sql
+
+2.You need to retrieve all order line items from Order.json and sort the data alphabetically by the city.
+select li.id as lineItemid ,li.price from orders o
+join li in o.line_itmes order by o.city
+
+3.
+Which two actions should you perform? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. Review the API connections.
+• B. Review the activity log.
+• C. Review the run history.
+• D. Review the trigger history.
+CD
+
+4.You need to update the order workflow to address the issue when calling the Printer API App.
+Box 1: fixed -
+PT60S is 60 seconds
+count =5
+
+5.You need to deploy a new version of the LabelMaker application to ACR.
+1.Build a new application image by using dockerfile
+2.Create an alias if the image with the fully qualified path to the registry
+3. Log in to the registry and push image
+
+6. You need to access data from
+   the user claim object in the e-commerce web app.
+
+7.u need to access data from the user claim object in the e-commerce web app.
+  What should you do first?
+  • A. Write custom code to make a Microsoft Graph API call from the e-commerce web app.
+  • B. Assign the Contributor RBAC role to the e-commerce web app by using the Resource Manager
+  create role assignment API.
+  • C. Update the e-commerce web app to read the HTTP request header values.
+  CloudCertified Practice Tests
+  • D. Using the Azure CLI, enable Cross-origin resource sharing (CORS) from the e-commerce
+  checkout API to the e-commerce web app.
+  Answer: C
+
+

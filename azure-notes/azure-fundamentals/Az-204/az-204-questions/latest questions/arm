@@ -10,3 +10,89 @@
   • C. 30
   • D. 40
   Answer: B
+
+2.You are configuring a new development environment for a Java application.
+  The environment requires a Virtual Machine Scale Set (VMSS), several storage accounts, and networking
+  components.
+  The VMSS must not be created until the storage accounts have been successfully created and an
+  associated load balancer and virtual network is configured.
+  How should you complete the Azure Resource Manager template? To answer, select the appropriate
+  options in the answer area.
+  NOTE: Each correct selection is worth one point.
+  Box 1: copyIndex -
+  copy
+  dependon
+
+3. You are developing an application to use Azure Blob storage. You have configured Azure Blob storage to
+   include change feeds.
+   A copy of your storage account must be created in another region. Data must be copied from the current
+   storage account to the new storage account directly between the storage servers.
+   You need to create a copy of the storage account in another region and copy the data.
+   create a new template
+   export
+   modify the template by chaging the storage account name and region
+   deploy to crfeate new region in target region
+   use azcopy
+
+   To get started, export, and then modify a Resource Manager template.
+
+4. Azure Resource Manager test toolkit - follow recommended practices
+  waht if operation  --> test and validate template changes
+
+5.app is deployed to multiple regions and uses
+  Azure Traffic Manager. Application Insights is enabled for the app.
+  You need to analyze app uptime for each month.
+  Which two solutions will achieve the goal
+
+  A. Azure Monitor logs
+  • B. Application Insights alerts
+  • C. Azure Monitor metrics
+  • D. Application Insights web tests
+
+  bc
+
+6.Box 1: DynamicThresholdCriterion
+  Box 2: Http5xx -
+  Server errors are in the 5xx range.
+  Client errors are in the 4xx range
+  Box 3: Low
+
+
+5.The VMs contain code that must access resources in an Azure resource group. You grant the VM access to
+  the resource group in Resource Manager.
+  You need to obtain an access token that uses the VM's system-assigned managed identity.
+  Which two actions should you perform? Each correct answer presents part of the solution.
+  • A. From the code on the VM, call Azure Resource Manager using an access token.
+  • B. Use PowerShell on a remote machine to make a request to the local managed identity for
+  Azure resources endpoint.
+  CloudCertified Practice Tests
+  • C. Use PowerShell on the VM to make a request to the local managed identity for Azure
+  resources endpoint.
+  • D. From the code on the VM, call Azure Resource Manager using a SAS token.
+  • E. From the code on the VM, generate a user delegation SAS token.
+  Answer: AC
+
+6.You are developing a road tollway tracking application that sends tracking events by using Azure Event
+  Hubs using premium tier.
+  Each road must have a throttling policy uniquely assigned.
+  You need to configure the event hub to allow for per-road throttling.
+  What should you do?
+  • A. Use a unique consumer group for each road.
+  • B. Ensure each road stores events in a different partition.
+  • C. Ensure each road has a unique connection string.
+  • D. Use a unique application group for each road. ans
+
+7.You develop and deploy an ASP.NET Core application that connects to an Azure Database for MySQL
+  instance.
+  Connections to the database appear to drop intermittently and the application code does not handle the
+  connection failure.
+  You need to handle the transient connection errors in code by implementing retries.
+  What are three possible ways to achieve this goal? Each correct answer presents part of the solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Close the database connection and immediately report an error.
+  • B. Disable connection pooling and configure a second Azure Database for MySQL instance.
+  • C. Wait five seconds before repeating the connection attempt to the database.
+  • D. Set a maximum number of connection attempts to 10 and report an error on subsequent
+  connections.
+  • E. Increase connection repeat attempts exponentially up to 120 seconds.
+  Answer: ACD

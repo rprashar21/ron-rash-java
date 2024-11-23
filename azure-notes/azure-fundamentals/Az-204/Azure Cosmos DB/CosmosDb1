@@ -54,14 +54,14 @@ Casandra -- column-family database model, column oriented schema
 
 ==================================================================================================================================================================================================================================================================
 Consistency Levels on Cosmos DB
-Strong --> strong guarantees that read operation will return most recent version,its slow,relational dbs use this,
+Strong -->        strong guarantees that read operation will return most recent version,its slow,relational dbs use this,
 Eventual Consistency --> offered by no sql db, eventually all replicas will have the data if no new writes are made, requests may return old value
                          lowest latency ,worst consistency
 Consistent Prefix -->  same as eventual consitency, but makes sure that reads can never see out of order writes,
                               read can get old values but not out of order
 Session Consistency --> guarantess constinecy for that session,client will nevers ee old data for that session,no conflicts between clients,
                        lowest latecn for reads and writes
-Bounded Staleness --> 2nd most popular,reads may lag behind writes for a small amoyt of time,
+Bounded Staleness --> 2nd most popular,reads may lag behind writes for a small amout of time,
                        costs are same as strong constinecy and allows u to distribute
                       ur dbs across regions and has lower latency.
 

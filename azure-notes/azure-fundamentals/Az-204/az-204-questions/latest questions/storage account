@@ -1,0 +1,36 @@
+You are developing an application. You have an Azure user account that has access to two subscriptions.
+You need to retrieve a storage account key secret from Azure Key Vault
+
+1. Get-AzSubscription
+2.Set-AzContext -SubscriptionId
+3.Get-AzStorageAccountKey
+4: $secretvalue = ConvertTo-SecureString <storageAccountKey> -AsPlainText -Force
+Set-AzKeyVaultSecret -VaultName <vaultName> -Name <secretName> -SecretValue $secretvalue
+5.Get-AzKeyVaultSecret
+
+2.Your company is developing an Azure API.
+  You need to implement authentication for the Azure API. You have the following requirements:
+  All API calls must be secure.
+  >> Callers to the API must not send credentials to the API.
+  Which authentication mechanism should you use?
+  • A. Basic
+  • B. Anonymous
+  • C. Managed identity
+  • D. Client certificate
+
+  c
+
+3.You are developing an Azure App Service REST API.
+The API must be called by an Azure App Service web app. The API must retrieve and update user profile
+information stored in Azure Active Directory (Azure AD).
+You need to configure the API to make the updates.
+Which two tools should you use? Each correct answer presents part of the solution.
+NOTE: Each correct selection is worth one point.
+• A. Microsoft Graph API
+• B. Microsoft Authentication Library (MSAL)
+• C. Azure API Management
+• D. Microsoft Azure Security Center
+• E. Microsoft Azure Key Vault SDK
+AB
+
+4.

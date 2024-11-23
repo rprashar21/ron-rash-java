@@ -4,7 +4,9 @@ but doing so has no effect on when a container restarts.
  When the processes in the container fail (terminating with a nonzero exit code), they will not restart and will only run once at most.
  Init containers are meant to perform initialization logic for app containers, running to completion before the application containers start.
 
-
+az container create - Azure Container Instances (ACI) is a service that allows you to run containers
+ directly without the need for any orchestration service.
+ The az container create command is used to create these instances, which are ideal for single, isolated workloads.
 
  Steps to build and push an image
  1. Create a Resource Group            ::   az group create --name myResourceGroup --location eastus

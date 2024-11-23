@@ -1,0 +1,40 @@
+1. fix cors policy
+a client who's trying to access data in one of your Blob Storage accounts from their local machine
+at http://localhost:5000. They've been encountering an error message that says:
+Access to XMLHttpRequest at 'https://myStorageAccount.blob.core.windows.net' from origin 'http://localhost:5000' has been blocked by CORS policy:
+
+az storage cors add --services blob
+--methods GET POST
+--origins 'http://localhost:5000'
+--allowed-headers '*'
+--exposed-headers '*'
+--max-age 200
+--account-name myStorageAccount
+
+2. Which Azure Monitor log types are only supported on Premium (and above) plan?
+AppServiceAntivirusScanAuditLogs file audit and and anti virus logs
+AppServiceFileAuditLogs
+
+3. Which of the following certificates can be exported?
+App Service Certificate
+Certificates stored in Key Vault
+
+4. You have existing App Service web app MyAppService in West US running on Basic plan.
+You want to add support for staging environments and move it to North Central US region region.
+ What steps you need to take?
+ u cannot move web app from one region to other. Also Basic plan does not support staging environments
+
+ # Create new resource group with location 'North Central US'
+ New-AzResourceGroup -Name DestinationAzureResourceGroup -Location "North Central US"
+
+ # Create new 'Standard' App Service plan for that group (and set staging environments leter)
+ New-AzAppServicePlan -Location "North Central US" -ResourceGroupName DestinationAzureResourceGroup
+ -Name DestinationAppServicePlan -Tier Standard
+
+ # Clone `MyAppService` into new web app and place it in the new App Service plan
+ $srcapp = Get-AzWebApp -ResourceGroupName SourceAzureResourceGroup -Name MyAppService
+ $destapp = New-AzWebApp -ResourceGroupName DestinationAzureResourceGroup -Name MyAppService2
+ -Location "North Central US" -AppServicePlan DestinationAppServicePlan -SourceWebApp $srcapp
+
+5. When would you use Service endpoints/Private endpoints feature?
+To restrict access to your Azure Service Resources to only your virtual network.

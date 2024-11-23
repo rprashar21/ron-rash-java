@@ -8,8 +8,8 @@ If you have multiple subscriptions, you might have to specify the one that was u
 Step 2:  Get-AzSubscription -Set-AzContext -SubscriptionId
 
 To specify the subscription that's associated with the key vault you'll be logging, enter: Set-AzContext -SubscriptionId <subscriptionID>
-Step 3: Get-AzStorageAccountKey -
-You must get that storage account key.
+Step 3: Get-AzStorageAccountKey - You must get that storage account key.
+
 Step 4: $secretvalue = ConvertTo-SecureString <storageAccountKey> -AsPlainText -Force Set-AzKeyVaultSecret -VaultName <vaultName> -Name <secretName> -SecretValue $secretvalue
 After retrieving your secret (in this case, your storage account key), you must convert that key to a secure string, a
 nd then create a secret with that value in your key vault.

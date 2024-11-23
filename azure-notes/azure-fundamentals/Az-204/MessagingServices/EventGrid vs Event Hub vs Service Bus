@@ -38,7 +38,9 @@ Allows Event Grid to run on your Kubernetes clusters, either on-premises or in t
 Scenarios
 Automating Image Processing
 Scenario: A company uploads thousands of images to an Azure Blob Storage container daily.
-Solution: Event Grid can trigger a function whenever a new image is uploaded. The function processes the image (e.g., resizing, watermarking) and stores the processed image back in Azure Storage. No need for constant polling.
+Solution: Event Grid can trigger a function whenever a new image is uploaded.
+The function processes the image (e.g., resizing, watermarking) and stores the processed image back in Azure Storage.
+ No need for constant polling.
 Benefit: Automatically reacts to new uploads without manual intervention or polling.
 
 Monitoring Virtual Machines

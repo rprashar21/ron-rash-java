@@ -1,0 +1,179 @@
+You are developing a .NET Core MVC application that allows customers to research independent holiday
+accommodation providers.
+You want to implement Azure Search to allow the application to search the index by using various criteria
+to locate documents related to accommodation venues.
+You want the application to list holiday accommodation venues that fall within a specific price range and
+are within a specified distance to an airport.
+What should you do?
+• A. Configure the SearchMode property of the SearchParameters class.
+• B. Configure the QueryType property of the SearchParameters class.
+• C. Configure the Facets property of the SearchParameters class.
+• D. Configure the Filter property of the SearchParameters class.
+
+D
+
+2.You are developing several Azure API Management (APIM) hosted APIs.
+  You must transform the APIs to hide private backend information and obscure the technology stack used
+  to implement the backend processing.
+  You need to protect all APIs.
+  What should you do?
+  • A. Configure and apply a new inbound policy scoped to a product.
+  • B. Configure and apply a new outbound policy scoped to the operation.
+  • C. Configure and apply a new outbound policy scoped to global.
+  • D. Configure and apply a new backend policy scoped to global.
+
+3.You plan to use APIM1 to publish an API named API1 that uses a backend database that supports only a
+  limited volume of requests per minute. You also need a policy for API1 that will minimize the possibility
+  that the number of requests to the backend database from an individual IP address you specify exceeds
+  the supported limit.
+  You need to identify a policy for API1 that will meet the requirements.
+  Which policy should you use?
+  • A. ip-filter
+  • B. quota-by-key
+  • C. rate-limit-by-key --> C
+  • D. rate-limit
+
+4.You are developing several Azure API Management (APIM) hosted APIs.
+  The APIs have the following requirements:
+  • Require a subscription key to access all APIs.
+  • Include terms of use that subscribers must accept to use the APIs.
+  • Administrators must review and accept or reject subscription attempts.
+  • Limit the count of multiple simultaneous subscriptions.
+  You need to implement the APIs.
+  What should you do?
+  • A. Configure and apply header-based versioning.
+  • B. Create and publish a product.
+  • C. Configure and apply query string-based versioning.
+  • D. Add a new revision to all APIs. Make the revisions current and add a change log entry.
+  Correct Answer: B
+
+5.You are developing several Azure API Management (APIM) hosted APIs.
+  You must inspect request processing of the APIs in APIM. Requests to APIM by using a REST client must
+  also be included. The request inspection must include the following information:
+  • requests APIM sent to the API backend and the response it received
+  • policies applied to the response before sending back to the caller
+  • errors that occurred during the processing of the request and the policies applied to the errors
+  • original request APIM received from the caller and the policies applied to the request
+  You need to inspect the APIs.
+  Which three actions should you do? Each correct answer presents part of the solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Enable the Allow tracing setting for the subscription used to inspect the API.
+  • B. Add the Ocp-Apim-Trace header value to the API call whit a value set to true.
+  • C. Add the Ocp-Apim-Subscription-Key header value to the key for a subscription that allows
+  access to the API.
+  CloudCertified Practice Tests
+  • D. Create and configure a custom policy. Apply the policy to the inbound policy section with a
+  global scope.
+  • E. Create and configure a custom policy. Apply the policy to the outbound policy section with an
+  API scope.
+  Correct Answer: ABC
+
+6.You are developing several Azure API Management (APIM) hosted APIs.
+  You must make several minor and non-breaking changes to one of the APIs. The API changes include the
+  following requirements:
+  • Must not disrupt callers of the API.
+  • Enable roll back if you find issues.
+  • Documented to enable developers to understand what is new.
+  • Tested before publishing.
+  You need to update the API.
+  What should you do?
+  • A. Configure and apply header-based versioning.
+  • B. Create and publish a product.
+  • C. Configure and apply a custom policy.
+  • D. Add a new revision to the API. --> ans
+  • E. Configure and apply query string-based versioning.
+
+7.You are developing a web application that runs as an Azure Web App. The web application stores data in
+Azure SQL Database and stores files in an Azure
+Storage account. The web application makes HTTP requests to external services as part of normal
+operations.
+The web application is instrumented with Application Insights. The external services are OpenTelemetry
+compliant.
+You need to ensure that the customer ID of the signed in user is associated with all operations
+throughout the overall system.
+What should you do?
+• A. Add the customer ID for the signed in user to the CorrelationContext in the web application
+• B. On the current SpanContext, set the TraceId to the customer ID for the signed in user
+• C. Set the header Ocp-Apim-Trace to the customer ID for the signed in user
+• D. Create a new SpanContext with the TraceFlags value set to the customer ID for the signed in
+user
+Answer: A
+
+8.he question is included in a number of questions that depicts the identical set-up. However, every
+  question has a distinctive result. Establish if the solution satisfies the requirements.
+  You are developing a solution for a public facing API.
+  The API back end is hosted in an Azure App Service instance. You have implemented a RESTful service for
+  the API back end.
+  You must configure back-end authentication for the API Management service instance.
+  Solution: You configure Client cert gateway credentials for the Azure resource.
+  Does the solution meet the goal?
+  • A. Yes
+  • B. No
+  no use jwt or manged identity for backedn service
+
+9.You are developing a web application that runs as an Azure Web App. The web application stores data in
+  Azure SQL Database and stores files in an Azure
+  Storage account. The web application makes HTTP requests to external services as part of normal
+  operations.
+  The web application is instrumented with Application Insights. The external services are OpenTelemetry
+  compliant.
+  You need to ensure that the customer ID of the signed in user is associated with all operations
+  throughout the overall system.
+  What should you do?
+  • A. Add the customer ID for the signed in user to the CorrelationContext in the web application
+  • B. On the current SpanContext, set the TraceId to the customer ID for the signed in user
+  • C. Set the header Ocp-Apim-Trace to the customer ID for the signed in user
+  • D. Create a new SpanContext with the TraceFlags value set to the customer ID for the signed in
+  user
+  Answer: A
+
+10.You develop a REST API. You implement a user delegation SAS token to communicate with Azure Blob
+   storage.
+   The token is compromised.
+   You need to revoke the token.
+   What are two possible ways to achieve this goal? Each correct answer presents a complete solution.
+   NOTE: Each correct selection is worth one point.
+   • A. Revoke the delegation key.
+   • B. Delete the stored access policy.
+   • C. Regenerate the account key.
+   • D. Remove the role assignment for the security principle.
+   Answer: AD
+
+ 11.You are developing an Azure App Service REST API.
+    The API must be called by an Azure App Service web app. The API must retrieve and update user profile
+    information stored in Azure Active Directory (Azure AD).
+    You need to configure the API to make the updates.
+    Which two tools should you use? Each correct answer presents part of the solution.
+    NOTE: Each correct selection is worth one point.
+    • A. Microsoft Graph API
+    • B. Microsoft Authentication Library (MSAL)
+    • C. Azure API Management
+    • D. Microsoft Azure Security Center
+    • E. Microsoft Azure Key Vault SDK
+    AB
+
+ 12.You are developing several Azure API Management (APIM) hosted APIs.
+    You must transform the APIs to hide private backend information and obscure the technology stack used
+    to implement the backend processing.
+    You need to protect all APIs.
+    What should you do?
+    • A. Configure and apply a new inbound policy scoped to a product.
+    • B. Configure and apply a new outbound policy scoped to the operation.
+    • C. Configure and apply a new outbound policy scoped to global.
+    • D. Configure and apply a new backend policy scoped to global.
+    Correct Answer: B
+
+ 13.You are developing several Azure API Management (APIM) hosted APIs.
+    The APIs have the following requirements:
+    • Require a subscription key to access all APIs.
+    • Include terms of use that subscribers must accept to use the APIs.
+    • Administrators must review and accept or reject subscription attempts.
+    • Limit the count of multiple simultaneous subscriptions.
+    You need to implement the APIs.
+    What should you do?
+    • A. Configure and apply header-based versioning.
+    • B. Create and publish a product.
+    • C. Configure and apply query string-based versioning.
+    • D. Add a new revision to all APIs. Make the revisions current and add a change log entry.
+
+    B

@@ -1,0 +1,43 @@
+Azure Container Apps is a serverless platform to run ur containers
+Container Apps provides automatic scaling,
+ reduces operational complexity, and allows you to focus on your application rather than infrastructure.
+ security also
+
+Azure Container Apps enables you to run microservices and containerized applications on a serverless platform.
+
+deploy ur image thru commnad line
+
+1. sign in
+az login
+
+2.ensure u are running the latest version of the cli
+az upgrade
+
+3.  install or update the Azure Container Apps extension for the CLI.
+az extension add --name containerapp --upgrade
+
+Now that the current extension or module is installed,
+register the Microsoft.App and Microsoft.OperationalInsights namespaces.
+
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.OperationalInsights
+
+create a group
+az group create \
+  --name my-container-apps \
+  --location centralus
+
+
+Create the Container Apps environment
+Create the Log Analytics workspace
+Create and deploy the container app using a public container image
+
+az containerapp up
+--name my-container-app
+--resource-group my-container-apps
+--location centralus
+--environment 'my-container-apps'
+--image mcr.microsoft.com/k8se/quickstart:latest
+--target-port 80
+--ingress external
+--query properties.configuration.ingress.fqdn

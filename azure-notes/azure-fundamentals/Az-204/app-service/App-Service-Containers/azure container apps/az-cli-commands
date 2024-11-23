@@ -1,0 +1,6 @@
+1.force delete resource group
+az group delete -n MyResourceGroup --force-deletion-types Microsoft.Compute/virtualMachines
+
+
+2.Update MyResourceGroup resource group. Set CostCenter tag to {"Dept":"IT","Environment":"Test"}
+az group update --resource-group MyResourceGroup --set tags.CostCenter='{"Dept":"IT","Environment":"Test"}'

@@ -1,0 +1,43 @@
+1.You develop software solutions for a mobile delivery service. You are developing a mobile app that users
+  can use to order from a restaurant in their area. The app uses the following workflow:
+  1. A driver selects the restaurants for which they will deliver orders.
+  2. Orders are sent to all available drivers in an area.
+  3. Only orders for the selected restaurants will appear for the driver.
+  4. The first driver to accept an order removes it from the list of available orders.
+  You need to implement an Azure Service Bus solution.
+  Which three actions should you perform in sequence
+
+   1.Create a single Service Bus Namespace
+   2.Create a Service Bus Topic for each restaurant for which a driver can receive messages.
+   3. Create a Service Bus subscription for each restaurant for which a driver can receive orders.
+
+2.u are creating an app that uses Event Grid to connect with other services. Your app's event data will be
+  sent to a serverless function that checks compliance.
+  This function is maintained by your company.
+  You write a new event subscription at the scope of your resource. The event must be invalidated after a
+  specific period of time.
+  You need to configure Event Grid
+  Webhook event delivery - sas tokens
+  Topic publishing      - validation code handshake
+
+3.You are a developer for a Software as a Service (SaaS) company. You develop solutions that provide the
+  ability to send notifications by using Azure Notification
+  Hubs.
+  You need to create sample code that customers can use as a reference for how to send raw notifications
+  to Windows Push Notification Services (WNS) devices.
+  The sample code must not use external packages.
+  How should you complete the code segment
+  Box 1: windows -
+  Box 2: application/octet-stream -
+
+4.You are developing a solution that uses several Azure Service Bus queues. You create an Azure Event Grid
+  subscription for the Azure Service Bus namespace. You use Azure Functions as subscribers to process the
+  messages.
+  You need to emit events to Azure Event Grid from the queues. You must use the principal of least
+  privilege and minimize costs.
+  Which Azure Service Bus values should you us
+   tier - premium
+   iam - contributor
+
+5.You create an Azure Service
+  Bus instance by providing a name, pricing tier, subscription, resource group, and location.

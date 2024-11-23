@@ -5,3 +5,15 @@ Locally redundant storage (LRS) copies your data synchronously
  three times within a single physical location in the primary region.
  LRS is the least expensive replication option,
   but isn't recommended for applications requiring high availability or durability.
+
+lrs -- sing region -- datacenter data is copied 3 times within the same datacenter
+zrs -- single region -- datacenter data is copied 3 times one in each data center
+                 availablityzone1           availablityzone2         availablityzone3
+primary region --storage account/copy1  -- storage account copy 2 - storage account copy 3
+
+gzrs
+zrs -- single region -- datacenter data is copied 3 times one in each data center
+                 availablityzone1           availablityzone2         availablityzone3
+primary region --storage account/copy1  -- storage account copy 2 - storage account copy 3
+                 availablityzone1           availablityzone2         availablityzone3
+2ndry region --storage account/copy1  -- storage account copy 2 - storage account copy 3

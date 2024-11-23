@@ -1,0 +1,31 @@
+You are working with a resource group, MultiContainerGroup1, which contains several services such as Azure Functions,
+a CosmosDB instance, and multiple container instances.
+You need to export this resource group for future deployment.
+ Write the Azure CLI command to export the template for this resource group.
+
+ az group export --name MultiContainerGroup1 --output-template-file "./MultiContainerGroup1.json"
+ az deployment group create --resource-group MultiContainerGroup1 --template-file "./MultiContainerGroup1.json"
+
+
+2. What is ACR Tasks?
+A suite of features within Azure Container Registry for container image building and patching
+
+3. You need to mount Azure Files in /aci/logs/. Under which property in the YAML file mountPath: /mnt/secrets/ will go
+Volume and VolumeMounts
+
+
+# Create a resource group named 'myResourceGroup' in 'eastus' location
+az group create --name myResourceGroup --location eastus
+
+# Create an Azure container registry named 'myContainerRegistry008' within the 'myResourceGroup'
+az acr create --resource-group myResourceGroup --name myContainerRegistry008 --sku Basic
+
+# Authenticate Docker client to the registry
+az acr login --name myContainerRegistry008
+
+# Build the Docker image from the Dockerfile in the current directory, tag it as 'sample/hello-world:v1',
+# and push it to the 'myContainerRegistry008' registry
+az acr build --registry myContainerRegistry008 --image sample/hello-world:v1 .
+
+# Execute the image from the registry
+az acr run --registry myContainerRegistry008 --cmd '$Registry/sample/hello-

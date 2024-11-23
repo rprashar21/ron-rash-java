@@ -13,9 +13,14 @@ Instead of manually installing and configuring nginx-ingress, you can use Helm t
 
 Simple Example: Helm makes it easier to install nginx-ingress like this:
 
-hat it is: An Ingress Controller is a special software that manages how external traffic (from the internet) gets routed into your Kubernetes cluster. Think of it as a smart traffic director that decides which service (frontend, backend, etc.) gets the incoming request.
+hat it is: An Ingress Controller is a special software that manages how external traffic
+(from the internet) gets routed into your Kubernetes cluster.
+Think of it as a smart traffic director that decides which service (frontend, backend, etc.) gets the incoming request.
 
-How it helps in this scenario: Once the nginx-ingress (installed via Helm) is set up, it acts as the Ingress Controller for your cluster. It will handle requests based on the routing rules you configure, like sending all requests to /frontend to the frontend service and /backend to the backend service.
+How it helps in this scenario: Once the nginx-ingress (installed via Helm) is set up,
+ it acts as the Ingress Controller for your cluster.
+It will handle requests based on the routing rules you configure,
+like sending all requests to /frontend to the frontend service and /backend to the backend service.
 
 Simple Example: If you configure an Ingress rule to route traffic, it might look like this:
 

@@ -81,16 +81,20 @@ Object ID, and an authentication method (either a Client Secret or Certificate).
 
    AE
 
- 5.You develop a containerized application. The application must be deployed to an existing Azure Kubernetes Service (AKS) cluster from an Azure Container Registry (ACR) instance. You use the Azure command-line interface (Azure CLI) to deploy the application image to AKS.
-   Images must be pulled from the registry. You must be able to view all registries within the current Azure subscription. Authentication must be managed by Microsoft Entra ID and removed when the registry is deleted. The solution must use the principle of least privilege.
+ 5.You develop a containerized application. The application must be deployed to an existing Azure Kubernetes Service (AKS)
+ cluster from an Azure Container Registry (ACR) instance. You use the Azure command-line interface (Azure CLI) to deploy the application image to AKS.
+   Images must be pulled from the registry. You must be able to view all registries within the current Azure subscription.
+    Authentication must be managed by Microsoft Entra ID and removed when the registry is deleted. The solution must use the principle of least privilege.
    You need to configure authentication to the registry.
    Which authentication configuration should you use? To answer, select the appropriate configuration values in the answer area,
 
    authenticaion method - system-assigined identity
    rbac will be acrpull
 
- 6.You are developing several microservices to run on Azure Container Apps for a company. External TCP ingress traffic from the internet has been enabled for the microservices.
-   The company requires that the microservices must scale based on an Azure Event Hub trigger. You need to scale the microservices by using a custom scaling rule.
+ 6.You are developing several microservices to run on Azure Container Apps for a company.
+ External TCP ingress traffic from the internet has been enabled for the microservices.
+   The company requires that the microservices must scale based on an Azure Event Hub trigger.
+    You need to scale the microservices by using a custom scaling rule.
    Which two Kubernetes Event-driven Autoscaling (KEDA) trigger fields should you use? Each correct answer presents part of the solution.
    NOTE: Each correct selection is worth one point.
    • A. metadata

@@ -21,8 +21,11 @@ you to purchase or upload a certificate manually.
   API Management allows to secure access to the back-end service of an API using client certificates.
 
 3. You are developing a web app that is protected by Azure Web Application Firewall (WAF).
- All traffic to the web app is routed through an Azure Application
-   Gateway instance that is used by multiple web apps. The web app address is contoso.azurewebsites.net. All traffic must be secured with SSL. The Azure Application Gateway instance is used by multiple web apps.
+   All traffic to the web app is routed through an Azure Application
+   Gateway instance that is used by multiple web apps.
+   The web app address is contoso.azurewebsites.net. A
+   ll traffic must be secured with SSL.
+   The Azure Application Gateway instance is used by multiple web apps.
    You need to configure the Azure Application Gateway for the web app.
    Which two actions should you perform
    A. In the Azure Application Gateway's HTTP setting, enable the Use for App service setting.

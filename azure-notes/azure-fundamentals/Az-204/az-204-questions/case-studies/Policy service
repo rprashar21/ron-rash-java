@@ -1,0 +1,65 @@
+1.You need to implement the Log policy.
+How should you complete the Azure Event Grid subscription?
+endPointType - webhook
+filter - subjectBeginsWith
+includedevenTypes - Microsoft.Storage.BlobCreated
+
+2.You need to
+  ensure that the solution can meet the scaling requirements for Policy Service.
+  Which Azure Application Insights data model should you use?
+  • A. an Application Insights dependency
+  • B. an Application Insights event
+  • C. an Application Insights trace
+  • D. an Application Insights metric ans
+
+3.You need to implement telemetry for non-user actions.
+  How should you complete the Filter class
+  ITelemetryProcessor -
+  To create a filter, implement ITelemetryProcessor. This technique gives you more direct control over
+  what is included or excluded from the telemetry stream
+
+  Box 2: ITelemetryProcessor -
+  Box 3: ITelemetryProcessor -
+  Box 4: RequestTelemetry - var x = item as RequestTelemert
+  Box 5: /health -
+  To filter out an item, just terminate the chain.
+
+4.You need to ensure that PolicyLib requirements are met.
+  How should you complete the code segment?
+  Box 1: ITelemetryInitializer - Use telemetry initializers to define global properties that are sent with all telemetry; and to override
+  selected behavior of the standard telemetry modules.
+  Box 2: Initialize -
+  Box 3: Telemetry.Context -
+  Box 4: ((EventTelemetry)telemetry).Properties["EventID"]
+
+5.You need to add code at line EG15 in EventGridController.cs to ensure that the Log policy applies to all
+  services.
+  How should you complete the code?
+  Scenario, Log policy: All Azure App Service Web Apps must write logs to Azure Blob storage.
+  Box 1: Status -
+  Box 2: Succeeded -
+  Box 3: operationName -
+
+
+6.You need to insert code at line LE03 of LoginEvent.cs to ensure that all authentication events are
+  processed correctly.
+  Box 1: id -
+  id is a unique identifier for the event.
+  Box 2: eventType - eventType is one of the registered event types for this event source.
+  Box 3: dataVersion - dataVersion is the schema version of the data object.
+
+7.You need to implement the Log policy.
+  How should you complete the EnsureLogging method in EventGridController.cs
+  box 1: logdrop -
+  All log files should be saved to a container named logdrop.
+  Box 2: 15 - Logs must remain in the container for 15 days
+  Box 3: UpdateApplicationSettings - All Azure App Service Web Apps must write logs to Azure Blob storage.
+
+  You need to resolve a notification latency issue.
+  Which two actions should you perform? Each correct answer presents part of the solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Set Always On to true.
+  • B. Ensure that the Azure Function is using an App Service plan.
+  • C. Set Always On to false.
+  • D. Ensure that the Azure Function is set to use a consumption plan.
+  Correct Answer: AB

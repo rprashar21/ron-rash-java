@@ -35,3 +35,5 @@ https://graph.microsoft.com/v1.0/me?$select=displayName
 AppCatalog.Submit
 BusinessScenarioConfig.Read.OwnedBy
 Users.Read.All
+
+10. for microsoft graph api -- we need to use the delegated permission type

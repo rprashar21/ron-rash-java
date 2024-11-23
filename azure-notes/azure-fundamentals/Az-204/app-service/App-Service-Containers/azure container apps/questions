@@ -1,0 +1,59 @@
+1.To mount an Azure File Share to an Azure Container Instance, you need the Storage Account Key
+
+az container create - Azure Container Instances (ACI) is a service that allows you to run containers
+ directly without the need for any orchestration service.
+ The az container create command is used to create these instances, which are ideal for single, isolated workloads.
+
+whereas
+az containerapp create - Azure Container Apps is a serverless container service that
+provides advanced features such as scaling and orchestration.
+The az containerapp create command is used to create a new Azure Container App, which is ideal for deploying microservices.
+
+2. What is the primary function of the "Observability" feature in Dapr?
+It sends tracing information to an Application Insights backend.
+
+3.You are managing an Azure Container Registry named myregistry.
+You have a task to publish the most recent windows/servercore container image from the Microsoft Container Registry into your registry.
+
+az acr import \
+--name myregistry
+
+4.In the context of Dapr, what is the purpose of a Dapr sidecar and how does it interact with a container app?
+The Dapr sidecar is used to expose Dapr APIs to the container app, which can be invoked via HTTP or gRPC.
+
+What is the default behavior of Dapr-enabled container apps regarding the loading of Dapr components?
+They load the full set of deployed components.
+
+5.# Create a new resource group in the West Europe region
+  az group create --name $resourceGroup --location "$location"
+
+  # Create a container group (ACI) in the new resource group
+  az container create --name  $containerName--resource-group $resourceGroup
+  --image $containerImage --dns-name-label $containerGroup --location $location
+
+6.What is the purpose of a restart policy in Azure Container Instances?
+To specify when and how containers should be restarted, based on the desired behavior.
+
+7.what is needed to enable authentication on your Azure Container App ?
+A configured ingress rule with allowInsecure set to disabled
+Any Identity provider
+A specified Authentication / Authorization provider within the app settings
+
+8.You have a containerized application that requires automatic updates whenever
+the image in Azure Container Registry (ACR) is updated. What should you configure?
+Webhooks
+Azure Files
+
+9 powershell commands for container groups
+New-AzResourceGroup -Name "myResourceGroup" -Location "West US"
+
+# Create a new container group "myContainerGroup"
+New-AzContainerGroup
+-ResourceGroupName "myResourceGroup"
+-Name "myContainerGroup"
+-Image "myAcrRegistry.azurecr.io/myNetApp:latest"
+-OsType "Windows"
+
+10. What happens when you update an application secret in Azure Container App?
+nothing
+Adding, removing, or changing secrets doesn't generate new revisions. Apps need to be restarted to reflect updates.

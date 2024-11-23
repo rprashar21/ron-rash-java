@@ -5,23 +5,32 @@ It’s stored in Azure Storage and works with a standard protocol (SMB) that man
 
 Key Concepts Explained
 Container Images:
+A container image is like a template or blueprint.
+It includes everything your application needs to run:
+the code, libraries, and settings. When you run a container, you’re launching a copy of this image.
 
-A container image is like a template or blueprint. It includes everything your application needs to run: the code, libraries, and settings. When you run a container, you’re launching a copy of this image.
 Containers:
+A container is a running instance of a container image.
+It’s like turning on a machine based on a blueprint (the image).
+Containers are lightweight and run isolated from one another.
 
-A container is a running instance of a container image. It’s like turning on a machine based on a blueprint (the image). Containers are lightweight and run isolated from one another.
 Container Groups:
+In Azure Container Instances, a container group is a collection of containers
+that run together, share the same resources (like CPU and memory), and network.
+Think of it as multiple small machines working closely together in the same environment.
 
-In Azure Container Instances, a container group is a collection of containers that run together, share the same resources (like CPU and memory), and network. Think of it as multiple small machines working closely together in the same environment.
 Pods:
+In Kubernetes (which Azure Kubernetes Service uses), a pod is similar to a container group.
+It’s the smallest unit that runs containers. A pod can contain one or more containers that share resources and are tightly coupled.
 
-In Kubernetes (which Azure Kubernetes Service uses), a pod is similar to a container group. It’s the smallest unit that runs containers. A pod can contain one or more containers that share resources and are tightly coupled.
 Azure File Share:
+Azure File Share is a managed file storage solution that acts like a shared network folder in the cloud.
+ Multiple containers (or virtual machines) can connect to it and read/write data.
 
-Azure File Share is a managed file storage solution that acts like a shared network folder in the cloud. Multiple containers (or virtual machines) can connect to it and read/write data.
 Mounting:
+Mounting is the process of connecting an external storage location (like an Azure File Share) to your container so it can use that storage.
+ It’s like plugging in a USB drive to give your computer more space.
 
-Mounting is the process of connecting an external storage location (like an Azure File Share) to your container so it can use that storage. It’s like plugging in a USB drive to give your computer more space.
 Summary
 Azure Container Instances (ACIs) are temporary by nature, and their data is lost if they restart.
 To keep data safe, you can use Azure Files, which is like cloud storage, and “mount” it to your containers.

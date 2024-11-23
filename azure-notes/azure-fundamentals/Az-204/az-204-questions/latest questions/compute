@@ -5,4 +5,101 @@ az webapp log config --name <webapp> --resource-group <rg-name> --docker-contain
 tail the logs
 az webapp log tail --name <webapp > --resource-group <rg-name>
 
-2.
+2.a single alert notification must be created when the alert is created and
+  when the alert is resolved
+  A. The Activity log signal type.
+  • B. The Application Log signal type.
+  • C. The Metric signal type. -->ans Metric alerts in Azure Monitor provide a way to get notified when one of your metrics cross a threshold.
+                                      Metric alerts work on a range of multi-dimensional platform metrics, custom metrics, Application Insights
+  • D. The Audit Log signal type.
+
+3.The web application makes HTTP requests to external services as part of normal
+  operations.
+  The web application is instrumented with Application Insights. The external services are OpenTelemetry
+  compliant.
+  You need to ensure that the customer ID of the signed in user is associated with all operations
+  throughout the overall system.
+
+  A. Add the customer ID for the signed in user to the CorrelationContext in the web application -->ans
+  • B. On the current SpanContext, set the TraceId to the customer ID for the signed in user
+  • C. Set the header Ocp-Apim-Trace to the customer ID for the signed in user
+  • D. Create a new SpanContext with the TraceFlags value set to the customer ID for the signed in
+  user
+
+4.You develop a gateway solution for a public facing news API. The news API back end is implemented as a
+  RESTful service and uses an OpenAPI specification.
+  You need to ensure that you can access the news API by using an Azure API Management service
+  instance.
+  Which Azure PowerShell command should you run?
+  • A. Import-AzureRmApiManagementApi -Context $ApiMgmtContext -SpecificationFormat
+  "Swagger" -SpecificationPath $SwaggerPath -Path $Path
+  • B. New-AzureRmApiManagementBackend -Context $ApiMgmtContext -Url $Url -Protocol http
+  • C. New-AzureRmApiManagement -ResourceGroupName $ResourceGroup -Name $Name
+  Location $Location -Organization $Org -AdminEmail $AdminEmail"€ג
+  • D. New-AzureRmApiManagementBackendProxy -Url $ApiUrl
+  Answer: D
+
+5.You develop and add several functions to an Azure Function app that uses the latest runtime host. The
+  functions contain several REST API endpoints secured by using SSL. The Azure Function app runs in a
+  Consumption plan.
+  You must send an alert when any of the function endpoints are unavailable or responding too slowly.
+  You need to monitor the availability and responsiveness of the functions.
+  What should you do?
+  • A. Create a URL ping test.
+  • B. Create a timer triggered function that calls TrackAvailability() and send the results to
+  Application Insights.
+  • C. Create a timer triggered function that calls GetMetric("Request Size") and send the results to
+  Application Insights.
+  • D. Add a new diagnostic setting to the Azure Function app. Enable the FunctionAppLogs and
+  Send to Log Analytics options.
+  Answer: B
+
+  6.An organization has web apps hosted in Azure.
+    The organization wants to track events and telemetry data in the web apps by using Application Insights.
+    You need to configure the web apps for Application Insights.
+    Which three actions should you perform in sequence
+
+    Step 1: Create an Application Insights resource
+    Step 2: Copy the connection string
+    Step 3: Configure the Application Insights SDK in the app
+
+  7.An organization hosts web apps in Azure. The organization uses Azure Monitor.
+    You discover that configuration changes were made to some of the web apps.
+    You need to identify the configuration changes.
+    Which Azure Monitor log should you review?
+    • A. AppServiceAppLogs
+    • B. AppServiceEnvironmentPlatformlogs ans
+    • C. AppServiceConsoleLogs
+    • D. AppServiceAuditLogs
+
+8.hich Application Insights SDK features should you use?
+reduce volumes of telemtery -- sapling
+enrich telemerty - telemetry initializer
+discard a telemerty - telemerty processor
+
+9.Question #39Topic 5
+  You develop and deploy a web app to Azure App Service. The Azure App Service uses a Basic plan in a
+  single region.
+  Users report that the web app is responding slow. You must capture the complete call stack to help
+  identify performance issues in the code. Call stack data must be correlated across app instances. You
+  must minimize cost and impact to users on the web app.
+  You need to capture the telemetry.
+  Which three actions should you perform? Each correct answer presents part of the solution.
+  NOTE: Each correct selection is worth one point.
+  • A. Restart all apps in the App Service plan.
+  • B. Enable Application Insights site extensions.
+  • C. Upgrade the Azure App Service plan to Premium.
+  • D. Enable Profiler.
+  • E. Enable the Always On setting for the app service.
+  • F. Enable Snapshot debugger.
+  • G. Enable remote debugging.
+  Correct Answer: BDE
+
+The application must alert operators when a technical issue is preventing sales to camps.
+You need to build an alert to detect technical issues.
+Which alert type should you use?
+• A. Metric alert using multiple time series
+• B. Metric alert using dynamic thresholds
+• C. Log alert using multiple time series
+• D. Log alert using dynamic thresholds
+Correct Answer: B

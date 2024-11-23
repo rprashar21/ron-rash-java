@@ -47,4 +47,5 @@ Container Groups	Group multiple containers in ACI that share the same lifecycle,
 ACR (Azure Container Registry)	A private registry for securely storing and managing Docker container images,
 u store your application container image in ACR.
 You deploy the container using ACI when a new job or task is triggered.
-If your application has multiple components, you can use a Container Group in ACI to deploy them together, ensuring they share the same environment and resources
+If your application has multiple components, you can use a Container Group in ACI to deploy them together,
+ensuring they share the same environment and resources

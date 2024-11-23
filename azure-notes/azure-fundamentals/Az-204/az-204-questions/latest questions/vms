@@ -1,0 +1,66 @@
+1.You are preparing to deploy an Azure virtual machine (VM)-based application.
+  The VMs that run the application have the following requirements:
+  >> When a VM is provisioned the firewall must be automatically configured before it can access Azure
+  resources.
+  >> Supporting services must be installed by using an Azure PowerShell script that is stored in Azure
+  Storage.
+  You need to ensure that the requirements are met.
+
+  firewall config --> run command
+  suporting services script --> hybrid runbook worker
+
+2.You are debugging an application that is running on Azure Kubernetes cluster named cluster1. The cluster
+  uses Azure Monitor for containers to monitor the cluster.
+  The application has sticky sessions enabled on the ingress controller.
+  Some customers report a large number of errors in the application over the last 24 hours.
+  You need to determine on which virtual machines (VMs) the errors are occurring
+
+  Box 1: ago(1d)
+  Box 2: distinct containerID -
+  Box 3: where ContainerID in (ContainerIDs)
+  Box 4: summarize Count() by Computer
+
+3.You develop an application. You plan to host the application on a set of virtual machines (VMs) in Azure.
+  You need to configure Azure Monitor to collect logs from the application.
+  Which four actions should you perform in sequence
+  Step 1: Create a Log Analytics workspace.
+  Step 2: Add a VMInsights solution.
+  Step 3: Install agents on the VM and VM scale set to be monitored.
+  Step 4: Create an Application Insights resource
+  Sign in to the Azure portal, and create an Application Insights resource.
+
+4.You are developing several microservices to run on Azure Container Apps. External HTTP ingress traffic
+  has been enabled for the microservices.
+  The microservices must be deployed to the same virtual network and write logs to the same Log Analytics
+  workspace.
+  You need to deploy the microservices.
+  What should you do?
+  • A. Enable single revision mode.
+  • B. Use a separate environment for each container.
+  • C. Use a private container registry image and single image for all containers.
+  • D. Use a single environment for all containers. --> ans
+  • E. Enable multiple revision mode.
+
+5.You have a Linux container-based console application that uploads image files from customer sites all
+  over the world. A back-end system that runs on Azure virtual machines processes the images by using the
+  Azure Blobs API.
+  You are not permitted to make changes to the application.
+  Some customer sites only have phone-based internet connections.
+  You need to configure the console application to access the images.
+  What should you use?
+  CloudCertified Practice Tests
+  • A. Azure BlobFuse A
+  • B. Azure Disks
+  • C. Azure Storage Network File System (NFS) 3.0 support
+  • D. Azure Files
+
+6.You develop an app that allows users to upload photos and videos to Azure storage. The app uses a
+  storage REST API call to upload the media to a blob storage account named Account1. You have blob
+  storage containers named Container1 and Container2.
+  Uploading of videos occurs on an irregular basis.
+  You need to copy specific blobs from Container1 to Container2 when a new video is uploaded.
+  What should you do?
+  • A. Copy blobs to Container2 by using the Put Blob operation of the Blob Service REST API
+  • B. Create an Event Grid topic that uses the Start-AzureStorageBlobCopy cmdlet ans
+  • C. Use AzCopy with the Snapshot switch to copy blobs to Container2
+  • D. Download the blob to a virtual machine and then upload the blob to Container2

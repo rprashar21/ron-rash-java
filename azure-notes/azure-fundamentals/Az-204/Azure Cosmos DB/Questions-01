@@ -1,8 +1,11 @@
 Retail Store Locations -
 You must perform a point-in-time restoration of the retail store location data due to an unexpected and accidental deletion of data.
-Azure Cosmos DB queries from the Azure Function exhibit high Request Unit (RU) usage and contain multiple, complex queries that exhibit high point read latency for large items as the function app is scaling.QuestionYou need to reduce read latency for the retail store solution.
+Azure Cosmos DB queries from the Azure Function exhibit high Request Unit (RU) usage and contain multiple,
+complex queries that exhibit high point read latency for large items as the function app is scaling.Question
+You need to reduce read latency for the retail store solution.
 What are two possible ways to achieve the goal? Each correct answer presents a complete solution. NOTE: Each correct selection is worth one point.
-• A. Create a new composite index for the store location data queries in Azure Cosmos DB. Modify the queries to support parameterized SQL and update the Azure Function app to call the new queries.
+• A. Create a new composite index for the store location data queries in Azure Cosmos DB.
+Modify the queries to support parameterized SQL and update the Azure Function app to call the new queries.
 • B. Provision an Azure Cosmos DB dedicated gateway. Update the Azure Function app connection string to use the new dedicated gateway endpoint.
 • C. Configure Azure Cosmos DB consistency to session consistency. Cache session tokens in a new Azure Redis cache instance after every write. Update reads to use the session token stored in Azure Redis.
 • D. Provision an Azure Cosmos DB dedicated gateway. Update blob storage to use the new dedicated gateway endpoint.
@@ -33,7 +36,8 @@ Option D (inventory reports) is not timely enough for nightly audits.
 Option E (Event Grid) is more suited for real-time processing than scheduled audits.
 
 
-3.You must connect to a No-SQL globally-distributed database by using the .NET API. You need to create an object to configure and execute requests in the database. Which code segment should you use?
+3.You must connect to a No-SQL globally-distributed database by using the .NET API.
+You need to create an object to configure and execute requests in the database. Which code segment should you use?
   • A. new Container(EndpointUri, PrimaryKey);
   • B. new Database(EndpointUri, PrimaryKey);
   • C. new CosmosClient(EndpointUri, PrimaryKey);

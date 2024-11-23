@@ -1,0 +1,57 @@
+1. comple code
+Box 1: AzureServiceTokenProvider()
+Box 2: tp.GetAccessTokenAsync("..")
+
+2.You need to ensure disaster recovery requirements are met.
+  What code should you add at line PC16?
+
+  Box 1: DirectoryTransferContext -
+  We transfer all files in the directory.
+  Note: The TransferContext object comes in two forms: SingleTransferContext and
+  DirectoryTransferContext. The former is for transferring a single file and the latter is for transferring a
+  directory of files.
+  Box 2: ShouldTransferCallbackAsync
+  The DirectoryTransferContext.ShouldTransferCallbackAsync delegate callback is invoked to tell whether a
+  transfer should be done.
+  Box 3: False -
+  If you want to use the retry policy in Copy, and want the copy can be resume if break in the middle, you
+  can use SyncCopy (isServiceCopy = false).
+  Note that if you choose to use service side copy ('isServiceCopy' set to true), Azure (currently
+
+  3. You need to add code at line PC26 of Processing.cs to ensure that security policies are met.
+  Box 1: var key = await Resolver.ResolveKeyAsyn(keyBundle,KeyIdentifier.CancellationToken.None);
+  Box 2: var x = new BlobEncryptionPolicy(key,resolver);
+  Example:
+  // We begin with cloudKey1, and a resolver capable of resolving and caching Key Vault secrets.
+  BlobEncryptionPolicy encryptionPolicy = new BlobEncryptionPolicy(cloudKey1, cachingResolver);
+  client.DefaultRequestOptions.EncryptionPolicy = encryptionPolicy;
+  Box 3: cloudblobClient. DefaultRequestOptions.EncryptionPolicy = x;
+
+  4.
+  You need to ensure the security policies are met.
+  What code do you add at line CS07 of ConfigureSSE.ps1
+  • A. ג€"PermissionsToKeys create, encrypt, decrypt
+  • B. ג€"PermissionsToCertificates create, encrypt, decrypt ans
+  • C. ג€"PermissionsToCertificates wrapkey, unwrapkey, get
+  • D. ג€"PermissionsToKeys wrapkey, unwrapkey, get
+
+  5.You need to ensure receipt processing occurs correctly.
+    What should you do?
+    • A. Use blob properties to prevent concurrency problems
+    • B. Use blob SnapshotTime to prevent concurrency problems ans
+    • C. Use blob metadata to prevent concurrency problems
+    • D. Use blob leases to prevent concurrency problems
+
+  6.u need to resolve the capacity issue.
+    What should you do?
+    • A. Convert the trigger on the Azure Function to an Azure Blob storage trigger
+    • B. Ensure that the consumption plan is configured correctly to allow scaling
+    • C. Move the Azure Function to a dedicated App Service Plan
+    • D. Update the loop starting on line PC09 to process items in parallel   ans
+
+  7.You need to resolve the log capacity issue.
+    What should you do?
+    • A. Create an Application Insights Telemetry Filter
+    • B. Change the minimum log level in the host.json file for the function
+    • C. Implement Application Insights Sampling ans
+    • D. Set a LogCategoryFilter during startup
