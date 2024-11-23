@@ -1,0 +1,8 @@
+You are developing several microservices to run on Azure Container Apps.
+The microservices must allow HTTPS access by using a custom domain.
+You need to configure the custom domain in Azure Container Apps.
+1.Enable Ingress
+2. Add custom domain name
+3. Validate custom domain name
+4. bind the certificate
+5. Add dns records to the domain provider

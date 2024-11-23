@@ -95,6 +95,7 @@ discard a telemerty - telemerty processor
   • G. Enable remote debugging.
   Correct Answer: BDE
 
+10.
 The application must alert operators when a technical issue is preventing sales to camps.
 You need to build an alert to detect technical issues.
 Which alert type should you use?
@@ -103,3 +104,49 @@ Which alert type should you use?
 • C. Log alert using multiple time series
 • D. Log alert using dynamic thresholds
 Correct Answer: B
+
+11.You want to implement Azure Search to allow the application to search the index by using various criteria
+   to locate documents related to accommodation venues.
+   You want the application to list holiday accommodation venues that fall within a specific price range and
+   are within a specified distance to an airport.
+   What should you do?
+   • A. Configure the SearchMode property of the SearchParameters class.
+   • B. Configure the QueryType property of the SearchParameters class.
+   • C. Configure the Facets property of the SearchParameters class.
+   • D. Configure the Filter property of the SearchParameters class.
+   Answer: D
+
+12.
+You are developing an Azure Function App that processes images that are uploaded to an Azure Blob
+container.
+Images must be processed as quickly as possible after they are uploaded, and the solution must minimize
+latency. You create code to process images when the
+Function App is triggered.
+You need to configure the Function App.
+What should you do?
+• A. Use an App Service plan. Configure the Function App to use an Azure Blob Storage input
+trigger.
+• B. Use a Consumption plan. Configure the Function App to use an Azure Blob Storage trigger.
+• C. Use a Consumption plan. Configure the Function App to use a Timer trigger.
+• D. Use an App Service plan. Configure the Function App to use an Azure Blob Storage trigger.
+• E. Use a Consumption plan. Configure the Function App to use an Azure Blob Storage input
+trigger.
+Answer: D
+
+13.You are developing a web app that is protected by Azure Web Application Firewall (WAF). All traffic to the
+   web app is routed through an Azure Application
+   Gateway instance that is used by multiple web apps. The web app address is contoso.azurewebsites.net.
+   All traffic must be secured with SSL. The Azure Application Gateway instance is used by multiple web
+   apps.
+   You need to configure the Azure Application Gateway for the web app.
+   Which two actions should you perform? Each correct answer presents part of the solution.
+   NOTE: Each correct selection is worth one point.
+   • A. In the Azure Application Gateway's HTTP setting, enable the Use for App service setting.
+   • B. Convert the web app to run in an Azure App service environment (ASE).
+   CloudCertified Practice Tests
+   • C. Add an authentication certificate for contoso.azurewebsites.net to the Azure Application
+   Gateway.
+   • D. In the Azure Application Gateway's HTTP setting, set the value of the Override backend path
+   option to contoso22.azurewebsites.net.
+   Answer: AD
+
