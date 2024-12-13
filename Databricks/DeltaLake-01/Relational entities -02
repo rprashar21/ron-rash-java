@@ -1,0 +1,41 @@
+Database and tables in databricks
+database is actually a schema in hive metastore
+
+To creata a db u use create database syntax or create schema syntax
+
+What is a hive metastore ?
+Hivemetastore is repository in databricks which  is used to store information for databases,tables and  partitions
+
+Every Databricks workspace has a central Hive metastore accessible by all clusters to persist table metadata.
+By default you have a database called "default". To create some tables in this default database,
+we use the CREATE TABLE statement without specifying any database name.
+And the table data will be located under the hive default directory, which: /user/hive/warehouse
+
+for other database we use create database or create schema commands
+db will be create in the hive metastore and db folder will be under the hive default directory
+databse folder has an extension .db
+
+To create databses outside the hive default directory we use the location keyword to specify the path
+CREATE SCHEMA DB_OUTSIDE
+LOCALTION 'dbfs:/custom/path/db_y.db'
+
+table definition will be in the hive metastore, the actual data files for these tables will
+be stored in the database folder in that custom location.
+
+==========Tables =========
+Managed Table                            External tables
+created under the db directory           created outside the db directory
+create table table_name                   create table table_name location 'path'
+dropping the table will delete all files   dropping the table will not delet teh underlying files
+
+========================================================================================================
+create table managed_default(id int,name string) --- this is a managed table ,, definition will be under hive metatstore and
+data will be in db directory -->
+DESCRIBE EXTENDED managed_default -- TO SEE METADATA INFORMATION
+
+create table external_default(id int,name string)
+LOCATION 'dbfs:/mnt/demo/external_default'
+
+===========================
+CREATE SCHEMA new_default
+DESCRIBE DATABASE EXTENDED NEW_default -- TO SEE METADATA INFORMATION

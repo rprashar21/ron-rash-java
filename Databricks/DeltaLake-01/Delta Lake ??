@@ -1,0 +1,93 @@
+what is delta lake
+It sits as a storage layer on top of a data lake like azure data lake and aws s3
+
+Delta lake enhance the functionality of data lake and bridges the gap between data lake and data warehouse
+Example Scenario
+With a Lakehouse:
+The company uses a lakehouse built with Delta Lake on Databricks.
+All data (raw, cleaned, structured, unstructured) resides in one storage system (e.g., Azure Data Lake Storage).
+Delta Lake:
+Handles ACID transactions to ensure data consistency.
+Allows real-time updates to the data.
+Supports both analytics and machine learning from the same platform.
+Result:
+Faster insights.
+Simplified architecture.
+Lower costs and better collaboration across teams.
+
+Delta Lake is a component which is deployed on the cluster as part of the Databricks runtime.
+If you are creating a Delta Lake table, it gets stored on the storage in one or more data files in
+parquet format.
+
+Delta stores transaction logs  know as Delta log
+Ordered records of every transaction happened on the table
+Each committed transaction is recorded in a JSON file.
+
+=================Delta Lake hands on ======
+create a table  --> insert some records -->
+Here is an example of an `employee` table with 4 sample records:
+
+| **emp_id** | **first_name** | **last_name** | **department**  | **salary**  | **hire_date** | **location**     |
+|------------|----------------|---------------|-----------------|-------------|---------------|------------------|
+| 1          | John           | Doe           | Engineering     | 75000.00    | 2020-06-15    | New York         |
+| 2          | Jane           | Smith         | Marketing       | 68000.00    | 2019-08-20    | San Francisco    |
+| 3          | Alice          | Johnson       | Human Resources | 72000.00    | 2021-01-10    | Chicago          |
+| 4          | Bob            | Brown         | Finance         | 80000.00    | 2018-03-25    | Dallas           |
+
+To see the metadata
+DESCRIBE DETAIL EMPLOYEE
+
+ we wil be able to see location of the table path,createdAt,lastmodified,numfiles
+ numfiles indicate the number of data files in the current table version.
+
+Let us copy the table location and explore the files using the %fs Magic Command.
+%fs ls 'dbfs:/user/hive/warehouse/employees'
+And indeed the directory contains four data files in parquet format.
+In addition to the data log directory.
+But the question is why do we have four files for a single insert operation?
+This is because Spark work in parallel. If we check our cluster.
+We see that our cluster has four cores, so there were four executers working at the same time to
+insert our six new records.
+
+===========================
+DESCRIBE HISTORY EMPLOYEE ---> TO SEE HISTORY OF THE TABLE
+version timestamp  userid userName  opertaion
+                                     UPDATE
+                                     WRITE
+                                     CREATE TABLE
+
+
+========ADVANCE DELTA TABLE FEATURES==========
+TIME TRAVEL --- > QUERY OLDER VERSION OF DATA
+1.
+Use TIMESTAMP or VERSION
+select * from employees timestamp as of '2024-01-10'
+2.
+Use version number
+select * from employees version as of 36
+select * from employees @v36
+
+ROLLBACK
+RESTORE COMMAND
+RESTORE EMPLOYEE TO TIMESTAMP AS OF '2024-01-01'
+RESTORE EMPLOYEE TO VERSION AS OF 36
+
+OPTIMIZE COMMAND
+One way to improve this speed is by compacting small files into larger ones.
+With OPTIMIZE, we can also do z-order indexing.
+Z-Order indexing in Delta Lake is about co-locating and reorganizing column information in the same set of files.
+
+OPTIMIZE EMPLOYEES
+ZORDER BY COLUMN-ID
+
+CLEAN UP COMMANDS
+VACUUMM COMMAND -- clean up uunused data file or files that are no longer in table state
+VACUUM EMPLOYEES [RETENTION_PERIOD]  retention period is of 7 days
+vacuum employees reatin 7 days
+
+Drop a table
+DROP TABLE EMPLOYEES
+
+
+
+

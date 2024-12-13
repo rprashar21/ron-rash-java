@@ -1,0 +1,45 @@
+CTAS statements to create Delta tables.
+
+CREATE TABLE TABLE_1 AS SELECT * from table2
+atumatically infers schema from other tables
+does not support manual schema declaration
+no need to insert data as data will be copied from anther table
+
+Table constaraints not null adn check constarints
+
+Alter table orders add constraint valid_date check (date > '2020-01-01')
+
+Make copy of tables deep clone and shallow clone
+Deep clone fully copies both data and metadata from a source table to a target.
+CREATE TABALE TABLE1 DEEP CLONE SOURCE_TABLE
+
+shallow clone only copies transactional logs -- no data movement
+Shallow clone is a good option, for example, to test out applying changes on a table without the risk of modifying
+the current table.
+
+CREATE TABALE TABLE1 SHALLOW CLONE SOURCE_TABLE
+
+==================VIEW IN DATABRICKS=====================
+A view in Databricks is a virtual table that has no physical data.
+In fact, it is just a saved SQL query against actual tables.
+And this query is executed each time a view is queried.
+
+3 TYPES OF VIEW
+STORED VIEW -- CREATE VIEW VIEW_NAME AS QUERY(SELECT * FROM TABLE WHERE NAME='ROHIT') -- THEY ARE PRESISTED IN THE TABLE
+             DROPPED ONLY WHEN VIEW IS DROPP
+TEMPORRARY VIEW -- TIED TO SPARK SESSION like (opening or closing a notebook or clusert or installing a package)
+                 CREATE TEMP VIEW VIEW_NAME AS QUERY(SELECT * FROM TABLE WHERE NAME='ROHIT')
+                 DROPPED WHEN session endds
+
+GLOBAL TEMPORARY VIEW  -- CREATE GLOBAL TEMP VIEW VIEW_NAME AS QUERY(SELECT * FROM TABLE WHERE NAME='ROHIT'
+                     dropped when cluster is restarted
+
+ eg
+ create view view_apple_phones
+ as select * from smartphones where brand='apple'
+
+ select * from view_apple_phones
+
+ show tables
+
+

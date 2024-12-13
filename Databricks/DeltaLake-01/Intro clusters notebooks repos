@@ -1,0 +1,39 @@
+We create a cluster ,, a single cluster
+A cluster in Databricks provides the compute power to run large-scale data processing tasks.
+Clusters are scalable; you can adjust the number of nodes based on your workload.
+ This is particularly useful for optimizing costs and performance
+
+
+Azure Databricks is commonly used for cleaning, transforming, and preparing data for downstream analytics.
+Clusters allow you to use notebooks in Databricks for interactive development and exploration.
+Multiple users can share a single cluster for collaborative development and testing, leveraging the workspace features.
+
+
+============   ================================ =========================== ========================
+
+what are notebooks?
+Notebooks are coding environments allowing you to interactively developing and executing code on databricks.
+they support many languages scala r python
+u can collaborate with different teams share
+
+Magic commands
+%sql
+%md -- markdown
+
+run magic command that allows us to run another notebook from the current notebook.
+%run
+simply create another notebook sya we have 2 notebooks n1 and n2 -- we are currently in n1
+
+n2 has pyhtom code like
+name ="rohit"
+
+in notebook n1
+use
+%run ./pathofthenotebook1
+print(name)
+
+%fs maggic command for lsiting files and folders
+%fs ls '/databricks-datasets'
+
+use dbutils function to see filesystem
+dbutils.fs.help();
