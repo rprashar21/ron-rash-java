@@ -1,0 +1,108 @@
+We will learn to extract data from files using spark sql on databricks
+
+We have 3 tables customers orders and books
+Customers              orders             books
+customer-id            order-id           book-id
+                       customer-id        title,author,category,price
+email                       book
+profile
+
+
+lets copy the dataset in our databaricks
+%run ../Includes/Copy-Datasets -- the data is in json format
+
+%python
+files = dbutils.fs.ls(f"{dataset_bookstore}/customers-json")
+display(files)
+
+we can see a list of files
+path                         name             size    mdoficationTime
+dbfs:/....     customers-json/export-001.json    1mb     ....
+
+~~ reads the files ~~
+select * from json.`${dataset.bookstore}/customers-json/export-001.json`
+o/p
+cusromer_id     email         profile
+1             ron@gmail      {} some json data
+
+
+~~ reads mutiple  files using wildcard~~
+select * from json.`${dataset.bookstore}/customers-json/export-*.json`
+
+~~ reads an entire directory assuming they have same format and schema~~
+select * from json.`${dataset.bookstore}/customers-json`
+
+~~ count~~
+select count(*) from json.`${dataset.bookstore}/customers-json`
+
+=================================================
+When reading multiple files,add the input_file_name function, which is a built-in Spark SQL command that records
+the source data file for each record.
+This is helpful for trobleshooting when the source data is a problem
+
+select *, input_file_name() source_file
+ from json.`${dataset.bookstore}/customers-json`
+
+ 0/p
+ cusromer_id     email         profile                sourcefile {there is a column for source file}
+ 1             ron@gmail      {} some json data
+
+~~ use text format to query any type of data   csv text , txt or json ~~
+select * from text.`${dataset.bookstore}/customers-json/export-*.json`
+
+~~ use binary format ~~
+select * from binaryFile.`${dataset.bookstore}/customers-json/export-*.json`
+
+===============================================
+for csv formats there is no supprot
+create table books_cvs(book_id string,title string,author string)
+USING csv
+options(
+       header="true",
+       delimiter=";")
+LOCATION "${dataset.bookstore}/books-csv"
+
+select * from books_csv
+
+this is not a delta table and it will not have features of a delta table , it smay show old data
+
+How to write data in csv file susing spark and python
+%python
+(spark.read
+           .table("book_csv"))
+       .write
+             .mode("append")
+             .format(csv)
+             .option('header','true')
+             .option
+             .save(f"{dataset.bookstore}/books-csv)
+
+ now check how manyt file have been written ,, there will be 4
+
+~~ REFRESH TABALE BOOKS_CSV ~~
+
+====================================================
+To create Delta tables where we load data from external sources, we use
+Create Table AS Select statements or CTAS statements.
+
+CREATE TABLE customers AS
+SELECT * from json.`${datset.bookstore}/customers-json`;
+
+DESCRIBE EXTENDED customers
+
+ CTAS statements do not support additional statemnets like csv file format
+ to overcome this we will first create a temp view of the dataset and then query that temp view USING CTAS
+
+ eg
+ create temo view tempview_books_csv(books_id string, title string,author string)
+ using csv
+ options(header="true",
+         path="${dataset.bookstore}/books_csv/export_*.csv"
+         delimiter=";"
+         );
+
+ create table books AS
+ SELECT * FROM tempview_books_csv
+
+ SELECT * FROM BOOKS
+

@@ -1,0 +1,58 @@
+Querying files in Databricks
+
+Using Ctas Statements CREATE TABLE AS SELECT QUERY
+CREATE TABLE table_name
+AS SELECT * FROM FILE_FORMAT.`/path/file_name.json`
+
+Spark Sql statements to extract data from external files
+
+Example to read file from a json
+select * from json.`/path/file_name.json`
+
+to extract data from text based files use
+select * from text.`/path/file_name.json`
+
+to extract fileas as raw data use
+select * from binaryFile.`/path/file_name.json`.
+
+CTAS STATEMENTS CREATE TABLE AS SELECT QUERY
+CREATE TABLE table_name
+AS SELECT * FROM FILE_FORMAT.`/path/file_name.json`
+
+CTAS statements  do not support specifying additional file options LIKE CSV ,,
+WE CAN EXTRATCT DATA FROM PQRQUET OR JSON FORMATS BUT
+ when it comes to csv
+This solution is the regular Create Table statement, but with the USING keyword.
+
+
+create table(id int, name string)
+using data_Source
+options(key1=val1, key2=val2)
+location =path
+
+example of creating a table using csv in an external location
+create table(id int, name string)
+using csv
+options(header=true,delimiter=";")
+location =path
+
+using a database
+create table(col1,col2)
+using jdbc
+options(url='',
+        dbtable="database.table"
+        user="username",
+        password="pwd")
+
+A table with external data source is not a delta table and has its limitations ie it will not have all the feature like time
+tavel of delta table
+
+Solution is
+create a temp view referring to external datasource and then query the temp view to create a table using CTAS statements
+
+create temp view temp_view_name(col1,col2)
+using data_source
+options()
+
+create table table_name
+As select * from temp_view_name
