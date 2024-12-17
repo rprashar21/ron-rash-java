@@ -1,0 +1,114 @@
+In this notebook, we are going to explore SQL syntax to insert and update records in Delta tables.
+
+Lets firts create delta tables using ctas statements since they have acid functionality
+
+create table orders
+as select * from parquet.`${bookstore.dataset}/orders` --> orders table has been created and parquet has a very good schema
+
+select * from orders
+o/p
+
+-----------------------------
+its better to overwrite a table than to delete and recreate as wwe can use time travel features to go back to older versions of tables
+overwirting is much faster as it does not require to list dir recursively ,it atomic , has acid support
+and if the  table fails it will be in its previous state
+
+How to do it cras statements
+1.create and replace
+eg
+create or replace table orders
+as select * from parquet.`${bookstore.dataset}/orders`;
+
+describe history orders
+o/p
+version timestamp  operation
+                   create or replace table as select
+                   create  table as select
+
+2. The second method to overwrite table data is to use INSERT OVERWRITE statement.
+INSERT OVERWRITE orders
+as select * from parquet.`${bookstore.dataset}/orders`;
+this will only overwrite a new table and not create like create or replace table
+it will only overwrite new records which is safer since t will not modfiy the existing scehma
+
+describe history orders
+o/p
+version timestamp  operation
+                   write
+                   create or replace table as select
+                   create  table as select
+
+3. append records to tables
+INSERT INTO orders
+as select * from parquet.`${bookstore.dataset}/orders`;
+
+this will just insert new records ,, if we rerun this it can creat duplication
+To resolve this situation we can use merge into statements
+Merge statements we can isnert update delete data
+
+eg
+here we are using merge statements to update customer data with update emails and adding new customers
+We are creating a temporary view of the new customer data.
+And now we can apply the merge operation that says MERGE INTO customers
+the new changes coming from customer_updates temp view on the customer ID key.
+
+And we have two actions here.
+When match, we do an update and when not match, we do an insert.
+
+In addition, we add extra conditions.
+In this case, we are checking that the current row has a null email while the new record does not.
+In such a case, we update the email and we also update the last updated timestamp.
+And again, if the new record does not match any existing customers based on the customer ID, in this
+case, we will insert this new record
+
+eg query
+CREATE OR REPLACE TEMP VIEW customer_updates
+as select * from parquet.`${bookstore.dataset}/orders`;
+
+merge into customers  c
+using  customer_updates  u
+on c.customer_id = t.customer_id
+WHEN MATCHED AND c.email is null and u.email is not null THEN
+ update set email= u.email, update = u.updated
+WHEN NOT MATCHED THEN INSERT *
+
+we have updated 100 records and we have inserted 201 records.
+
+So in a merge operation, updates, inserts and deletes are completed in a single atomic transaction.
+In addition, merge operation is a great solution for avoiding duplicates when inserting records.
+
+
+-------------------------------------------
+Another example
+Here we have new books to be inserted and they are coming in CSV format.
+create a temp view againt the datasource
+
+CREATE OR REPLACE TEMP VIEW books_updates(book_id STRING, title STRING)
+USING CSV
+OPTIONS(path ="",
+        header='true',
+        delimiter =";");
+
+select *  from  books_updates
+
+Let us now use the Merge Into statement to update the table books with the data coming from the temporary
+view books_updates.
+And now we can use the Merge Into statement where we provide only the not match condition.
+It means we are only inserting new data if they DO NOT  exist based on our key, which is the
+book_id and the title.
+In addition, we are specifying the category of the new record to be inserted is only computer science.
+
+MERGE INTO books b
+USING  books_updates u
+ON b.book_id = u.book_id AND b.title =u.title
+WHEN NOT MATCHED AND U.CATEGORY ='COMPUTER SCIENECE' THEN
+INSERT *
+
+LIKE WISE MAIN ADVANTAGE IS THAT USING MERGE STATEMENTS THERE WILL BE NO DUPLCIATES
+
+
+
+
+
+
+
