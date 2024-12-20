@@ -1,5 +1,8 @@
 Querying files in Databricks
 
+CTAS stands for Create Table As Select. It is used to create a new table based on the result of a query
+
+
 Using Ctas Statements CREATE TABLE AS SELECT QUERY
 CREATE TABLE table_name
 AS SELECT * FROM FILE_FORMAT.`/path/file_name.json`

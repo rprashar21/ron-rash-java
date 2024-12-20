@@ -44,70 +44,92 @@ as select * from parquet.`${bookstore.dataset}/orders`;
 
 this will just insert new records ,, if we rerun this it can creat duplication
 To resolve this situation we can use merge into statements
-Merge statements we can isnert update delete data
 
-eg
-here we are using merge statements to update customer data with update emails and adding new customers
-We are creating a temporary view of the new customer data.
-And now we can apply the merge operation that says MERGE INTO customers
-the new changes coming from customer_updates temp view on the customer ID key.
 
-And we have two actions here.
-When match, we do an update and when not match, we do an insert.
+==============================================================
 
-In addition, we add extra conditions.
-In this case, we are checking that the current row has a null email while the new record does not.
-In such a case, we update the email and we also update the last updated timestamp.
-And again, if the new record does not match any existing customers based on the customer ID, in this
-case, we will insert this new record
+The MERGE statement is used to perform upserts (update + insert) based on a condition.
+Here's a simplified explanation with an example.
 
-eg query
-CREATE OR REPLACE TEMP VIEW customer_updates
-as select * from parquet.`${bookstore.dataset}/orders`;
+We have two datasets:
+customers table (existing records).
+customer_updates view (new data to merge into the customers table).
 
-merge into customers  c
-using  customer_updates  u
-on c.customer_id = t.customer_id
-WHEN MATCHED AND c.email is null and u.email is not null THEN
- update set email= u.email, update = u.updated
-WHEN NOT MATCHED THEN INSERT *
+customers
+customer_id	    email	            last_updated
+1	            NULL	            2023-11-01
+2	            alice@gmail.com	    2023-11-10
+3	            bob@gmail.com	    2023-11-15
 
-we have updated 100 records and we have inserted 201 records.
+customer_updates
+customer_id	        email	            last_updated
+1	                john@gmail.com	    2023-12-01
+3	                bob@gmail.com	    2023-11-15
+4	                david@gmail.com	    2023-12-02
+
+MERGE INTO customers c
+USING customer_updates u
+ON c.customer_id = u.customer_id
+WHEN MATCHED AND c.email IS NULL AND u.email IS NOT NULL THEN
+  UPDATE SET email = u.email, last_updated = u.last_updated
+WHEN NOT MATCHED THEN
+  INSERT (customer_id, email, last_updated)
+  VALUES (u.customer_id, u.email, u.last_updated);
+
+Explanation
+ON c.customer_id = u.customer_id: Matches records in customers with customer_updates based on customer_id.
+
+WHEN MATCHED:Updates records in customers if:
+c.email IS NULL (existing email is missing).
+u.email IS NOT NULL (new email is provided).
+
+WHEN NOT MATCHED:Inserts records into customers if customer_id does not exist in customers.
+
+
 
 So in a merge operation, updates, inserts and deletes are completed in a single atomic transaction.
 In addition, merge operation is a great solution for avoiding duplicates when inserting records.
 
+---------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+First, create a temporary view from the CSV file.
 
--------------------------------------------
-Another example
-Here we have new books to be inserted and they are coming in CSV format.
-create a temp view againt the datasource
-
-CREATE OR REPLACE TEMP VIEW books_updates(book_id STRING, title STRING)
+CREATE OR REPLACE TEMP VIEW books_updates(book_id STRING, title STRING, category STRING)
 USING CSV
-OPTIONS(path ="",
-        header='true',
-        delimiter =";");
+OPTIONS (
+    path = "path/to/books_updates.csv",
+    header = 'true',
+    delimiter = ";"
+);
 
-select *  from  books_updates
+-- View the data in books_updates
+SELECT * FROM books_updates;
 
-Let us now use the Merge Into statement to update the table books with the data coming from the temporary
-view books_updates.
-And now we can use the Merge Into statement where we provide only the not match condition.
-It means we are only inserting new data if they DO NOT  exist based on our key, which is the
-book_id and the title.
-In addition, we are specifying the category of the new record to be inserted is only computer science.
+Step 2: Merge Statement to Insert New Records
+The MERGE statement checks if a book already exists in the books table by matching the book_id and title.
+If it does not exist and the category is 'Computer Science', the book is inserted.
 
 MERGE INTO books b
-USING  books_updates u
-ON b.book_id = u.book_id AND b.title =u.title
-WHEN NOT MATCHED AND U.CATEGORY ='COMPUTER SCIENECE' THEN
-INSERT *
-
-LIKE WISE MAIN ADVANTAGE IS THAT USING MERGE STATEMENTS THERE WILL BE NO DUPLCIATES
-
+USING books_updates u
+ON b.book_id = u.book_id AND b.title = u.title
+WHEN NOT MATCHED AND u.category = 'Computer Science' THEN
+INSERT (book_id, title, category)
+VALUES (u.book_id, u.title, u.category);
 
 
+
+Existing books Table:
+book_id	        title	                category
+1	            Spark Essentials	    Computer Science
+2	            Advanced Spark	        Computer Science
+
+
+books_updates Temporary View:
+book_id	        title	                            category
+2	            Advanced Spark	                    Computer Science
+3	            Streaming with Spark	                Computer Science
+4	            Data Science Basics	                    Data Science
 
 
 

@@ -1,0 +1,159 @@
+Higher order functions allow you to work directly with hierarchical data like arrays and map type objects.
+
+filter function which filters an array using a given lambda function.
+
+Let's assume we have a table orders with the following structure:
+
+Input Table orders
+order_id	customer_id	    items
+1	            101	        [{"item_id": "i1", "price": 200}, {"item_id": "i2", "price": 150}]
+2	            102	        [{"item_id": "i3", "price": 300}, {"item_id": "i4", "price": 50}]
+3	            103	         [{"item_id": "i5", "price": 100}, {"item_id": "i6", "price": 250}]
+
+Here, items is an array of maps, where each map contains an item_id and a price.
+
+Using filter to Filter Items with Price > 150
+You can use the filter function to filter out items with a price greater than 150.
+
+Spark SQL Query:
+
+SELECT
+    order_id,
+    customer_id,
+    filter(items, x -> x.price > 150) AS expensive_items
+FROM orders;
+Output:
+order_id	customer_id	    expensive_items
+1	            101	        [{"item_id": "i1", "price": 200}]
+2	            102	        [{"item_id": "i3", "price": 300}]
+3	            103	        [{"item_id": "i6", "price": 250}]
+
+==========================================   =====================================================
+The transform function in Spark SQL applies a transformation to every element in an array and
+returns a new array with the transformed values.
+It is particularly useful for manipulating elements of complex data types like arrays or maps.
+
+Input Table orders
+order_id	customer_id	            books
+1	            101	            [{"book_id": "b1", "subtotal": 500}, {"book_id": "b2", "subtotal": 300}]
+2	            102	            [{"book_id": "b3", "subtotal": 700}, {"book_id": "b4", "subtotal": 200}]
+
+books is an array of structs containing book_id and subtotal.
+
+We want to apply a 10% discount on the subtotal for each book in the books array.
+
+SELECT
+    order_id,
+    customer_id,
+    transform(books, x -> named_struct('book_id', x.book_id, 'subtotal', x.subtotal * 0.9)) AS discounted_books
+FROM orders;
+
+o/p
+order_id	customer_id	    discounted_books
+1	        101	             [{"book_id": "b1", "subtotal": 450}, {"book_id": "b2", "subtotal": 270}]
+2	        102	             [{"book_id": "b3", "subtotal": 630}, {"book_id": "b4", "subtotal": 180}]
+
+named_struct: Used to reconstruct the struct with the same fields (book_id and subtotal), but with a transformed value for subtotal.
+x.subtotal * 0.9: Applies a 10% discount.
+Result:
+
+The discounted_books column contains a new array where the subtotal values have been reduced by 10%.
+Key Notes
+The transform function is versatile and can apply any custom transformation to array elements.
+You can use named_struct to preserve or modify the structure of complex data types while applying transformations.
+Let me know if you'd like further examples!
+
+===============================================================
+UDF functions leverage spark SQL
+we can create custom functions
+
+The UDF getUrl takes an email string as input and extracts the domain name to generate a URL.
+
+CREATE OR REPLACE FUNCTION getUrl(email STRING)
+RETURNS STRING
+RETURN CONCAT("https://www.", split(email, "@")[1]);
+
+split(email, "@")[1]: Extracts the domain part of the email address after @.
+CONCAT("https://www.", ...): Prepends the domain with https://www. to form a URL.
+ -- run this command to create a function
+
+now we will use this function
+
+select email,getUrl(email) domain from customers
+
+Customers
+
+Email
+alice@example.com
+bob@company.org
+charlie@university.edu
+
+o/p
+email	                    domain
+alice@example.com	        https://www.example.com
+bob@company.org	            https://www.company.org
+charlie@university.edu	    https://www.university.edu
+
+getUrl(email):Extracts the domain from the email and generates the corresponding URL.
+
+Note that user defined functions are permanent objects that are persisted to the database, so you can use
+them between different Spark sessions and notebooks.
+
+DESCRIBE FUNCTION getUrl -- basic info about ur function
+DESCRIBE FUNCTION EXTENDED getUrl -- MORE INFO -- Body field at the bottom shows the SQL logic used in the function itself.
+
+
+
+======================== =
+This UDF will classify the email domains based on their suffix (e.g., .com, .org, .edu)
+
+CREATE OR REPLACE FUNCTION site_type(email STRING)
+RETURNS STRING
+RETURN CASE
+    WHEN split(email, "@")[1] LIKE "%.com" THEN "Commercial"
+    WHEN split(email, "@")[1] LIKE "%.org" THEN "Organization"
+    WHEN split(email, "@")[1] LIKE "%.edu" THEN "Educational"
+    ELSE "Other"
+END;
+
+SELECT
+    email,
+    site_type(email) AS domain_category
+FROM customers;
+
+Customers
+email
+alice@example.com
+bob@company.org
+charlie@university.edu
+dave@unknown.net
+
+email	                            domain_category
+alice@example.com	                Commercial
+bob@company.org	                    Organization
+charlie@university.edu	            Educational
+dave@unknown.net	                Other
+
+if we created the UDFs getUrl and site_type earlier, we can drop them like this:
+
+-- Drop the getUrl function
+DROP FUNCTION IF EXISTS getUrl;
+
+-- Drop the site_type function
+DROP FUNCTION IF EXISTS site_type;
+
+Why Drop UDFs?
+Cleanup: Ensures the Spark environment remains clean and avoids conflicts with future functions having the same name.
+Memory Management: Removes unnecessary overhead as Spark evaluates everything natively and optimizes for parallel execution.
+Avoid Errors: Prevents accidental usage of outdated or irrelevant UDFs in new queries.
+
+
+
+
+
+
+
+
+
+
+

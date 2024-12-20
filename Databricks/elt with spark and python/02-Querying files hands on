@@ -106,3 +106,19 @@ DESCRIBE EXTENDED customers
 
  SELECT * FROM BOOKS
 
+header = "true": The first row contains column headers.
+path: The location of the CSV files (can use wildcards like export_*.csv).
+delimiter = ";": Indicates that fields are separated by a semicolon (;).
+
+Input CSV Files (e.g., export_1.csv):
+books_id	title	                author
+1	        Spark Essentials	    John Doe
+2	        Advanced Spark	        Jane Smith
+3	        Streaming with Spark	Alice Johnson
+
+o/p -- a books table
+
+books_id	title	                author
+1	        Spark Essentials	    John Doe
+2	        Advanced Spark	        Jane Smith
+3	        Streaming with Spark	    Alice Johnson

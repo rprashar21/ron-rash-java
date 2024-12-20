@@ -1,0 +1,239 @@
+Spark SQL has built-in functionality to directly interact with JSON data stored as strings.
+
+eg we have a customer table
+We have 3 tables customers, orders and books
+Customers              orders             books
+customer-id            order-id           book-id
+                       customer-id        title,author,category,price
+email                       book
+profile
+
+now profile has data in json structure
+profile
+{fname:'',lname:'',address:{'city:'',state:'''}}
+
+to query JSON data stored as strings.
+
+select customer_id , profile:fname, profile:address:city
+from customers
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Spark SQL also has the ability to parse JSON objects into struct types.
+Struct is a native spark type with nested attributes can be used using the from_json() function
+
+select from_json(profile) as profile_struct from customers -- this will fail becoz Because this
+function requires the schema of the JSON object which can be obtained by extracing the sample data of our
+json field with non null values
+
+eg -- select profile from customers limit 1; -- copy the json data store it in temporary view
+create or replace temp view view_name
+AS select customer_id, from_json(profile,schema_of_json('{fname:'',lname:'',address:{'city:'',state:'''}}')) As profile_struct
+from customers
+
+select * from view_name
+o/p
+customerid         profile_struct -- new column has struct data type -- the nested json structure will also be of struct type
+
+for subfields we can use .
+select customer_id,profile_struct.fname,profile_struct.address.city from customers
+
+And once a json string is converted to a struct type,
+we can use the star operation to flatten fields into columns.
+
+lets create another view and see the flatten structure
+create or replace temp view temp_view_customers_struct
+as select customer_id , profile.*
+from view_name
+
+select * from temp_view_customers_struct
+o/p
+customer_id , address    fnam lname gender email
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Explode function -- if a column has a array of struct type , then the explode function will put
+each array in a separate record ,,obviously then it will repeat values
+
+order_id	customer_id	           books
+1	        101	                [{"title": "Book A", "price": 200}, {"title": "Book B", "price": 300}]
+2	        102	                 [{"title": "Book C", "price": 150}, {"title": "Book D", "price": 250}]
+
+select order_id,customer_id,
+explode(books) as book from orders
+o/p
+
+order_id  customer_id	book.title	   book.price
+1	       101	           Book A	    200
+1	       101	           Book B	    300
+2	       102	           Book C	    150
+2	       102	           Book D	    250
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Collect_set aggregation function that allows us to collect unique
+values for a field, including fields within arrays.
+
+
+customer_id	    order_id	books
+c201	        1001	    [{"book_id": "b1"}, {"book_id": "b2"}]
+c201	        1002	    [{"book_id": "b2"}, {"book_id": "b3"}]
+c201	        1003	    [{"book_id": "b1"}, {"book_id": "b3"}, {"book_id": "b4"}]
+c202	        1004	    [{"book_id": "b5"}]
+c202	        1005	    [{"book_id": "b6"}, {"book_id": "b5"}]
+c203	        1006	[   {"book_id": "b7"}, {"book_id": "b8"}, {"book_id": "b7"}]
+
+SSELECT
+    customer_id,
+    collect_set(order_id) AS order_set,
+    collect_set(books.book_id) AS book_set
+FROM orders
+GROUP BY customer_id;
+
+Output Data
+customer_id	    order_set	                    book_set
+c201	        ["1001", "1002", "1003"]	["b1", "b2", "b3", "b4"]
+c202	        ["1004", "1005"]	        ["b5", "b6"]
+c203	        ["1006"]	                ["b7", "b8"]
+
+
+collect_set eliminates duplicates within arrays and across rows grouped by the same customer_id.
+It works on fields within arrays (e.g., books.book_id) just as effectively as standalone fields (e.g., order_id).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So instead of having the B08 twice after flatten the array, we will get only one unique value.
+So here we are applying flatten function and then we apply the array_distinct function to keep only
+the distinct values.
+
+select customer_id,
+collect_set(books.book_id) as before_flatten
+array_distinct(flatten(collect_set(books.book_id))) as after_flatten
+from orders group_by customer_id
+
+o/p
+customer_id  before_flatter                          after_flatten
+c101         [["b8","b10"],["b8"],["b10","b9"]]          ["b8,b9,b10"]
+c102         ["00101","000120","0020"]          ["b28","b020","b023"]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Join operations in Saprk Sql
+here we are joining the result of the explode operation to the books lookup table in order to retrieve
+books information like book's title, and author's name.
+
+Example Scenario
+
+Orders
+order_id	customer_id	        books
+1	        101	                [{"book_id": "b1"}, {"book_id": "b2"}]
+2	        102	                [{"book_id": "b2"}, {"book_id": "b3"}]
+
+BOOKS_LOOKUP
+book_id	    title	                author_name
+b1	        "Spark Basics"	        "John Doe"
+b2	        "Advanced Spark"	    "Jane Smith"
+b3	        "Spark Streaming"	    "Alice Johnson"
+
+Explode the books Array: Use the explode function to convert the array of books in the orders table into individual rows.
+Join with books_lookup: Use an INNER JOIN to match the book_id from the exploded data with the book_id in the books_lookup table.
+Retrieve Relevant Columns: Select columns like order_id, customer_id, book_id, title, and author_name.
+
+select order_id,customer_id,
+explode(books) as book from orders
+
+create or replace view view_orders_join
+as select * (select 8 ,explode(books) as book from orders) o
+inner join BOOKS_LOOKUP b
+on o.book.book.id = b.book_id
+
+select * from view_orders_join
+o/p
+Sample Output
+order_id	customer_id	    book_id	        title	                author_name
+1	        101	            b1	            "Spark Basics"	        "John Doe"
+1	        101	            b2	            "Advanced Spark"	    "Jane Smith"
+2	        102	            b2	            "Advanced Spark"	    "Jane Smith"
+2	        102	            b3	            "Spark Streaming"	     "Alice Johnson"
+
+The view view_orders_join can now be queried multiple times without rewriting the join logic.
+Efficient Execution:
+
+Views in Spark SQL are typically optimized at runtime, allowing efficient query execution for large datasets.
+
+
+----- Saprk also supports union and intersect , minus,
+UNION --  operation combines rows from both tables, removing duplicates.
+If you want to include duplicates, use UNION ALL
+
+SELECT id, name
+FROM table_a
+UNION
+SELECT id, name
+FROM table_b;
+
+ INTERSECT operation returns rows that are present in both tables.
+SELECT id, name
+FROM table_a
+INTERSECT
+SELECT id, name
+FROM table_b;
+
+MInus
+The MINUS operation (sometimes called EXCEPT) returns rows that are in the first table but not in the second.
+
+UNION and INTERSECT eliminate duplicates by default, while UNION ALL retains them.
+MINUS returns the difference between two tables.
+These operations are useful for set-based comparisons and transformations in Spark SQL.
+
+--------------------------------------------------------------------
+In Spark SQL, the PIVOT function is used to transform rows into columns.
+ It is useful when you want to summarize data and restructure it
+ into a more readable format, such as aggregating data based on a specific column's values.
+
+Sales table
+region	    product	    sales
+East	    Apples	    100
+East	    Bananas	    200
+West	    Apples	    150
+West	    Bananas	    300
+
+The goal is to pivot the product column to show sales by region for each product.
+
+SELECT
+    region,
+    SUM(CASE WHEN product = 'Apples' THEN sales ELSE 0 END) AS Apples,
+    SUM(CASE WHEN product = 'Bananas' THEN sales ELSE 0 END) AS Bananas
+FROM sales
+GROUP BY region;
+
+Output:
+region	    Apples	    Bananas
+East	    100	        200
+West	    150	        300
+
+Using Spark SQL PIVOT
+Instead of manually using CASE, Spark SQL provides a simpler syntax:
+
+SELECT *
+FROM sales
+PIVOT (
+    SUM(sales)
+    FOR product IN ('Apples', 'Bananas')
+);
+
+Output:
+region	    Apples	    Bananas
+East	    100	        200
+West	    150	        300
+
+SUM(sales):Aggregates the sales for each combination of region and product.
+FOR product IN ('Apples', 'Bananas'):
+
+Specifies the columns to pivot (values of the product column become new column headers).
+Result:
+
+Rows are transformed into columns based on the product values, with region as the grouping key.
