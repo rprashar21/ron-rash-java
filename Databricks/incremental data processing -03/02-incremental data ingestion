@@ -1,0 +1,46 @@
+To load data incremenatally from files into databrickls we use
+2 options
+
+
+Feature	            COPY INTO	                    Auto Loader
+Use Case	        Small-scale data loads	        Large-scale, high-volume data loads
+File Support	    Thousands of files	            Millions or billions of files
+Scalability	        Not easily scalable	            Easily scalable
+Recommendation	    Not for large data	            Recommended for high-volume loads
+Real-timeIngestion  No	                            Yes
+
+
+===================================  Hands on ====================================================
+
+Let us explore our data source directory.
+files = dbutils.fs.ls(f"{'path'}")
+display(files)
+
+lets use autoloader to read current files in the directory and also new files as they come in
+We use readStream and write stream methods from Spark Structured Stream
+
+from pyspark.sql import SparkSession
+(spark.readStream
+      .format("cloudFiles")  # Enable Auto Loader
+      .option("cloudFiles.format", "parquet")  # Specify the file format
+      .option("cloudFiles.schemaLocation", "dbfs:/mnt/demo/orders_checkpoint")  # Schema tracking
+      .load("/path/to/data/source")  # Source directory
+      .writeStream
+      .option("checkpointLocation","dbfs:/mnt/demo/orders_checkpoint")  # Checkpointing
+      .table("order_updates")  # Target Delta table
+)
+
+How it works ??
+Initial Load
+files are intilayy loaded from the data source
+Infers the schema and writes the data into the order_updates Delta table.
+
+Incremental Processing:As new files are added to the source directory, Auto Loader automatically detects and processes them.
+The checkpoint ensures no duplicates or missed files.
+
+Schema Evolution:If new columns appear in incoming files, the schema is updated automatically (if mergeSchema is enabled).
+
+what are cloudFiles ??
+CloudFiles is a source format in Databricks designed to work with Auto Loader, a high-performance data ingestion feature
+
+load_new_data() function seems to be a placeholder--process of loading new data

@@ -1,0 +1,169 @@
+MultiHop or Medallion Architectures
+
+    Bronze                                     silver                                     gold
+    raw data like json                      clean and refined data                   Aggreagted data for busines reporting
+    files or kafkastream                                                             or live dashboards
+
+Benefits
+simple data model
+ETLS
+combines t streaming and batch workloads in unified pipeline
+
+
+==================hands on==============
+
+Lets create a DELTA LAKE MULTI HOP PIPELINE
+The following steps outline how to build a Delta Lake Multi-Hop pipeline in Databricks
+using Auto Loader for data ingestion and enrichment.
+
+A Delta Lake Multi-Hop pipeline involves reading raw data from a source, enriching it,
+and writing it to various stages (Bronze, Silver, and Gold) for processing and analysis.
+Here's a step-by-step guide with simplified examples.
+
+Copy the dataset to a source directory where raw data is stored
+1.copy the dat set --> % run ../Include/Copy-dataset
+
+2. check the source directiry --> files = dbutils.fs.ls(f"{path}") ;
+                                  display(files)
+   0/p
+   dbfs:/mnt/demo-datasets/bookstore/orders-raw/01.parquet
+
+
+Use Auto Loader to read the raw data incrementally and create a temporary view. This allows Spark to monitor the directory for new files and process them as they arrive.
+
+3.create and autoloader agains the source directory with schema inference
+(spark.readStream
+      .format("cloudFiles")  # Enable Auto Loader
+      .option("cloudFiles.format", "parquet")  # Specify file format
+      .option("cloudFiles.schemaLocation", "dbfs:/mnt/demo/orders_checkpoint/orders_raw")  # Schema tracking
+      .load("dbfs:/mnt/demo-datasets/bookstore/orders-raw")  # Source directory
+      .createOrReplaceTemporaryView("orders_raw_temp")
+)
+
+Auto Loader starts monitoring the source directory for new files.
+It creates a temporary view orders_raw_temp for processing.
+The stream is set up but not active yet.
+
+STEP 4:
+Enrich the raw data by adding metadata such as:
+arrival_time: Timestamp when the data is processed.
+source_file: Name of the source file.
+
+%sql
+CREATE OR REPLACE TEMPORARY VIEW ords_tmp AS
+SELECT *,
+       current_timestamp() AS arrival_time,
+       input_file_name() AS source_file
+FROM orders_raw_temp;
+
+-- Preview the enriched data
+SELECT * FROM ords_tmp;
+
+order_id	customer_id	    total_amount	arrival_time	        source_file
+101	        1	            250.75	        2024-12-21 10:30:15	    dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+102	        2	            300.50	         2024-12-21 10:30:15	dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+
+5.
+Write the enriched data from ords_tmp incrementally to a Delta table (orders_bronze) using Structured Streaming.
+(spark.table("ords_tmp")  # Load the temporary view as a DataFrame
+    .writeStream
+    .format("delta")  # Write in Delta format
+    .outputMode("append")  # Append mode for incremental writes
+    .option("checkpointLocation", "dbfs:/mnt/demo/orders_checkpoint/bronze")  # Checkpoint location
+    .toTable("orders_bronze")  # Target Delta table name
+)
+
+select * from orders_bronze
+order_id	customer_id	    total_amount	    arrival_time	source_file
+101	1	    250.75	        2024-12-21          10:30:15	    dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+102	2	    300.50	        2024-12-21          10:30:15	    dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+
+
+Stage 1 Bronze -- key points to remember
+
+Raw Data (Bronze): Ingest raw data.
+Enriched Data (Bronze): Add metadata for tracking and auditing.
+Checkpointing: Ensures the stream processes only new data and avoids reprocessing.
+Auto Loader:Continuously monitors for new files.
+Automatically infers schema and processes data incrementally.
+Delta Lake:Provides ACID compliance, fault tolerance, and time travel.
+
+
+==============Silver Layer ==========
+The Silver layer processes and cleans the data from the Bronze layer. This includes:
+
+Filtering out invalid or incomplete records.
+Standardizing formats.
+Enriching data with additional transformations.
+Steps to Create the Silver Layer:
+
+1. Transform Data
+Use SQL to filter and clean the Bronze data.
+
+CREATE OR REPLACE TEMPORARY VIEW orders_silver_temp AS
+SELECT *
+FROM orders_bronze
+WHERE total_amount > 0;  -- Example: Remove records with invalid total_amount
+
+2. Write to Delta Table
+Write the cleaned data to the orders_silver Delta table.
+python
+(spark.table("orders_silver_temp")
+    .writeStream
+    .format("delta")
+    .outputMode("append")
+    .option("checkpointLocation", "dbfs:/mnt/demo/orders_checkpoint/silver")  # Checkpoint location
+    .toTable("orders_silver")
+)
+Query the Silver Table:
+sql
+Copy code
+SELECT * FROM orders_silver;
+
+Example Output (Cleaned Data):
+order_id	customer_id	total_amount	arrival_time	source_file
+101	1	    250.75	    2024-12-21      10:30:15	    dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+102	2	    300.50	    2024-12-21      10:30:15	    dbfs:/mnt/demo-datasets/orders-raw/01.parquet
+
+Gold Layer
+The Gold layer aggregates and transforms data for specific business needs (e.g., dashboards, KPIs).
+
+Steps to Create the Gold Layer:
+1. Perform Aggregation
+Create a temporary view for aggregated data.
+
+sql
+CREATE OR REPLACE TEMPORARY VIEW orders_gold_temp AS
+SELECT
+    customer_id,
+    COUNT(order_id) AS total_orders,
+    SUM(total_amount) AS total_spent
+FROM orders_silver
+GROUP BY customer_id;
+
+2. Write to Delta Table
+Write the aggregated data to the orders_gold Delta table.
+
+python
+(spark.table("orders_gold_temp")
+    .writeStream
+    .format("delta")
+    .outputMode("complete")  # Complete mode for aggregations
+    .option("checkpointLocation", "dbfs:/mnt/demo/orders_checkpoint/gold")  # Checkpoint location
+    .toTable("orders_gold")
+)
+Query the Gold Table:
+sql
+Copy code
+SELECT * FROM orders_gold;
+Example Output (Aggregated Data):
+customer_id	total_orders	total_spent
+1	        1	            250.75
+2	        1	            300.50
+
+Pipeline Overview
+Layer	    Purpose	                                                Delta Table
+Bronze	    Raw data ingestion	                                    orders_bronze
+Silver	    Data cleaning and transformation	                    orders_silver
+Gold	    Aggregations and analytics-ready data for reporting	    orders_gold
+

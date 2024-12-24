@@ -1,0 +1,94 @@
+Delta Live Tables or DLT is a framework for building reliable and maintainable data processing pipelines.
+DLT simplifies the hard work of building large scale ETL while maintaining table dependencies and data quality.
+
+we can see our dlt multi-hop pipeline with 2 broze tables customers and orders_raw --
+ joined together to get silver table orders_cleaned
+ From which we calculate our gold table daily_ customer_books.
+
+
+DLT pipelines are implemented using Databricks notebooks. we can see the dlt definitions
+
+
+Pipeline Overview
+Bronze Tables:customers: Raw customer data and orders_raw: Raw orders ingested incrementally via Auto Loader.
+Silver Table:orders_cleaned: Joins customers and orders_raw, cleans, and enriches the data.
+Gold Table:daily_customer_books: Aggregates data from the Silver table for reporting.
+
+Step 1: Bronze Tables
+orders_raw Table (Bronze)
+Ingests Parquet data incrementally via Auto Loader. Use the LIVE and STREAMING keywords for incremental ingestion.
+
+sql
+CREATE OR REFRESH STREAMING LIVE TABLE orders_raw
+COMMENT "Ingest raw orders data incrementally via Auto Loader."
+AS
+SELECT * FROM cloud_files(
+    '/mnt/demo-datasets/bookstore/orders-raw',  -- Source directory
+    'parquet',  -- File format
+    STRUCT(
+        "cloudFiles.inferColumnTypes" = "true",  -- Infer schema automatically
+        "cloudFiles.schemaLocation" = "/mnt/demo/orders_checkpoint/orders_raw"  -- Track schema
+    )
+);
+
+running a DLT query from here only validates that it is syntactically valid.
+To define and populate this table, you must create a DLT pipeline.
+
+A static table with customer data.
+
+sql
+
+CREATE OR REFRESH LIVE TABLE customers
+COMMENT "Static customer data."
+AS
+SELECT * FROM parquet.`/mnt/demo-datasets/bookstore/customers`;
+
+Step 2: Silver Table
+orders_cleaned Table (Silver)
+Joins the orders_raw and customers tables to clean and enrich the data.
+
+Silver Table: orders_cleaned
+The Silver table cleans and enriches data by:
+
+Joining the raw orders (orders_raw) with customer data (customers).
+Applying constraints to filter invalid records (e.g., missing order_id).
+Filtering out invalid orders (e.g., total_amount <= 0).
+
+DLT SQL for orders_cleaned Table:
+CREATE OR REFRESH STREAMING LIVE TABLE orders_cleaned(
+  CONSTRAINT valid_order_number EXPECT (order_id IS NOT NULL) ON VIOLATION DROP ROW  -- Drop rows with NULL order_id
+)
+COMMENT "CLEANED BOOK ORDERS WITH VALID ORDER ID."
+AS
+SELECT
+    o.order_id,
+    o.customer_id,
+    c.customer_name,
+    o.total_amount,
+    o.order_date,
+    current_timestamp() AS processed_time
+FROM STREAM(LIVE.orders_raw) o  -- Streaming read from Bronze table
+LEFT JOIN LIVE.customers c      -- Enrich with customer data
+ON o.customer_id = c.customer_id
+WHERE o.total_amount > 0;  -- Exclude invalid orders
+
+Key Points:
+Constraints:CONSTRAINT valid_order_number: Ensures all rows have a valid order_id.
+Action Modes:
+DROP ROW: Discards rows violating the constraint.
+FAIL UPDATE: Fails the pipeline when a constraint is violated.
+Omitted: Includes violating rows but logs the violations in metrics.
+
+Streaming Data:
+Use STREAM(LIVE.orders_raw) to process streaming data from the Bronze table.
+Result:Produces a cleaned and enriched dataset with valid order_id and total_amount.
+
+And for streaming DTL tables, we need to use the STREAM method.
+
+Lastly, we declare the gold table, in this case the daily number of books per customer in a specific
+
+region.
+
+Here it is China.
+
+Let us

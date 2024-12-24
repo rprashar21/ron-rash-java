@@ -1,0 +1,109 @@
+What is a data stream ?
+A data stream is any data source that grows over time (e.g., logs, files, sensor data).
+
+How Spark Structured Streaming Works:
+Source: Reads data continuously (e.g., from files, tables, or Delta tables).
+Spark Streaming: Processes the data incrementally.
+Sink: Outputs processed data to durable storage (e.g., tables or files).
+
+
+==========================================================================
+Read a Stream:
+Use spark.readStream to read streaming data.
+Create a temporary view for SQL processing
+
+(spark.readStream
+     .table("books")  # Input table or directory
+     .createOrReplaceTempView("books_streaming_view")  # Streaming temporary view
+)
+
+SELECT * FROM books_streaming_view;
+This query continuously processes new data, and the result is updated in real time.
+
+writestream -- write data to durable sinks{tables or files }
+spark.table("books_streaming_view")  # Load the streaming view as DataFrame
+    .writeStream
+    .trigger(processingTime='2 minutes')  # Trigger interval
+    .outputMode("append")  # Output mode: append or complete
+    .option("checkpointLocation", "dbfs:/mnt/demo/checkpoints/books")  # Track progress
+    .table("processed_books_table")  # Output Delta table
+
+    triggers --
+
+
+Note that spark always loads streaming views as a streaming DataFrames, and static views as a static DataFrames,
+meaning that: incremental processing must be defined from the very beginning with Read logic
+to support later an incremental writing.
+
+we are using DataFrame writeStream method to persist the result of a streaming query to a durable storage.
+
+spark.table("temp_view_name")
+       .writeSTream
+             .trigger("processingTime="2 minutes")
+             .outputmode("complete")
+             .option("checkpointlocation","/path")
+             .table('output table')
+
+.trigger("processingTime="2 minutes") by default = 5mins
+Trigger                     Method calls                                    behaviour
+unspecified                                                             defualt processing time =500ms
+fixed interval          .trigger("processingTime="2 minutes")            Processes data at regular intervals
+triggerd batch           .trigger(once=true)                           Processes all available data once and stops.
+triggered microbatches    .trigger(availableNow=true)                Processes available data incrementally and stops after each batch
+
+
+====================================
+Hands on structured streaming in spark
+
+To copy our data set we use the magic commadn % run ../Includes/Copy-Datasets
+
+========================================== ====================================================== =============
+
+Hands-On Example: Author Book Counts
+Step 1: Streaming View for Books tbale
+Create a streaming view to process new book records incrementally.
+
+python
+spark.readStream
+        .table("books") # Assume "books" contains book data
+        .createOrReplaceTemporaryView(books_streaming_view)  # Create a streaming view
+
+Step 2: Enrich the Data
+Create another view to aggregate book counts by author.
+sql
+CREATE OR REPLACE TEMPORARY VIEW author_counts_temp_view AS
+SELECT author, COUNT(book_id) AS total_books
+FROM books_streaming_view
+GROUP BY author
+
+Step 3: Write the Aggregated Data to a Delta Table
+Use PySpark to write the aggregated results to a Delta table.
+
+spark.table("author_counts_temp_view")  # Load the aggregated streaming view
+    .writeStream
+    .trigger(processingTime='4 seconds')  # Trigger every 4 seconds
+    .outputMode("complete")  # Overwrite with the latest aggregation results
+    .option("checkpointLocation", "dbfs:/mnt/demo/checkpoints/author_counts")  # Track progress
+    .table("author_counts_table")  # Delta table for aggregated results
+
+    Output Mode ===> complete:
+    Required for aggregation queries.
+    Replaces the table with the latest aggregation.
+
+Query the Delta table for the processed data:
+select * frm author_counts_table;
+
+
+Streaming Views:
+Temporary views (books_streaming_view, author_counts_temp_view) allow SQL queries on streams.
+Queries run continuously unless stopped.
+Checkpoints:
+
+Required for tracking progress in streaming queries.
+Output Modes:
+
+Append: Adds only new rows.
+Complete: Overwrites the entire result (useful for aggregation).
+Triggers:
+
+Control the frequency and mode of execution.
