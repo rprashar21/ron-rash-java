@@ -1,0 +1,63 @@
+dbricsk allows u to create multiple tasks as a job
+
+A multi-task job in Databricks orchestrates multiple tasks like executing notebooks,
+ running Delta Live Tables (DLT) pipelines, and querying results. Below is an example of creating a job with three tasks:
+
+Step 1: Go to the Workflows Tab
+Navigate to the Workflows tab in Databricks.
+Click Create Job.
+Name the job: Demo_MultiTask_Job.
+
+
+ 3tasks as part of job
+1.First, executing a notebook that lands a new batch of data in our source directory.
+2.running our Delta Live Tables pipeline created last session to process this data through a series of tables.
+3. executing the notebook we created in the last session to show the pipeline results.
+
+To create such a multitask job.
+goto workflows tabs--> create job{name the job} --> in tasks name the task
+
+1. task name = land_new_data ,, type = notebook
+
+Notebook --
+def load_new_data():
+    # Simulate loading new data into the source directory
+    dbutils.fs.cp(
+        "dbfs:/mnt/demo-datasets/new-batch/books.json",
+        "dbfs:/mnt/demo-datasets/source-directory/books.json"
+    )
+    print("New data loaded into source directory.")
+
+# Execute the function
+load_new_data()
+
+
+2. task for dlt pipeline
+Enter DLT for the task name.
+For type, select Delta Live Tables Pipeline.
+For Pipeline, select our demo pipeline we created it during our last session
+Depends_on
+
+
+3. let us add a third task for executing a notebook to show the pipeline results.
+  Enter Pipeline Results for the task name.
+  For type, select Notebook.
+  For Path, select the notebook pipeline result created in the last session.
+  This notebook
+  just shows the content of the pipeline storage location and query our gold table.
+
+
+  Job Configuration in Databricks
+
+  Task Name	                Type	                        Depends On	                        Description
+  land_new_data	            Notebook	                    None	                    Loads new batch of data into source.
+  DLT_Pipeline	            Delta Live Tables Pipeline	    land_new_data	            Processes data through the DLT pipeline.
+  Pipeline_Results	        Notebook	                     DLT_Pipeline	            Queries the Gold table for results.
+
+
+ Gold Table (books_aggregated)
+ author	     total_books	total_revenue
+ John Doe	    5	        1200.00
+ Jane Smith	    3	        900.00
+
+

@@ -1,0 +1,42 @@
+ Stream Using spark.readStream.table Vs Auto Loader
+Both approaches use spark.readStream to process streaming data,
+ but there are key differences in their use cases, configuration, and functionality.
+
+Reads streaming data directly from an existing Delta table.
+Assumes the Delta table is already configured as a streaming source (i.e., it receives new data incrementally).
+
+(spark.readStream
+     .table("books")  # Input: Delta table
+     .createOrReplaceTempView("books_streaming_view")  # Temporary view
+)
+
+spark.readStream works with only with Delta tables that are already configured for streaming
+automatically picks up new data and  uses schema definde in the delta table
+
+Use Case:
+
+When you already have a Delta table as the source for streaming.
+Example: If books is a Delta table continuously updated by another process.
+
+
+Using Auto Loader with spark.readStream.format("cloudFiles")
+Reads streaming data incrementally from cloud storage directories (e.g., S3, ADLS, or DBFS).
+Uses Auto Loader, a high-performance ingestion mechanism, to detect new files and load them.
+
+(spark.readStream
+      .format("cloudFiles")  # Auto Loader for file-based ingestion
+      .option("cloudFiles.format", "parquet")  # Input file format
+      .option("cloudFiles.schemaLocation", "dbfs:/mnt/demo/orders_checkpoint")  # Schema tracking
+      .load("/path/to/data/source")  # Source directory
+      .writeStream
+      .option("checkpointLocation", "dbfs:/mnt/demo/orders_checkpoint")  # Checkpointing
+      .table("order_updates")  # Target Delta table
+)
+
+Feature	            spark.readStream.table	                Auto Loader (cloudFiles)
+Source	            Delta table	                            Directory of files
+Schema Management	Inherited from the Delta table	        Automatic with schema inference and tracking
+Data Detection	    New rows in the Delta table	            New files in the directory
+File Formats	    Not applicable	                        Supports multiple formats (parquet, csv, etc.)
+Scalability	        Limited to Delta table updates	        Handles millions or billions of files
+Use Case	        When data is already in a Delta table	When ingesting raw data from file-based sources

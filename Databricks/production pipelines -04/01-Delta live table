@@ -26,8 +26,8 @@ SELECT * FROM cloud_files(
     '/mnt/demo-datasets/bookstore/orders-raw',  -- Source directory
     'parquet',  -- File format
     STRUCT(
-        "cloudFiles.inferColumnTypes" = "true",  -- Infer schema automatically
-        "cloudFiles.schemaLocation" = "/mnt/demo/orders_checkpoint/orders_raw"  -- Track schema
+        "cloudFiles.inferColumnTypes" = "true",  --> Infer schema automatically
+        "cloudFiles.schemaLocation" = "/mnt/demo/orders_checkpoint/orders_raw"  --> Track schema
     )
 );
 
@@ -91,4 +91,4 @@ region.
 
 Here it is China.
 
-Let us
+Let us see now how to use this notebook to create a new DLT pipeline.

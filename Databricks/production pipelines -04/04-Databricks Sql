@@ -1,0 +1,9 @@
+Databricks SQL, also known as
+DBSQL, is a data warehouse allows you to run all your SQL and BI applications at scale and with a unified governance model.
+
+Let us start by clicking on the SQL Warehouses tab.
+
+From here, we can create our first SQL warehouse.
+
+A SQL warehouse is the compute power of Databricks SQL.
+It is a SQL engine or endpoint based on Spark cluster.

@@ -1,0 +1,158 @@
+Change Data Capture (CDC) tracks changes like INSERT, UPDATE, and DELETE in source data
+and applies them to a target table.
+Delta Live Tables (DLT) supports CDC through the APPLY CHANGES INTO command, enabling easy CDC handling.
+
+Example: CDC Pipeline with Delta Live Tables
+Source Data
+Consider a CDC feed in JSON format that tracks book data changes:
+
+author	    book_id	    category	price	row_status	row_time	        title
+John Doe	1	        Fiction	    200	    update	    2024-12-21 12:00:00	Book A Updated
+Jane Smith	2	        Non-fiction	150	    delete	    2024-12-21 12:01:00	Book B
+Alice Tan	3	        Science	    300	    insert	    2024-12-21 12:02:00	Book C
+
+
+ row_status shows operations performed
+ row_time will be used as sequence key in our CDC data processing.
+
+ Lets look at our new notebook with new DLT pipeline
+
+ Steps
+
+ Step 1
+ In this notebook, we start by creating a bronze table to ingest the book CDC feed.
+ And we are using auto loader to load the JSON files incrementally.
+
+ %sql
+ CREATE OR REFRESH STREAMING LIVE TABLE books_bronze
+ COMMENT "The raw books data, ingested from CDC feed."
+ AS SELECT * FROM cloud_files(
+   '${datasets.path}/books-cdc',  -- Path to CDC feed
+   'json'                         -- File format
+ );
+
+Purpose: Ingest raw JSON files incrementally into the Bronze table
+
+ Step 2 ---Silver layer
+ Next, we are creating the silver table.
+ This is our target table into which the changes from the CDC feed will be applied.
+
+  CREATE OR REFRESH STREAMING LIVE TABLE books_silver;
+
+  APPLY CHANGES INTO LIVE.books_silver
+  FROM STREAM(LIVE.books_bronze)  -- Source: Bronze table
+  KEYS (book_id)                  -- Primary key: book_id
+  APPLY AS DELETE WHEN row_status = "DELETE"  -- Delete rows with row_status = DELETE
+  SEQUENCE BY row_time            -- Use row_time to order operations
+  COLUMNS * EXCEPT (row_status, row_time);  -- Exclude operational columns
+
+
+     //Then we identify the book_id as the primary key.
+     If the key exists in the target table, the record will be updated.
+     If not, it will be inserted.
+
+     Silver Table: books_silver
+     book_id	    author	    category	price	title
+     1	            John Doe	Fiction	    200	    Book A Updated
+     3	            Alice Tan	Science	    300	    Book C
+
+
+Step 3
+
+The Gold table aggregates data from the Silver table for reporting.
+Since CDC involves updates and deletions, this gold table is not a streaming source.
+
+CREATE LIVE TABLE author_count_state
+COMMENT "Number of books per author."
+AS SELECT
+    author,
+    COUNT(*) AS books_count,
+    current_timestamp() AS update_time
+FROM LIVE.books_silver
+GROUP BY author;
+
+Gold Table: author_count_state
+
+author	    books_count	    update_time
+John Doe	1	            2024-12-21 12:30:00
+Alice Tan	1	            2024-12-21 12:30:00
+
+
+Explanation:
+Aggregates the total number of books per author from the Silver table.
+The LIVE keyword ensures the Gold table depends on the latest data in books_silver.
+
+
+=============================================================
+Advantages of APPLY CHANGES INTO
+
+Handles Late-Arriving Records: Ensures the correct sequence of changes using SEQUENCE BY.
+Simplified CDC Logic:Automatically handles INSERT, UPDATE, and DELETE operations.
+Flexible Output:Supports different layers (Bronze, Silver, Gold) for raw, clean, and aggregated data.
+
+
+=================================================================
+
+Delta Live Tables (DLT) Pipeline: Understanding Views and Multi-Notebook Pipelines
+1. DLT Views  are  Temporary Views Scoped to the Pipeline
+A DLT View is a temporary view used within a Delta Live Tables (DLT) pipeline. These views:
+
+Are not persisted in the metastore.
+Exist only during the execution of the DLT pipeline.
+Can be used for intermediate transformations or calculations.
+Allow metrics collection and data quality enforcement.
+
+CREATE LIVE VIEW books_Sale --creates a temporary DLT view (books_Sale) scoped to the pipeline.
+AS
+SELECT
+    b.title,
+    o.quantity
+FROM
+    (SELECT *, explode(books) AS book  -- Explodes books array into individual rows
+     FROM LIVE.orders_cleaned) o
+INNER JOIN LIVE.books_silver b  -- Join with books_silver to enrich data
+ON o.book.book_id = b.book_id;
+
+Output of books_Sale View:
+
+title	                quantity
+Spark Essentials	    2
+Data Science 101	    1
+
+2. Multi-Notebook DLT Pipelines
+In Delta Live Tables, you can create a pipeline spanning multiple notebooks.
+Each notebook can define its own part of the pipeline (e.g., Bronze, Silver, or Gold layers).
+These notebooks work together to construct a complete pipeline.
+
+Example Complete DLT Pipeline Example across 3 notebooks
+
+STEP 1
+Notebook 1: Ingest Raw Data (Bronze Layer)
+
+CREATE OR REFRESH STREAMING LIVE TABLE books_raw
+COMMENT "Raw books data ingested from JSON files."
+AS SELECT * FROM cloud_files('/path/to/books', 'json');
+
+Step 2
+Notebook 2: Clean and Enrich Data (Silver Layer)
+
+CREATE OR REFRESH STREAMING LIVE TABLE books_silver
+COMMENT "Cleaned and enriched books data."
+AS SELECT * FROM LIVE.books_raw WHERE price > 0;
+
+step3
+Notebook 3: Aggregations (Gold Layer)
+CREATE LIVE TABLE books_aggregated
+COMMENT "Aggregated book data."
+AS SELECT author, COUNT(book_id) AS total_books, SUM(price) AS total_revenue
+FROM LIVE.books_silver
+GROUP BY author;
+
+LIve keyword
+The LIVE prefix ensures dependencies between tables, views, or layers are managed automatically by Delta Live Tables.
+Ensures the pipeline always works with the latest version of the source data.
+
+
+
+
+
