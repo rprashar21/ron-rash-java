@@ -1,0 +1,17 @@
+Unity Catalog is a centralized governance solution across all your workspaces on any cloud.
+It unifies governance for all data and AI assets in your Lakehouse including files, tables, machine
+learning models and dashboards.
+
+Unity Catalog hierachy
+
+     ucmetastore -- metadata ,, info about object being managed by metadata ,also access control list
+     |
+   catalog
+     |
+   schema(database)
+   |        |       |
+  table  view   function
+
+Databricks identities exist at two levels: at account-level and at workspace-level.
+
+Unity Catalog supports a feature called Identity Federation, where identities are simply created oncein the account console.

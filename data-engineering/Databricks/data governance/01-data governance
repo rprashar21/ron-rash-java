@@ -1,0 +1,95 @@
+The data governance model in Databricks lets you programmatically grant, deny and revoke access to
+your data from Spark SQL.
+
+Example
+GRANT PRIVILEGE ON OBJECT MY_TABLE TO user123@gmail.com
+GRANT SELECT ON TABLE MY_TABLE TO user123@gmail.com
+So this table here is a data object on which we set permissions.
+
+Object(TANLE)	Scope
+CATALOG	        Controls access to the entire data catalog
+SCHEMA	        Controls access to a database
+TABLE	        Controls access to managed or external tables
+VIEW	        Controls access to SQL views
+FUNCTION	    Controls access to user-defined functions
+ANY FILE	    Controls access to the underlying filesystem
+
+Privilege	Ability
+SELECT	        Read access to an object
+MODIFY	        Add, delete, or modify data in an object
+CREATE	        Create new objects
+READ_METADATA	View object structure and metadata
+USAGE	        No access but can refer to the object
+ALL PRIVILEGES	Full control (all the above permissions)
+
+Hierarchy of Governance
+CATALOG: Top-level scope for data governance.
+SCHEMA (Database): Logical grouping of tables, views, or functions.
+TABLE/VIEW/FUNCTION: Individual objects within a schema.
+
+
+
+Roles for Granting Privileges
+Role	                Can Grant Access To
+Databricks Admin	    All objects in the catalog and filesystem
+Catalog Owner	        All objects in their catalog
+Database Owner	        All objects in their schema
+Table Owner	            Only their specific table
+
+
+CATALOG
+  └── SCHEMA (DATABASE)
+       └── TABLE / VIEW / FUNCTION
+
+Key Operations
+GRANT: Assign privileges to a user or group.
+DENY: Explicitly deny privileges to a user or group.
+REVOKE: Remove previously granted privileges.
+SHOW GRANTS: View existing privileges on an object.
+
+========== HANDS ON
+
+Grant all privileges to a user for a schema:
+grant all privileges on schema my_scheam to 'users@gmail.com'
+
+Grant MODIFY access to a group for a table:
+grant modify on table my_table to 'dev_team'
+
+Explicitly deny MODIFY access to a user:
+deny modify on table my_table to 'user12@gmail.com'
+
+Revoke all privileges from a user for a table:
+REVOKE ALL PRIVILEGES ON TABLE my_table FROM 'user123@gmail.com';
+
+View all grants
+SHOW GRANTS ON TABLE my_table;
+
+Example Scenario
+Setup
+A catalog my_catalog.
+A schema sales_data.
+A table monthly_sales.
+
+Grant ALL PRIVILEGES on the catalog to a catalog owner:
+grant all privileges on catalog my_catalog to 'catalog_owner'
+
+Grant SELECT on the sales_data schema to an analyst:
+GRANT SELECT ON SCHEMA sales_data TO 'analyst@company.com';
+
+Grant MODIFY on the monthly_sales table to a data engineer:
+GRANT MODIFY ON TABLE monthly_sales TO 'data_engineer@company.com';
+
+Deny MODIFY access to the same table for a specific user:
+DENY MODIFY ON TABLE monthly_sales TO 'data_engineer123@company.com';
+
+Revoke all privileges for an external consultant:
+REVOKE all privileges ON TABLE monthly_sales FROM 'abc_consultant@external.com';
+
+Show all grants on the monthly_sales table:
+SHOW GRANTS ON TABLE monthly_sales;
+
+Summary
+Use GRANT to give access.
+Use DENY to block access explicitly.
+Use REVOKE to remove access.
+Use SHOW GRANTS to inspect permissions.

@@ -1,0 +1,45 @@
+In this demo, we will explore how to manage permissions for databases, tables and views in Databricks SQL.
+Navigate to the Databricks SQL Workspace.
+Make sure that your SQL warehouse is running.
+And now navigate to the SQL editor in the left sidebar.
+
+
+this demo, we will create a database called HR DB.
+And within this database, we will create a table called employees with ID, name, salary and city columns.
+Then we will insert some data in this table.
+And lastly, we will create a view for employees in Paris city.
+Let us run these commands.
+
+CREATE DATABASE IF NOT EXISTS hr_db
+LOCATION 'dbfs:/mnt/demo/hr_db.db'
+
+use hr_db
+CREATE TABLE EMPLOYEES(id INT,name String, salary DOUBLE,city STRING);
+
+insert into EMPLOYEES values(1,'ron',2000,'londo',.....)
+
+select * from employees
+0/p
+
+Let us start by granting several privileges on the whole HR database to a group of users called HR Team
+
+GRANT SELECT,MODIFY, READ_METADATA, CREATE ON SCHEMA  hr_db To hr_team
+
+So all the members in this group will have the ability to read, and modify the data,access metadata information,
+and also the ability to create a new object like tables and view in this database.
+
+However, for users to perform any action on a database object, they must have an additional privilege,
+which is the USAGE privilege.
+Without this privilege, the objects in the database cannot be used.
+
+Grant usage on schema hr_db To hr_team;
+
+Grant SELECT access to a user for a specific table:
+grant select on table my_table to 'user123@gmail.com'
+
+Here, for example, we are granting a read access on our view object to a user from outside of the HR team.
+grant select ON VIEW hr_db.some_view_name to 'outsideuser@gmail.com'
+
+to show all the grants
+show grants on schema hr_db
+o/p
