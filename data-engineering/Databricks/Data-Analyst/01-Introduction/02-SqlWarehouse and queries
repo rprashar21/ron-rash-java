@@ -1,0 +1,15 @@
+Create an Sql warehouse
+
+Serverless SQL warehouses are faster, cost-effective, secure, and start instantly.
+They are hosted and managed by Databricks and include all the features of Pro.
+
+
+--- create a catalog --
+catalog is the top level container -- mamnages schemas,tables view permissiions
+Use GRANT to manage permission
+Simplifies governance across multiple workspaces
+
+Creata a Catalog
+CREATE CATALOG sales_catalog
+COMMENT "Catalog for managing sales data";
+

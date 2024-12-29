@@ -1,0 +1,57 @@
+Aspect	                    NLP	                                                        LLM
+Scope	                Broad field of AI.	                                      A specific type of model within NLP.
+Examples	            Translation, chatbots, text mining.	                    ChatGPT, GPT-4, BERT, etc.
+Techniques  Used	Includes simpler approaches
+                    (e.g., rule-based models, statistical models).	            Deep learning models based on transformers.
+Complexity	        Can use both simple and advanced tools.	                    Focuses on advanced tools like transformers.
+Training Data	    May work with small or specialized datasets.	            Trained on massive datasets (e.g., books, websites).
+Capabilities	    Task-specific, may require fine-tuning for each task.	    General-purpose, can handle multiple tasks without specific tuning.
+
+
+Analogy for Better Understanding
+NLP: Like a toolbox. It has various tools like screwdrivers, hammers, and wrenches to solve different problems.
+LLM: A power drill inside the toolbox. It’s a powerful, versatile tool for many tasks, but it’s not the only tool in the box.
+
+
+Prompt Design (Basic):
+Task: Write a poem about cats.
+Prompt: "Write a 4-line poem about a cat."
+
+Prompt Engineering (Advanced):
+Task: Write a poem about cats in a Shakespearean style.
+Prompt: "Write a 4-line poem about a cat in the style of Shakespeare, using iambic pentameter and old English phrasing."
+
+Prompt Design is about what you ask.
+Prompt Engineering is about how you ask to get the most precise and optimized result.
+
+=============== ================ ====================== ================= ========
+
+3 kinds of llm
+Generic language models
+Instruction tuned
+Dialog tuned
+
+Generic lms -- Large models trained on diverse datasets to predict the next word or token in a sequence.
+Focus on understanding and generating general text.
+- Not optimized for specific tasks.
+eg -- GPT-3, BERT, LLaMA
+Example Prompt:
+Input: "Write a story about space exploration."
+Output: May generate a narrative but could lack coherence or relevance without detailed prompting
+
+Instruction tuned -- models which are fine tuned to follow specific instructions ,
+like InstructGPT
+Example Prompt:
+Input: "Summarize this article in 3 points."
+Output: Provides concise, relevant summaries in point form
+
+Dailog tuned -- like chat gpt, claude ai-- for more converstaion with humans
+Best for chatbots, personal assistants, and multi-turn interaction
+
+Chain of thought reasoning --> models are getting better after the first anw
+
+Task specific tuning makes lllm more efficiient and reliable
+like customers are buying what on what day -- sentimnetal model
+train or fine tune a model on specific tasks like medical field
+
+Google ka vertex Ai

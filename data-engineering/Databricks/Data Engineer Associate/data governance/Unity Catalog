@@ -1,0 +1,70 @@
+Unity Catalog is a centralized governance solution across all your workspaces on any cloud.
+It unifies governance for all data and AI assets in your Lakehouse including files, tables, machine
+learning models and dashboards.
+
+Metastore (UC Metastore):
+
+What: Central metadata store for managing information about data objects and access controls
+Example: "Main Metastore" contains metadata for all data assets (tables, views, functions).
+
+Unity Catalog hierachy
+
+     ucmetastore -- metadata ,, info about object being managed by metadata ,also access control list
+     |
+   catalog -- logical grouping of schemas
+     |
+   schema(database)
+   |        |       |
+  table  view   function
+
+Databricks identities exist at two levels: at account-level and at workspace-level.
+
+Unity Catalog supports a feature called Identity Federation, where identities are simply created oncein the account console.
+
+Example Scenario
+Use Case: You are a data engineer managing a Lakehouse for an e-commerce company. You need centralized governance for:
+Customer data (customer_orders table).
+Analytics dashboards (recent_orders view).
+Machine learning models (predict_churn).
+
+Setup with Unity Catalog:
+1. metatsore -- Create a UC Metastore named main_metastore, This stores metadata and access control for all your data assets.
+
+2. Catalog : Create a catalog named sales_catalog to group all sales-related data.
+3.schemas : Within sales_catalog, create a schema named customer_data tables function and view
+Tables and Views: Add the customer_orders table to the schema.
+Create a view recent_orders for last month's orders.
+
+Functions:
+Define a UDF calculate_discount for promotional calculations.
+Define a UDF calculate_discount for promotional calculations.
+
+Identity Federation
+Example:
+Without Identity Federation: You must manually create user accounts (john.doe@example.com) in each workspace.
+With Identity Federation: Create john.doe@example.com once in the Databricks Account Console, and it works across all workspaces.
+
+
+Practical Example: SQL Commands
+1.Create a Catalog: CREATE CATALOG sales_catalog; --> this is basically a logical container
+
+2. Create a Schema: CREATE SCHEMA sales_catalog.customer_data; --> this is basically a database
+
+
+3. Create a Table:
+
+CREATE TABLE sales_catalog.customer_data.customer_orders (
+    order_id INT,
+    customer_id INT,
+    order_date DATE,
+    total_amount DECIMAL(10, 2)
+);
+
+Create a View:
+
+CREATE VIEW sales_catalog.customer_data.recent_orders AS
+SELECT * FROM sales_catalog.customer_data.customer_orders
+WHERE order_date >= current_date() - INTERVAL 30 DAYS;
+
+4.Grant Access:
+    GRANT SELECT ON TABLE sales_catalog.customer_data.customer_orders TO 'analyst@example.com';

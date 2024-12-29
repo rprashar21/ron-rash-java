@@ -1,0 +1,60 @@
+1. Create a Azure databricks service
+ Resource group ==rondatabrick21
+ Location  ------>UK South
+ Subscription ---->rohitp21subscription
+
+Defintion what is a unity catalog ??
+ centralized governance solution across all your workspaces
+
+2. Enable Unity catalog
+
+ Azure data lake  u will give {storage blob data
+ Storage Gen2       contributor access}                                        {access connector id }
+      +               <-----------------==access connector for azure dbricks <--------------------==unity catakog in dbirkc workspace
+  Container
+
+
+3. create a azure storage account
+What is azure data lake --> data lake is a single centralized repo where u can store huge amounts of data structure or unstructured
+Azure data lake storage is the cloud version of that called Azure Data Lake StorageGen2
+Data Lake Storage Gen2 supports a hierarchical directory structure. easy to organize and manage data
+it leverages azure blob storage
+scalable hadoop like features
+
+Subscription   ==    rohitp21subscription
+Resource group  ==   rondatabrick21
+Location    ==   UK South
+Storage account name    == dbricksstorage27december
+
+Performance     ==   Premium
+Premium account type    -==  Block blobs
+Replication     ==   Locally-redundant storage (LRS)
+
+Advanced
+Enable hierarchical namespace ==>Enabled
+
+Under ur resource group ===>rondatabrick21
+u will have 2 resources
+
+
+Name                        Type                                location
+databricksworkspace         Azure Databricks Service            UK South
+dbricksstorage27december    Storage account                     UK South
+
+lets create a container under the storage account --> ucmetastore to store metadata
+
+
+4. Access connector
+The Access Connector for Databricks is a feature that allows Databricks to securely access data stored
+in Azure Data Lake Storage GEn2 and Blob storage
+So what we'll do is create the access connector for Databricks and then give that storage blob data
+contributor access to the container in our Data Lake Storage Gen2.
+
+Create an Access Connector for Azure Databricks
+
+Subscription      rohitp21subscription
+Resource group    rondatabrick21
+Name              access27dec
+Region            UK South
+
+And the role assignment you want to add is a storage blob data contributor --> to a managed Indentity --> ur recnlty created access connector
