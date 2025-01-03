@@ -1,0 +1,11 @@
+what is adf ? azure data factory
+Its an etl tool, it extracts data from on place transforms it and then loads the data in another destination
+
+what is a pipline ?
+Logical group of activities that perform a certain task
+define actions to perform on your data
+
+for example  copy data from github account and tranforsm the data and load it  into sql db in azure
+
+what is a linked service -- more like connection strings
+Linked service defines the connection information to a data store or compute.

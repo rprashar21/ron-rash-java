@@ -1,0 +1,80 @@
+End-to-End Project Using Medallion Architecture
+
+Resources Required
+Resource Group: Create a new resource group.
+Azure Data Lake (Gen2): Create a storage account and enable hierarchical structure for lakehouse.
+Azure Data Factory (ADF): Set up ADF as the ETL tool for data transformation and loading.
+Azure SQL Database: Provision a fully managed PaaS SQL database.
+
+Step 1: Initial Data Load
+Create Linked Services in ADF:
+Linked Service Definition: A linked service defines the connection information to a data store or compute.
+ls_git: Connection with the GitHub source.
+ls_sql_db: Connection with the SQL database.
+
+Create Copy Activity Pipeline:
+Use the two linked services to copy data from the GitHub source to the SQL database.
+Run the pipeline and verify that the data has been copied successfully to the SQL database.
+
+Step 2: Incremental Data Load
+Prepare SQL Database:
+Create a table water_table with a column last_load to store the timestamp of the last data load.
+Add a query to fetch incremental data:
+
+SELECT *
+FROM carsales
+WHERE date_id > last_load AND date_id <= max_date;
+
+Create a stored procedure to update last_load with the maximum date ID:
+
+CREATE PROCEDURE updatewatermarktable
+@last_load VARCHAR(2000)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    UPDATE [dbo].[water_table]
+    SET last_load = @last_load;
+
+    COMMIT TRANSACTION;
+END;
+
+Example of renaming a column if needed:
+
+EXEC sp_rename 'water_table.last_laod', 'last_load', 'COLUMN';
+
+Incremental Pipeline in ADF:
+
+Lookup Activities:
+
+last_load Lookup Activity: Queries the water_table to retrieve the last_load value.
+current_load Lookup Activity: Queries the carsales table to retrieve the max_date value.
+
+Copy Activity: Uses the values from last_load and current_load lookup activities to form a query for incremental data.
+
+Copies the incremental data from the SQL database to the Azure Data Lake Storage (Bronze container).
+
+Example query for incremental data:
+
+SELECT *
+FROM carsales
+WHERE date_id > '@{activity('last_load').output.value[0].last_load}'
+  AND date_id <= '@{activity('current_load').output.value[0].max_date}';
+
+Stored Procedure Activity:
+
+Use the stored procedure to update the last_load value in the water_table after the incremental load.
+Set Variable Activity: To view or store the output of any activity for debugging or reuse in subsequent activities.
+
+Summary
+
+Initial Load: Use ADF to copy raw data from GitHub to SQL database using Copy Activity.
+
+Incremental Load
+Set up lookup activities to retrieve last_load and current_load.
+Use Copy Activity to load incremental data into Azure Data Lake (Bronze container).
+
+Update last_load in the SQL table using a stored procedure.
+This workflow aligns with the Medallion Architecture by ensuring raw data is ingested into a centralized storage
+ (Bronze) for further transformation and use.
+

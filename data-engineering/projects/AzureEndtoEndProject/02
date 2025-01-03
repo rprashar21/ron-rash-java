@@ -1,0 +1,52 @@
+Databricks Inclusion
+
+1.Create a databricks account in azure --> launch the portal as well
+https://accounts.azuredatabricks.net/data?account_id=e6a94074-0f30-4e0b-8338-a177fb88de0a
+make ur account as the admin so that u can login
+
+2.Create a metastore -- top level container and add the data lake and access connector id
+A metastore is the top-level container for catalog in Unity Catalog-- it basically stores info and access details about
+ur catalog , schemas(db) tables view and functions
+
+access connector id -- connector which allows dbricks to access our data lake storage
+In this we create an access connector and then go to the storage account and add a role storage blob contributor and
+we assign this role of storage blob contributor to the access connector ie can contribute to this data lake
+and then use the id in databricks metatsore
+
+3. create a compute
+4. create external locations for the containers under catalog - firts create a storage credentials
+which will allow us to read write to out blob containers
+
+goto external data --> Create a new external location
+                       An external location allows you to access your data stored in ADLS
+
+df = spark.read.format('parquet')\
+   .option("inferSchema", "true")\
+       .load('abfss://bronze@end2endstorage.dfs.core.windows.net/raw_data')
+
+1. Check File Listing
+Run the following code to verify whether Spark can list files in the specified path:
+
+python
+Copy code
+dbutils.fs.ls("abfss://bronze@end2endstorage.dfs.core.windows.net/raw_data")
+
+some of the code
+files = dbutils.fs.ls("abfss://bronze@end2endstorage.dfs.core.windows.net/raw_data")
+for file in files:
+    display([(file.name, file.size) for file in files])
+
+
+#####################
+after loading the data we need to transform the data
+     withcoulmn -- will create or do some transformation on an existing column
+
+df = df.withColumn('model_category',split(col('model_id'),'-')[0])
+
+# Another scenario where we will see how many units were sold  for every branch every year
+display(df.groupBy('year','branchName').agg(sum('units_sold').alias('total_units_sold'))).sortBy('year','total_units_sold',ascending=[1,0])
+
+
+df.groupBy('year',"BranchName").agg(sum("Units_Sold").alias("Total_Units_Sold")).sortBy("year",'Total_Units_Sold' ascending=[1,0]).display()
+
+

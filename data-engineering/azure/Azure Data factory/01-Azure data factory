@@ -1,0 +1,29 @@
+what is Azure data factory
+Its an etl tool
+It extracts data from one place,
+transforms it as needed,
+And loads it to another destination for further use (analytics, storage, or machine learning).
+
+Real-Time Example: E-Commerce Sales Data Pipeline
+Scenario: You work for an e-commerce company and need to create a pipeline to:
+
+Extract sales data from a cloud storage (e.g., Azure Blob Storage).
+Transform the data by cleaning and aggregating it.
+Load the transformed data into an Azure SQL Database for analytics.
+
+
+Pipeline Creation Steps
+1.Create a Linked Service: Connect ADF to Azure Blob Storage and Azure SQL Database.
+2.Create a Dataset: Define input and output data formats (e.g., CSV for Blob, SQL table for Azure SQL).
+3.Design the Pipeline: Drag and drop a Copy Activity for extracting and loading data.
+4.Trigger the Pipeline:Schedule the pipeline to run daily.
+
+example of the pipeline
+
+1.Source -- Azure blob storage --> sales_data.csv
+Columns: product_id, sales_date, quantity, price
+
+2. transform the data  --> Add a column total_sales = quantity * price also Filter rows where quantity is null.
+
+3. Destination: Azure SQL Database --> Table: sales_analytics
+Columns: product_id, sales_date, total_sales
