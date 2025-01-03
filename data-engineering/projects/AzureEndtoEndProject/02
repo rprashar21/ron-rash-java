@@ -50,3 +50,21 @@ display(df.groupBy('year','branchName').agg(sum('units_sold').alias('total_units
 df.groupBy('year',"BranchName").agg(sum("Units_Sold").alias("Total_Units_Sold")).sortBy("year",'Total_Units_Sold' ascending=[1,0]).display()
 
 
+write the data into the silver table
+df.write.format('parquet')\
+    .mode('append')\
+        .option('path','abfss://silver@end2endstorage.dfs.core.windows.net/silver_data')\
+        .save();
+
+ query the table
+
+ df = spark.read.parquet("abfss://silver@end2endstorage.dfs.core.windows.net/silver_data");
+ display(df)
+
+ till here we have done some transformations on the table --> like we have addes 2 new fields
+
+ lets create an incremenatl flag which will determine whether this is the first run or second run
+
+ dbutils.widgets.text('incremental_flag','0')
+
+
