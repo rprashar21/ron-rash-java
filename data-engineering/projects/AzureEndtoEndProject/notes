@@ -9,3 +9,38 @@ for example  copy data from github account and tranforsm the data and load it  i
 
 what is a linked service -- more like connection strings
 Linked service defines the connection information to a data store or compute.
+
+what is dimension vs fact table
+In data warehousing, dimension tables and fact tables are the core components of a
+star schema or snowflake schema used for organizing and analyzing data.
+
+Imagine you have an e-commerce system.
+
+Fact Table: Sales_Fact -- > how much revenue or quantity was sold
+
+Transaction_ID	Customer_ID	Product_ID	Date_ID	    Revenue	Quantity_Sold
+1	            C001	        P001	D20230101	100	        2
+2	            C002	        P002	D20230101	200	        1
+
+this fact table has metrics ans revenue and quantity sold
+whereas foreign keys are customer_id, product_id and date_id
+
+Dimension table will be ur customer table product table
+
+Customer_Dimension
+Customer_ID	        Customer_Name	        City
+C001	            John Doe	            New York
+C002	            Jane Smith	            Los Angeles
+
+Product_Dimension
+Product_ID	    Product_Name	    Category
+P001	        Laptop	            Electronics
+P002	        Phone	            Electronics
+
+Date_Dimension
+Date_ID	            Date	    Year	        Month	    Day
+D20230101	    2023-01-01	    2023	        January	            1
+
+so in short
+what is the total revenue from Electronics in January 2023?"
+Join the Sales_Fact table with Product_Dimension and Date_Dimension.

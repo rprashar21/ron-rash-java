@@ -68,3 +68,48 @@ df.write.format('parquet')\
  dbutils.widgets.text('incremental_flag','0')
 
 
+ What’s Happening?
+ 1. Create a DataFrame (df_sink) Using a SQL Query
+ The SQL query:
+
+ sql
+ SELECT 1 AS dim_model_key, model_id, model_Category
+ FROM silver_data_temp_view
+ WHERE 1=0
+
+ SELECT 1 AS dim_model_key: This creates a column called dim_model_key and assigns it the constant value 1 (this is mostly placeholder logic for now).
+ FROM silver_data: Indicates the data source (likely a table or a temporary view named silver_data).
+ WHERE 1=0: This condition always evaluates to false, meaning no rows will be selected from the silver_data_temp_view table.
+ As a result, the query creates an empty DataFrame with the schema derived from silver_data but no rows.
+
+ 2. Why Create an Empty Sink (df_sink)?
+ Creating an empty DataFrame like this serves as a template or destination schema for writing transformed data later in the pipeline.
+
+ Schema Definition: This ensures that the df_sink DataFrame has the same schema (column names and types) as the expected destination table.
+ Pipeline Placeholder: It's common in ETL or ELT pipelines to define the "sink" (destination) structure upfront, even before processing any actual data.
+ Dynamic Loading: In some workflows, you might dynamically populate df_sink later with real data that conforms to this schema.
+ 3. Why Use dim_model_key = 1?
+ The dim_model_key is likely a surrogate key for a dimension table in a data warehouse (often used in star schema design).
+ By initializing the key with a placeholder value (1), it creates the structure for handling unique identifiers when actual data is loaded.
+ 4. Using display(df_sink)
+ The display() function in Databricks shows the content of the df_sink DataFrame.
+ Since WHERE 1=0 ensures no rows are returned, the display will show an empty table with column names: dim_model_key, model_id, model_Category.
+ Use Case Example
+ This approach is common when preparing staging tables or dimension tables for a data warehouse.
+
+ Example:
+ Suppose you have silver_data containing raw or semi-processed data:
+
+ model_id	model_Category
+ M001	Electronics
+ M002	Automotive
+ By creating df_sink, you are setting up the schema for a dimension table like this:
+
+ dim_model_key	model_id	model_Category
+ Placeholder (1)	None	None
+ Later, you can populate this df_sink with actual data and assign proper surrogate keys dynamically.
+
+ Conclusion
+ This code creates an empty DataFrame with a predefined schema and placeholder logic, which acts as a template or sink for future data processing steps. It's useful in pipelines where schema consistency or ETL workflows require pre-defined structures before loading actual data.
+
+

@@ -16,16 +16,19 @@ Apache Spark -- In memory processing, easy to use , sdk with java scala SQl, 100
 
 WHat is databricks ?
 Databricks is a multi cloud lakehouse platform based on Apache Spark.
+It is an analytics platform for data analysis,engineering,science and machine learning workflows
+Web platform for Apache spark
 
-what is a lake house
 
+
+what is a lake house ?
 A data lakehouse is a unified analytics platform that combines the best elements of data lakes and data warehouses.
 Data lake           +           Data Warehouse
-raw data                        refined structured data,
+raw data                         refined structured data,
 Large                            small ,
 data engineers and scientists    relational  data for business use
 
-It is an analytics platform for data analysis,engineering,science and machine learning workflows
+
 Web platform for Apache spark
 Has many apis for diff programming languages
 
@@ -48,23 +51,23 @@ Workspace for Databricks or lakehouse platfom
 MachineLearning - platform for building,training deploying machine learning modules
                   Ml Practitioners and Data Scinetists
 Databricks Sql -  Platform for quering data in data lake house platforms
-                  run queries,visulize data , perform analsis task.
+                  run queries,visualize data , perform analysis task.
                   Used By data Analysts and Sql Developers
-Data Sciene and Engineering - data engineers/scientist can perform building pipelines develop science models
+Data Science and Engineering - data engineers/scientist can perform building pipelines develop science models
 
 
 
 Databricks uses the infrastructure of your cloud provider to provision virtual machines or nodes of
 a cluster.
 
-There are two high level components: the control plane and the data plan .
+There are two high level components: the control plane and the data plane .
 The control plane resides in Databricks account while the data plane is in your own cloud subscription.
 
 Whenever you create a databricks workspace, it is deployed in the control plane along with Databricks
 services like Databricks UI, Cluster Manager, workflow service and notebooks.
 
 Control Plane          vs               Data Plane is ur cloud account
-Web Ui                               Cluster Vms {spark cluster is }
+Web Ui                                Cluster Vms {spark cluster is }
 Databricks Workspace                 Storage account is in data plane use for dbfs --databricks file system
 Wrokflow Service
 Notebooks
