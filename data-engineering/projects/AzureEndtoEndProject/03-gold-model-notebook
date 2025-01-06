@@ -126,16 +126,26 @@ dim_model_key	model_id	model_Category
 SUMMARY
 Summary
 Step	    Purpose	Example                                                 Code
-Step 1	    Create incremental flag.	                                     dbutils.widgets.text('incremental_flag', '0')
+Step 1	    Create incremental flag.	                                    dbutils.widgets.text('incremental_flag', '0')
+
 Step 2	    Read Silver data and create a temp view.	                    df.createOrReplaceTempView("silver_data_temp_view")
+
 Step 3	    Prepare the source table.	                                    SELECT DISTINCT(model_id), model_Category FROM silver_data_temp_view
+
 Step 4	    Check/create the sink table.	                                SELECT 1 AS dim_model_key, model_id, model_Category FROM silver_data_temp_view WHERE 1=0
-Step 5	    Filter old and new records.	                                        df_src.join(df_sink, df_src.model_id == df_sink.model_id, 'left')
+
+Step 5	    Filter old and new records.	                                    df_src.join(df_sink, df_src.model_id == df_sink.model_id, 'left')
+
 Step 6	    Separate old and new records.	                                df_filter.filter(df_filter.dim_model_key.isNotNull())
+
 Step 7	    Generate surrogate keys for new records.	                    df_filter_new.withColumn("dim_model_key", max_value + monotonically_increasing_id())
+
 Step 8	    Combine old and new data.	                                    df_filter_old.union(df_filter_new)
-Step 9	    Perform SCD upsert into the Gold dimension table.	                delta_table.alias('target').merge(...).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
-Step 10	    Validate the dimension table.	                                   sql SELECT * FROM carsales.gold.dim_model
+
+Step 9	    Perform SCD upsert into the Gold dimension table.	            delta_table.alias('target').merge(...).
+                                                                            whenMatchedUpdateAll()
+                                                                            .whenNotMatchedInsertAll().execute()
+Step 10	    Validate the dimension table.	                                sql SELECT * FROM carsales.gold.dim_model
 
 This process ensures that your Gold Dimension Table is always up-to-date with incremental changes.
 
