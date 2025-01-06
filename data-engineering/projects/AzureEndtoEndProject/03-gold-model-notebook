@@ -1,0 +1,142 @@
+Creating Dimension Tables for Fact Table (Steps)
+
+Step 1: Set Incremental Flag
+dbutils.widgets.text('incremental_flag', '0')  # Set default value
+incremental_flag = dbutils.widgets.get('incremental_flag')  # Get value
+print(incremental_flag)
+
+==================== ==================== ==================== ==================== ====================
+
+Step 2: Read Silver Data and create a temproray view
+
+df = spark.read.parquet("abfss://silver@end2endstorage.dfs.core.windows.net/silver_data")
+df.createOrReplaceTempView("silver_data_temp_view")
+
+==================== ==================== ==================== ==================== ====================
+
+Step 3 Create Source Table and sink tables
+
+df_src = spark.sql('SELECT DISTINCT(model_id) AS model_id, model_Category FROM silver_data_temp_view')
+display(df_src)
+
+model_id	model_Category
+M001	    Electronics
+M002	    Automotive
+
+
+Step 4: Create Sink Table
+Purpose: Check if the dimension table exists (gold layer). If not, create an empty template.
+
+if spark.catalog.tableExists('carsales.gold.dim_model'):
+    df_sink = spark.sql('SELECT dim_model_key, model_id, model_Category FROM carsales.gold.dim_model')
+else:
+    df_sink = spark.sql('SELECT 1 AS dim_model_key, model_id, model_Category FROM silver_data_temp_view WHERE 1=0')
+display(df_sink)
+
+Explanation
+If dim_model exists: Load existing data.
+If not: Create an empty DataFrame as a schema template.
+
+
+==================== ==================== ==================== ==================== ====================
+
+Step 5: Filter Records
+
+df_filter = df_src.join(df_sink, df_src.model_id == df_sink.model_id, 'left') \
+                  .select(df_src.model_id, df_src.model_Category, df_sink.dim_model_key)
+display(df_filter)
+
+Sample Output:
+model_id	    model_Category	dim_model_key
+M001	        Electronics	        NULL
+M002	        Automotive	        NULL
+
+==================== ==================== ==================== ==================== ====================
+
+Step 6:
+Separate Old and New Records
+df_filter_old = df_filter.filter(df_filter.dim_model_key.isNotNull())
+df_filter_new = df_filter.filter(df_filter.dim_model_key.isNull())
+
+Old Records: Existing records with a dim_model_key.
+New Records: New records where dim_model_key is NULL.
+
+==================== ==================== ==================== ==================== ====================
+
+Step 7: Generate Surrogate Keys
+ Assign surrogate keys to new records using incremental_flag.
+
+if incremental_flag == '0':
+    max_value = 1
+else:
+    max_df = spark.sql('SELECT MAX(dim_model_key) AS max_value FROM carsales.gold.dim_model')
+    max_value = max_df.first()["max_value"]
+
+from pyspark.sql.functions import monotonically_increasing_id
+df_filter_new = df_filter_new.withColumn("dim_model_key", max_value + monotonically_increasing_id())
+display(df_filter_new)
+
+
+model_id	    model_Category	    dim_model_key
+
+M001	        Electronics	        1
+M002	        Automotive	        2
+....
+
+
+==================== ==================== ==================== ==================== ====================
+
+Step 8: Combine Old and New Data
+Merge old and new records into a single DataFrame.
+
+df_filter_final = df_filter_old.union(df_filter_new)
+display(df_filter_final)
+
+
+
+Step 9: Perform Slowly Changing Dimension (SCD) Upsert
+Purpose: Update existing records and insert new records into the Gold Dimension Table.
+
+from delta.tables import DeltaTable
+
+if spark.catalog.tableExists('carsales.gold.dim_model'):
+    delta_table = DeltaTable.forPath(spark, "abfss://gold@end2endstorage.dfs.core.windows.net/dim_model")
+    delta_table.alias('target') \
+               .merge(df_filter_final.alias('source'), 'target.dim_model_key == source.dim_model_key') \
+               .whenMatchedUpdateAll() \
+               .whenNotMatchedInsertAll() \
+               .execute()
+else:
+    df_filter_final.write.format('delta').mode("overwrite") \
+                         .option("path", "abfss://gold@end2endstorage.dfs.core.windows.net/dim_model") \
+                         .saveAsTable('carsales.gold.dim_model')
+
+
+Step 10
+Validate the Dimension Table
+
+%sql
+SELECT * FROM carsales.gold.dim_model
+
+dim_model_key	model_id	model_Category
+1	M001	Electronics
+2	M002	Automotive
+
+
+SUMMARY
+Summary
+Step	    Purpose	Example                                                 Code
+Step 1	    Create incremental flag.	                                     dbutils.widgets.text('incremental_flag', '0')
+Step 2	    Read Silver data and create a temp view.	                    df.createOrReplaceTempView("silver_data_temp_view")
+Step 3	    Prepare the source table.	                                    SELECT DISTINCT(model_id), model_Category FROM silver_data_temp_view
+Step 4	    Check/create the sink table.	                                SELECT 1 AS dim_model_key, model_id, model_Category FROM silver_data_temp_view WHERE 1=0
+Step 5	    Filter old and new records.	                                        df_src.join(df_sink, df_src.model_id == df_sink.model_id, 'left')
+Step 6	    Separate old and new records.	                                df_filter.filter(df_filter.dim_model_key.isNotNull())
+Step 7	    Generate surrogate keys for new records.	                    df_filter_new.withColumn("dim_model_key", max_value + monotonically_increasing_id())
+Step 8	    Combine old and new data.	                                    df_filter_old.union(df_filter_new)
+Step 9	    Perform SCD upsert into the Gold dimension table.	                delta_table.alias('target').merge(...).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
+Step 10	    Validate the dimension table.	                                   sql SELECT * FROM carsales.gold.dim_model
+
+This process ensures that your Gold Dimension Table is always up-to-date with incremental changes.
+
+

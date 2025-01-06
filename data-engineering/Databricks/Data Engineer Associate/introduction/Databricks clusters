@@ -1,0 +1,16 @@
+What is databricks cluster ??
+Databricks cluster is nothing but a set of computational resource and some configuration on which
+you can run your data engineering, data science and data analytics kind of workload such as you can
+go for some kind of pipeline.
+
+Got oto compute section in the databricks
+All-Purpose Cluster vs Job Clusters
+
+Aspect	                All-Purpose Clusters	                            Job Clusters
+Purpose	                Interactive, collaborative analysis.	            Optimized for running specific jobs or workflows.
+Use Case	Used for development, ad-hoc queries, or testing.	              Used for scheduled tasks like ETL, machine learning pipelines, or batch processing.
+Lifecycle	Always running (can be manually started/stopped).             automatically created for the job and terminated after the job completes.
+
+
+
+cluter configuration -- one driver node and 0 or more worker nodes

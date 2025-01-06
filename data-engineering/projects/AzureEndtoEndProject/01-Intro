@@ -51,7 +51,6 @@ last_load Lookup Activity: Queries the water_table to retrieve the last_load val
 current_load Lookup Activity: Queries the carsales table to retrieve the max_date value.
 
 Copy Activity: Uses the values from last_load and current_load lookup activities to form a query for incremental data.
-
 Copies the incremental data from the SQL database to the Azure Data Lake Storage (Bronze container).
 
 Example query for incremental data:

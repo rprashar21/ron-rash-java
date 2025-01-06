@@ -19,6 +19,11 @@ Databricks is a multi cloud lakehouse platform based on Apache Spark.
 It is an analytics platform for data analysis,engineering,science and machine learning workflows
 Web platform for Apache spark
 
+Databricks is a cloud-based platform specifically designed for big data processing and analytics.
+It builds on Apache Spark and simplifies cluster setup, scalability, and management.
+It also supports advanced features like Delta Lake and Lakehouse architecture,
+enabling faster and more efficient data processing.
+
 
 
 what is a lake house ?
@@ -85,3 +90,5 @@ This file is actually persisted in the underlying cloud storage.
 Like your Azure storage or your S3 buckets.
 So even after the cluster is terminated, all the data is safe in your cloud storage.
 
+The control plane is responsible for managing configurations like clusters, notebooks, job scheduling, and the user interface.
+ It acts as the central controller, abstracting away infrastructure complexity, allowing users to focus on data processing tasks.

@@ -1,0 +1,72 @@
+Implementing the Medallion Architecture in Databricks
+
+Step 1:
+Reading Data from the Bronze Layer
+Read raw data from the Bronze container.
+
+# Read data from the Bronze layer
+data_frame = spark.read.parquet("abfss://bronze@end2endstorage.dfs.core.windows.net/raw_data/data.parquet")
+
+Explanation : This reads the raw data from the Bronze container, which stores unprocessed data.
+
+======== ======== ======================================================== ======== ======== ========================================================
+
+Step 2:
+Data Transformation - Transform the raw data into a refined format (Silver Layer).
+
+Split a Column into a New Column:
+
+from pyspark.sql.functions import *
+df = data_frame.withColumn('model_category', split(col('model_id'), '-')[0])
+display(df)
+
+Explanation: Extracts the prefix from model_id (e.g., BMW-M1 → BMW) and creates a new column called model_category.
+
+Another example ---  Converts units_sold from integer to string type.
+df = df.withColumn('units_sold', col('units_sold').cast('string'))
+
+Another example -- Create a New Column Based on Calculations:
+df = df.withColumn('revenues_per_unit', col('revenue') / col('units_sold'))
+
+======== ======== ======================================================== ======== ======== ========================================================
+
+Step 3:
+Aggregation and Analysis
+Calculate the total units sold for each branch and year
+df_aggregated = df.groupBy('year', 'branch_name') \
+                  .agg(sum('units_sold').alias('total_units_sold')) \
+                  .orderBy('year', 'total_units_sold', ascending=[True, False])
+display(df_aggregated)
+
+Explantion
+Groups data by year and branch_name.
+Aggregates the total units_sold for each branch.
+Orders results by year (ascending) and total_units_sold (descending).
+
+======== ======== ======================================================== ======== ======== ========================================================
+
+Step 4: Writing Data to the Silver Layer
+
+df.write.format("parquet") \
+        .mode("append") \ The append mode ensures new data is added to the existing dataset.
+        .option("path", "abfss://silver@end2endstorage.dfs.core.windows.net/silver_data") \
+        .save()
+
+
+======== ======== ======================================================== ======== ======== ========================================================
+Step 5: Querying the Silver Layer
+
+# Read data from the Silver layer
+df_silver = spark.read.parquet("abfss://silver@end2endstorage.dfs.core.windows.net/silver_data")
+
+# Display the data
+display(df_silver)
+
+Step	Purpose	                                                Example
+Step 1	Read raw data from the Bronze container.	            spark.read.parquet("abfss://bronze@end2endstorage.dfs.core.windows.net/raw_data/data.parquet")
+Step 2	Transform data: create new columns, convert types.	    withColumn('model_category', split(col('model_id'), '-')[0])
+Step 3	Aggregate and analyze data for insights.	            groupBy('year', 'branch_name').agg(sum('units_sold').alias('total_units_sold'))
+Step 4	Write the transformed data into the Silver container.	df.write.format("parquet").mode("append").option("path", "abfss://silver@end2endstorage/silver_data").save()
+Step 5	Read and validate the Silver-layer data.	            spark.read.parquet("abfss://silver@end2endstorage/silver_data")
+
+This process ensures the raw data is transformed into refined and aggregated formats, adhering to the Medallion Architecture (Bronze → Silver).
