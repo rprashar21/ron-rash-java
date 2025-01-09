@@ -1,0 +1,40 @@
+What is a fact table -- aggreagtion of the dimension tables , follows the star schema or snowflake schema
+
+Step 1 . Create a data frame by reading data from silver notebook
+df = spark.read.parquet("abfss://silver@end2endstorage.dfs.core.windows.net")
+df.createorReplaceTempView('silver_fact')
+
+df_silver_fact = spark.sql(select * from sivler_fact)
+
+Step 2. -->  is to read all the dimensions into a dataframe
+df_dealer = spark.sql('select * from carsales.gold.dim_dealer')
+df_model = spark.sql('select * from carsales.gold.dim_model')
+df_date = spark.sql('select * from carsales.gold.dim_date')
+df_branch = spark.sql('select * from carsales.gold.dim_branch')
+
+Step3 Bring the keys to the fact table
+
+df_fact = df_silver_fact.join(df_dealer,df_silver_fact.dealer_id == df_dealer.dealer_id,'left')\
+                        .join(df_model,df_silver_fact.model_id == df_dealer.model_id,'left')\
+                        .join(df_date,df_silver_fact.date == df_dealer.date_id,'left')\
+                        .join(df_branch,df_silver_fact.branch == df_dealer.branch_id,'left')\
+                        .select(df_silver_fact.revenue,df_silver_fact.units_sold,df_silver_fact.revenue_per_unit,
+                        df_silver_fact.dim_model_key,df_silver_fact.dim_delaer_key,
+                        df_silver_fact.dim_branch_key,df_silver_fact.dim_date_key)
+
+step4 -- Writing into the fact table
+
+if spark.catalog.tableExists('carsales.gold.salesfact'):
+    delta_table = DeltaTable.forName(spark, 'carsales.gold.salesfact')
+
+    delta_table.alias('target').merge(df_fact.alias('source'), "target.dim_date_key = source.dim_date_key AND target.dim_branch_key = source.dim_branch_key AND target.dim_model_key = source.dim_model_key AND target.dim_dealer_key = source.dim_dealer_key").whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
+
+else:
+    df_fact.write.format("delta")\
+    .mode("overwrite")\
+    .option("path", "abfss://gold@end2endstorage.dfs.core.windows.net/salesfact")\
+    .saveAsTable("carsales.gold.salesfact")
+
+step 5
+%sql
+select * from carsales.gold.salesfact

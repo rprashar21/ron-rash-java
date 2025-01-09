@@ -1,0 +1,45 @@
+HDFS - hadoop distributed file system -> storing large amounts of data across multiple servers/machines
+       breaks data into blocks for high availabilty and reliabilty.
+Hadoop is a distributed data processing platform that offers three core capabilities.
+
+It has 3 components or capabilires
+1--> Yarn -- manages the resource allocation
+2 --> HDFS -- file system -- stores files and blocks -- manages the data blocks
+3 --> map-reduce
+     map function -- reads data block parallely -- map output is sent to the reduce
+     reduce fuction -- consolidates thes results
+
+It has 3 capabilities Yarn is the cluster resource manager --
+it acts as master slave where one computer will act as a master and
+others will act as slave
+
+Example u have 5 computers -- install hadoop and the cluster is now a hadoop cluster
+For running an application on Hadoop, you must submit the application to the YARN resource manager.
+
+What is a conatiner ?
+It is a set of resources that includes memory and CPU. -- think of a box with cpu and memory
+
+
+MapReduce --> Parallel processing of these data -- to get the final result
+
+
+Hadoop issues -- hadoop relies on disk based storage,ie. high disk i/o operation slow process.
+                 Apache spark is in memory processing framework.
+                 coding in hadoop is difficult
+
+Many solution were develped on top of hadoop
+So Hive simplified using Hadoop.
+Map Reduce Programming model was complex to use
+With hive we could create databases, tables view and run sql queries
+
+
+Why Spark ?
+Spark programs worked 10 to 100 times faster than the Hadoop M/R programs.
+Spark SQL was also 10 to 100 times faster than Hive SQL.
+In memory processing, easy to use , sdk with java scala SQl, 100x faster than  MapReduce
+Apis in multiple langauage
+
+Spark also decoupled the HDFS and started supporting cloud storage such as Amazon S3 and Azure Blob storage.
+Spark also removed the dependency on Hadoop YARN.
+The Spark community designed it to work on multiple containers and resource management options.
+So adopting Spark in the Cloud platform was easy.

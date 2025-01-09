@@ -3,10 +3,40 @@ What is Apache Spark?
 Apache Spark is an open-source distributed computing system designed for processing large datasets quickly and efficiently.
 It provides an interface for programming entire clusters with implicit data parallelism and fault tolerance.
 
+Apache Spark does not offer Cluster Management and Storage Management.
+Apache Spark is used to run your data processing workload.
+And that part is managed by the Spark Compute Engine.
+So the compute engine is responsible for a bunch of things.
+
+The compute engine for spark manages
+breaking ur data processing work into smaller tasks
+scheduling those tasks on the cluster for parallel execution, providing data to these tasks,
+managing and monitoring tasks, prvide fault tolerance when a job fails
+
+The core engine is also responsible for interacting with the cluster and storage manager
+
+The secon part of the spark core is the apis
+it is the programming interface that offers you the core apis in 4 languages
+java scala python and r
+
+The topmost layer
+Spark sql and dataframes -- deal with sql queries and dataframse -- for structured unstructured and semistructured data
+Streaming - they allow you to process a continuous and unbounded stream of data
+mlib -- machine learning libraries
+graphx --> graph processing libraires
+
+Why sparki great ?
+Spark will abstract away that you are coding to execute your program on a cluster of computers.
+You will feel like working with a database.
+u will be working with rdds or datframes
+it takes away all the complexities of distributed computing
+combines sql queries , batch processing
+
 Example: Word Count in Apache Spark
 Let’s calculate the number of times each word appears in a text file.
 
 Python Example (PySpark)
+
 Input Data (sample.txt):
 Apache Spark is fast.
 Spark is easy to use.
@@ -18,7 +48,7 @@ code
 from pyspark import SparkContext
 
 # Initialize Spark Context
-sc = SparkContext("local", "WordCount")
+sc = SparkContext("local", "WordCount") -this is the file
 
 # Load the text file into an RDD (Resilient Distributed Dataset)
 text_file = sc.textFile("sample.txt")
