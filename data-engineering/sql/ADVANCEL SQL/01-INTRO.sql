@@ -56,7 +56,7 @@ SELECT * FROM ARRAY_TABLE WHERE ARRAY[10,20,30,40]::INTEGER[] = MYARRAY; -- COMP
 
 -- EXPLODE THE ARRAY --
 
-SELECT ID,UNNEST(MYARRAY) AS EXPLODED FROM ARRAY_TABLE; -- EXPLOEDS THE ARRAY
+SELECT ID,UNNESTUNNEST(MYARRAY) AS EXPLODED FROM ARRAY_TABLE; -- EXPLOEDS THE ARRAY
 ID  MYARRAY
 1	1
 1	2
@@ -86,7 +86,8 @@ select id, name, address->>'street' as street,address->>'city' as city,address->
 --- create an index
 create index indx_address_city on customers ((address->>'city'));
 
----an index  stores a reference to where those records are located in the main table, allowing the database to quickly locate them. Let me explain in more detail:
+---an index  stores a reference to where those records are located in the main table,
+-- allowing the database to quickly locate them. Let me explain in more detail:
 
 PostgreSQL creates a functional index, which is essentially a B-tree (or another suitable data structure) storing:
 The extracted city values (e.g., "croydon", "london", etc.).

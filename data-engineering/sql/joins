@@ -5,6 +5,29 @@ inner join depament_table
 on emp.name = dept.name;  // some common column name
 
 
+employee_table
+emp_id	    name	                position	                    salary
+1	        Alice	                 Engineer	                    60000
+2	        Bob	                    Manager	                           80000
+3	        Charlie	                Analyst	                        50000
+4	        Diana	                Engineer	                    65000
+
+department_table
+dept_id	        name	    department
+101	            Alice	    IT
+102	            Bob	        Finance
+103	            Eve	        HR
+104	            Diana	    IT
+
+emp_id	    name	position	salary	dept_id	    department
+1	        Alice	Engineer	60000	101	        IT
+2	        Bob	    Manager	    80000	102	        Finance
+4	        Diana	Engineer	65000	104	        IT
+
+The query performs an INNER JOIN on employee_table and department_table where the name column matches in both tables.
+Only rows where there is a matching name in both tables are included in the result (Alice, Bob, and Diana).
+
+
 full outer join grabs entire data from both tables
 full outer join with where will get unique rows from either table
 which is basically opposite of inner join . rows unique to eeach table
