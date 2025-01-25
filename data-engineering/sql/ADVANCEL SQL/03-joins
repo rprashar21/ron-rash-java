@@ -1,0 +1,84 @@
+lateral join --where a subquery or table function depends on columns from the outer query (the "left-hand" table)
+
+employees:
+emp_id	    name	    department	    salary
+1	        Alice	    Engineering	    75000
+2	        Bob	        Sales	        55000
+3	        Charlie	    Marketing	    60000
+
+bonuses:
+department	    bonus_percent
+Engineering	    10
+Sales	        5
+Marketing	    8
+
+
+SELECT
+    e.emp_id,
+    e.name,
+    e.department,
+    e.salary,
+    b.bonus_percent,
+    e.salary * (b.bonus_percent / 100.0) AS bonus
+FROM employees e
+LEFT JOIN LATERAL (
+    SELECT bonus_percent
+    FROM bonuses
+    WHERE bonuses.department = e.department
+) b ON TRUE;
+
+Result:
+emp_id	name	department	    salary	bonus_percent	bonus
+1	    Alice	Engineering	    75000	10	            7500.00
+2	    Bob	    Sales	        55000	5	            2750.00
+3	    Charlie	Marketing	    60000	8	            4800.00
+
+Explanation
+Outer Query (employees table): Fetches each employee's details.
+
+LATERAL Subquery:
+For each row in employees, the subquery matches the department and fetches the corresponding bonus_percent.
+
+ON TRUE:This clause ensures the subquery executes for every row.
+
+Advantages of LATERAL JOIN:
+Flexibility: Allows using data from the outer query row within the subquery.
+Simplicity: Reduces the need for complex joins or transformations.
+Compatibility: Useful for advanced queries involving arrays, JSON, or other structured data.
+
+======================== **** =================== ======================== **** ===================
+
+cross lateral join
+A cross lateral join is essentially a lateral join without a filtering condition.
+It is a combination of a CROSS JOIN and a LATERAL JOIN,
+ where the subquery (or table function) is executed for each row of the outer query, but without any specific join condition.
+
+This means that for every row in the left table, the lateral subquery or function is executed, and the results are combined
+
+emp_id	name	salary
+1	    Alice	75000
+2	    Bob	    55000
+3	    Charlie	60000
+
+
+
+SELECT
+    e.emp_id,
+    e.name,
+    e.salary,
+    b.bonus
+FROM employees e
+CROSS JOIN LATERAL (
+    SELECT e.salary * 0.1 AS bonus
+) b;
+
+result===
+emp_id	name	salary	bonus
+1	    Alice	75000	7500.00
+2	    Bob	    55000	5500.00
+3	    Charlie	60000	6000.00
+
+
+
+
+

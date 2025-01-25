@@ -1,0 +1,23 @@
+Spark is a data processing platform
+2 ways 2 process data using
+1. Spark database and sql
+2. spark dataframe and api
+
+Saprk data frame are in memory - is a runtime and temporary object
+spark tables are permanent
+
+Spark table                               vs           Sprak data frames
+table store schema info in metadatastore             dataframes store schema in runtime catalogs
+table and schema are persistent objects               dataframes and catalog are runtime objects
+and visible throught an application                   live only thru the app runtime-- only visble durinhg application
+tbales have sql                                       data frames are supproted thru apis
+
+====================================
+
+every spark table or dataframe has 3 layers
+look at the image
+
+first layer is the metadata layer --> table or dataframe schema info-- tells u where the data is or what is the schema of the data of the table
+second layer is the - physical storage layer whihc is the top layer on any cloud storage -- abstraction or mounting on cloud storages like
+aws s3 or azure blobl storages - spark data lives in data files
+third layer{middle layer } is the compute layer --> runs ur spark sql engine
