@@ -1,3 +1,33 @@
+what is apache spark ??
+a distributed computing platform
+
+what do we do with apache spark ??
+we create programs and execute them on spark clusters
+
+how to create spark programs?
+Ultimately we will be building full blown spark applications like stream processing or batch processing
+eg read a news feed as a continuous stream --> then apply machine-learning algorithms to figure out what type of users
+are interested in what new s and redirect the story to those users
+
+or
+For example, YouTube statistics.
+In this case,we collect the data for 24 hours and start a scheduled spark job to compute the watch-time minutes for the last 24 hours.
+Finally,the outcome goes to a table and also appears on the dashboard.
+
+in both these jobs you must package your application and submit it to the Spark cluster for execution.
+and that's the second method for executing your programs on a Spark Cluster.
+
+1.so we can run spark applications on notebooks or interactive ui for learning or development
+2. a real-life production implementation is all about packaging your Spark application and submitting it to the cluster for execution.
+
+Spark-submit is the most commonly used tool for this purpose.others are databricks notebooks and rest apis
+In databricks cloud they allow u to submit ur notebooks
+
+
+=====================Spark distributed Processing model ==========
+
+
+
 
 What is Apache Spark?
 Apache Spark is an open-source distributed computing system designed for processing large datasets quickly and efficiently.

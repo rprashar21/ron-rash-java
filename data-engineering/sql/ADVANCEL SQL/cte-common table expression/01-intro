@@ -1,0 +1,35 @@
+common table expression -- break down complex queries , provodes a temporary result
+Imagine you have a table of sales data and you want to calculate total sales per customer first, then filter those results:
+
+sale_id	    customer_id	    sale_amount
+1	        101	            400
+2	        101	            700
+3	        102	            500
+4	        103	            200
+5	        102	            600
+6	        103	            900
+7	        104	            1500
+8	        105	            800
+
+calculates total sales per customer, followed by a filter to return only those customers whose total sales exceed 1000
+
+with customer_Sales as (
+select customer_id,
+       sum(sale_amount) as total_sales
+       from table_name
+)
+select customer_id,total_sales
+from customer_Sales
+where total_sales >1000
+
+explanation - the query first creates a cte --common table expression named customer_Sales
+
+0/p
+customer_id	total_sales
+101	            1100
+102	            1100
+103	            1100
+104	            1500
+
+Real world sceanrios
+Businesses often need to identify high-value customers for targeted marketing or loyalty programs.

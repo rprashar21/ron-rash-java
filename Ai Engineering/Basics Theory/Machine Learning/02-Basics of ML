@@ -1,0 +1,23 @@
+ML systems can be categorized as supervised, unsupervised, reinforcement, or generative AI, each learning differently.
+
+Supervised -- ml models learn/make prediction based on labeled data --> classification or regression
+           clasifcation -- learning from email subjects like spam or not spam -- learning about sender or email address
+                           the model learns patterns (like certain keywords or sender information) that indicate whether an email is likely spam
+           Regression Example (House Price Prediction): the model learns from historical data about the houses size,location,
+           area and predicts the price
+
+Supervised machine learning is based on the following core concepts:
+Data
+Model - a model is the complex collection of numbers that define the mathematical relationship
+  from specific input feature patterns to specific output label values. The model discovers these patterns through training.
+Training - we need to train the model before it can make predictions
+Evaluating
+Inference
+
+
+UnSupervised -->identifies patterns in unlabeled data - eg u have a dataset of cutsomer with no predefined labels with diff customer groups
+             the model applies an algo --clustering algo such as k means the algorithm groups customers based on similarities in their behaviors,
+             demographics, or purchasing patterns
+
+
+

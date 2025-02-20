@@ -1,0 +1,36 @@
+recuresive cte
+
+recursive cte is used to deal wth hierarchy
+
+now suppose we have a table -->
+employee_id	    name	manager_id
+1	            Alice	    NULL
+2	            Bob	        1
+3	            Charlie	    1
+4	            David	    2
+5	            Eve	        2
+6	            Frank	    3
+
+Alice is at the top (no manager).
+Bob and Charlie report to Alice.
+David and Eve report to Bob.
+Frank reports to Charlie
+
+query
+
+with recursive org_chart as  -- Anchor Member: Select top-level manager(s)
+(
+ select employee_id,name,manager_id,
+ 0 as level,                       --> We assign 0 AS level because these employees are at the top (level 0).
+ cast(name as varchar(1000)) as chain_of_command
+ from employees where manager_id is null
+)
+cast --> starts the chain with the employee's own name. We cast it to a string type long enough to hold the entire chain later.
+
+union all --keyword combines the results of the anchor member with the results of the recursive member.
+The anchor provides the starting point.
+The recursive part will then add more rows (each subordinate) based on those starting rows.
+
+recursive member
+select  e.employee_id,e.name,e.manager_id,
+        oc.level

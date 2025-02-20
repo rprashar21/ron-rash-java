@@ -1,0 +1,14 @@
+Langchain is a framework just like springboot and other frameworks to help build ai models
+
+what can we build using them?
+Ai Agents
+Summarization / -- company specific chatgpt
+Workflow Automation
+Ai Knowledge assistants -- helping us to build or read big documents and understand them , book tickets , look for scams
+Conversational Chatbots
+
+Alternatives
+LLamIndex
+haystack
+
+

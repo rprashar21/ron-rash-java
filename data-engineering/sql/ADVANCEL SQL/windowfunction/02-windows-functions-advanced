@@ -1,0 +1,103 @@
+1.NTILE() functions -- which helps us data preprocessing, feature engineering, and model evaluation.
+in simple terms helps us to group sets of data .
+
+Scenario
+Imagine you are building a customer segmentation model for an e-commerce company.
+The goal is to group customers into different tiers (e.g., high-value, medium-value, low-value)
+based on their purchase behavior, so the marketing team can tailor campaigns accordingly.
+
+here is the dataset
+
+customer_id	total_purchase_amount
+1	        5000
+2	        3000
+3	        8000
+4	        2000
+5	        6000
+6	        1000
+7	        4000
+8	        7000
+
+u want to divide customers into 3 tiers (high, medium, low) based on their purchase amounts.
+
+select customer_id,purchase_amount
+       ntile(3) over (order by total_purchase_amount desc) as customer_tier
+
+
+customer_id	total_purchase_amount	customer_tier
+3	        8000	                    1
+8	        7000	                    1
+5	        6000	                    2
+1	        5000	                    2
+7	        4000	                    3
+2	        3000	                    3
+4	        2000	                    3
+6	        1000	                    3
+
+Tier 1: High-value customers (top 33%).
+Tier 2: Medium-value customers (middle 33%).
+Tier 3: Low-value customers (bottom 33%).
+
+this can be used for fraud detetction, anomaly detection, a/b testing
+
+PERCENT_FUNCTION
+PERCENT() -- calculate the relative rank of a row as a percentage between (0 and 1) within a partition
+employee_id	performance_score
+1	95
+2	85
+3	75
+4	90
+5	80
+6	70
+
+lets calulate the percent_rank using the window function
+select employee_id,perfromance_score
+      percent_rank() over (order by performance_score) as percent_rank
+      from table;
+
+employee_id	    performance_score	    percent_rank
+6	            70	                            0.0
+3	            75	                            0.2
+5	            80	                            0.4
+2	            85	                            0.6
+4	            90	                            0.8
+1	            95	                            1.0
+
+The employee with the lowest score (70) has a PERCENT_RANK of 0.0.
+The employee with the highest score (95) has a PERCENT_RANK of 1.0.
+The employee with a score of 80 is in the 40th percentile.
+
+same for CUME_DIST --> u want to calculate the cumulative distribution of performance scores to
+understand what percentage of employees have scores less than or equal to a given score
+select employee_id,perfromance_score
+      cume_dist() over (order by performance_score) as percent_rank
+      from table;
+
+
+===================================================================================================================
+Advanced Framing Options: Custom Window Frames
+
+
+sale_date	sale_amount
+2024-01-01	100
+2024-01-02	200
+2024-01-03	300
+2024-01-04	400
+2024-01-05	500
+
+3 day moving avergage -- average for first 3 days
+
+select sale_date, sale_Amount
+       avg(sale_amount) over (order by sale_date rows between 2 and preceding current row) as moving_avg
+       from table
+
+explanation - rows between 2 and preceding current row -- this frame includes the current row and the preceding rows
+If there are fewer than two preceding rows (at the start of the data), the frame will include as many as are available.
+
+output -->
+sale_date	sale_amount moving_avg
+2024-01-01	100           100
+2024-01-02	200.          150
+2024-01-03	300.          200
+2024-01-04	400.          300
+2024-01-05	500.          400

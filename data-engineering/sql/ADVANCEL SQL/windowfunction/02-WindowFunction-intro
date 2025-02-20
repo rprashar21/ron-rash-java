@@ -1,0 +1,148 @@
+--Window functions perform aggreagtion or operations on groups of rows
+-- but they produce result for each row
+
+--
+select * from employees
+emp_id , department salary
+
+
+-- find the average saleary for each department
+SELECT
+    emp_id,
+    name,
+    department,
+    salary,
+    AVG(salary) OVER (PARTITION BY department) AS dept_average_salary,
+        min(salary) over (partition by department) as min_salary,
+        max(salary) over (partition by department) as max_salary,
+        rank() over (PARTITION BY department order by salary desc) as salary_rank
+FROM employees;
+
+Window Function Behavior:
+
+PARTITION BY:  is similar to group by
+
+The RANK() function ranks rows within a specific window or group defined by the PARTITION BY clause.
+In this context, it assigns a rank to each employee's salary within their department, ordered by salary (descending).
+
+employees Table:
+emp_id	    name	    department	    salary
+1	        Alice	    Engineering	    75000
+2	        Bob	        Engineering	    80000
+3	        Charlie	    Sales	        55000
+4	        Diana	    Sales	        50000
+5	        Eve	        Sales	        55000
+6	        Frank	    Engineering	    75000
+
+SELECT
+    emp_id,
+    name,
+    department,
+    salary,
+    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank
+FROM employees;
+
+emp_id	name	department	    salary	salary_rank
+2	    Bob	    Engineering	    80000	1
+1	    Alice	Engineering	    75000	2
+6	    Frank	Engineering	    75000	2
+3	    Charlie	Sales	        55000	1
+5	    Eve	    Sales	        55000	1
+4	    Diana	Sales	        50000	3
+
+
+======= we have a table ----
+sale_id	employee_name	department	sale_amount	sale_date
+1	    Alice	        Electronics	500	        2024-02-01
+2	    Bob	            Electronics	700	        2024-02-02
+3	    Alice	        Electronics	800	        2024-02-03
+4	    Charlie	        Clothing	400	        2024-02-01
+5	    Alice	        Electronics	900	        2024-02-04
+6	    Bob	            Electronics	650	        2024-02-05
+7	    Charlie	        Clothing	550	        2024-02-02
+8	    Alice	        Electronics	300	        2024-02-06
+
+ROW_NUMBER()
+row_number --> when we want to rank something uniquely
+It helps in ranking rows uniquely—for instance, when deduplicating data or ordering entries.
+
+select employee_name,department,sale_amount,sale_date
+  row_number() over (partition by department order by sale_amount desc) as row_num
+
+
+employee_name	department	sale_amount	sale_date	row_num
+Alice	        Electronics	900	2024-02-04	                1
+Alice           Electronics	800	2024-02-03	                2
+Bob	    Electronics	700	2024-02-02                            3
+Bob	    Electronics	650	2024-02-05	4
+Alice	Electronics	500	2024-02-01	5
+Alice	Electronics	300	2024-02-06	6
+Charlie	Clothing	550	2024-02-02	1
+Charlie	Clothing	400	2024-02-01	2
+
+
+=====
+RANK() -- SAME AS ROW_NUMBER But if there are duplicate values the rows will have the same rank
+
+select employee_name,department,sale_amount,sale_date
+  rank() over (partition by department order by sale_amount desc) as rank_num
+
+Dense_rank() -- rank will skip ranks if there are duplicates but dense_Rank will not skip ranks look at the sample data below
+
+rank
+student	score	dense_rank_val
+A	    100	        1
+B	    100	        1
+C	    95	        3
+D	    90	        4
+E	    90	        4
+F	    80	        6
+
+dense_rank
+student	score	dense_rank_val
+A	    100	        1
+B	    100	        1
+C	    95	        2
+D	    90	        3
+E	    90	        3
+F	    80	        4
+
+
+Lag() ==> compare a rows value with preciding  row value
+
+SELECT
+    employee_name, department,sale_amount,sale_date,
+    LAG(sale_amount, 1) OVER (PARTITION BY department ORDER BY sale_date) AS prev_sale
+FROM sales;
+
+the prev_sale column will compare with the sale_Amount sale
+
+employee_name	    department	    sale_amount	    sale_date	    prev_sale
+Alice	            Electronics	    500	            2024-02-01	    NULL
+Bob	                Electronics	    700	            2024-02-02	    500
+Alice	            Electronics	    800	            2024-02-03	    700
+Alice	            Electronics	    900	            2024-02-04	    800
+Bob	                Electronics	    650	            2024-02-05	    900
+Alice	            Electronics	    300	            2024-02-06	    650
+Charlie	            Clothing	    400	            2024-02-01	    NULL
+Charlie	            Clothing	    550	            2024-02-02	    400
+
+
+The window is partitioned by department, so comparisons are made within each department.
+
+====
+LEAD() - This function is useful for forecasting or planning scenarios where you want to anticipate the next value in a sequence.
+
+select employee_name, departmet, sale_amount,sale_date,
+       LEAD() OVER (partition by deparment order by sale_Date ) as next_Sale
+
+employee_name	    department	    sale_amount	    sale_date	    next_sale
+Alice	            Electronics	    500	            2024-02-01	    700
+Bob	                Electronics	    700	            2024-02-02	    800
+Alice	            Electronics	    800	            2024-02-03	    900
+Alice	            Electronics	    900	            2024-02-04	    650
+Bob	                Electronics	    650	            2024-02-05	    300
+Alice	            Electronics	    300	            2024-02-06	    NULL
+Charlie	            Clothing	    400	            2024-02-01	    550
+Charlie	            Clothing	    550	            2024-02-02	    NULL
+

@@ -1,0 +1,138 @@
+real world scenarios where we will use the window fucntions
+row_number -- is used for duplication
+magine a table where duplicate entries exist due to system error
+You could partition by a unique identifier (like customer ID) and order by a timestamp to retain only the most recent record.
+
+table -- customer_updates
+id	customer_id	    customer_name	update_date	            update_info
+1	101	        John Doe	        2024-02-01 08:30:00	    Address changed
+2	101	        John Doe	        2024-02-01 09:15:00	    Order updated
+3	102	        Jane Smith	        2024-02-01 10:00:00	    New sign-up
+4	101	        John Doe	        2024-02-01 10:45:00	    Email updated
+5	102	        Jane Smith	        2024-02-01 11:30:00	    Password reset
+
+Duplicates exist for customer 101 (John Doe) and 102 (Jane Smith), where multiple updates are logged.
+We need to find the latest records -- using a window function we can assign or rownumber for the updates based update_Date
+
+WITH RANKED_UPDATES AS (
+select customer_id,customer_name,update_date,update_info,
+       row_number() over (partition by customer_id order by update_date desc) as row_number
+       from customer_updates
+)
+-- the inner query will give me
+
+id	customer_id	    customer_name	update_date	            update_info      rw_number
+1	101	        John Doe	        2024-02-01 08:30:00	    Address changed.    3
+2	101	        John Doe	        2024-02-01 09:15:00	    Order updated.      2
+3	102	        Jane Smith	        2024-02-01 10:00:00	    New sign-up.       2
+4	101	        John Doe	        2024-02-01 10:45:00	    Email updated.     1
+5	102	        Jane Smith	        2024-02-01 11:30:00	    Password reset.    1
+
+from this i will select latest records where rw_number is ==1
+
+WITH RANKED_UPDATES AS (
+select customer_id,customer_name,update_date,update_info,
+       row_number() over (partition by customer_id order by update_date desc) as row_number
+       from customer_updates
+)
+select customer_id,
+       customer_name,
+       update_date,
+       update_info
+       from RANKED_UPDATES
+       where rw_number =1
+
+
+--- final output --- shows us the last or the most recent update
+customer_id	customer_name	update_date	        update_info
+101	        John Doe	    2024-02-01 10:45:00	Email updated
+102	        Jane Smith	    2024-02-01 11:30:00	Password reset
+
+
+Explanation of the Query:
+
+CTE (Common Table Expression) "RankedUpdates":
+We partition the data by customer_id so that each customer's records are grouped.
+Within each group, the records are ordered by update_date in descending order, ensuring that the most recent update comes first.
+The ROW_NUMBER() function assigns a sequential number (rn) to each row in the partition.
+Final SELECT:
+We then filter out only the rows where rn = 1, which means we keep only the latest update for each customer.
+
+
+=========================== RANK() AND DENSE_RANK() ======
+imagine a table --- sales performacnce now we need to rank the people based on their performance
+
+salesperson	total_sales
+John	    1000
+Jane	    1000
+Alex	    800
+Mary	    600
+
+select salesperson,total_Sales
+      rank() over (order by total_sales desc) as rank_value
+      from sales_performance
+
+0/P
+
+salesperson	total_sales	rank_value
+John	    1000	    1
+Jane	    1000	    1
+Alex	    800	        3
+Mary	    600	        4
+
+WHEN we uuse dense rank there it will not skip rank_value
+
+salesperson	total_sales	rank_value
+John	    1000	    1
+Jane	    1000	    1
+Alex	    800	        2
+Mary	    600	        3
+
+==========
+trend analysis based on daily sales report for every day
+
+this is basically sales data
+sale_date	total_sales
+2024-02-01	1000
+2024-02-02	1100
+2024-02-03	1050
+2024-02-04	1200
+
+now we need to calucltae the diffrence in sales every day
+sale_date	total_sales prev_sales  sales_diff
+2024-02-01	1000.        null.       null
+2024-02-02	1100.        1000.       100
+2024-02-03	1050.        1100.       -50
+2024-02-04	1200.        1050.       150
+
+select sale_date	total_sales
+       lag(total_sales,1) over (order by sales_Date) as prev_sales
+       total_sales - lag(total_sales,1) as sales_diff
+       from table
+
+Lead() -- used to fetch the next value --->
+u can view the next day's stock level to help forecast when stock might run out or determine upcoming transitions.
+product	    report_date	    stock_level
+WidgetA	    2024-02-01	    100
+WidgetA	    2024-02-02	    90
+WidgetA	    2024-02-03	    80
+WidgetA	   2024-02-04	    70
+
+in lead function we calculate the next day
+
+product	    report_date	   stock_level	    next_stock_level	stock_change
+WidgetA	    2024-02-01	    100	                90	                10
+WidgetA	    2024-02-02	    90	                80	                10
+WidgetA	    2024-02-03	    80	                70	                10
+WidgetA	    2024-02-04	    70	                NULL	            NULL
+
+select product	    report_date	   stock_level
+       lead(stock_level,1) over (partition by product order by report_date) as next_stock_level,
+       stock_level - lead(stock_level,1) over (partition by product order by report_date) as stock_change
+       from table
+
+LEAD() fetches the next day's stock level for each record.
+stock_change shows the difference between the current day and the next day’s inventory.
+his information can be used to forecast trends, such as how quickly inventory is depleting.
+
+These examples illustrate how to use LAG() for analyzing past trends and LEAD() for forecasting future values in real-life scenarios

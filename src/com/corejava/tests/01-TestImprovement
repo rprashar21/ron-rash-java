@@ -1,0 +1,2 @@
+Static blocks and static fields are initialized when the class is loaded, which can add overhead if the initialization is heavy.
+Use @BeforeAll or @AfterAll for setup and cleanup that is shared across all tests, rather than static blocks.
