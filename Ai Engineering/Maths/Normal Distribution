@@ -1,0 +1,43 @@
+Normal Distribution for Probabilty Density Estimation
+
+Imagine you randomly scoop ice cream and measure 1000 scoops.
+Some are 48g, some are 52g, and most are close to 50g.
+
+Now, we calculate:
+
+Average scoop weight (Mean): → 50g
+Variation in scoops (Standard Deviation): → 5g
+This means most scoops are between 45g and 55g, but a few might be 40g or 60g.
+
+from scipy.stats import norm
+
+# Find the mean and std of existing scoops
+mean_scoop = sample.mean()  # Average scoop weight (e.g., 50g)
+std_scoop = sample.std()    # Variation in scoop weight (e.g., 5g)
+
+# Fit a normal distribution model
+dist = norm(mean_scoop, std_scoop)
+
+We now have a "pattern" (mathematical model) that describes how our scoops behave.
+
+Predicting Future Scoops
+Now that we have this fitted distribution dist, we can generate new ice cream scoops that follow the same pattern.
+
+# Generate 5 future scoops
+new_scoops = dist.rvs(size=5)
+print(new_scoops)
+
+[51.2, 48.5, 50.7, 52.3, 47.8]
+Each new scoop follows the same pattern as the original ones.
+
+Why is This Useful?
+Prediction: If tomorrow we scoop more ice cream, we now know that most scoops will be around 50g ± 5g.
+Quality Control: If a scoop is way too big (70g) or too small (30g), we know it’s not normal and should be fixed.
+Decision Making: If customers complain about small scoops, we can adjust the recipe to make sure scoops are always close to 50g.
+
+When we say "Fit a Normal Distribution to Predict Future Scoops", we mean:
+
+Find the pattern (mean & std deviation).
+Use that pattern to generate future values.
+Ensure the new scoops follow the same behavior as past ones.
+This concept applies to heights of people, exam scores, cricket runs, or stock prices—anywhere you want to understand data trends and predict future values!

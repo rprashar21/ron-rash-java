@@ -1,0 +1,74 @@
+This code is configuring connection pooling for databases using HikariCP (a high-performance connection pool).
+
+MAX_POOL_SIZE = 20 → Maximum 20 database connections can be open at the same time.
+MIN_IDLE = 5 → At least 5 idle connections are always available.
+IDLE_TIMEOUT = 300000 → If a connection is idle for 300 seconds (5 mins), it will be removed.
+Using ConcurrentHashMap → Keeps multiple connection pools thread-safe, ensuring efficient database access.
+
+
+Before
+public Connection getDbConnection() throws SQLException {
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/mydb", "user", "password");
+}
+❌ Every request opens a new database connection.
+❌ Database gets overloaded quickly if many users access it.
+❌ Slow performance because establishing a new connection takes time.
+
+
+public HikariDataSource createConnectionPool(String dbUrl) {
+    HikariConfig config = new HikariConfig();
+    config.setJdbcUrl(dbUrl);
+    config.setMaximumPoolSize(MAX_POOL_SIZE);
+    config.setMinimumIdle(MIN_IDLE);
+    config.setIdleTimeout(IDLE_TIMEOUT);
+
+    return new HikariDataSource(config);
+}
+
+// Store pools in a thread-safe map for reuse
+public void initializePools() {
+    eventStorePools.put("eventDB", createConnectionPool("jdbc:postgresql://localhost:5432/eventDB"));
+    viewStorePools.put("viewDB", createConnectionPool("jdbc:postgresql://localhost:5432/viewDB"));
+}
+Reuses connections instead of opening new ones every time.
+✅ Improves performance by keeping idle connections ready.
+✅ Thread-safe ConcurrentHashMap allows multiple database connections to be stored and reused safely.
+
+
+HashMap vs ConcurrentHasMap
+import java.util.HashMap;
+
+public class HashMapExample {
+    private static final HashMap<String, Integer> userScores = new HashMap<>();
+
+    public static void main(String[] args) {
+        // Thread 1 adding data
+        new Thread(() -> userScores.put("Alice", 10)).start();
+
+        // Thread 2 reading data
+        new Thread(() -> System.out.println(userScores.get("Alice"))).start();
+    }
+}
+problems
+❌ Not Thread-Safe: If one thread writes while another reads, the data may become corrupt or inconsistent.
+❌ Race Condition: The second thread might read null or incorrect data if the first thread is still writing.
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    private static final ConcurrentHashMap<String, Integer> userScores = new ConcurrentHashMap<>();
+
+    public static void main(String[] args) {
+        // Thread 1: Adding data
+        new Thread(() -> userScores.put("Alice", 10)).start();
+
+        // Thread 2: Reading data
+        new Thread(() -> System.out.println(userScores.get("Alice"))).start();
+    }
+}
+
+hread-Safe: Multiple threads can read/write at the same time without crashing.
+✔ Faster than Synchronized HashMap because it only locks specific parts, not the whole map.
+✔ Ideal for high-performance applications where multiple users access data at once.
+
+

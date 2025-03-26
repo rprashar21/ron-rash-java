@@ -1,0 +1,47 @@
+A logarithm is just a fancy way to ask: 👉 "How many times do I multiply a number to get another number?"
+
+Let’s say you have a magic number 2. You want to find out how many times you need to multiply it to get 8.
+
+log2(8)=3 ie u multiply 2 ,3 times to get to 8
+
+Read as: "Log base 2 of 8 equals 3.
+
+Where is it useful ??
+Instead of writing 1,000,000, we can write log(1,000,000) = 6, making things simpler
+
+Solving for Time or Steps ⏳
+If you want to know how long it takes to double your money in a bank, logs help calculate that.
+
+
+So if we take time complexity
+log(n)-- How many times do I need to search to reach a certain number ?" → That’s log(n)
+Imagine you have a book with 1,000,000 pages, and you need to find one special page. Instead of flipping through one by one, you
+
+Open the middle page. If the special page is before it, ignore the right half.
+Open the middle of the remaining pages.
+Keep cutting the pages in half until you find it.
+
+This takes only ~20 steps instead of 1,000,000!
+That’s log(n) time complexity!
+log(n)
+
+log(n) means cutting the problem in half each time!
+
+If n = 1,000, log(1000) is about 10
+If n = 1,000,000, log(1,000,000) is about 20
+It grows very slowly, making it super efficient!
+
+So O(n log n) (QuickSort, MergeSort)
+
+   You divide the problem log n times (just like Binary Search).
+   But at each step, you process all n elements.
+   Example: Sorting 1,000,000 numbers using QuickSort or MergeSort → takes about 20×1,000,000 = 20,000,000 steps.
+
+Comparison
+Complexity	What It Does	Example	Steps for n = 1,000,000
+O(log n)	Divides problem each step	Binary Search	20 steps
+O(n log n)	Divides & processes each item	QuickSort/MergeSort	~20,000,000 steps
+QuickSort & MergeSort (Why O(n log n))?
+📌 Step 1: Divide the array in half → log n times
+📌 Step 2: Process each number at every division → O(n)
+📌 Total Work Done = O(n log    

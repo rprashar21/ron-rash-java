@@ -1,0 +1,40 @@
+ A probability density function (PDF) is a mathematical function that describes the relative likelihood of a continuous
+ random variable taking on a specific value.
+ However, for continuous random variables, the probability of the variable being exactly any single value is technically zero.
+ Instead, the PDF helps determine the probability that the variable falls within a certain interval.
+
+ Example
+ Imagine you're picking candies from a jar, and the PDF tells you that most candies are red.
+  So, if you take a handful, you’re more likely to get red candies.
+
+In Machine Learning:
+When computers learn from data, they sometimes use PDFs to understand how likely different outcomes are.
+if a computer is trying to guess someone's height, it might use a PDF to figure out that most people are around a certain height, and fewer people are very short or very tall.
+
+
+What is PMF CDF AND PDF
+PMF -- > Probablity Mass Function
+A function that gives the probability that a discrete random variable is exactly equal to a specific value.
+Example : rolling a dice what is the probablity that any number x is a specific value is 1/6
+
+CDF (Cumulative Distribution Function):
+A function that gives the probability that a random variable is less than or equal to a specific value.
+Example: For the same die roll, the CDF for x=3 is:
+F(3)=P(X≤3)=P(X=1)+P(X=2)+P(X=3)= =0.5
+
+So, there is a 50% chance that the die roll will result in a number 3 or less
+
+In short, the PMF tells you the probability of each specific outcome, while the CDF tells you the probability of the outcome being at or below a certain value.
+
+
+A Probability Density Function (PDF) is similar to a Probability Mass Function (PMF) but is used for continuous random variables instead of discrete ones
+ PDF shows how "dense" the probability is around that value
+ it will show what is the probablity that a randow variable will fall within a range
+
+ To find the probability that the spinner lands between 0.2 and 0.5, calculate the area under the curve from 0.2 to 0.5:
+
+ There are 2 types of PDF Probability Density Function
+ Parameteric and Non Parameteric
+
+ Parametric -- it measure what is the probability of a continuoss random variable will fall within a range
+
