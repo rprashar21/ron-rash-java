@@ -1,0 +1,17 @@
+This is not a typical Spring Boot application, but rather a more complex distributed system with:
+CQRS architecture
+Event-driven design
+Microservices
+Domain-driven design
+Event sourcing
+The tests are integration tests that verify the behavior of the entire system, including:
+Command processing
+Event handling
+State changes
+Document management
+Case progression
+Would you like me to:
+Explain more about any specific aspect?
+Show how the CQRS pattern is implemented?
+Explain the event handling mechanism?
+Discuss the testing strategy?

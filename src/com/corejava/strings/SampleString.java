@@ -1,4 +1,4 @@
-package com.corejava.corejava.cleanCodesample;
+package com.corejava.strings;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,12 +9,14 @@ public class SampleString {
 
     //
     public static void main(String[] args) {
-        String s1 = "Hello" + " World"; // use StringBuilder instead
+        String s1 = "Hello"; // use StringBuilder instead
+        s1="Jack";
+        String s2 ="Hello".concat(" World");
 
         StringBuilder sb = new StringBuilder();
         sb.append("Hello");
         sb.append(" World");
-        String s = sb.toString();
+
 
         String s3 = "hello";
         String s4 = "hello".intern();

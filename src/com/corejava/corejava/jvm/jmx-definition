@@ -1,0 +1,36 @@
+JMX is a built-in Java API that lets you monitor, manage, and interact with Java applications at runtime,
+through things called MBeans (Managed Beans).
+
+Think of JMX as the remote control for a Java app.
+
+nalogy:
+JMX is like a control room for a big machine (your Java app).
+MBeans are the switches, dials, and meters inside the room.
+You can turn things on/off, check statuses, and trigger tasks — all without stopping the machine.
+
+Example use cases:
+Check memory usage
+Reload config without restarting
+Kick off batch jobs
+View application state
+
+what is classpath --
+The classpath is like a map that tells your Java application where to find its tools and dependencies (like .jar files) when it runs.
+
+
+what is widlfy
+WildFly is a Java EE application server. It has built-in support for JMX over HTTP, but it needs to be configured to expose those controls.
+You configure WildFly to:
+Enable JMX access
+Set the management port (9990)
+Secure access (users, protocols, etc.)
+
+
+Think of WildFly like a smart building, and the configuration is like setting up:
+Access control (who can enter)
+Intercom system (how people connect remotely)
+Control panel wiring (exposing the JMX beans)
+
+JMX	    Remote control panel	Used to trigger commands in your app (like starting a scheduler)
+MBean	Switches/dials on the panel	Actual commands like resync, refresh, etc.
+WildFly Config	Smart building setup	Must expose the MBeans and allow connections over port 9990

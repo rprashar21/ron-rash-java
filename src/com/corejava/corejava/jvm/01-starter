@@ -1,0 +1,37 @@
+ public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, JVM!");
+    }
+}
+1.You create a .java file — the source code.
+
+2. Compile Using javac (Part of JDK)
+javac HelloWorld.java -- Converts .java → .class file (bytecode) Platform-independent bytecode is created
+
+3. run using the java command
+java HelloWorld
+
+Starts the JRE, which contains the JVM.
+JVM loads and runs the bytecode.
+
+What the JVM Does Internally
+JVM Execution Flow
+ClassLoader – loads .class file into memory
+Bytecode Verifier – checks code safety
+Execution Engine:
+Starts with the Interpreter
+Uses JIT Compiler for frequently used code
+
+Memory Management:
+Heap, Stack, Metaspace managed
+Garbage Collector cleans unused memory
+
+
+Tools used
+javac -- complier from jdk
+java -- runs bytecode from jre
+jvm --  executes the program, manages memory
+jit -- compiles the bytecode to native code
+jvisualvm,jfr,cmd  profiling/monitoring
+
+

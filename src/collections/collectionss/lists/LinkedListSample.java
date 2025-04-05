@@ -1,8 +1,7 @@
-package com.corejava.corejava.collectionss.lists;
+package collections.collectionss.lists;
 
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class LinkedListSample {
 

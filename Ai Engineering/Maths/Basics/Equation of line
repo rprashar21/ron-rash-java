@@ -1,0 +1,41 @@
+Equation of line
+y=mx+c this is the equation of a straight line
+
+y: the output (what you're trying to find or predict)
+x: the input (what you already know)
+m: the slope (how much 𝑦 changes with x)
+c: the y-intercept (where the line crosses the y-axis)
+
+
+Real Life Example
+imagine u get 10 res from ur parents every day ,,now plot a graph --
+On Day 1, you have ₹10
+On Day 2, you have ₹20
+On Day 3, you have ₹30
+
+
+x = number of days
+y = total pocket money
+
+You’re gaining ₹10 per day, so the equation becomes:
+y=10x+0
+
+m=10: you earn ₹10 each day (slope)
+c=0: you started with ₹0 (no starting amount)
+
+After 1 day: y=10(1)+0=10
+after 3 days: y=10(3)+0=30
+
+m	Tells you how fast things are changing (rate or slope)
+c	Tells you where you started (the beginning value when
+y	The result/output you're calculating
+x	The input/independent value
+
+y = mx + c" tells you how something grows or changes over time, starting from a specific point and moving at a steady rate.
+
+if u look a the png u will see an equation of line
+y=mx+c -->
+x-axis: time in hours 🕒
+y-axis: distance traveled in kilometers 🚴‍♂️
+Slope (m = 5): You travel 5 km every hour.
+Intercept (c = 2): You already traveled 2 km before you started timing.

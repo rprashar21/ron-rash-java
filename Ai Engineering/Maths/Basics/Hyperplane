@@ -1,0 +1,28 @@
+In machine learning, we use hyperplanes to separate different kinds of data.
+
+Imagine you're training a robot to recognize:
+🐱 Cats
+🐶 Dogs
+You give it data: size, ear shape, tail length, etc.
+The algorithm finds a hyperplane that splits cat data on one side, dog data on the other.
+Then for new data, it checks which side of the hyperplane it falls on — and predicts the label.
+
+Let’s say the equation is: 𝑤x + b =0
+
+Then:
+If result > 0 → it's on one side (maybe a dog)
+If result < 0 → it's on the other side (maybe a cat)
+If result = 0 → it's exactly on the hyperplane
+
+==========
+
+So basically A hyperplane is just like a line or plane, but it lives in more dimensions — like 4D, 5D, or more.
+
+The equation stays the same pattern:
+
+
+             Where:
+
+             𝑤 ->w is a vector of weights (like [2, -3, 1])
+             x is a data point (like [5, 1, 7])
+             b is the biad ⋅ means dot product

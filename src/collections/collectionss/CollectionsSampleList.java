@@ -1,8 +1,7 @@
-package com.corejava.corejava.collectionss;
+package collections.collectionss;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.RandomAccess;

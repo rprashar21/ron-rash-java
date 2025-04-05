@@ -1,0 +1,35 @@
+What is Linear Regression?
+Linear Regression is a machine learning algorithm that tries to find the best straight line
+(in 2D, a plane in higher dimensions) that fits through a set of data points.
+
+It answers the question:
+"Can I predict one thing (like weight) based on another (like height) using a straight line?
+
+Example Data
+Height(cm)     weight(kg)
+160	            55
+165	            58
+170	            62
+
+You can see that taller people usually weigh more
+If someone is 172 cm tall, I predict they weigh about 65 k
+
+Plot the graph and try to see if u get a sort of linear
+y=mx+c or y=wx+b
+x = input (height)
+y= predicted output (weight)
+w = slope (how much weight changes with height)
+b = bias (intercept, where the line starts)
+
+How it works
+Input: A bunch of known examples (height → weight)
+Model: Linear equation
+Goal: Find the line that minimizes the error between predicted and actual weights
+Training: Uses math (least squares or gradient descent) to reduce that error
+
+Term	                Meaning
+Linear regression	    Predicting values using a straight-line relationship
+Formula
+Goal	                Find best line that minimizes error
+Output	                Continuous value (e.g., price, weight, score)
+Use	                    Prediction, trend modeling, regression tasks

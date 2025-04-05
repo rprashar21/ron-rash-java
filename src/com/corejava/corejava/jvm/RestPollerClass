@@ -1,0 +1,17 @@
+This sets up a RestPoller instance for polling a REST endpoint repeatedly until a condition is met.
+
+Uses exponential backoff, meaning:1st retry will be shorter
+it uses math delay = basedelay*Math.pow(attempt-1)
+exponentialBaseDelayMs = 10
+Poll Attempt #	Formula	Delay (ms)
+1	10 × 2^(1 - 1) = 10 × 1	10
+2	10 × 2^(2 - 1) = 10 × 2	20
+3	10 × 2^(3 - 1) = 10 × 4	40
+4	10 × 2^(4 - 1) = 10 × 8	80
+5	10 × 2^(5 - 1) = 10 × 16	160
+
+Each time, it doubles the wait time — that's exponential growth
+
+Helps reduce system load during retries
+Avoids hammering the server with too many requests
+Ideal for testing async systems where results take time (like queues, background jobs)
