@@ -1,4 +1,4 @@
-package collections;
+package collections.collectionss.lists;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -7,13 +7,14 @@ import java.util.PriorityQueue;
 
 public class CollectionIntro {
     /*
-    *  https://www.javatpoint.com/collections-in-java
+    *  https://www.tpointtech.com/collections-in-java
     *
-    *  Iterator(I)--Collection(I) --> Collections
+    *  Iterable(I)--Collection(I) --> Collections
     *  List(I) --> ArrayList LInkedList Vector Stack
     *  Queue(i) --> PriorityQueue
     *  Dequqie(i) -- ArrayDeque
     *  Set(i)--> HashSet LinkedHasSet
+    *  SortedSet(i) --> TreeSet is the implementation
     *
     * Iterator interface provides the facility of iterating the elements in a forward direction only.
     * basically iterates over a collection

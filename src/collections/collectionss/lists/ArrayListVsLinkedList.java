@@ -20,7 +20,7 @@ public class ArrayListVsLinkedList {
 
             String trimmed = item.trim();
             // check f the element ialready present in the list
-            if(groceries.indexOf(trimmed)<0)
+            if(!groceries.contains(trimmed))
             groceries.add(trimmed);
         }
 

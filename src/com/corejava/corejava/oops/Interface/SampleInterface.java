@@ -35,12 +35,16 @@ interface Samp{
      void m1(); // public and abstract
     // default methods
     default void calculate(){
-        System.out.println("default cal method ");
+        square(10,2);
+        System.out.println("default cal method gives :: "+square(10,2));
     }
 
     static int calculateAdd(int x, int y)
     {
         return x+y;
+    }
+    private int square(int x,int y){
+        return  x*y;
     }
 }
 

@@ -1,0 +1,68 @@
+Cahce is temporary storage -not a db which can be used as an alternative to retrieve commonly accessed data fast
+frequently used for api and io or db calls
+
+Goal is to improve the application
+
+Types of cache
+Caching Technique	        Purpose	Used In
+
+1. In-Memory Cache	        Simple, fast access	Local method calls, single-thread apps
+2. LRU Cache	            Memory-efficient, auto-eviction	Most used items kept in memory
+3. TTL Cache	            Expire after X time	Session caching, temporary tokens
+4. Write-through Cache	    Syncs data to DB on every update	Financial systems, inventory
+5. Write-behind Cache	    Batches DB writes asynchronously	High throughput apps
+6. Read-through Cache	    Automatically loads on cache miss	Product catalog, profile data
+7. Distributed Cache	    Shared across multiple app servers	Microservices, horizontal scaling
+8. Hybrid Caching	        Combines in-memory + distributed	Enterprise-grade systems
+
+Patterns
+
+1. Cache Aside (Lazy Loading)
+-- data is fetched from the cache , if missed then db
+app is responsible for maintaining the cahce logic
+new data will or incorrect read will always cause cache miss
+If DB returns null → don’t cache. Always check DB next time.
+Pros: Always fresh -- Read heavy applications
+Cons: DB hit every time for bad keys
+
+or
+Cache the null with short TTL
+Cache "NOT_FOUND" (or similar flag) for say 5 min
+Simple, flexible
+DB always source of truth
+Fine-grained cache control
+First request always hits DB
+
+
+2. Read Thru Cache -- basically in here the app ill first check in the cache , the problem is when the data is not in the cache or
+data which is not cached ,, it will alwyas look into the cache
+App never accesses DB directly → Cache handles DB load on miss
+if key is missing → cache automatically loads from DB → returns & stores it
+
+Pros
+cache abstracts DB logic
+
+Cons
+Poor for rarely-accessed data (unnecessary cache loads)
+
+3. Write Around Cache
+Write goes directly to DB, and then it invalidates the cache
+
+Write → only to DB
+Read → check cache first → miss → go to DB
+
+4. Write Thru cache -- write into cache and db synchronosly or else rollback the transaction
+
+5. write back or behind cache --
+Cache is the primary write target
+DB is updated asynchronously later
+DB write is queued or batch-written later (e.g., via Kafka/Executor)
+
+Pattern	Read Flow	    Write Flow	                                                    Best Use Case
+Cache-Aside	            App → Cache → DB	App → DB → Cache update	                    General-purpose, simple setup
+Read-Through	        App → Cache (auto-load)	App → DB → (optional) cache refresh	    Clean API, frequently-read data
+Write-Around	        App → Cache → DB	App → DB only	                            High write, low-read data
+Write-Through	        App → Cache	App → Cache + DB (sync)	                            Consistency-critical apps
+Write-Behind	        App → Cache	App → Cache → DB (async)	                        Write-heavy, performance-first
+
+

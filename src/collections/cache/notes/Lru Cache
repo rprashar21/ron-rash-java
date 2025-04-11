@@ -1,0 +1,97 @@
+LRU Cache is a cache eviction policy that removes the least recently accessed item when the cache is full.
+
+When to use cache in the backend
+Service Layer	Caching expensive calculations or API calls
+DAO Layer	Caching recent DB queries (e.g., recent users)
+Search Layer	Caching autocomplete or recent searches
+Auth Layer	Caching JWT validation results, tokens
+File System / Media	Cache recently opened documents/thumbnails
+
+What is LRU Cache and why use it
+An LRU cache evicts the least recently used item first when it exceeds capacity.
+ It's useful to retain the most relevant data in memory for performance and memory efficiency
+
+How do you implement LRU Cache in Java ?
+Use LinkedHashMap with access-order enabled
+Override removeEldestEntry() to evict when size exceeds limit.
+Or use a custom implementation with a HashMap + Doubly Linked List for O(1) operations.
+
+What's the time complexity of LRU operations?
+O(1) for both get and put
+
+When not to use LRU Cache?
+when data is dyamcic random ,, no recent biases
+when strong consistency is more important than speed
+When you need large cache sizes and prefer TTL-based eviction
+
+ Difference between LRU and TTL Cache
+ Feature	LRU	TTL (Time To Live)
+ Eviction	Based on access order	Based on time expiry
+ Use case	Memory efficiency	Temporary, expiring data
+ Granularity	Based on usage	Based on timestamp
+
+
+ Summary
+ Use LRU when memory is limited and you want to prioritize recently used data
+ Implement it with LinkedHashMap or use Caffeine/Guava
+ Can be used in search, user profile caching, e-commerce, file previews, etc.
+
+ config example
+ maxmemory 100mb
+ maxmemory-policy allkeys-lru
+
+
+ #
+ Redis + LRU Eviction Policy Setup
+ maxmemory 100mb
+ maxmemory-policy allkeys-lru
+Now Redis will evict the least recently used key once memory crosses 100MB
+
+## Apply LRU in Spring Boot REST API
+
+Add The Guava dependecy
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>32.1.1-jre</version>
+</dependency>
+
+LRU Cache Config with Guava
+@Component
+public class UserCache {
+
+    private final Cache<String, String> cache = CacheBuilder.newBuilder()
+            .maximumSize(100) // LRU eviction
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .build();
+
+    public void put(String key, String value) {
+        cache.put(key, value);
+    }
+
+    public String get(String key) {
+        return cache.getIfPresent(key);
+    }
+}
+
+Use cache in User Controller
+
+@RestController
+public class UserController {
+
+    @Autowired
+    private UserCache userCache;
+
+    @GetMapping("/user/{id}")
+    public String getUser(@PathVariable String id) {
+        String cached = userCache.get(id);
+        if (cached != null)
+        return "From Cache: " + cached;
+
+        // simulate DB call
+        String user = "User-" + id;
+        userCache.put(id, user);
+        return "From DB: " + user;
+    }
+}
+

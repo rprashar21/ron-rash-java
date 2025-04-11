@@ -1,4 +1,4 @@
-package collections.collectionss;
+package collections.collectionss.lists;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -22,7 +22,7 @@ public class FailFastList {
             String element = iterator.next();
             System.out.println(element);
             // trying to add something while iterating
-            stringList.add("c"); // fails fast and give concurrent modifcation exception--
+         //   stringList.add("c"); // fails fast and give concurrent modifcation exception--
         }
 
         // to over come this use CopyWriteOnArrayList
@@ -38,7 +38,7 @@ public class FailFastList {
             String element = iterator2.next();
             System.out.println(element);
             // trying to add something while iterating
-            stringList2.add("c"); // fails fast and give concurrent modifcation exception--
+            stringList2.add("c"); // fails safe and give concurrent modifcation exception--
         }
         System.out.println(stringList2); //
     }

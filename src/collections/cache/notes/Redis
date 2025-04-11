@@ -1,0 +1,21 @@
+Redis (REmote DIctionary Server) is an open-source, in-memory key-value data store, widely used as:
+used as cache, data structure serve , no sql database , a message broker
+
+
+In memory -- > data is stored in the ram- superfast
+Data Structures	---> Supports strings, lists, sets, hashes, sorted sets, bitmaps, HyperLogLogs
+Atomic
+Thread safe
+Pub/Sub
+TTl Support
+Networked Server
+Can also save to disks
+
+Use case
+caching
+session storage
+rate limiting -- Track API hits per IP/user
+Leaderboard ---> 	Use sorted sets for top scores
+Queue Systems	Lists/Streams for task queues
+Pub/Sub Chat	Real-time messaging / notification
+Distributed Lock -- implements lock with expiration

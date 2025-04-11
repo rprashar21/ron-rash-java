@@ -19,7 +19,7 @@ public class ComparableAndComparator {
 
 //    The comparable interface imposes a total ordering on the objects of each class that implements it.
 //    This ordering is referred to as the class's natural ordering, and the class's compareTo method is referred to as its natural comparison method.
-//        Lists (and arrays) of objects that implement this interface can be sorted automatically by Collections.sort (and Arrays.sort).
+//    Lists (and arrays) of objects that implement this interface can be sorted automatically by Collections.sort (and Arrays.sort).
 //        Objects that implement this interface can be used as keys in a sorted map or as elements in a sorted set, without the need to specify a comparator
 
     // Comparable has compareTo(Object object)
@@ -179,7 +179,12 @@ class Student implements Comparable<Student> {
 //            return 0;
 
         // or simply write this
+     //   return this.name.compareTo(student.getName());
+    //    return Integer.compare(id,student.getId());
+
         return this.name.compareTo(student.getName());
+
+
     }
     //    @Override
     //    public int compareTo(final Student o) {

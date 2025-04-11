@@ -65,8 +65,10 @@ public class StaticExample {
 //Overuse is Risky: Excessive use of static members can lead to
 // issues with testing and code flexibility.
 // They can't be overridden in subclasses, which may limit object-oriented design and polymorphism.
-//        Thread Safety: Static variables are not thread-safe unless properly synchronized, as they are shared among all threads running in the JVM.
-//        Design Limitations: Static methods cannot access instance variables or methods; they can only access static variables or other static methods.
+//        Thread Safety: Static variables are not thread-safe unless properly synchronized,
+//        as they are shared among all threads running in the JVM.
+//        Design Limitations: Static methods cannot access instance variables or methods;
+//        they can only access static variables or other static methods.
 class Student{
     private String name;
     public static String collegeName = "ABC";

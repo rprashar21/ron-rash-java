@@ -28,17 +28,14 @@ public class MapSample {
     * */
     public static void main(String[] args) {
         HashMap<String, Integer> map = new HashMap<>() ; // create empty hashMap object with default size as 16
-
         // HashMap is not synchronized ,, we can make it synchronized using Collections.synchronized()
         Map  map1 = Collections.synchronizedMap(map); // map1 is synchronized and map is not synchronized
          map.put("rohit",500);
         map.put("swati",800);
         map.put("rohit",900); // this will be replaced ,, string object string object implements equals and hashcode
-
         // loop thru the map
         Set<String> keyset = map.keySet();
         System.out.println(keyset);
-
         Collection<Integer> values = map.values();
         System.out.println(values);
 
@@ -47,12 +44,8 @@ public class MapSample {
 //       }
 //
        map1.forEach((s, value) -> System.out.println(s+" "+value) );
-
         Set set = map1.entrySet();
         System.out.println(set);
-
-
-
     }
 
 }

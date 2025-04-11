@@ -1,0 +1,104 @@
+// Spring Boot Caching Template with Caffeine + Redis Fallback
+<dependencies>
+    <!-- Spring Boot Starter Cache -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
+
+    <!-- Caffeine Cache -->
+    <dependency>
+        <groupId>com.github.ben-manes.caffeine</groupId>
+        <artifactId>caffeine</artifactId>
+    </dependency>
+
+    <!-- Spring Data Redis -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <!-- Jedis (Redis client) -->
+    <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+    </dependency>
+</dependencies>
+
+// 2. application.properties
+spring.cache.type=caffeine
+    spring.redis.host=localhost
+spring.redis.port=6379
+
+// 3. CaffeineConfig.java
+@Configuration
+@EnableCaching
+public class CaffeineConfig {
+    @Bean
+    public Caffeine<Object, Object> caffeineConfig() {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .maximumSize(100);
+    }
+
+    @Bean
+    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
+        CaffeineCacheManager manager = new CaffeineCacheManager("users");
+        manager.setCaffeine(caffeine);
+        return manager;
+    }
+}
+
+// 4. RedisCacheFallback.java
+@Component
+public class RedisCacheFallback {
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    public void put(String key, String value) {
+        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(30));
+    }
+
+    public String get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+}
+
+// 6. UserController.java
+@RestController
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/user/{id}")
+    public String getUser(@PathVariable String id) {
+        return userService.getUserById(id);
+    }
+}
+
+// 5. UserService.java
+@Service
+public class UserService {
+
+    @Autowired
+    private RedisCacheFallback redisCache;
+
+    @Cacheable(value = "users", key = "#id")
+    public String getUserById(String id) {
+        // check fallback cache first
+        String redisValue = redisCache.get(id);
+        if (redisValue != null) return "From Redis: " + redisValue;
+
+        // simulate DB call
+        String dbValue = "User-" + id;
+        redisCache.put(id, dbValue); // populate Redis
+        return "From DB: " + dbValue;
+    }
+}
+
+What's the Goal?
+You're using two layers of cache:
+Caffeine: A super-fast in-memory cache for your application.
+Redis: A backup (fallback) cache that survives app restarts and is shared across instances.

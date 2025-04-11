@@ -43,6 +43,8 @@ public class ListSample {
      String[] array ={"kiwi","apples"};
         List<String> fruits = List.of(array); // immutable list
         System.out.println(fruits);
+//        fruits.add("banana");
+     //   System.out.println("immutable list:{}"+fruits); this will give an error since this is now an immutable list
         int apples = fruits.indexOf("apples");
         System.out.println(apples);
 
