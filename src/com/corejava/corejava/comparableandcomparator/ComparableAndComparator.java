@@ -26,6 +26,12 @@ public class ComparableAndComparator {
     //Comparator is used for own natural sorting order
     // has compare(Object object1,Object object2 )
 
+ //If you only care about sorting, you can omit equals/hashCode (you’ll get identity‐based equality instead).
+    //
+    //If you also want two different new Person("Alice",30)
+    // instances to be “equal” in a HashSet or as keys in a HashMap, you must override equals and hashCode.
+ //
+
     public static void main(String[] args) {
         // Integer and String class implement Comparable interface
         List<Integer> integerList = Arrays.asList(2, 4, 5, 1);

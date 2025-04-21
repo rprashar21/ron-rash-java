@@ -1,0 +1,27 @@
+Differentiation tells you how fast something is changing.
+
+The distance you travel changes over time.
+The speedometer tells you how fast you're going right now
+
+
+Let’s say you’re tracking how many pizzas you’ve delivered:
+
+At 1 PM: 10 pizzas
+At 2 PM: 25 pizzas
+At 3 PM: 40 pizzas
+
+Your speed of delivery (rate) is increasing!
+
+Between 1–2 PM: 25-10/2-1 =15 pizzas/hour
+
+Between 2–3 PM: 40-25/3-1 =15 pizzas/hour
+
+If you take the derivative of your delivery count over time, it tells you how fast you're delivering pizzas at any moment
+
+y=f(x)
+
+
+Differentiation is SUPER important In Ml because:
+Models learn by minimizing error using techniques like gradient descent
+Gradient = the derivative of the error function
+It tells the model which direction to move the weights to improve performance

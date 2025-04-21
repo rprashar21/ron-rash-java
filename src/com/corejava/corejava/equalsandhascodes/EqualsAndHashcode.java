@@ -25,7 +25,10 @@ public class EqualsAndHashcode {
         Employee e2 = new Employee(1,"donny");
 
         System.out.println("shaloow compare "+(e1==e2));
-            System.out.println("shaloww compare "+(e1.equals(e2)));
+        System.out.println(e1 == e2);                     // false
+        System.out.println("real address of the object inside heap "+System.identityHashCode(e1));  // e.g. 434091818
+        System.out.println("real address of the object inside heap "+System.identityHashCode(e2)); // 398887205
+        System.out.println("content check will be true "+(e1.equals(e2)));
 
         System.out.println(e1.hashCode()+" "+e2.hashCode());
     }
@@ -53,7 +56,8 @@ class Employee{
         // what is a hashcode?
         // hascode genereate ann integer value ,return the hashcode/ integer value of an object/instance
         //This method is supported for the benefit of hash tables such as those provided by HashMap.
-        // f two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result.
+        // f two objects are equal according to the equals(Object) method, then calling the hashCode method
+        // on each of the two objects must produce the same integer result.
         return Objects.hash(id,name);
     }
 }

@@ -15,8 +15,10 @@ public class JavaStringSample {
         // but can be useful when
         // This can be useful when you want to have a
         // distinct object for synchronization purposes or to ensure the string has a unique identity.
-        //Control over String Interning: You can decide to intern a string explicitly if you want to move it to the string pool using the intern() method. This gives you control over when or if you want to pool your string.
+        //Control over String Interning: You can decide to intern a string explicitly
+        // if you want to move it to the string pool using the intern() method.
+        // This gives you control over when or if you want to pool your string.
 //        String name = "rohit"; uses the string pool and can reuse instances if the string already exists in the pool.
-//                String newName = new String("rohit"); always creates a new string object on the heap, regardless of the content of the string pool.
+//        String newName = new String("rohit"); always creates a new string object on the heap, regardless of the content of the string pool.
     }
 }

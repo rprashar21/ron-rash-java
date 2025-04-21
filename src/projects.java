@@ -8,7 +8,7 @@ public class projects {
 
 
 class CurrencyConverter {
-    private Map<String, BigDecimal> exchangeRates;
+    private final Map<String, BigDecimal> exchangeRates;
 
     public CurrencyConverter() {
         exchangeRates = new HashMap<>();

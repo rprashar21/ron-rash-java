@@ -21,6 +21,7 @@ Patterns
 -- data is fetched from the cache , if missed then db
 app is responsible for maintaining the cahce logic
 new data will or incorrect read will always cause cache miss
+
 If DB returns null → don’t cache. Always check DB next time.
 Pros: Always fresh -- Read heavy applications
 Cons: DB hit every time for bad keys

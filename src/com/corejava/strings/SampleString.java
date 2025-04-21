@@ -19,7 +19,7 @@ public class SampleString {
 
 
         String s3 = "hello";
-        String s4 = "hello".intern();
+        String s4 = "hello";
         // The intern() method is a method of the String class that returns a canonical
         // representation of the string. By using intern(), we can ensure that only one instance of a string is created,
         // even if the same string is created multiple times.

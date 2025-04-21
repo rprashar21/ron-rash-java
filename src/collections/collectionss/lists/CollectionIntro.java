@@ -40,7 +40,8 @@ public class CollectionIntro {
 * It can be defined as an ordered list that is used to hold the elements which are about to be processed.
 * There are various classes like PriorityQueue, Deque, and ArrayDeque which implements the Queue interface.
 * The PriorityQueue class implements the Queue interface.
-* It holds the elements or objects which are to be processed by their priorities. PriorityQueue doesn't allow null values to be stored in the queue.
+* It holds the elements or objects which are to be processed by their priorities.
+* PriorityQueue doesn't allow null values to be stored in the queue.
     *
     *
     *
@@ -56,9 +57,14 @@ public class CollectionIntro {
         // PriorityQueue doesn't allow null values to be stored in the queue.
 
 //        Initially, the PriorityQueue stores the strings in a way that respects their natural ordering.
-//        When you call remove() and poll(), the first two elements according to natural string ordering are removed. Since String objects are ordered lexicographically in Java, "Amit Sharma" and "JaiShankar" would typically be considered the first two elements to be removed, assuming there are no elements with a lexicographically smaller value. However, it's important to note that PriorityQueue's iterator does not guarantee to traverse the elements in any particular order. To see the elements in their priority order, one should poll elements from the queue one by one.
+//        When you call remove() and poll(), the first two elements according to natural string ordering are removed.
+//        Since String objects are ordered lexicographically in Java, "Amit Sharma" and "JaiShankar"
+//        would typically be considered the first two elements to be removed,
+//        assuming there are no elements with a lexicographically smaller value.
+//        However, it's important to note that PriorityQueue's iterator does not guarantee to traverse the elements in any particular order.
+//        To see the elements in their priority order, one should poll elements from the queue one by one.
 //
-//                After removing two elements with remove() and poll(), the remaining elements are printed,
+//      After removing two elements with remove() and poll(), the remaining elements are printed,
 //        showcasing the updated state of the queue.
 
 
@@ -69,6 +75,7 @@ public class CollectionIntro {
         queue.add("JaiShankar");
         queue.add("Raj");
         System.out.println("head:"+queue.element());
+        System.out.println("the queue elements are "+queue);
         System.out.println("head:"+queue.peek());
         System.out.println("iterating the queue elements:");
         Iterator itr= queue.iterator();

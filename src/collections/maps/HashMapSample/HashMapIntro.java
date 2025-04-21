@@ -10,7 +10,13 @@ public class HashMapIntro {
 
     // HashMap can have a List or object as keys but need to make sure that the hashcode does not change
     // ifu modifiy the list the hashcode will change which
-  //      When you try to retrieve the value using the modified list as a key, you might not find it because the hashCode of the list has changed.
+  //      When you try to retrieve the value using the modified list as a key,
+    //      you might not find it because the hashCode of the list has changed.
+
+    //If you only care about sorting, you can omit equals/hashCode (you’ll get identity‐based equality instead).
+    //
+    //If you also want two different new Person("Alice",30)
+    // instances to be “equal” in a HashSet or as keys in a HashMap, you must override equals and hashCode.
 
     public static void main(String[] args) {
 
