@@ -6,6 +6,9 @@ public abstract class Player {
     private String name;
 
     public Player(final String name) {
+        if (name == null) {
+            throw new NullPointerException("Player name cannot be null");
+        }
         this.name = name;
     }
 

@@ -1,4 +1,6 @@
 package threads.Parrellelism;
 
-public class SampleClass {
+public class SampleClass
+{
+
 }

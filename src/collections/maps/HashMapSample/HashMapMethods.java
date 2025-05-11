@@ -46,6 +46,12 @@ public class HashMapMethods {
         // suppose u have football cricket groups and u have to add people to that group
         // u have a list of players
         List<String> fruits = Arrays.asList("Apple", "Banana", "Cherry","Orange", "bamboo","cucumber");
+        // bsaically an immutbale list -- structurall this list cannot be modified
+
+        List<String> immutableList = List.copyOf(fruits);
+        // now if we try to add anything in this list it will fail -->
+
+        List.of(fruits).forEach(fruit -> {});
         // i am creating agroups based on alphbets
 
         for(String fruit : fruits){

@@ -43,12 +43,12 @@ class Box<T>
         System.out.println(list.get(0));
     }
     // make sure that the type passed is child of Number -- Integer float Byte short
-    public void processElementsWithSoecificType(List<? extends Number> list){
+    public void processElementsWithSpecificType(List<? extends Number> list){
         System.out.println(list.get(0));
     }
 }
 
-  //  Type Erasure: Generic type information is used for type checking at compile time,
+//  Type Erasure: Generic type information is used for type checking at compile time,
 //  but it's removed (erased) at runtime for backward compatibility.
 //  This means that generic types are treated as Object during runtime.
 

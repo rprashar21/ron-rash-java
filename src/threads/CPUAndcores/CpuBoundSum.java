@@ -1,19 +1,26 @@
-package threads.cpusnotneeded;
+package threads.CPUAndcores;
 
 
+import java.util.concurrent.TimeUnit;
 
 // Imagine you want to sum all the numbers from 1 to N and it’s so large that it really taxes the CPU
 public class CpuBoundSum {
 
     public static void main(String[] args) throws InterruptedException {
 
-        final long N = 200_000_000L;
+        final long N = 200L;
+
+        long startTime = System.currentTimeMillis();
 
         int numThreads = Runtime.getRuntime().availableProcessors();
         System.out.println("Number of cores  in the machine : " + numThreads);
+
         Worker[] workers = new Worker[numThreads];
         Thread[] threads = new Thread[numThreads];
+
         long chunk = N / numThreads;
+
+        System.out.println("chunk is : " + chunk);
 
         // Create and start threads
         for (int i = 0; i < numThreads; i++) {
@@ -32,6 +39,8 @@ public class CpuBoundSum {
         }
 
         System.out.println("Total sum = " + total);
+        long diff = System.currentTimeMillis() - startTime;
+        System.out.println("Total time taken = " + diff);
     }
 
     static class Worker implements Runnable {

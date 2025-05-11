@@ -1,0 +1,36 @@
+A core is basically an independent processing unit inside your CPU.
+If you look at a modern chip, it might say “6-core” or “8-core” or even more—that just means there are that many
+little CPUs all on the same silicon die. Each core can execute one instruction stream at a time.
+
+The jvm maps the native thread to the os threads or cpu
+If you have 4 cores, at any given instant at most 4 threads can be physically running instructions in parallel.
+iff you start 100 threads, the OS scheduler time-slices them across your 4 cores.
+So only up to 4 run at exactly the same time; the others wait in line and take turns.
+
+Concurrency simply means many threads exist and can make progress (by chopping time into slices).
+
+Parallelism is when two or more threads actually execute simultaneously on separate cores.
+
+Many CPUs simulate “extra” logical cores by sharing execution units—e.g. an 8-core CPU might show up as 16 “logical cores” if it has hyper-threading.
+That can improve throughput on some workloads, but you still only get one real “big” execution pipeline per physical core.
+
+
+Adding more threads just increases context-switch overhead.
+
+I/O-bound work (waiting on disk, network, sleep): you can often safely have many more threads than cores,
+because most of them will be blocked or parked and not actually consuming CPU
+
+threads = cores × (1 + waitTime/computeTime)
+
+2 quick examples
+Balanced work
+
+If your code waits 2 seconds and then computes 2 seconds, wait/compute = 2/2 = 1.
+Threads ≈ cores × (1 + 1) = cores × 2.
+You can have about 2 threads per core: while one thread waits, the other uses the CPU.
+
+Mostly CPU work
+If you compute 9 seconds then wait 1 second, wait/compute = 1/9 ≈ 0.11.
+
+Threads ≈ cores × (1 + 0.11) ≈ cores × 1.11.
+You only need just over 1 thread per core—extra threads won’t help much because they spent almost all their time computing.

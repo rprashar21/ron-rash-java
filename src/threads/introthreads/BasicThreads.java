@@ -1,4 +1,4 @@
-package threads;
+package threads.introthreads;
 
 public class BasicThreads {
     public static void main(String[] args) {
@@ -34,7 +34,8 @@ class SimplePojoObject implements Runnable{
 /*
 *  the heap will contains 2 objects ,each object holds a referenece to the a thread
 *
-*Thread Area which is also a heap - Holds the actual Thread objects ,, each thread has its own stack with frames for start() (inside SampleDemo) and ultimately run()
+* Thread Area which is also a heap - Holds the actual Thread objects ,,
+* each thread has its own stack with frames for start() (inside SampleDemo) and ultimately run()
 
  * This code
  Creates three threads: main, Alpha, and Beta.

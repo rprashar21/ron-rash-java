@@ -3,12 +3,9 @@ package concurrency;
 public class ThreadsCreation1 {
     public static void main(String[] args) {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Inside run methid"+Thread.currentThread().getName());
-            }
-        });
+        // let change the main threads name
+        Thread.currentThread().setName("Main Thread");
+        Thread thread = new Thread(() -> System.out.println("Inside run method" + Thread.currentThread().getName()));
 
         thread.setName("daemon thread");
         thread.setPriority(Thread.MAX_PRIORITY);
@@ -25,6 +22,7 @@ public class ThreadsCreation1 {
         }
 
         try {
+            // blocking operation for the thread
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -16,7 +16,7 @@ public class Team<T extends Player> {
         this.name = name;
     }
 
-    private List<Player> team = new ArrayList<>();
+    private final List<Player> team = new ArrayList<>();
 
     public void addPlayers(T player) {
         if (this.team.contains(player)) {

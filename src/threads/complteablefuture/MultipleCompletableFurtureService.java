@@ -32,6 +32,7 @@ public class MultipleCompletableFurtureService {
 
         CompletableFuture<String> stringCompletableFuture = asyncWorkingWithExecutoservice();
 
+        // waiting for the response to come back
         stringCompletableFuture.join();
 
 

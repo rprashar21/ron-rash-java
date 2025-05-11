@@ -13,6 +13,7 @@ public class IoBoundDownloader {
 
         // Spawn one thread per download
         for (String url : urls) {
+            System.out.println(url);
             new Thread(() -> download(url)).start();
         }
     }
@@ -28,3 +29,10 @@ public class IoBoundDownloader {
     }
 }
 
+//What it does: Fires off 100 threads, each blocking on network I/O.
+//
+//Why extra cores don’t help:
+//
+//While one thread is waiting for the server to send bytes, it’s not using the CPU—it’s blocked in kernel/network code.
+//
+//The OS wakes it only when data arrives. Most of the working set is I/O waiting, so adding cores won’t reduce download time.

@@ -1,4 +1,4 @@
-package threads;
+package threads.producerconsumer;
 
 public class ProducerConsumerProblem {
 

@@ -1,4 +1,4 @@
-package threads;
+package threads.synchroization;
 
 public class ReentrantVsSeeamphore
 {

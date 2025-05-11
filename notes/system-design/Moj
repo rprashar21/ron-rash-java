@@ -1,0 +1,82 @@
+
+Normal flow
+Client -> Command API -> Command Queue -> Command Handler -> Event Stream -> Event Queue -> Event Processor -> View Store
+
+Error Flow
+Client -> Command API -> Command Queue -> Command Handler (Fails) -> DLQ -> Retry Mechanism -> Command Handler (Succeeds) -> Event Stream
+
+Recovery Flow
+DLQ -> Manual Review -> Reprocess -> Command Handler -> Event Stream -> Event Queue -> Event Processor -> View Store
+
+ey Error Handling Features:
+Resilience:
+System continues operating despite failures
+Graceful degradation
+Automatic recovery
+Data consistency maintained
+
+Monitoring:
+Queue health checks
+Processing metrics
+Error tracking
+Performance monitoring
+
+Recovery:
+Automatic retries
+Manual intervention options
+State reconstruction
+Data consistency checks
+
+Audit:
+Error logging
+Event tracking
+Retry history
+Recovery actions
+This system is designed to be resilient and
+ handle errors gracefully while maintaining data consistency and providing clear recovery paths.
+The combination of CQRS, event sourcing, and robust error handling makes it suitable for enterprise-level applications
+where reliability is crucial.
+
+Lets look at scalabilty
+Command side can scale independently
+Query side can scale independently
+Event processors can be scaled separately
+Each component can be deployed on multiple instances
+
+
+  Command Side (Write Operations):
+   - Optimized for consistency
+   - Event sourcing for audit
+   - Can handle high write loads
+   - Distributed across multiple nodes
+
+   Query Side (Read Operations):
+   - Denormalized views for fast reads
+   - Can be scaled horizontally
+   - Cached frequently accessed data
+   - Optimized for read performance
+
+ What is unique about this architecture
+ Separation of concerns the command query event processor
+  Command Side:
+    - Handles write operations
+    - Maintains consistency
+    - Processes business logic
+    - Generates events
+
+    Query Side:
+    - Handles read operations
+    - Optimized for speed
+    - Denormalized data
+    - Fast response times
+
+  This architecture is particularly suitable for:
+  High-volume court/justice systems
+  Systems requiring audit trails
+  Applications needing high availability
+  Systems with complex business logic
+  Applications requiring fast read operations
+  Systems needing data consistency
+  Applications with high scalability requirements
+  The combination of CQRS, event sourcing, and message queuing makes this system capable of
+  handling millions of requests while maintaining data consistency and providing fast response times. The architecture is designed for both scalability and reliability, which is crucial for a court/justice system

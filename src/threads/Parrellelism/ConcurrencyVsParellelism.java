@@ -50,7 +50,7 @@ public class ConcurrencyVsParellelism {
 
     public static void main(String[] args) {
 
-
+    long startTime = System.currentTimeMillis();
         // example of parallelism
         // Make them Capital
         final List<String> stringList
@@ -63,6 +63,21 @@ public class ConcurrencyVsParellelism {
                 .collect(Collectors.toList());
 
         System.out.println(namesInUpperCase);
+        System.out.println((System.currentTimeMillis() - startTime));
+
+
+        long startTime1 = System.currentTimeMillis();
+
+        final List<String> stringList1
+                = Arrays.asList("rohit", "swati", "shabu", "ashivin");
+
+        // this is not asynchronous this will totalyy depend upon the hardware
+        final List<String> namesInUpperCase1 = stringList1.
+                stream()// fork/Join framework // now depedning upon the number of cores the task will be divided
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+
+        System.out.println((System.currentTimeMillis() - startTime1));
 
     }
 }

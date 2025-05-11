@@ -52,7 +52,7 @@ public class SampleCompletableFuture {
 
         System.out.println("call has waited  "+Thread.currentThread().getName());
         try{
-            Thread.sleep(2000);
+            Thread.sleep(9000);
             Calendar calendar = Calendar.getInstance();
         }catch (InterruptedException exception){
 
@@ -65,13 +65,15 @@ public class SampleCompletableFuture {
 
 class HelloWorldService {
 
+    private int counter=0;
     public  String helloWorld()  {
         try{
-            Thread.sleep(1000);
-            System.out.println(Thread.currentThread().getName());
+            counter++;
+            Thread.sleep(9000);
+            System.out.println("Entered hello world service "+Thread.currentThread().getName());
         }catch (InterruptedException exception){
 
         }
-        return "hello world ";
+        return "First call entered "+Thread.currentThread().getName() + " counter "+counter;
     }
 }

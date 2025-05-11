@@ -1,5 +1,6 @@
 package threads.executors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -36,28 +37,31 @@ public class ThreadPool {
      *
      * */
 
-    public static void main(String[] args) {
-//        final List<Task> tasks = Arrays.asList(new Task("Task1"),
-//                new Task("Task2"),
-//                new Task("Task3"),
-//                new Task("Task4"),
-//                new Task("Task5")
-//        );
-//
-//
-//        ExecutorService service = Executors.newFixedThreadPool(3);
-//        tasks.stream()
-//                .forEachOrdered(task -> service.submit(task));
+    // It’s concurrent by design
+    //You’ve created an ExecutorService and you’re using multiple threads.
+    // That allows your tasks to be interleaved or actually run at the same time if you let them—but that potential alone is “concurrency.”
+
+    // It’s not truly parallel as written
+    //Because of the immediate future.get(), you never let two tasks actually overlap.
+    // You wait for each to finish before starting the next. That serializes them, so there’s no real parallel execution.
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         final List<NewTask> newTaskList = Arrays.asList(new NewTask("payment", 10),
                 new NewTask("shopping", 5),
                 new NewTask("registartion", 3)
         );
-        ExecutorService service = Executors.newFixedThreadPool(2); // the exec
+
+        // No of cores
+        int numThreads = Runtime.getRuntime().availableProcessors();
+        System.out.println("Number of threads: " + numThreads);
+        ExecutorService service = Executors.newFixedThreadPool(numThreads); // the exec
         newTaskList.forEach(newTask ->
                 {
+                    //submit is a non blocking call ,,   hands your task off to the thread-pool’s work queue (and one of the pool’s threads will pick it up when it can).
                     final Future future = service.submit(newTask); // this is still a blocking call ??
                     try {
+                   // future.get() is blocking: your main thread sits and waits until that particular task has finished and a result is available.
                         System.out.println("task number is " + newTask.num + " returns value : " + future.get());
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
@@ -69,9 +73,32 @@ public class ThreadPool {
 
         );
         // shut the executor service
+
+        Thread.sleep(5000);
+
+        System.out.println("Now lets execute the following tasks parallely");
+
+        // to achieve pure concurrecny or parllelism
+        // In your example, your NewTask’s call() method computes and returns an int
+        List<Future<Integer>> futures = new ArrayList<>();
+       for(NewTask newTask : newTaskList) {
+
+           futures.add(service.submit(newTask));
+       }
+
+       // Then wait for all of them
+
+        for (int i = 0; i < futures.size(); i++) {
+            System.out.println("Task " + i + " result: " + futures.get(i).get());
+        }
+
+
+
         service.shutdown();
     }
 }
+
+
 
 
 class Task implements Runnable {
@@ -108,9 +135,10 @@ class NewTask implements Callable {
         System.out.println(this.name + "..... Job Started by " + Thread.currentThread().getName());
         int sum = 0;
         for (int i = 0; i < num; i++) {
+
             sum = sum + i;
         }
-
+        Thread.sleep(3000);
         return sum;
     }
 }

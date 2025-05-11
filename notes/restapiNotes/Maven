@@ -34,6 +34,37 @@ Snapshots -- under development should not take snapshots
 10.0.0-M1 -- milestone
 10.0.0 -- Released
 
+ Maven Enforcer Plugin
+ To make use of the plugin in our project, we need to add the following dependency to our pom.xml:
+ <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-enforcer-plugin</artifactId>
+     <version>3.0.0-M2</version>
+ </plugin>
+
+ Maven Enforcer has two goals: enforcer:enforce and enforcer:display-info.
+
+ The enforce goal runs during a project build to execute rules specified in the configuration,
+ while the display-info goal shows current information about the built-in rules that are present in the project’s pom.xml.
+
+ ...
+ <executions>
+     <execution>
+         <id>enforce</id>
+         <goals>
+             <goal>enforce</goal>
+         </goals>
+         <configuration>
+             <rules>
+                 <banDuplicatePomDependencyVersions/>
+             </rules>
+         </configuration>
+     </execution>
+ </executions>
+ ...
+
+ 
+
 
 
 

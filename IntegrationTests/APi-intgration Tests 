@@ -1,0 +1,28 @@
+Api Integration Tests actas as a client to test the  acts as a client to those APIs and verifies their behavior.
+
+Build Lifecycle
+maven-failsafe-plugin: This is key. Failsafe is designed for running integration tests (unlike Surefire, which is for unit tests).
+Your configuration uses it heavily:
+It's configured within multiple <profiles> (api-test, api-test-smoke, etc.).
+Each profile typically activates Failsafe to run a specific subset of tests (using <includes> and <excludes>).
+
+exec-maven-plugin: This plugin is used to run specific Java classes during the build lifecycle
+(pre-integration-test and post-integration-test).
+You're using it to run SetupIntegrationTests before the Failsafe tests run and TeardownIntegrationTests afterwards.
+ This indicates complex setup/teardown logic (e.g., priming databases, creating users, setting up test data
+ , cleaning up afterwards) that goes beyond simple @Before/After annotations.
+
+ As identified previously, the main remaining bottleneck is polling (both HTTP and DB waits)
+ within the test code itself (CourtsAbstractTest, RestClientUtil, DBHelper).
+
+
+What the Command Does:
+It connects to the remote server DEVCCMSLAVE01.cpp.nonlive via SSH.
+The -L 5425:psf-dev-ccm05-supporting.postgres.database.azure.com:5432 part tells SSH:
+"Listen on port 5425 on my local machine. Any traffic that comes to this port should be securely forwarded through the DEVCCMSLAVE01.cpp.nonlive server,
+ and then sent to the host psf-dev-ccm05-supporting.postgres.database.azure.com on port 5432."
+
+Database Location: Your integration tests need to connect to various databases to verify data, check preconditions, or set up test states.
+The hostname psf-dev-ccm05-supporting.postgres.database.azure.com clearly indicates a PostgreSQL database hosted on Azure,
+ specifically the one for the "supporting" context (likely holding data for material, notification, documentqueue, etc.) in the ccm05 DEV environment.
+ Port 5432 is the standard PostgreSQL port.

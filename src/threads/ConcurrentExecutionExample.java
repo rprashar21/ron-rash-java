@@ -1,5 +1,7 @@
 package threads;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ConcurrentExecutionExample {
 
     public static void main(String[] args) {
@@ -22,15 +24,13 @@ public class ConcurrentExecutionExample {
 
         @Override
         public void run() {
-            for (int i = 1; i <= 5; i++) {
-                System.out.println(threadName + ": Count " + i);
-                try {
-                    Thread.sleep(1000); // Sleep for 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            AtomicInteger count = new AtomicInteger(0);
+
+
         }
     }
 }
-
+// Concurreny -- rogrmultiple tasks pess over  same time ,, not at the same instant
+// Concurrency means “multiple tasks in progress at overlapping times.”
+//
+//Your two loops are concurrent: they both start, both can make progress, and may interleave.

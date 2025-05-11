@@ -1,9 +1,10 @@
-package collections;
+package collections.list;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import collections.StudentNew;
 
 public class ListExample {
 

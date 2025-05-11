@@ -10,7 +10,8 @@ public class WildCards {
     *   We know that Object is the supertype of all Java classes. However, a collection of Object is not the supertype of any collection.
     *   List<Object> is not  a superType for List<String>
 
-    *    If we imagine a subtype of Building, such as a House, we can't use this method with a list of House, even though House is a subtype of Building.
+    *    If we imagine a subtype of Building, such as a House, we can't use this method with a list of House,
+    even though House is a subtype of Building.
          If we need to use this method with type Building and all its subtypes, the bounded wildcard can do the magic:
     *
     * */

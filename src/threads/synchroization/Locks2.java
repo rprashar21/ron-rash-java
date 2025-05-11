@@ -1,4 +1,4 @@
-package threads;
+package threads.synchroization;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;

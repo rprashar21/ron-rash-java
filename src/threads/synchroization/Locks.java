@@ -1,4 +1,4 @@
-package threads;
+package threads.synchroization;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,8 +18,8 @@ public class Locks {
         MyThread1 thread2 = new MyThread1(d);
         thread1.setName("Rohit Thread ");
         thread2.setName("Swati Thread ");
-        thread1.start();
         thread2.start();
+        thread1.start();
     }
 
 }
@@ -47,12 +47,13 @@ class Display {
 
 class MyThread1 extends Thread {
 
-    private Display display;
+    private final Display display;
 
     public MyThread1(Display display) {
         this.display = display;
     }
 
+    @Override
     public void run() {
 
         this.display.wish();

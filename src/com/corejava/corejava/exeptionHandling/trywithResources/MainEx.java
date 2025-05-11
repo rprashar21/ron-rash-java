@@ -32,7 +32,8 @@ public class MainEx {
         trySimulator.withoutTryWithResources();
 
         // try with resources
-        try(FileReader fr= new FileReader("");BufferedReader br = new BufferedReader(new FileReader(""))) {
+        try(FileReader fr= new FileReader("");
+            BufferedReader br = new BufferedReader(new FileReader(""))) {
 
         }
     }

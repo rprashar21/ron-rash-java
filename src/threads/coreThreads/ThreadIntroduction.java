@@ -1,4 +1,4 @@
-package threads;
+package threads.coreThreads;
 
 public class ThreadIntroduction {
     // A process is a program executioon like msword ,aint browising

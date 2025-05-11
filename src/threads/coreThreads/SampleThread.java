@@ -1,4 +1,4 @@
-package threads;
+package threads.coreThreads;
 
 public class SampleThread {
 

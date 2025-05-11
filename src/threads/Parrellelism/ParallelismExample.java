@@ -4,7 +4,8 @@ import java.util.concurrent.*;
 
 public class ParallelismExample {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        int N = 10_000_000;
+
+        int N = 100;
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService pool = Executors.newFixedThreadPool(cores);
 
