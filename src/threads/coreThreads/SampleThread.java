@@ -49,7 +49,7 @@ class ChildThread extends Thread
 }
 
 class AnotherChild implements Runnable{
-    private Thread childThread;
+    private final Thread childThread;
 
     public AnotherChild(String name) {
         // this is the current class object, name is

@@ -6,10 +6,7 @@ import java.util.concurrent.Executors;
 public class MainApp {
 
     public static void main(String[] args) {
-            ExecutorService service = Executors.newFixedThreadPool(2);
-            service.submit(new Task());
 
-            service.shutdown();
             // 2 threads create
             Task task = new Task();
             Thread thread1 = new Thread(task);
@@ -22,7 +19,8 @@ public class MainApp {
 
 class Task implements Runnable {
 
-    int count = 0;
+
+     static int count = 0;
 
     @Override
     public void run() {
@@ -31,19 +29,20 @@ class Task implements Runnable {
     }
 
     public synchronized int calculate() {
-        System.out.println(count);
-        for (int i = 0; i < 4; i++) {
+        System.out.println("count value is -> "+count);
+        System.out.println("thread name is -> "+Thread.currentThread().getName());
+        for (int i = 1; i <= 4; i++) {
             count =count+1;
-            System.out.println(Thread.currentThread().getName());
         }
-        System.out.println(count);
+        System.out.println("finished for loop count is "+count);
         return count;
     }
     public  synchronized void  result (int calculate) {
+        System.out.println("entered result thread name is -> "+Thread.currentThread().getName());
         for (int i = 0; i < 4; i++) {
             calculate =calculate+1;
-            System.out.println(Thread.currentThread().getName());
+
         }
-        System.out.println(calculate);
+        System.out.println("finished for loop calculate count is "+calculate);
     }
 }

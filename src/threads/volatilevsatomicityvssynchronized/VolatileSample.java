@@ -33,5 +33,14 @@ public class VolatileSample {
         // 1. multiple threads can execute the same code ,, synchrozine main only one thread ata time
         // 2 . only individual read/writes are atomic not entire block
         // 3 . No built-in wait/notify
+
+        int counter =0;
+
+
     }
+
+
+
+
+
 }

@@ -5,6 +5,12 @@ public class ThreadIntroduction {
     // thread is als a process or a unit of execution within a process and they share memory and that is why we have to deal
     // with concurrent programming
 
+    // threads are expensive ,, meaing they have their own stack pc registers means memory
+    // they take upto 1ms to startup and 1mb to 2mb to ,, thread context switching also eats up some time 100us
+    // threads live in the heap memory
+
+    // threads are bocked and tied up to the task until it live s
+
 
     // In a microservices world we have to deal with blocaking calls -- apply asynchronous process ie. completeableFUture
 

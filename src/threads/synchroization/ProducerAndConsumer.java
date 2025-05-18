@@ -43,7 +43,7 @@ class Producer implements Runnable {
                     }
 
                 }
-            }catch (InterruptedException e){}
+            }catch (InterruptedException ignored){}
 
         }
     }

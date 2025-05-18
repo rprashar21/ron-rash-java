@@ -3,6 +3,19 @@ Better Performance: Connection pooling reduces the overhead of creating new conn
 Resource Management: The pool manages connection lifecycle and handles cleanup
 Thread Safety: HikariCP handles thread safety for you
 
+No Connection Pooling: Each call creates a new connection, which is inefficient and resource-intensive.
+Hardcoded Logic: URL construction and credential handling are repetitive and tightly coupled.
+Resource Management: No mechanism for connection reuse or lifecycle management.
+Scalability: Repeated connection creation can exhaust database resources under load.
+
+
+Using HikariCp
+Uses HikariCP for connection pooling, maintaining separate pools for viewstore, viewstore writable, eventstore, and eventprocessorstore.
+Caches HikariDataSource instances in ConcurrentHashMap for thread-safe reuse.
+Dynamically constructs JDBC URLs in buildJdbcUrl, supporting DEV and non-DEV environments.
+Configures credentials and pool settings (e.g., maxPoolSize, connectionTimeout) with flexibility via system properties.
+Includes logging and error handling for pool creation.
+
 
 
 This code is configuring connection pooling for databases using HikariCP (a high-performance connection pool).

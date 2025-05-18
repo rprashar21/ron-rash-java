@@ -1,4 +1,4 @@
-package threads.introthreads;
+package threads.coreThreads.introthreads;
 
 public class BasicThreads {
     public static void main(String[] args) {

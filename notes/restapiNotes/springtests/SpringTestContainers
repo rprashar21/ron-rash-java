@@ -1,3 +1,4 @@
- Test conatiners are a java library that supports testing frameworks like junit providing a light weight throwaway instances of common db like
+ Test conatiners are a java library that supports testing frameworks like junit providing a
+ light weight throwaway instances of common db like
  mysql postgres mongobd similar to production ready databases
  https://java.testcontainers.org/

@@ -36,6 +36,7 @@ public class InterThreadCommunication {
 
         synchronized (someObject){ // main thread gets the lockk of the object SomeObject
             System.out.println("MainThread enters ,, release the child object lock and goes to waiting state "+Thread.currentThread().getName());
+            someObject.calculate();
             someObject.wait();// main thread goes to waiting ,, once recives notification from child thread will start execution
 
             System.out.println("Total value is ::" + someObject.total);
@@ -56,18 +57,25 @@ class SomeObject implements  Runnable{
             //
             System.out.println("child thread gets the object lock release by main thread and starts executing ");
 
-            for(int i=0;i<=5;i++)
-            {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                total=total+i;
-            }
+            calculate();
             System.out.println("child thread finishes  execution ");
             System.out.println("child thread sends  notification ");
-            this.notify(); // releases lock of this object but may not immediately
+            this.notify(); // releases lock of this object but may not immediately after coming out of the syncronized block
         }
     }
+
+     public void calculate() {
+
+         System.out.println("Thread entered is "+Thread.currentThread().getName());
+         for(int i=0;i<=5;i++)
+         {
+             try {
+                 Thread.sleep(1000);
+             } catch (InterruptedException e) {
+                 throw new RuntimeException(e);
+             }
+             total=total+i;
+         }
+         System.out.println("Thread exited  is "+Thread.currentThread().getName());
+     }
 }

@@ -25,7 +25,7 @@ class Counter {
 
     // this method will be used by the consumer to consume
     synchronized public int getCount() throws InterruptedException {
-        if (shouldProduce == true) {
+        if (shouldProduce) {
             System.out.println("Consumer thread is gone to waiting queue");
             wait();
         }
@@ -69,12 +69,10 @@ class Consumer extends Thread {
     }
 
     public void run() {
-        int total = 0;
         for (int i = 0; i < 10; i++) {
 
             try {
                 System.out.println("Consumer :" + counter.getCount());
-                total += counter.getCount();
                 Thread.sleep((int) Math.random() * 3000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

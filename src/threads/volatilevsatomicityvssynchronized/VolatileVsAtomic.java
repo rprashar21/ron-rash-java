@@ -17,14 +17,15 @@ public class VolatileVsAtomic {
     // the values of thses variable are directly updated to the main memory  instead of the variable cache ,, this makes sure the value is consistent
     // but decreases the performance.
 }
- class Counter {
-    // one variable is volatile and the other not when 2 threads try to execute this it is possible that when u perform any operation
-     // the cpu thread loads it to the cpu register and decides to keep with itself for some time without pushing the value in the main memory
-     // which can casue the other thread to read stale value
 
-     // so when we make a variable volatile the thread will always push the value to the main memory
-     private volatile int count = 0;
-   private int max =0;
+class Counter {
+    // one variable is volatile and the other not when 2 threads try to execute this it is possible that when u perform any operation
+    // the cpu thread loads it to the cpu register and decides to keep with itself for some time without pushing the value in the main memory
+    // which can casue the other thread to read stale value
+
+    // so when we make a variable volatile the thread will always push the value to the main memory
+    private volatile int count = 0;
+    private int max = 0;
 
     public void increment() {
         count++;
@@ -36,7 +37,8 @@ public class VolatileVsAtomic {
 }
 
 class Counter2 {
-    private AtomicInteger count = new AtomicInteger(0); // the count variable is an instance of the AtomicInteger and any operation on this will be done in atomicity
+    private AtomicInteger count = new AtomicInteger(0);
+    // the count variable is an instance of the AtomicInteger and any operation on this will be done in atomicity
 
     public void increment() {
         count.incrementAndGet();
