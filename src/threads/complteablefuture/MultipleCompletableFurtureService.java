@@ -108,11 +108,10 @@ public class MultipleCompletableFurtureService {
 
         // combine all these calls
 
-        CompletableFuture<String> finalResult = firstCall
+        return firstCall
                 .thenCombine(secondCall, (first, second) -> first + second)
                 .thenCombine(thirdCall, (prev, current) -> prev + current)
                 .thenApply(String::trim);
-        return finalResult;
 
     }
 

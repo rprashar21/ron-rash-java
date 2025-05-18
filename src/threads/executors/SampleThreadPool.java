@@ -34,6 +34,7 @@ public class SampleThreadPool {
 
         // now i will block the call
 
+        // this can be an assertion
         for(Future<String> future : futures) {
             try{
                 System.out.println(future.get());

@@ -56,6 +56,7 @@ public class ThreadPool {
         int numThreads = Runtime.getRuntime().availableProcessors();
         System.out.println("Number of threads: " + numThreads);
         ExecutorService service = Executors.newFixedThreadPool(numThreads); // the exec
+
         newTaskList.forEach(newTask ->
                 {
                     //submit is a non blocking call ,,   hands your task off to the thread-pool’s work queue (and one of the pool’s threads will pick it up when it can).

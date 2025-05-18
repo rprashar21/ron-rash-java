@@ -57,7 +57,7 @@ class Action implements Runnable {
             Thread.sleep(2000);
             for(int i=0;i<3;i++)
             {
-                // perfrom some task
+                // perfrom some task maybe some http call or i/o operation wait for some time
             }
 
             System.out.println("Action "+ this.name+" excluded");
