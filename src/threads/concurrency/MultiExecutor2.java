@@ -1,4 +1,4 @@
-package concurrency;
+package threads.concurrency;
 
 import java.util.Arrays;
 import java.util.List;

@@ -11,8 +11,8 @@ public class LeftAndRightRotate {
         int a[] = {1, 2, 3, 4, 5, 6}; // basically a circular array [5,6,1,2,3,4]
 
         // if no of rotatons = length of the array thne all the elemenst will be back to their position
-      //  leftRotate(a);
-        rightRotate(a);
+        leftRotate(a);
+      //  rightRotate(a);
     }
 
     private static void rightRotate(final int[] a) {

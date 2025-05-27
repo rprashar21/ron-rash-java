@@ -5,7 +5,7 @@
 
   host.json file contains global configuration options that affect the behavior of the function app.
 
-  "dynamicThrottlesEnabled" is set to true, it allows the function to respond to throttle events from the dynamic concurrency feature.
+  "dynamicThrottlesEnabled" is set to true, it allows the function to respond to throttle events from the dynamic threads.concurrency feature.
    This is useful in scenarios where there are sudden and unpredictable bursts of incoming requests,
     as the function can automatically adjust based on current conditions.
 

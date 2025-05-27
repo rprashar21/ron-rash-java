@@ -1,4 +1,4 @@
-package concurrency;
+package threads.concurrency;
 
 import java.io.IOException;
 import java.net.URI;

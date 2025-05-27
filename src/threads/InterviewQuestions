@@ -1,0 +1,35 @@
+We have a process with 2 threads.
+
+Thread A sleeps 90% of the time, and 10% of the time it performs operations like responding to keyboard and mouse events.
+Thread B sleeps 10% of the time, 90% of the time it performs heavy computations like matrix multiplications.
+
+Thread A is IO bound and therefore gets higher priority from the OS by default.
+Thread B is CPU bound and therefore gets lower priority from the OS by default.
+
+By default, the operating system prioritizes IO-bound threads to provide high responsiveness.
+
+
+
+Q2> What do threads share within the process?
+ they share --> heap,static variable,file system, application code
+
+Q3> What is a context switch?
+When the operating system stops the execution of a thread on the CPU and schedules another thread to run on the CPU instead.
+During this process, the state of the preempted thread is stored in memory so it can be resumed later.
+
+Q4> Which line of code will always trigger the thread to stop executing on the CPU and cause the operating system to perform a context switch?
+Thread.sleep() --
+Thread.wait
+
+q5 > Which of the following is a blocking call? (or a potentially blocking call)
+Thread.sleep() --
+Thread.wait
+synchronized(this ){}
+lockObject.lock()
+thread.join()
+
+q6> Thread threadA = new Thread( () -> ... );
+    thread.setPriority(MAX_PRIORITY);
+    thread.start()
+
+threadA's static priority is set to MAX_PRIORITY but the dynamic priority maintained by the OS is unknown and changes based on the OS scheduler

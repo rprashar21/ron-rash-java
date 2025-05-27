@@ -1,10 +1,10 @@
-package concurrency;
+package threads.concurrency;
 
 public class ConcurrencyIntro {
 
     /*
     Concurrency is the ability of your program to deal (not doing) with many things at once and is achieved through multithreading.
-    Do not confuse concurrency with parallelism which is about doing many things at once.
+    Do not confuse threads.concurrency with parallelism which is about doing many things at once.
 
     Context switching is the technique where CPU time is shared across all running processes and is key for multitasking.
 

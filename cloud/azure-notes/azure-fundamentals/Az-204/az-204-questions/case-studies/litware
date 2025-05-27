@@ -37,10 +37,10 @@ Box 2: tp.GetAccessTokenAsync("..")
 
   5.You need to ensure receipt processing occurs correctly.
     What should you do?
-    • A. Use blob properties to prevent concurrency problems
-    • B. Use blob SnapshotTime to prevent concurrency problems ans
-    • C. Use blob metadata to prevent concurrency problems
-    • D. Use blob leases to prevent concurrency problems
+    • A. Use blob properties to prevent threads.concurrency problems
+    • B. Use blob SnapshotTime to prevent threads.concurrency problems ans
+    • C. Use blob metadata to prevent threads.concurrency problems
+    • D. Use blob leases to prevent threads.concurrency problems
 
   6.u need to resolve the capacity issue.
     What should you do?

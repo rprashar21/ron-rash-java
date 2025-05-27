@@ -17,3 +17,5 @@ class Ac{
         }
     }
 }
+
+// first hello will be printed and then 2

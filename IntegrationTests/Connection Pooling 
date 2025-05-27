@@ -1,7 +1,7 @@
 Connection Reuse: Connections are reused from the pool instead of creating new ones each time
 Better Performance: Connection pooling reduces the overhead of creating new connections
 Resource Management: The pool manages connection lifecycle and handles cleanup
-Thread Safety: HikariCP handles thread safety for you
+Thread Safety: HikariCP handles thread safety
 
 No Connection Pooling: Each call creates a new connection, which is inefficient and resource-intensive.
 Hardcoded Logic: URL construction and credential handling are repetitive and tightly coupled.

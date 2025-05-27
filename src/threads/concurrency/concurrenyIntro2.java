@@ -1,8 +1,8 @@
-package concurrency;
+package threads.concurrency;
 
 public class concurrenyIntro2 {
     // When to Use Which
-    //Use the term “concurrency” when you’re talking about your application design:
+    //Use the term “threads.concurrency” when you’re talking about your application design:
     // “We need to handle 1,000 simultaneous connections without blocking,” or “We want responsive UIs and background work.”
     //
     //Use multithreading when you’re describing the specific implementation:
@@ -15,10 +15,10 @@ public class concurrenyIntro2 {
 
 //Concurrency is your design goal: overlapping tasks to improve utilization and responsiveness.
 //
-//Multithreading is one (very common) way to get concurrency in Java, by running multiple threads in the same process.
+//Multithreading is one (very common) way to get threads.concurrency in Java, by running multiple threads in the same process.
 //
 //You can be concurrent without multithreading (e.g. async/NIO),
-// and you can be multithreaded without high concurrency (e.g. two threads doing sequential work).
+// and you can be multithreaded without high threads.concurrency (e.g. two threads doing sequential work).
 // Choose the right tool for your workload and environment.
 
 }

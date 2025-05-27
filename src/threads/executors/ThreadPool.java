@@ -17,8 +17,11 @@ public class ThreadPool {
      *    Creating threads not good for every job
      *     Thread of pools are created and are readily avaliable
         number of threads in a machine = no of cores in that machine
-        Advantage is that we do not have to manually create or start or join threads
-        Helps in achievng concurreny in our application
+
+        ADVANTAGES---> is that we do not have to manually create or start or join threads
+        there is no latency when we recieve a request , we can fine tune the thread pool whihc helps us to control the thruput of the application
+        Helps in achievng concurreny in our application, the systen  will not go out of memory because the threads are not created without any limits
+        we can have enought threads to keep all our porcessors buys ,, the application will degrade gracefull if the system is under load
         Excecutor service is java is a Asynchronous Task execution engine
         Provides a way toa asynchronoulsy execute tasks and provide results in  a much simpleer way
         Executor service has WorkQueue and CompletionQueue
@@ -39,7 +42,7 @@ public class ThreadPool {
 
     // It’s concurrent by design
     //You’ve created an ExecutorService and you’re using multiple threads.
-    // That allows your tasks to be interleaved or actually run at the same time if you let them—but that potential alone is “concurrency.”
+    // That allows your tasks to be interleaved or actually run at the same time if you let them—but that potential alone is “threads.concurrency.”
 
     // It’s not truly parallel as written
     //Because of the immediate future.get(), you never let two tasks actually overlap.

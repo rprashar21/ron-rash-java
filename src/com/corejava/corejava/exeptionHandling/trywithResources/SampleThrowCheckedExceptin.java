@@ -29,7 +29,7 @@ public class SampleThrowCheckedExceptin {
         BufferedReader fileInput = new BufferedReader(file);
 
 
-        throw new FileNotFoundException();
+        throw new FileNotFoundException("File not found");
 
     }
 }

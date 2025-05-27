@@ -22,7 +22,7 @@ In a Premium Plan and Dedicated (App Service) Plan, you can manually scale by ad
 
 ==============More questions ========
  which configuration in the host.json file can help manage sudden surges of concurrent requests to an Azure Function?
-Enable  dynamic concurrency in the host.json file.
+Enable  dynamic threads.concurrency in the host.json file.
 It adjusts the number of concurrent executions based on real-time load,
 
 

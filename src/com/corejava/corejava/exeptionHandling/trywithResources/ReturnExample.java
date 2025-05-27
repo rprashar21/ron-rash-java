@@ -9,14 +9,14 @@ public class ReturnExample {
          //   throw new RuntimeException("exception occurred"); // this is an
             // here we can print the exceprton
             System.out.println(e.getMessage());
-            return 0; // Return a default value // thisis an unreachable statement
+            return 9; // Return a default value // thisis an unreachable statement
         } finally {
             System.out.println("Finally block executed");
         }
     }
 
     public static void main(String[] args) {
-        int result = divide(10, 0);
+        int result = divide(10, 2);
         System.out.println("Result: " + result);
     }
 }

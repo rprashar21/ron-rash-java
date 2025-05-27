@@ -1,4 +1,4 @@
-package concurrency;
+package threads.concurrency;
 
 //In this exercise we are going to implement a  MultiExecutor .
 //

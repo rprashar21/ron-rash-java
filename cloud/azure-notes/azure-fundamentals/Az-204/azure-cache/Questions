@@ -1,6 +1,6 @@
 Redis Cluster supports up to 10 shards to create 1.2 TB of memory
 
-https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching#managing-concurrency-in- a-cache
+https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching#managing-threads.concurrency-in- a-cache
 
 1. A company is developing a gaming platform. Users can join teams to play online and see leaderboards that include player statistics.
 The solution includes an entity named Team.

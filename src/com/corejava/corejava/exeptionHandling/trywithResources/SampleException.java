@@ -18,9 +18,12 @@ public class SampleException {
 
         }
         // try to handle the ArithmeticException using ArrayIndexOutOfBoundsException
-        catch(ArithmeticException e) // this is a proper exception -- program does not terminate
+        catch(IllegalArgumentException e) // this is a proper exception -- program does not terminate
         {
+            System.out.println("this block"+e.getMessage());
             System.out.println(e);
+        } catch (Exception e) {
+            System.out.println("latest block"+e.getMessage());
         }
         System.out.println("rest of the code");
     }
