@@ -5,6 +5,10 @@ public class CustomQueue02<T extends Comparable<T>> {
     private Node<T> headNode;
     private int count;
 
+    public CustomQueue02(final int count) {
+        this.count = count;
+    }
+
     //  10-->20--->30
 
     // this will not have constant time complexity
@@ -39,7 +43,7 @@ public class CustomQueue02<T extends Comparable<T>> {
 
     public static void main(String[] args) {
 
-        CustomQueue02<Integer> customQueue02 = new CustomQueue02();
+        CustomQueue02<Integer> customQueue02 = new CustomQueue02(3);
         customQueue02.enqueue(10);
         customQueue02.enqueue(20);
         customQueue02.enqueue(30);

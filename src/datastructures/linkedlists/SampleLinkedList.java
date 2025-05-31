@@ -16,13 +16,13 @@ public class SampleLinkedList {
     *
     *BUT IN JAVA'S LINKED LIST, THERE IS A REFERENCE TO THE LAST NODE OF THE LINKED LIST AS WELL !!!
 
-It means of course that inserting items to the end of the linked list
-(and removing items from the end of a linked list) takes O(1) constant running time complexity.
+    It means of course that inserting items to the end of the linked list
+    (and removing items from the end of a linked list) takes O(1) constant running time complexity.
 
-Also we should always code by Interface
-If you have declared a List, you can later change it from ArrayList to LinkedList any time you want to.
+    Also we should always code by Interface
+    If you have declared a List, you can later change it from ArrayList to LinkedList any time you want to.
 
-List<Integer> integerList = new ArrayList<>(); or U cna use LinkedList
+    List<Integer> integerList = new ArrayList<>(); or U cna use LinkedList
     *
     * */
 }
