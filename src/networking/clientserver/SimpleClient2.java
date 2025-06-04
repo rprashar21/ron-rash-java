@@ -18,7 +18,7 @@ public class SimpleClient2 {
         PrintWriter output = null;
         Scanner scanner = new Scanner(System.in);
         try {
-            socket = new Socket("localhost", 2000);
+            socket = new Socket("localhost", 1250);
             // input and output                                             the sockte will recive message from the server
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("We are connected to the server --> server responds " + input.readLine());

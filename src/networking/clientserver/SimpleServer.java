@@ -9,6 +9,16 @@ import java.net.Socket;
 
 public class SimpleServer {
 
+    // What is a socket -- a piece  of software which allows communication between devices -- it is an abstraction of the os that allows process
+    // to send and recieve data over a netwrok using standardized protocols like TCP or UDP /
+
+   //  ServerSocket is bascailly used on the server side to accept connections
+
+  //    Term	        Purpose	                            Used By	        Blocking?	                Key Use
+    // Socket	        Connect to server and communicate	Client	        Yes (traditional IO)	    Send/receive data with server
+    // ServerSocket	    Wait for and accept connections	    Server	        Yes	                        Accept new client connections
+    // Channel	     Non-blocking data transfer	            Client/Server	Can be non-blocking	        Efficient high-performance networking (NIO)
+
     // sockets -- when using low level apis we use sockets to establish connections request and recieve
     // the client and server will have a socket
 
@@ -30,7 +40,7 @@ public class SimpleServer {
             ServerSocket serverSocket = new ServerSocket(2000); // server started on port 200 // any request on localhost:200 will be recieved by this program
             System.out.println("Server started :: "+serverSocket.getInetAddress());
 
-            Socket socket = serverSocket.accept(); // // Wait for client connection
+            Socket socket = serverSocket.accept(); // // Wait for client connection // this is alos a blocking call
             System.out.println("Client connected :: "+socket.getInetAddress());
             // server recives any message from the client
             BufferedReader serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));

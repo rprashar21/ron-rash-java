@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class SimpleClient {
+public class SimpleClient3 {
 
     public static void main(String[] args) {
 

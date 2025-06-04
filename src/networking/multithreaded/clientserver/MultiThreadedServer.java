@@ -27,6 +27,7 @@ public class MultiThreadedServer {
                 System.out.println("Accepted connection from " + socket.getRemoteSocketAddress());
                 // when there is no interaction with tany client for say 2 mins close any connections
                 socket.setSoTimeout(20_0000);
+                // here basically i have created a executo service and wheneever i recivec a new connection that will be handled by a new thread
                 executorService.submit(()->handleClientRequests(socket));
             }
 
