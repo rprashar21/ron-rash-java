@@ -2,9 +2,12 @@
 It is used to create a global exception handler for handling exceptions thrown by the application's RESTful API controllers.
 
 When you annotate a class with @RestControllerAdvice, it becomes a central place to handle exceptions across multiple controllers.
-It allows you to define methods that will be invoked when exceptions of specific types are thrown, providing a consistent and uniform way to handle errors in your API.
+It allows you to define methods that will be invoked when exceptions of specific types are thrown,
+providing a consistent and uniform way to handle errors in your API.
 
 Typically, the methods within a @RestControllerAdvice class are annotated with @ExceptionHandler to specify the type of exception they handle.
+
+
 When an exception occurs within any of the mapped controllers,
 Spring will look for a matching @ExceptionHandler method in the @RestControllerAdvice class and invoke it to handle the exception.
 
@@ -38,16 +41,15 @@ public class GlobalExceptionHandler {
     }
 }
 GET:
-
 200 OK: The request was successful, and the response contains the requested data.
 404 Not Found: The requested resource could not be found.
-PUT:
 
+PUT:
 200 OK: The request was successful, and the resource was updated.
 201 Created: The request was successful, and a new resource was created.
 204 No Content: The request was successful, and there is no additional content to send.
-PATCH:
 
+PATCH:
 200 OK: The request was successful, and the resource was partially updated.
 204 No Content: The request was successful, and there is no additional content to send.
 POST:

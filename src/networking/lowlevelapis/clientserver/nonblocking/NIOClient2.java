@@ -1,4 +1,4 @@
-package networking.nonblocking;
+package networking.lowlevelapis.clientserver.nonblocking;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

@@ -1,4 +1,4 @@
-package networking.clientserver;
+package networking.lowlevelapis.clientserver.clientserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class SimpleServer {
 //    Class	                                Role
 //    Socket	                        Client-side socket – connects to a server
 //    ServerSocket	                    Server-side socket – listens for incoming connections
-//    InputStream / OutputStream	Used to send and receive data through the socket
+//    InputStream / OutputStream	 Used to send and receive data through the socket
 
     //InputStreamReader → to turn bytes into characters (text)
     //
@@ -48,7 +48,7 @@ public class SimpleServer {
             PrintWriter serverOutput = new PrintWriter(socket.getOutputStream(), true);
             serverOutput.println("Hello Client connected is  "+socket.getInetAddress());
 
-
+           // this is an infinte loop to make sure ur server is running unless said to close
             while(true){
                                            // this is a blocking call and this will wait until we recive a message from the client
                 String messageFromClient = serverInput.readLine();
@@ -57,7 +57,7 @@ public class SimpleServer {
                     break;
                 }
                 // send a response from sever
-                serverOutput.println("Im from the server: "+"I have reccived ur message -- you sent :"+messageFromClient);
+                serverOutput.println("server responds -->"+messageFromClient);
             }
 
         } catch (IOException e) {

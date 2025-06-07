@@ -1,4 +1,4 @@
-package networking.multithreaded.clientserver;
+package networking.lowlevelapis.clientserver.multithreaded;
 
 import java.io.BufferedReader;
 import java.io.IOException;

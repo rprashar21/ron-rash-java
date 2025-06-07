@@ -47,10 +47,28 @@ What are beans?
 Spring maneges the lifecyle of java classes are called beans
 
 What is IOC container ?
+In Java (especially in frameworks like Spring), an IoC Container (Inversion of Control Container)
+is a framework component that manages the lifecycle and dependencies of objects (beans) in an application
 It is responsible for instantiating the application class.
+
 There are 2 types of IOc containers .
 1. BeanFactory
 2. ApplicationContext
+
+// normal code
+Car car = new Car(new Engine());
+
+Code example
+ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+Car car = context.getBean(Car.class);
+
+You let the IoC container decide how to create and inject the Engine into Car
+
+It’s a component (like ApplicationContext in Spring) that:
+Creates objects (beans)
+Manages their lifecycle (singleton, prototype, etc.)
+Injects dependencies (DI – Dependency Injection)
+Configures beans using metadata (XML, annotations, or Java config)
 
 Spring framework such as IoC, AOP, and transaction management,
 

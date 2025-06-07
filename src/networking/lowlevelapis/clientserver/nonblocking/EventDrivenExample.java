@@ -1,4 +1,4 @@
-package networking.nonblocking;
+package networking.lowlevelapis.clientserver.nonblocking;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,8 +13,8 @@ import java.util.Set;
 
 public class EventDrivenExample {
 
-    // Event Driven architecture -- evenst react to certaiin events like button clicks or rest endpoints call or messages in the queue
-    // componets are generaly independent and loosely coupled ,commucnication occurs thru events , they usuualy trigger async actions
+    // Event Driven architecture -- events  react to certain events like button clicks or rest endpoints call or messages in the queue
+    // components are generaly independent and loosely coupled ,commucnication occurs thru events , they usuualy trigger async actions
 
     // Selectable Channels -- represents i/o operations like sockets ,pipe, file transfer  , they are assocaited with a Selector and
     // are key to event driven NIO programming in java -- ServerSocketChannel and SocketChannel are 2 example of these

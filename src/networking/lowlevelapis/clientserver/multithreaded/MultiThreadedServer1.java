@@ -1,4 +1,4 @@
-package networking.multithreaded.clientserver;
+package networking.lowlevelapis.clientserver.multithreaded;
 
 import java.io.*;
 import java.net.*;
@@ -18,6 +18,8 @@ public class MultiThreadedServer1 {
             }
         } catch (IOException e) {
             System.out.println("Server error: " + e.getMessage());
+        }finally {
+            executorService.shutdown();
         }
     }
 
