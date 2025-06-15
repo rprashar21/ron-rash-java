@@ -1,0 +1,150 @@
+// CourtCaseApplication.java - Main Entry
+
+@SpringBootApplication
+public class CourtCaseApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(CourtCaseApplication.class, args);
+    }
+}
+
+// Event Interface
+public interface DomainEvent {
+    String getEventType();
+    int getVersion();
+}
+
+// Versioned Event
+public class HearingScheduledEvent implements DomainEvent {
+    private UUID caseId;
+    private LocalDate hearingDate;
+    private String courtroom;
+    private int version = 1;
+
+    // Constructors, Getters, Setters
+
+    public String getEventType() { return "HearingScheduledEvent"; }
+    public int getVersion() { return version; }
+}
+
+// Aggregate Root
+public class CaseAggregate {
+    private UUID caseId;
+    private List<DomainEvent> changes = new ArrayList<>();
+    private LocalDate scheduledDate;
+
+    public void scheduleHearing(HearingScheduledEvent event) {
+        apply(event);
+        changes.add(event);
+    }
+
+    private void apply(HearingScheduledEvent event) {
+        this.caseId = event.getCaseId();
+        this.scheduledDate = event.getHearingDate();
+    }
+
+    public List<DomainEvent> getUncommittedChanges() {
+        return changes;
+    }
+}
+
+// Event Store (In-Memory for simplicity)
+@Repository
+public class InMemoryEventStore {
+    private Map<UUID, List<String>> store = new ConcurrentHashMap<>();
+    private ObjectMapper mapper = new ObjectMapper();
+
+    public void save(UUID aggregateId, List<DomainEvent> events) throws JsonProcessingException {
+        List<String> serialized = new ArrayList<>();
+        for (DomainEvent e : events) {
+            serialized.add(mapper.writeValueAsString(e));
+        }
+        store.putIfAbsent(aggregateId, new ArrayList<>());
+        store.get(aggregateId).addAll(serialized);
+    }
+
+    public List<DomainEvent> getEvents(UUID aggregateId) throws IOException {
+        List<DomainEvent> events = new ArrayList<>();
+        for (String json : store.getOrDefault(aggregateId, List.of())) {
+            JsonNode node = mapper.readTree(json);
+            String type = node.get("eventType").asText();
+            switch (type) {
+                case "HearingScheduledEvent" ->
+                    events.add(mapper.treeToValue(node, HearingScheduledEvent.class));
+            }
+        }
+        return events;
+    }
+}
+
+// ActiveMQ Config
+@Configuration
+public class ActiveMQConfig {
+    @Bean
+    public ActiveMQConnectionFactory connectionFactory() {
+        return new ActiveMQConnectionFactory("tcp://localhost:61616");
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate(ActiveMQConnectionFactory connectionFactory) {
+        return new JmsTemplate(connectionFactory);
+    }
+}
+
+// JMS Listener with DLQ Retry
+@Service
+public class HearingEventListener {
+    private static final Logger log = LoggerFactory.getLogger(HearingEventListener.class);
+
+    @JmsListener(destination = "court.case.hearing")
+    public void onMessage(String message) throws Exception {
+        try {
+            // Deserialize & apply event
+            ObjectMapper mapper = new ObjectMapper();
+            HearingScheduledEvent event = mapper.readValue(message, HearingScheduledEvent.class);
+            log.info("Processing event: {}", event);
+            // Simulate error scenario
+            if ("Courtroom Z".equalsIgnoreCase(event.getCourtroom())) {
+                throw new IllegalArgumentException("Invalid courtroom");
+            }
+        } catch (Exception ex) {
+            log.error("Error processing event, sending to DLQ: {}", ex.getMessage());
+            throw ex; // Will be moved to DLQ by ActiveMQ
+        }
+    }
+
+    // DLQ Listener for Retry
+    @JmsListener(destination = "ActiveMQ.DLQ")
+    public void handleDLQ(String message) {
+        log.warn("Handling DLQ message: {}", message);
+        // Manual retry logic or admin dashboard trigger
+    }
+}
+
+// Caching Permissions (example)
+@Component
+public class PermissionService {
+    private final Map<String, List<String>> cache = new ConcurrentHashMap<>();
+
+    public List<String> getPermissions(String userId) {
+        return cache.computeIfAbsent(userId, this::fetchPermissions);
+    }
+
+    private List<String> fetchPermissions(String userId) {
+        // Simulate DB or usersgroups call
+        return List.of("VIEW_CASE", "SCHEDULE_HEARING");
+    }
+}
+
+// ViewStore Projection (Eventual Consistency)
+@Service
+public class ViewStoreProjection {
+    private final Map<UUID, LocalDate> hearingView = new ConcurrentHashMap<>();
+
+    public void apply(HearingScheduledEvent event) {
+        hearingView.put(event.getCaseId(), event.getHearingDate());
+    }
+
+    public LocalDate getScheduledDate(UUID caseId) {
+        return hearingView.get(caseId); // may lag behind write
+    }
+}

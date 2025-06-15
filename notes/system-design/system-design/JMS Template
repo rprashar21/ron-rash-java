@@ -1,0 +1,58 @@
+JmsTemplate hides all teh complexities to avoid connectionfactory and session and other stuff
+its an abstarction
+
+@Component
+class MessageSender{
+
+@Autowired
+JmsTempalte jmsTemplate;
+     public void sendMessage(final Message message){
+       jmsTemplate.send(message)
+     }
+}
+
+====== Jms Messages ======
+Header--destination, deliverymode ,messageid,
+
+providerc--timestamp,expiration,redelivered,priority,
+
+developer
+replyto , correlationid, type =====
+
+
+Jms Messaging -- request and reply ---
+we can create a queue manually or  dynamically
+how to map request and reply queue
+when we send a message via a request that has a jmsMessageid
+when we send back a reply we can set correlationid as the jmsMessage id
+
+eg. JmsProducer producer = jmsContext.createProducer()
+    jmsproducer.send(new Message("hello")) // this message will have a jmsMessageId
+    sout(message.getJmsMessageId())
+
+    JmsConsumer consumer = jmsContext.createComsumer()
+    Message messageConsumed= consumer.recieve() // this message will have a jmsMessageId
+     sout(messageConsumed)
+
+  //sending message back
+     JmsProducer producer = jmsContext.createProducer()
+     Message message = jmsContext.createMessage()
+     message.setCorrelationId(messageConsumed.getJmsMessageId())
+     producer.send(message)
+
+ //////++++++++++++++++
+
+ setMessageExpiry
+JmsMessage move the expired messages to expiryQueue -- u can access teh message from the expiryqieueu
+
+setDeliveryDelay(); -- u can set the delay as well
+
+
+Add custom message properties to the message
+Message can be of many types string,object,stream,map,byte
+jmsContext,createTextMessage,byteMessage
+
+
+=============P2P ======
+when 2 use -- oneto one -- like login,bank and atm machine ,improve performance ,,increase queues when load is heavy
+

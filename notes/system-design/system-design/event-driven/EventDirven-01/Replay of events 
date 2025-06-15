@@ -1,0 +1,87 @@
+One of the most powerful aspects of Event Sourcing: the ability to rebuild system state at any time by replaying stored events
+
+What actually is replaying
+Replaying the event store means using all historical events to reconstruct the current state of a domain object.
+ You don’t store the object — you store how it became that object over time
+
+what does repalying the event store mean ??
+imagine ur service crashes or u change the business logic
+1.Load all the events from the event store
+2. reapply them in order
+2. reconstruct the current state of the aggreagate object eg hearing
+
+============= code example==
+
+===== event model===========
+interface event{}
+
+class HearingCreated implements Event{
+    String hearingId;
+    HearingCreated(String hearingId)
+    { this.hearingId = hearingId; }
+}
+class HearingScheduled implements Event {
+    String courtId;
+    String date;
+    HearingScheduled(String courtId, String date) {
+        this.courtId = courtId;
+        this.date = date;
+    }
+}
+----- eveny model -----
+
+---  Aggregate – Hearing
+
+public class Hearing {
+    String hearingId;
+    String courtId;
+    String date;
+
+    public static Hearing replay(List<Event> events) {
+        Hearing h = new Hearing();
+        for (Event e : events) {
+            if (e instanceof HearingCreated ev) {
+                h.hearingId = ev.hearingId;
+            } else if (e instanceof HearingScheduled ev) {
+                h.courtId = ev.courtId;
+                h.date = ev.date;
+            }
+        }
+        return h;
+    }
+
+    @Override
+    public String toString() {
+        return "Hearing{" + "id=" + hearingId + ", courtId=" + courtId + ", date=" + date + "}";
+    }
+}
+================
+
+Simulate Event Store & Rebuild State
+
+public class ReplayDemo {
+    public static void main(String[] args) {
+        // Simulated event stream from event store
+        List<Event> storedEvents = List.of(
+            new HearingCreated("H123"),
+            new HearingScheduled("C001", "2025-06-10")
+        );
+
+        // Rebuild the aggregate by replaying events
+        Hearing rebuilt = Hearing.replay(storedEvents);
+
+        System.out.println("✅ Rebuilt aggregate: " + rebuilt);
+    }
+}
+
+== basically in this sample code you will load all the events and replay the event store
+
+✅ Rebuilt aggregate: Hearing{id=H123, courtId=C001, date=2025-06-10}
+
+Real World
+Crash recovery: Lose in-memory state? Just replay
+Recalculate state with new logic: Add logic to apply(...), replay all old events.
+Debugging: Replay one user's stream to reproduce a bug.
+Build projections: Create a new read model by consuming old events.
+
+Some omportant definition

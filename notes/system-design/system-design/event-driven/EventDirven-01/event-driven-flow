@@ -1,0 +1,199 @@
+Steps
+
+Step1 -->
+CommandApi -- The command api takes a command via a rest call , validates the command and sends it to the commadn queue
+@ServiceComponent(COMMAND_API)
+public class ListingCommandApi {
+    @Handles("listing.command.schedule-hearing")
+    public void handleScheduleHearing(final JsonEnvelope envelope) {
+        // Command received from external system
+        // Example payload:
+        // {
+        //   "hearingId": "123",
+        //   "courtId": "456",
+        //   "date": "2024-03-20",
+        //   "caseId": "789"
+        // }
+        sender.send(envelope);  // Sends to command queue
+    }
+}
+The command queue is  a JMS queue -- the message are persisted in the queue -- point to point communication -- delivery is aguaranteed
+Question ? is it an external queue ,load duplicacy failure ?? yes it as an external queu jms queue artemis
+
+2. Command Handler layer
+The command handler recieves the command from the queue and converst the command to the domain object
+
+@ServiceComponent(COMMAND_HANDLER)
+public class ListingCommandHandler {
+    @Inject
+    private EventSource eventSource;
+
+    @Handles("listing.command.schedule-hearing")
+    public void scheduleHearing(final JsonEnvelope command) throws EventStreamException {
+        // 1. Convert command to domain object
+        final ScheduleHearing scheduleHearing = jsonObjectConverter.convert(
+            command.payloadAsJsonObject(),
+            ScheduleHearing.class
+        );
+
+        // 2. Get event stream for the hearing using the strema id o
+        final EventStream eventStream = eventSource.getStreamById(scheduleHearing.getHearingId());
+
+        // 3. Load hearing aggregate
+        final Hearing hearing = aggregateService.get(eventStream, Hearing.class);
+
+        // 4. Generate events
+        final Stream<Object> events = hearing.scheduleHearing(
+            scheduleHearing.getCourtId(),
+            scheduleHearing.getDate()
+        );
+
+        // 5. Append events to stream
+        eventStream.append(events.map(toEnvelopeWithMetadataFrom(command)));
+    }
+}
+what does the command handler do ==
+recieve the command from the queue ,validates it and then converst the commadn into domain object
+
+Lets create a scenario , where u are buildinga system for a court to manage hearings
+A user (maybe a case manager) schedules a hearing by sending a request like
+POST /schedule-hearing
+{
+  "hearingId": "H123",
+  "courtId": "C001",
+  "date": "2025-06-10"
+}
+
+in a traditional system problem will
+INSERT INTO hearing(id, court_id, date) VALUES (...)
+❌ No audit/history of who changed what and when
+❌ No clear rollback or replay
+❌ Hard to reason about state transitions (was it scheduled? rescheduled? unscheduled?)
+❌ No clear separation between business logic and data store
+❌ Harder to scale or plug into other systems (e.g., notify external agency)
+
+why we use cqrs+eventsouring
+we accept commands or actions , apply business logic on aggreagtes
+we emit events as results facts
+Store those immutable events in the event store
+Let event processors react and update view models or publish external events
+separation of concerns between write and read
+
+we have full tracebality
+Full traceability (HearingCreated, HearingScheduled, HearingUpdated)
+Easy replay, rollback, versioning
+Plug-and-play with downstream services (e.g., email, reporting, notification systems)
+
+what exactyt happens
+
+step1 a rest call is made for the scedule hearing -- jms message triggers the command handlers
+Command payload = hearingId, courtId, date
+
+Step2
+load The eventStream for that hearingid (streamid or aggreagte id )
+
+code sample
+EventStream stream = eventSource.getStreamById(hearingId);
+
+Event Stream = all events associated with a particular aggregate
+Stream ID = hearingId (e.g., "H123")
+Contains a chronological list of all events related to this hearing
+for example
+[
+  { type: "HearingCreated", data: {...}, version: 1 },
+  { type: "HearingScheduled", data: {...}, version: 2 }
+]
+This stream is loaded and used to rebuild the Hearing object — this is aggregate reconstruction
+
+Step3 is rebuild the aggreagte
+ebuild Aggregate
+
+Hearing hearing = aggregateService.get(eventStream, Hearing.class);
+All events in the stream are applied one by one to recreate the internal state
+This is done using methods like apply(HearingScheduledEvent e)
+The result is an in-memory object that now reflects the current state
+
+Step4:
+Apply the Domain logic
+Stream<Object> events = hearing.scheduleHearing(courtId, date);
+Inside scheduleHearing(), we check:
+Is it already scheduled?
+Is the court available?
+If all is valid, return a list of new domain events like HearingScheduled
+
+
+Step5: Append to Event Store
+eventStream.append(events.map(toEnvelopeWithMetadataFrom(command)));
+
+These new events are stored in the event store table
+Each row contains:
+stream_id (aggregate ID)
+event_type (like hearing-scheduled)
+event_data (payload)
+metadata (e.g., correlationId, timestamp)
+version
+
+As the stream grows the agreagte becomes sophisticated , new commands get triggered HearinSchedule and HearingCanceled
+
+Why this arcitecture ??
+Cleanly separates intent (command) from fact (event)
+Everything that happens is stored immutably
+Systems can be rebuilt by replaying the event store
+Scales well across microservices and domains
+
+Key definitions
+Command	            Intent (e.g., schedule hearing)
+Event Stream	    Ordered list of events for a single aggregate
+Stream ID	        Unique identifier (like hearingId)
+Event Store	        Table storing all events (event_type, event_data, version, etc.)
+Aggregate	        In-memory domain object rebuilt from past events
+Event Processor	    Listens for events, updates view/read model, or publishes to external
+
+To Summarize this
+Command Api -- A REST API sends a schedule-hearing command, this validate the command
+{
+  "hearingId": "H123",
+  "courtId": "C001",
+  "date": "2025-06-10"
+}
+This is send to the command handler via a jms queue ie Activemq -- point to point -->
+
+The command handler will listen/recieve this command from the queue, validate the payload
+convert it into domain object
+eventStream = eventSource.getStreamById(hearingId);
+Loads all past events for this hearing from the event store
+
+3. Aggregate Rehydrated
+Applies each event (HearingCreated, HearingRescheduled, etc.) to rebuild a Hearing object
+hearing.scheduleHearing(courtId, date)
+Applies business rules
+→ Returns new event: HearingScheduled
+
+4. Event Appended to Event Store
+stream_id = "H123"
+event_type = "hearing-scheduled"
+event_data = { courtId: ..., date: ... }
+version = 3
+
+5. Event Processor Reacts
+@Handles("listing.events.hearing-scheduled")
+Updates the view store (e.g., for UI or search)
+
+Publishes an external/public event like:
+public.listing.hearing-scheduled
+
+Event Store Table Example
+
+id	    stream_id	version	event_type	        event_data
+UUID1	H123	    1	    HearingCreated	    {...}
+UUID2	H123	    2	H   earingScheduled	    {"courtId":"C001",...}
+
+ Key Benefits
+🎯 Only one source of truth: the list of events
+🔁 Supports replay, audit, rollback
+🧱 View store can evolve separately (no coupling)
+
+
+
+
+

@@ -1,0 +1,57 @@
+Scenario: A Hearing Scheduling Fails and Ends Up in DLQ
+
+A scheduiling command is sent
+there a exception in the command handler (eg a bad date or some business rule validation or null pinter exception)
+the message ends up n the DLQ or the dead letter queue -- in the active mq
+Now you need to replay the evnt stream to
+debug to see what happened
+rebuuild the state
+possibly reporcess teh the command manually to fix it
+
+Suppose one of the evnst failed
+Manually Reprocess the Failed Command
+Suppose this was the failed command that landed in DLQ:
+
+ScheduleHearing failedCommand = new ScheduleHearing("H999", "C001", "BAD-DATE"); // this failed becoz of bad-date
+
+Now, before resubmitting, you can debug by replaying events
+try {
+    // Apply new command to reconstructed state
+    List<Event> newEvents = hearing.schedule("C001", "BAD-DATE");  // or fixed date u either resend the same payoad or fix the payload or see what the issue is
+    System.out.println("New events generated: " + newEvents);
+} catch (Exception e) {
+    System.err.println("❌ Domain logic failed: " + e.getMessage());
+}
+
+output will be either passed or fialed
+Rehydrated state: Hearing{id=H999, courtId=C001, date=2025-06-10}
+❌ Domain logic failed: Invalid date format or already scheduled
+
+
+Steps to take
+Use Case	                    Action Taken
+DLQ message found	            Inspect DLQ message payload and metadata
+Rehydrate aggregate	            Replay events using stream_id (e.g., "H999")
+Understand current state	    What the object looked like before the failure
+Apply command locally	        See why it failed: validation, duplicates, missing data
+Fix and reprocess	            Manually or automatically send a new valid command
+
+Optional: Command Metadata for Tracing
+In the real event store or DLQ message, you’ll have metadata like:
+{
+  "commandId": "abc-123",
+  "correlationId": "xyz-789",
+  "timestamp": "2025-06-01T10:00:00Z"
+}
+You can trace:
+Who sent it
+When it failed
+What stream it was trying to modify (hearingId)
+
+In production, when a message fails and hits the DLQ, we can load the related aggregate’s event stream,
+replay it to see current state, apply the same command to reproduce the failure,
+fix it, and optionally reprocess it. This is the debugging superpower of event sourcing.
+
+
+Some important definitions
+Correlation Id CasuationID and Metadata

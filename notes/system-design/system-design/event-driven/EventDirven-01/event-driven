@@ -1,0 +1,65 @@
+Imagine a pizza ordering systme
+Customer --> orders pizza --> Process Payment -> Make Pizza -> Deliver Pizza
+Everything here happens synchronously each step must wait for it to complete
+
+=====================================================================================================================
+In our application
+Traditional Approach:
+User -> Create Hearing -> Update Database -> Notify Parties -> Update Calendar
+(Everything happens synchronously, one after another)
+
+Event-Driven Approach:
+User creates hearing -> "HearingCreated" event
+↓
+Database Service (subscribes to "HearingCreated")
+↓
+"HearingStored" event
+↓
+Notification Service (subscribes to "HearingStored")
+↓
+"PartiesNotified" event
+↓
+Calendar Service (subscribes to "PartiesNotified")
+
+======================================================================================================================
+Implementation in the project
+The project implements Event-Driven Architecture through several key components:
+
+The event driven architecture is good for comlpex workflows
+
+@ServiceComponent(EVENT_PROCESSOR)
+public class ListingEventProcessor {
+    @Handles("listing.events.hearing-created")
+    public void handleHearingCreated(final JsonEnvelope envelope) {
+        // Process the event
+        // Emit new events if needed
+    }
+}
+
+There are 2 types of events emitted
+private event
+public event
+
+Key components -- different EventHandlers can handle different types of events
+Hearing Events - New Hearing Creation , updation sequencing
+Case Events  - case linking removal updates
+
+Benefits of this application is
+Decoupling: Services don't need to know about each other
+Scalability: Each event processor can be scaled independently
+Maintainability: Easy to add new event handlers
+Reliability: Events can be replayed if processing fails
+Audit Trail: All changes are tracked through events
+
+How can we scale the event processors different modules
+Each event processor is a separate service component
+Multiple instances can be deployed independently
+Each instance can handle different types of events
+
+if a particaluar event processor is handling more events , we can scale them
+Use container orchestration (like Kubernetes) to automatically scale based on load
+
+Container based scaling
+<!-- listing-event-processor/pom.xml -->
+<artifactId>listing-event-processor</artifactId>
+<packaging>war</packaging>

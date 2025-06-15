@@ -1,0 +1,9 @@
+Technical stack about our application
+Java 17 recently migrated from java8
+Framework - MOJ internal framework
+Build tool - maven
+Database - Postgresql
+Testing: JUnit for testing
+Containerization: Docker support (visible in docker directory)
+
+How do we maintian autorization and Authenrtication ?

@@ -1,0 +1,107 @@
+Java messaging Service is an api {} like the jdbc api
+it is a standard
+
+Java API to communicate between two components asynchronously using messages
+it is typically an external broker - messaging queue -- point to pint communcation
+
+it has 2 destinations queue or topics
+
+These are messaging brokers
+Active mq
+Rabbit MQ
+Artemis Mq
+So yes, it’s external infra (hardware/software), but your Java app connects to it via a JMS client and javax.jms API.
+You configure it in WildFly, Spring, or other containers via JNDI, annotations, or XML
+
+Type of messaging models
+p2p --> point to point --
+
+app1 ---< queue --> app2
+
+aysnc fire and forgert or sync request reply messaging
+producer send the message to the que and forgets
+the jms queue ensure that the message is consumed only once or by only one application.
+And once it is consumed the message is gone from the Q It is the JMS provider's responsibility to ensure
+that the message is consumed by only one application. JMs provide ensures that the message is delivered
+
+===================
+Queues are based on poin to point --where messages are gauranteed to be delivered , exactly one sender and reciver
+if messages failed the provider will retry -- if not the message are sent to the dlq
+
+pub sub -- push model
+one message is broadcasted and can be read my many consumers , jms provider ensure message is consumed by
+all the comsuer who have scubscribed to that topic
+Nsubscribers can subscribe to that topic ,each will get a copy of that message
+
+===================================
+
+Artemis is the broker
+Jms Api -- client
+
+ur download the jar for the atremis broker and then run ur aremis broker -- if u do a locall setup or thru docker
+once u do this you can basically go to ur broker.xml where u can make configuration changes
+
+============JSM 1.X Api
+Components that make up this JMS Api are
+ConnectionFactory -- connection factory is an object used by the client to create a connection to the provide,set of connection configuration
+provide by the jms provider which is the artemis-- factory of connections
+Destination -- object could be queue or topic, the jms provider will be the
+Connection -- A jms connection is a virtual connection with a jms provider . Acoonection representa tcp/ip socket between client and server
+You can use these connection to create one or more sessions
+Message
+Session -- single threaded context to send message for producing and sending message
+MessageProducer to prodcue message -- created by the session object
+Message --
+MessageConsumer -- object which consume a message it is created by the jms session
+Message listeners - objects that act as asynchronous event handlers for handling these messages.
+Message selectors -- to filter messages
+
+== Delviery mode for the messages
+defualt delivery mode is persistent ,which means the messages will be stored on the disk/database until consumed by the consumer
+
+queues are durable ,, where as topic can be non durable and durable
+if durable -- queues will definitly recive message ,where as consumers subscribing to a topic will receiev all teh messages when thye come up
+if not durable the subscriber cam loose message whem the broker/topic is down
+
+====== Steps ===
+Create the project
+add the artemis client dependecy <dependecy>
+create jndi.properties
+
+
+class MessageProducer{
+
+url of the jms server is -- since it is on the local -- tcp://localhost:61616
+
+private static final URL = ActiveMqConnection.DEFAULT_BROKER_URL;
+
+private static String queueName ="SomeQueuName";
+
+   psvm{
+  /// creating a connection with the jms client
+   ConnectionFactory connectionFactory = new ActiveMqConnectionFactory(url);
+   Connection connection = connectoinFactory.createConnection();
+   connection.start()
+
+   // creating a non transcational  session to send and recieve message
+
+   Session session = connection.createSession(false,Session.AutoAcknowledge)
+
+   // create a queue on the server
+   Destination destination = session.createQueue(queueName);
+
+// producer to send message
+   MessageProdcuer producer = session.createProdcuer(destinaion)
+
+   prodcuer.sendMessage(session.createTextMessage("hello how are u "))
+
+   // MessageConsumer to recive message
+   MessageConsumer messageConsumer = session.createConsumer(destination)
+
+  Message message =messageConsumer.receive()
+
+      if(message instanceOf TextMessage){
+      sout(message recieved )
+      }
+        }
+}

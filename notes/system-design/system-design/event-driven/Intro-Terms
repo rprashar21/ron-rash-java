@@ -18,7 +18,8 @@ Factors Influencing Latency:
 Hardware Performance: The speed and capabilities of the hardware components such as CPU, memory, storage, and network devices.
 Software Efficiency: The efficiency of algorithms, data structures, and code optimizations in minimizing processing overhead.
 Network Conditions: The bandwidth, congestion, and distance affecting communication between different components of the system.
-Concurrency and Parallelism: Utilizing parallel processing and threads.concurrency to handle multiple tasks simultaneously and reduce overall processing time.
+Concurrency and Parallelism: Utilizing parallel processing and threads.
+concurrency to handle multiple tasks simultaneously and reduce overall processing time.
 System Load: The level of demand on system resources due to concurrent requests or workload spikes.
 Techniques to Reduce Latency:
 

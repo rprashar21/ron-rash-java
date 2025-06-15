@@ -1,0 +1,84 @@
+Metadata Field	    Purpose
+Correlation ID	    Links all events/commands that are part of a single business operation or request
+Causation ID	    Indicates which message (command or event) caused the current event
+Stream ID	        The ID of the event stream (e.g. hearingId, caseId)
+Event ID	        Unique identifier for the specific even
+
+In our project we use the json payload ,, to wrap the metadata and the payload
+
+// example fo a metadata
+{
+  "_metadata": {
+    "id": "uuid-of-this-message",
+    "streamId": "uuid-of-aggregate",
+    "causation": "uuid-of-parent-message",
+    "correlation": "uuid-of-root-request",
+    "name": "listing.command.update-hearing-for-listing-enriched",
+    "userId": "admin"
+  }
+}
+
+Step1 client/external/internal system sends a request
+POST /hearings/update
+Your framework wraps the payload into a JsonEnvelope with metadata:
+id: UUID for this command
+correlation: new UUID (root of flow) -- this might be sent ftom the external system or button clicked or internal
+causation: null (this is the origin)
+name: listing.command.update-hearing-for-listing-enriched --> what is the command that has been sent now
+
+Step2
+public void handleUpdateHearingForListingEnriched(final JsonEnvelope command)
+
+Command Handler Runs- validates , rebuits the aggregate ,applies this command to grenerate new events and then stores the events into the event store
+and publishes these events to the jms topics
+
+It generates domain events like HearingUpdated
+for each event
+correlation: inherited from the command
+causation: set to command's id - so now the new event knows that I was triggered by command X, and I’m still part of operation Y”
+
+
+Step 3: Event is Stored + Published to JMS
+When appendEventsToStream is called:
+The event’s metadata (especially causation and correlation) is included
+The event is then published to the private JMS topic
+
+Step 4 Event Listener processes teh events
+public void handleHearingUpdated(final JsonEnvelope envelope)
+The listener receives:
+Envelope with full metadata
+Uses event.getMetadata().getCorrelationId() for:
+Logging / traceability
+Storing in processed_event table
+Alerting or monitoring (e.g. “Operation X failed”)
+
+Why Correlation & Causation Matter
+Use Case	                    Metadata Used	Benefit
+Distributed tracing	            Correlation ID	    Links logs/events across microservices
+Root cause analysis (debugging)	Causation ID	    Understand what caused a failure
+Retrying operations from root	Correlation ID	    Replay entire transaction safely
+Building execution graphs	    Both	                Visualize how commands → events → views flow
+
+
+Example Trace for One Operation
+
+| Stage                       | Message Type | ID | Correlation     | Causation |
+| --------------------------- | ------------ | -- | --------------- | --------- |
+| Client → Command            | Command      | A  | A (new root ID) | null      |
+| Handler → HearingUpdated    | Event        | B  | A               | A         |
+| EventListener → PublicEvent | Event        | C  | A               | B         |
+
+
+Metadata commandMetadata = command.metadata();
+UUID correlationId = commandMetadata.getCorrelationId(); // e.g. UUID A
+UUID commandId = commandMetadata.getId();               // e.g. UUID A
+
+// When creating new event:
+Metadata eventMetadata = metadataBuilder
+    .withId(randomUUID())        // new ID for event
+    .withCausation(commandId)    // causation: UUID A
+    .withCorrelation(correlationId) // correlation: UUID A
+    .withStreamId(hearingId)
+    .withName("listing.events.hearing-updated")
+    .build();
+

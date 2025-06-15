@@ -1,17 +1,144 @@
 This is not a typical Spring Boot application, but rather a more complex distributed system with:
+
+I’m working on a distributed system that handles case management,manages court hearing scheduling listing,
+resulting and notification to external parties
+like dvla
 CQRS architecture
 Event-driven design
 Microservices
 Domain-driven design
 Event sourcing
-The tests are integration tests that verify the behavior of the entire system, including:
-Command processing
-Event handling
-State changes
-Document management
-Case progression
-Would you like me to:
-Explain more about any specific aspect?
-Show how the CQRS pattern is implemented?
-Explain the event handling mechanism?
-Discuss the testing strategy?
+
+This is a microservices-based project implementing CQRS (Command Query Responsibility Segregation) and Event-Driven Architecture.
+The project is structured into several key modules:
+
+Why Microservice -- so that a large application can be broken down into smaller domains so that they can servd a particular functionality
+or domain , These services can be scalable maintained developed and deployed independantly
+
+Each service a Context Bounded microservice following Domain-Driven Design (DDD) principles
+It follows CQRS (Command Query Responsibility Segregation) pattern with separate command and query modules
+Uses event sourcing (indicated by the event and event-sources modules)
+Has clear domain boundaries (domain module)
+Includes proper separation of concerns with dedicated modules for different responsibilitie
+
+Each microservice is further divided into separated into write and read compnents
+Why Cqrs Command and Query responsibility segragation?
+this project implements cqrs pattern
+command side --> handles write operations
+Query side handle ths read operations
+this sepration handles the better scalabilty and optimization for read and write operation
+
+These are the different modules
+listing-command: Handles write operations
+listing-query: Handles read operations
+listing-domain: Contains domain models and business logic
+listing-event: Manages event handling
+listing-viewstore: Manages the read model storage
+listing-service: Core service implementation
+listing-common: Shared utilities and common code
+listing-healthchecks: Health monitoring
+listing-event-sources: Event sourcing implementation
+
+
+Each microservice depends upon user-groups-service for autorization and authentication.
+The usergroups service handles the user and group managemnet
+
+User makes request to any MOJ service
+2. That service needs to verify:
+   - Is the user authenticated?
+   - Does the user have permission to access this feature?
+3. The service calls UsersGroups microservice to check permissions
+
+The user group service provides several key components
+ usersgroups.get-logged-in-user-permissions
+- usersgroups.permissions
+- usersgroups.role.based.permissions
+- usersgroups.get-permissions-by-feature-key
+
+The service uses Drools rules (in usersgroups-query-api.drl) to enforce access control:
+System administrators have full access
+Organization administrators have limited access
+Regular users have restricted access based on their roles and groups
+
+For example
+ Let's take a scenario where a lawyer (user) tries to access a case file in the MOJ system
+ Lawyer logs in → Case Management Service needs to verify:
+ - Is this a valid user?
+ - What permissions do they have?
+ - What groups do they belong to?
+
+Case Management Service makes a call to UsersGroups Service:
+GET /usersgroups-query-api/query/api/rest/usersgroups/users/logged-in-user/permissions
+
+Drools is a business rules management system that evaluates rules to make decisions.
+In this case, it's used to enforce access control policies.
+Each rule in the system follows this pattern:
+Rule name
+when "conditions "
+ then
+ end
+
+Advandtage
+Centralized rule management, easy to modify the rules , only authorized users can access , acces is controlled
+at multiple levels , groups roles permission users
+
+Caching is also used
+The service implements caching (through QueryApiCacheInterceptor) to improve performance for frequently accessed permissions and user data.
+
+
+So simple example
+User tries to access a case file:
+
+1. Initial Request:
+   - User makes request to case management service
+   - Service needs to verify permissions
+
+2. Rule Evaluation:
+   a. First, check user existence:
+      - Rule: "usersgroups.get-user-details"
+      - Verifies user ID exists
+
+   b. Then, check permissions:
+      - Rule: "usersgroups.get-logged-in-user-permissions"
+      - Evaluates user's permissions
+
+   c. Finally, check specific access:
+      - Rule: "usersgroups.restrict-case-access"
+
+
+
+
+How do we maintian autorization and Authenrtication ?
+For example a suer court clerk or leagl advisero want to see a case file
+They want to view a hearing
+the request will include a CJSCPPUID a unique identfier -- this  will based on the user
+A call will be made to usergroup service to check the validity of the user,permissions and specific access
+Different roles have different permissions:
+Listing Officers
+System Users
+Court Clerks
+
+We use a CJSCPPUID-based authentication system. Every request must include a valid CJSCPPUID header,
+which is a UUID that uniquely identifies the user.
+This is validated against our user database, and the user's context is maintained throughout the request lifecycle using a thread-local context."
+
+How do u ensure security in ur api ??
+"Security is implemented at multiple levels:
+   1. Mandatory CJSCPPUID authentication
+   2. Role-based authorization
+   3. Request validation against defined schemas
+   4. Thread-local user context management
+   5. Integration with enterprise security services
+
+  How do you maintain user context across requests
+  We use a thread-local context to maintain user information throughout the request lifecycle.
+  This ensures that user-specific operations and validations can be performed consistently across different parts of the application."
+
+In your specific codebase, ThreadLocal is likely used to maintain context about the current operation or request being processed, ensuring that different threads don't interfere with each other's data. This is particularly important in a CQRS (Command Query Responsibility Segregation) architecture where you might have multiple commands or queries being processed concurrently.
+Remember to always clean up ThreadLocal variables when they're no longer needed to prevent memory leaks,
+especially in long-running applications or when using thread pools.
+
+What is idam ?
+It's implemented as a separate microservice called usersgroups-service
+This service handles user authentication and group membership
+It's called via REST endpoints like /usersgroups-service/query/api/rest/usersgroups/users/{userId}/groups

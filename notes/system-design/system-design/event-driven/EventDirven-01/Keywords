@@ -1,0 +1,126 @@
+Idempotency
+In REST, idempotency means that multiple identical requests to a server have the same effect as a single request
+sometimes the message can be duplicate unintentionally(network issue or clinet mistake ). we should make sure that these type
+of requests do not hurt our application
+caches can store and serve the results of idempotency
+
+IN rest HTTP methods which are idempotent are -- GET, PUT, DELETE, HEAD, OPTIONS, and TRACE methods
+execpt post and patch
+post is used to create a resource on the sever -- chnages the state of the server
+
+HTTP PATCH is used for making partial updates to an existing resource without replacing the entire resource
+For instance, if you use a PATCH request to increment the number of items in a shopping cart,
+repeating the same PATCH request multiple times will increase the quantity with each request, which is a non-idempotent behavior
+
+Fir example put
+PUT APIs are used to update the resource state. If you execute a PUT API N times, the very first request will update the resource;
+the other N-1 requests will just overwrite the same resource state again and again – effectively not changing anything
+
+===== JMS QUEUE == JMS is JAVA Messaging Service is an api
+Java API to communicate between two components asynchronously using messages
+it is typically an external broker - messaging queue -- point to pint communcation l
+Active mq
+Rabbit MQ
+Artemis Mq
+So yes, it’s external infra (hardware/software), but your Java app connects to it via a JMS client and javax.jms API.
+You configure it in WildFly, Spring, or other containers via JNDI, annotations, or XML
+
+Suppose u have a springboot application (Spring boot with Artemis)
+u add the exetenral dependency
+<!-- Example for Artemis (ActiveMQ Artemis) -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-artemis</artifactId>
+</dependency>
+
+==== code where u have the command api which will recive a message or caomadn
+this is bascally the prodcuer
+@RestController
+@RequestMapping("/commands").
+public class CommandApiController {
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @PostMapping("/schedule-hearing")
+    public ResponseEntity<String> scheduleHearing(@RequestBody ScheduleHearingDto dto) {
+        JsonEnvelope envelope = JsonEnvelope.wrap(dto); // assume a converter utility
+        jmsTemplate.convertAndSend("listing.command.queue", envelope);
+        return ResponseEntity.ok("Command sent.");
+    }
+}
+
+the command handler is te consumer whihc will consume this message
+@Component
+public class CommandHandler
+{
+    @Autowired
+    private EventStore eventStore;
+
+    @JmsListener(destination ="listing.command.queue") // it will listemn to message from the queuue
+    public void handleScheduleHearing(JsonEnvelope envelope) {
+            String commandId = envelope.getMetadata().get("commandId");
+
+            // Idempotency Check
+            if (eventStore.alreadyHandled(commandId)) {
+                return; // skip duplicate
+            }
+
+        ScheduleHearing command = envelope.toDomain(ScheduleHearing.class);
+        Hearing hearing = eventStore.loadAggregate(command.getHearingId());
+        List<Event> events = hearing.scheduleHearing(command.getCourtId(), command.getDate());
+        eventStore.append(command.getHearingId(), events, commandId); // includes dedup metadata
+ }
+
+ How We handle Idempotency,failure or Scaling ,duplicates
+ Concern	                        Handled by
+ Idempotency	            commandId in metadata; check if already handled in eventStore
+ Failure	                If handleScheduleHearing() throws exception → JMS retries message
+ Retry	                    JMS has retry policies (e.g., exponential backoff) and a Dead Letter Queue
+ Duplicate Commands	        Retry of same message → same commandId → skipped by eventStore
+ Scaling	                Use concurrency in @JmsListener for parallel consumers
+
+Why we use JMS queue poin t point -- we want it be consumed by only one consumer
+only one handler should take action, so JMS Queue is ideal.
+
+JMS Queue	One producer, one consumer (1:1)	            Command pattern — only one service should process
+Topic	        1:N broadcast (like pub-sub)	            For events where multiple services react
+Kafka	    Stream-based, partitioned, highly scalable	    For high-throughput, log-based, distributed systems
+
+Why JMS queue and not Kafka or topic
+becoz commmands are actions and only one service handler should take action ,, not broadcast like events
+
+ What if the handler crashes?
+ JMS retries delivery. You can configure retry attempts + dead-letter queue (DLQ) for failed messages.
+
+How do you avoid duplicate processing?
+Use a command ID in metadata and skip processing if already handled
+
+How can you scale this?
+Use multiple consumers with concurrency = X in @JmsListener.
+@JmsListener(destination = "listing.command.queue", concurrency = "5")
+
+What are the benefits
+decoupling rest api
+asynchronous and resilient
+gaurantee on time deliver, esaily extended to cqrs and event sourcing
+
+# here is a simple explanation
+We use a JMS Queue for commands because it's point-to-point — only one handler should act on a command.
+The queue is durable and supports retries. We attach metadata like commandId to enforce idempotency.
+If the handler fails, Spring retries it. After 3 attempts, the message goes to the DLQ.
+The REST API responds immediately with 202 Accepted, so the operation is fully asynchronous.
+we can use embedded ActiveMQ
+
+DLQ Handling and Retry
+By default: Spring will retry the failed message 3 times
+After that, it sends the message to a Dead Letter Queue (DLQ)
+
+In ActiveMQ, it will land in:
+ActiveMQ.DLQ
+
+No user impact if failure occurs → REST returns 202 Accepted immediately → async.
+
+Concurreny means
+There are 5 concurrent consumer threads
+ut each message from the queue is only handled once, its picke by one thread if there are more message each thread will pick one and perform on that

@@ -1,0 +1,29 @@
+This will deal with 2ndpart of the flow from the commadn handler to the processor
+
+what is an event store ??
+its like a database , but instead of storing the current state ,it stores a sequence of domain events
+the source of truth is the list of events ,not rows in tables
+example
+HearingId: 123
+- HearingCreated
+- HearingScheduled
+- HearingSequenced
+
+Event stream is a list of events with a stream id/aggreagte id -- usually the hearing id ,,
+You load all events from this stream to reconstruct the aggregate
+
+what is Aggregate
+It is a domain object the encapsulates the business logic and state
+REbuilt from the event stream
+Has internal state like date, courtId, sequence
+Exposes methods like scheduleHearing() or sequenceHearingDays()
+
+UPstream --> The system or service that sends the command or event
+Downstream	The system that reacts to the event (e.g., sends email, updates search index)
+
+In your example:
+Command API is upstream
+Event Processor + View Store + Notification Publisher = downstream
+
+
+

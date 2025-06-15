@@ -1,0 +1,22 @@
+How do you synchronize read and write models?
+The cqrs makes ure the commadn and query are separate ,
+The command handler will handle the payload , it willl convert the payload into domain object
+it will load the the entire evnt stream based on the stream id / unique id for a case
+it may genererate new events which are stored in the event store
+they are consumed by the event listeners to update the read projections (stored in the view store)
+
+there is no direct synchronization between the read and write model , we depend upon eventual consistency
+There is no direct synchronization — instead, we rely on eventual consistency.
+The read model eventually reflects the write model once the event has been processed.
+
+For critical user flows, we apply polling with retry logic (Fibonacci/exponential backoff) to ensure the data is
+available before responding to the user.”
+
+
+How do you replay events for a corrupted case?
+Each aggregate (e.g., a case) has a dedicated event stream. If we detect data corruption or need to investigate a bug,
+we can replay the stream by fetching all events using the stream ID (like Case-UUID) and reapplying them to reconstruct the state.
+
+We also support partial replays — e.g., from a certain event onwards —
+and have a utility endpoint to trigger replays in dev/stage environments.
+In production, we run replays manually after isolating the impacted case IDs.

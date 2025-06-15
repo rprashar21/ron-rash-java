@@ -1,0 +1,95 @@
+Our platform is part of the UK’s Criminal Justice System digital transformation.
+OUr system or applicatioin handles the lifeycle of courts or bascaill the case management system ,, like creation of case, hnadling of these cases
+The system handles everything from case createion , defendant management,hearing scheduling listig, it deals with cour administrators,leagla advisors
+proseutors to efficintly manage case workflows
+
+ It facilitates end-to-end case progression—from when the police raise a case, all the way through prosecution,
+court processing, and final result reporting—via a distributed microservices architecture.
+It ensures that justice cases, whether SJP (Single Justice Procedure) or Non-SJP,
+flow reliably across different stakeholders like police, prosecutors, and courts
+
+What are my roles and responsiblities
+My responsiblyity is to build and maintain these services within the common platform
+These services are buit using CQRS and Event Sourcing .
+We process event streams, maintain event-sourced aggregates, and support auditing and replay of the system’s state
+Integration with legacy systems (CJSE, Libra) via SPI over REST and JSON messages
+Azure DevOps for CI/CD, infrastructure on Kubernetes
+Database: Postgres (for projections), and custom in-memory event store for dev/tes
+
+
+What makes it a Distributed Service ?
+Independent microservices (ATCM, Courts, Results, SJP, etc.)
+Communicate asynchronously via events
+Shared message contracts and consistent correlation IDs for traceability
+Replayable event streams for resilience and state reconstruction
+
+
+Imagine a Simple BUsiness Scenario
+Imagine a person is caught speeding by the police. The police prepare a case and send it electronically to the Common Platform.
+
+Police prepare a speeding case and send it to the Common Platform.
+The platform converts it into a Prosecution Case File, tagged as an SJP case.
+
+if the case is an sjp the (atcm is atomated track case management system)
+The case is routed to ATCM, which automatically:
+
+Checks the documents
+Assigns it to a magistrate
+Generates a result (e.g., fine or penalty points)
+The Result is stored and sent back to the Police via the CJSE gateway.
+
+If anything goes wrong (e.g., incomplete data), the case lands in the Error Management section, where a Court Admin can review and fix it
+Cases are moved here if they fail schema validation, routing, or business rules
+
+Keyword	Business Explanation
+SJP (Single Justice Procedure)	A fast-track digital process used for minor offences (like speeding, fare evasion).
+No court appearance is needed. The case is reviewed by a single magistrate based on written evidence.
+
+Prosecution	The legal process where the state (Crown Prosecution Service or CPS) brings a case against a defendant based on the evidence.
+Defendant	The person accused of committing the offence. In our example, the person caught speeding.
+
+ATCM (Automated Track Case Management)	A system/component that handles SJP cases automatically,
+assigns them to a magistrate, and sends the result back to police. Think of it like an auto-pilot court process.
+
+Questions
+“What if the defendant pleads not guilty in an SJP case?”
+Expected: It’s automatically escalated and converted to a Non-SJP case and sent to the Courts context.
+
+What’s the role of ATCM exactly?”
+Expected: It automates the end-to-end flow of SJP cases including validation, magistrate assignment, and result generation.
+
+Can you explain what makes this a distributed system?”
+Expected: Multiple independent services (SJP, Courts, Results, ATCM), each running on separate nodes,Interview Questions
+
+
+How do Drools rules work? Can you add/modify rules without code deployment?
+A:
+“Drools is a rule engine we use in the usersgroups service to define access policies. Rules are written in .drl files and evaluated at runtime
+We externalize these .drl files, so rules can be hot-reloaded in dev/stage.
+In production, we follow a controlled release process, but rules can still be updated without code changes.
+
+
+How do you invalidate or refresh cached permission data??
+We use a custom interceptor (QueryApiCacheInterceptor) to cache user permission responses.
+Each entry has a TTL (e.g., 5 minutes) and is invalidated automatically.
+
+For cases where permission changes must reflect immediately (e.g., role update),
+ we publish a cache invalidation event, and listeners on each instance clear the cache for that user.”
+
+ Q: What are the risks with ThreadLocal in thread pools?
+ thread locals store per thread user context like cjscuuid and permisiion , since threads are reused , old data might be retained
+ we make ssure that ThreadContext.clear(); // avoids memory leaks is called in the finally block after each request is processed
+
+How do you prevent spoofed headers (e.g., fake CJSCPPUID)
+Every incoming request goes through a gateway or interceptor that validates the CJSCPPUID,
+it must be a valid uuid
+it must be in our database and have a vaild roles/gropus
+
+How do you recover failed events?
+All unprocessable messages go to a DLQ ?
+We log the message and root cause --> Expose it our dashboard ie Error management ui
+allow analysts/devs to inspect and trigger a manual replay after fixing the underlying issue
+Replay involves either:
+
+Reprocessing the event using a dedicated endpoint
+Republishing it to the original topic with a new message ID”

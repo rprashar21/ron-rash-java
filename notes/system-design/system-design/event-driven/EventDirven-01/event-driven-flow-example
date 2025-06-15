@@ -1,0 +1,92 @@
+This is a justice domain use case implementing event sourcing to preserve every change and rebuild system state from those events if needed.
+
+
+An external system or frontend sends a command:
+"Update hearing #123 to start at 10 AM in Courtroom 2"
+
+Step1 --> Command API Received -- the messages are validated and send the the jms queue artemis apache active mq
+
+
+Step2 -> the handler processes these message ,, why jms queue becoz the message are quite big
+Converts JSON command/payload into UpdateHearingForListingEnriched ie a domain object
+Loads the event stream for that hearingId/aggreagte id  from the Event Store ie
+ur are  updating the Hearing aggregate (business object) using a pure function, and generating a stream of domain events from that.
+These events reflect how the hearing has changed, e.g., HearingUpdated, CourtRoomChanged, etc.
+
+Part 2: Event Store — Storing Events
+final EventStream eventStream = eventSource.getStreamById(hearingId);
+final Hearing hearing = aggregateService.get(eventStream, Hearing.class);
+final Stream<Object> events = updateFunction.apply(hearing);
+appendEventsToStream(command, eventStream, events);
+
+This block:
+
+Loads the event stream by ID
+Reconstructs the aggregate (Hearing) by replaying historical events
+Applies the command to generate new events
+Appends the new events to the event store
+
+This is event sourcing in action — events are stored instead of mutating data directly.
+
+Part 3: Emitting Events via JMS Topics
+Once events are stored, they are published to a private/pubkic JMS topic
+
+What is a JMS Topic?
+Part of Java Messaging Service (JMS) — a pub-sub mechanism
+Topic = one-to-many broadcast (like a fan-out)
+Multiple subscribers (event listeners) can receive the same message
+
+How is it configured?
+Declared in code using @Resource
+Backed by a JMS broker like ActiveMQ, HornetQ, or Artemis
+Usually configured in standalone.xml (for WildFly) or in application properties
+
+example in wildfly configuration
+<jms-destinations>
+  <jms-topic name="listing.event"/>
+</jms-destinations>
+
+Part 4: Event Processor — Listening to Events
+@Handles("listing.events.hearing-updated")
+public void handleHearingUpdated(final JsonEnvelope envelope)
+This is the event listener that:
+
+Receives HearingUpdated from the private topic
+Converts it into a domain event
+Updates the read model / view store (used by the frontend)
+Optionally sends a public event for downstream systems
+
+Part 5
+Eventual Consistency in Play
+In CQRS + Event Sourcing, the write side and read side are asynchronous.
+
+That means:
+
+A command can be processed immediately
+The read model might take a few milliseconds or seconds to reflect the change
+This is called eventual consistency — the system guarantees that:
+"Given no further updates, the read model will eventually be consistent with the write model."
+
+REcap
+REST API → CommandHandler (write model)
+             ↓
+    Aggregate reconstructed
+             ↓
+  New events generated (e.g., HearingUpdated)
+             ↓
+  Events appended to Event Store
+             ↓
+  Events published to JMS Private Topic (listing.event)
+             ↓
+  Event Listeners consume
+             ↓
+  View Store updated + Public Event emitted
+             ↓
+  External systems consume (via Public Topic)
+
+
+If the listener fails:
+
+The event goes to DLQ (Dead Letter Queue)
+A recovery process can replay the failed event from DLQ
+You can also use REPLAY JMX command to rebuild view stores
