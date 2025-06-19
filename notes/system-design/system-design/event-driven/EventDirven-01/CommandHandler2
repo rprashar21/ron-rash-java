@@ -1,0 +1,29 @@
+What is a command
+A command is an intent to mutate/modfiy the state of the domain model.
+Whether it succeeds or not depends on the business rules that we configure.
+
+Go thru this for better understanding https://github.com/rprashar21/sample-cqrs/blob/master/src/main/java/com/example/cqrs/CqrsApplication.java
+
+@RequiredArgsConstructor
+public class UserAggregate {
+
+    // we will have 2 repositories
+    private final UserWriteRepository userWriteRepository;
+
+    // handle the create command
+    public User handleCreateUserCommand(CreateUserCommand createUserCommand){
+        User user = new User(createUserCommand.getUserId(), createUserCommand.getFirstName(), createUserCommand.getLastName());
+        userWriteRepository.addUser(user.getUserid(), user);
+        return user;
+    }
+
+    // handle the updateCommand
+    public User handleUpdateUserCommand(UpdateUserCommand updateUserCommand) {
+        User user = userWriteRepository.getUser(updateUserCommand.getUserId());
+        user.setAddresses(updateUserCommand.getAddresses());
+        user.setContacts(updateUserCommand.getContacts());
+        userWriteRepository.addUser(user.getUserid(), user);
+        return user;
+    }
+
+}

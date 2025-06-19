@@ -1,0 +1,26 @@
+Queve vs topic
+
+| Feature       | **Queue (Point-to-Point)**                | **Topic (Publish-Subscribe)**                            |
+| ------------- | ----------------------------------------- | -------------------------------------------------------- |
+| Delivery      | One consumer per message                  | All subscribers get a copy                               |
+| Use Case Type | **Task Distribution**                     | **Event Broadcasting**                                   |
+| Example       | Process orders, send emails               | Notify services about a new user registered              |
+| Scalability   | Scale consumers to parallelize processing | Scale subscribers independently                          |
+| Durability    | Messages persist until consumed           | Messages can be transient or durable depending on config |
+
+| Feature            | **JMS (e.g., ActiveMQ, Artemis)**     | **RabbitMQ**                         | **Kafka**                                  |
+| ------------------ | ------------------------------------- | ------------------------------------ | ------------------------------------------ |
+| Type               | Java Messaging Standard               | Lightweight message broker           | Distributed event streaming platform       |
+| Protocol           | Java-specific API (JMS), AMQP         | AMQP                                 | Custom TCP protocol, uses logs             |
+| Use Case           | Enterprise Java systems, transactions | Microservices, queue-based workflows | High-throughput event streaming, analytics |
+| Message Retention  | Until consumed                        | Configurable (ack-based)             | Long-term (configurable)                   |
+| Consumers          | Message removed after consumption     | Similar (with ack)                   | Consumers read independently from log      |
+| Ordering           | Preserved per queue                   | Preserved                            | Partition-based ordering                   |
+| Performance        | Medium                                | Medium to High                       | Very High (horizontal scalability)         |
+| Delivery Semantics | At-most-once, At-least-once           | At-least-once (default)              | Exactly-once with Kafka Streams or Flink   |
+
+
+Use JMS (ActiveMQ/Artemis):
+You’re in a Java ecosystem.
+You need JTA/XA transactions, durable queues, or enterprise features.
+Suitable for court case processing, event sourcing, DLQ handling, etc

@@ -1,0 +1,109 @@
+
+
+Real-World Scenario
+You're integrating with an external system (e.g., CJSE — Criminal Justice System Exchange).
+That system sends SPI messages with data about court or prosecution.
+
+Imagine a Simple BUsiness Scenario
+Imagine a person is caught speeding by the police. The police prepare a case and send it electronically to the Common Platform.
+
+Police prepare a speeding case and send it to the Common Platform.
+The platform converts it into a Prosecution Case File, tagged as an SJP case.
+
+This message sent by the police via and applicationInterface is called SPI-
+Each SPI message has:
+A unique requestId
+The message payload
+(Optionally) an mdiError if something went wrong on their end
+
+The commadnhandler logic
+It will valida teh payload nad gets is requestid
+Load the eventStream from the EventStore using requestId
+Rebuild CJSEMessageAggregate using .replay(history)
+Call .receive(...) on the aggregate
+Aggregate decides which event(s) to emit:
+CjseRequestMessageReceived
+CjseDuplicateRequestMessageReceived
+CjseMessageReceivedWithMdiErrors
+
+Events are saved and passed to the event processor
+
+use case
+
+{
+  "requestId": "R001",
+  "message": "Prosecutor staged successfully",
+  "mdiError": null
+}
+// post message send via a rest call , post api POST /commands/cjse-message
+
+if u send the same message then the aggreagate logic will detect it to be same and emit this event
+CjseDuplicateRequestMessageReceived
+If you send a message with an mdiError:
+It emits CjseMessageReceivedWithMdiErrors
+
+Now how do you replay ???
+If something breaks or a downstream system asks, “What happened with requestId=R001?”
+→ You call GET /replay/R001
+The system rebuilds the CJSEMessageAggregate from all previous events, and shows the current state.
+
+code sample
+
+@PostMapping("/cjse-message")
+public ResponseEntity<String> receiveCjseMessage(@RequestBody CjseMessage message) {
+    try {
+        CJSECommandHandler.receiveSpiCjseMessage(message);
+        return ResponseEntity.ok("CJSE Message Processed");
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body("CJSE Message Failed");
+    }
+}
+
+command hanlder logic
+public static void receiveSpiCjseMessage(CjseMessage message) {
+    String streamId = message.requestId;
+
+    List<Object> history = store.getStream(streamId);                     // ⬅ Step 1: Load past events
+    CJSEMessageAggregate aggregate = CJSEMessageAggregate.replay(history); // ⬅ Step 2: Rebuild aggregate
+    List<Object> events = aggregate.receive(message);                      // ⬅ Step 3: Run domain logic
+
+    store.append(streamId, events);                                        // ⬅ Step 4: Save events
+    events.forEach(EventProcessor::process);                               // ⬅ Step 5: Notify downstream
+}
+
+// lets look at the replay method of how it actully build the aggregate
+the Aggregate class ie CJSEMessageAggregate will have a list of events
+have a listof vebts
+
+// logic to build the aggregate domain object
+static CJSEMessageAggregate replay(List<Object> events) {
+    CJSEMessageAggregate agg = new CJSEMessageAggregate();
+    for (Object e : events) {
+        if (e instanceof CjseRequestMessageReceived ev) {
+            agg.requestId = ev.requestId;  // Just enough to detect duplicates
+        }
+    }
+    return agg;
+}
+
+// domain logic to generate new events
+List<Object> receive(CjseMessage message) {
+    if (message.mdiError != null) {
+        return List.of(new CjseMessageReceivedWithMdiErrors(message.requestId, message.message));
+    } else if (this.requestId != null) {
+        return List.of(new CjseDuplicateRequestMessageReceived(message.requestId, message.message));
+    } else {
+        return List.of(new CjseRequestMessageReceived(message.requestId, message.message));
+    }
+}
+/// after that we have the processor which will listen to the new events and the evnet listenr will
+A ViewStore to track the latest status per CJSE request
+A /view/{requestId} REST endpoint to query it
+Event processor logic to update this view based on the type of CJSE event received
+
+
+
+
+
+
+

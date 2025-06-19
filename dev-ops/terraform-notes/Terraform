@@ -67,3 +67,6 @@ terraform workspace new prod-env
 terraform workspace select default
 terraform workspace list
 terraform workspace select prod-env
+
+
+<parallel>both</parallel><forkCount>${fork.thread.count}</forkCount><reuseForks>${reuse.forks}</reuseForks><threadCount>${fork.thread.count}</threadCount>

@@ -1,0 +1,121 @@
+1. Infrastructure (AKS + WildFly)
+Each microservice runs as a docker container in Azure kubernetes service
+WildFly is used as the runtime inside the container for Java WARs
+
+Each microservice has:
+A WildFly runtime
+Artemis (JMS broker)
+PostgreSQL (or connects to a central Postgres)
+Liquibase runner for DB migrations
+These containers are scheduled across multiple AKS nodes (VMs), organized via deployments, services, and pods.
+
+2. POD and service communciation
+UI Pods --> the ui pods they run on nginx server-- they call the backend vai the apim thru res calls
+Exposed via Kubernetes Ingress + Azure Application Gateway
+Angular app is served via NGINX or Node container
+Calls backend via REST (secured with tokens or mTLS)
+
+Backend Pods
+Not directly exposed externally
+Each service exposes an internal Kubernetes Service to communicate to ither ms
+Communication is via internal DNS: e.g., spi.staging.svc.cluster.local
+
+3.Security
+| Layer         | Security Feature                                      |
+| ------------- | ----------------------------------------------------- |
+| API Gateway   | OAuth2, IP whitelisting, throttling                   |
+| UI to Backend | Auth token (JWT, OIDC), HTTPS, Istio mTLS (optional)  |
+| Inter-service | Kubernetes NetworkPolicies, TLS, ServiceAccount roles |
+| DB Access     | Identity-based access or secrets via Azure Key Vault  |
+
+4. Load Balancing
+Azure Load Balancer / App Gateway routes external traffic
+
+Inside AKS:
+Kubernetes Services load-balance across pod replicas
+Horizontal Pod Autoscaler (HPA) scales based on CPU/memory
+
+5. Monitoring Performance and Auditing
+| Tool                              | What It Tracks                                       |
+| --------------------------------- | ---------------------------------------------------- |
+| **Azure Monitor** / Log Analytics | Logs, traces, metrics across AKS cluster             |
+| **Prometheus + Grafana**          | Real-time metrics for pods, services, APIs           |
+| **App Insights**                  | Traces, custom events, exceptions (frontend/backend) |
+| **Audit Logs**                    | Via ELK stack or native Azure integration            |
+End-to-end request tracing
+Alerting on latency, failures
+Historical auditing for compliance
+
+6. CI CD
+| Step                 | Tool / Activity                        |
+| -------------------- | -------------------------------------- |
+| **Code commit**      | GitHub / Azure Repos                   |
+| **CI pipeline**      | Azure DevOps / GitHub Actions          |
+| **Build**            | Maven build → WAR → Docker image       |
+| **Image Registry**   | Azure Container Registry (ACR)         |
+| **Deploy**           | Helm Chart → AKS (via DevOps pipeline) |
+| **Environment tags** | dev, test, uat, prod via namespaces    |
+
+Blue/Green or Canary deployments are supported via Helm/Kustomiz
+
+Dependencies Between Services
+Defined by domain (e.g., SPI talks to PCF, PCF may call Hearing)
+Inter-service calls are via:
+REST (via Feign, WebClient, or RestTemplate)
+Message queue (Artemis for async flows)
+Events (if CQRS/event-sourced)
+
+can u describe ur architecure
+Our platform manages the end-to-end lifecycle of court prosecution cases, including hearing scheduling, case listing, resulting,
+ and notifications to external systems like DVLA.
+It’s built as a distributed microservices system using CQRS and Event Sourcing.
+Each microservice handles a specific domain (like hearing, result, listing) and separates reads from writes.
+Requests from clients go through APIM, then pass through a load balancer, into App Gateway (with WAF),
+and hit the Kubernetes ingress controller, which routes to the correct service using path-based routing.
+
+We use ActiveMQ for event delivery, and every state change is persisted as an event in our in-memory or durable event store.
+ We expose projections via viewstores for read-heavy use cases.
+
+ Why did u choose cqrs + event sourcing?
+ Court systems require a full audit trail of every change.
+ CQRS lets us separate commands (for complex rules) from queries (for performance).
+ Event Sourcing adds a replayable log of all state transitions — perfect for compliance, debugging, and building workflows.
+ It also enables event-driven integration with external parties.
+ The main challenge is complexity, so we mitigate that with versioned events,
+ centralized event serialization, and tooling for replay/debugging.”
+
+ How do you handle authentication and authorization?
+ Authentication mechanism (CJSCPPUID)
+ API gateway role
+ Authorization rules (roles + features)
+ Runtime enforcement:
+
+ Every API request includes a CJSCPPUID header that uniquely identifies the user.
+ This is validated at the API gateway layer — in our case, APIM — before traffic reaches backend services.
+ We also apply rate-limiting per user using APIM policies. Roles like ‘Court Clerk’ or ‘Legal Advisor’ determine access,
+  and permissions are evaluated using Drools rules in our usersgroups-service. The services consume these rules and cache results where possible
+
+How do you ensure eventual consistency between command and query models?
+Once a command is accepted, we emit an event. This event is consumed by the projection handlers (viewstores) to update the read model.
+This happens asynchronously, so we use exponential backoff and smart polling in the UI. Every projection is idempotent, and failed projections are routed to a DLQ for inspection and replay.
+We also expose internal replay endpoints to rebuild read models if needed.
+
+What happens when a message fails in your event-driven system?
+When a message fails (e.g., malformed payload or validation error), we send it to a DLQ using ActiveMQ. We tag messages with correlation IDs and log failure reasons.
+Ops teams or devs can inspect the DLQ and manually trigger replay after fixing root causes.
+For common issues, we use retry strategies with exponential backoff.”
+
+We have a dlq tool to replay the messages and catch logs to see where the error occurs or was it during api or serenity tests run
+we can see the scenarios and
+
+How do you scale and isolate services?
+Each microservice is independently deployable in its own K8s pod.
+We use HPA to auto-scale based on CPU/memory or custom metrics. The ingress controller ensures traffic is routed based on path.
+
+Since each service is a bounded context, they can evolve independently. Viewstores can scale horizontally,
+ and we use caching to reduce backend load for permission checks
+
+How would you debug an inconsistent read model or missing event?
+I’d trace the correlation ID through logs and ensure the event was persisted.
+Then I’d check if it was picked up by the projection handler. If it’s in the DLQ, I’d inspect the root cause and replay.
+If the read model is corrupt, we support partial or full replay of events to reconstruct the state.”

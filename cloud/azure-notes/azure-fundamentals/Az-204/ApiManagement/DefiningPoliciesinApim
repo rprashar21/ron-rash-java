@@ -51,7 +51,6 @@ Product:
 Applies to all APIs included in a product.
 Example: A policy that requires subscription keys for all APIs under the “Premium” product.
 API:
-
 Applies to all operations under a specific API.
 Example: A policy that converts the response format from XML to JSON for a specific API.
 Question: "How can you enforce a specific rule across all operations of a single API?"

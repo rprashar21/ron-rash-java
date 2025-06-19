@@ -21,16 +21,21 @@ verify: perform checks on the packaged code to ensure its integrity
 install: install the packaged code in the local repository
 deploy: deploy the packaged code to a remote repository
 
+What is Semantic Versioning?
+Semantic versioning uses a MAJOR.MINOR.PATCH structur
+
 Version In Maven
-1.0.0 [major.minor.patch]
+1.0.0 [major.minor.patch] major -- Breaking Chnges like entire Api DEsign, minor --> new endpoint , patch --> bug fixes
 1.1.2
 1.2.3
 major -- siginficant amout of work
 minor -- little work required for upgrade
 pacth -- no work to upgrade
 
-Snapshots -- under development should not take snapshots
-10.0.0-SNAPSHOT -- under development
+Snapshots -- so when you createa feature or wroking on a feature u release a snaps hot version and work
+when u merge to master u align with the master -- we have pluging inside maven which will automatcally increae the pom version
+under development should not take snapshots
+10.0.0-SNAPSHOT -- under development --
 10.0.0-M1 -- milestone
 10.0.0 -- Released
 

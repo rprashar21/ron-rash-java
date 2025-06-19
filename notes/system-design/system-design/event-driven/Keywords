@@ -123,4 +123,5 @@ No user impact if failure occurs → REST returns 202 Accepted immediately → a
 
 Concurreny means
 There are 5 concurrent consumer threads
-ut each message from the queue is only handled once, its picke by one thread if there are more message each thread will pick one and perform on that
+ut each message from the queue is only handled once,
+its picke by one thread if there are more message each thread will pick one and perform on that

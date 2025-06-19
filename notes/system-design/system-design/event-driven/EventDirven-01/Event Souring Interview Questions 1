@@ -1,0 +1,87 @@
+ Why event sourcing instead of traditional CRUD storage?
+ In crud -- u create update and delete the system
+ You store the current state of an entity (like a case or hearing).
+ When an update happens (e.g., changing hearing date), you overwrite the old data.
+ You lose the historical context unless you explicitly build audit tables or logging frameworks.
+
+ hard to trace , get the full history of what happened ,difficult to rollbak
+ integration with external systems will be manual
+
+ How event sourcing helps instead ??
+ you never overwrite the state
+ every change is stored as an immutable event in chronological order in the evnt store with version
+ correlation casuation posution in stream .
+ the current state is derived by replaying events in order.
+
+ [
+   { type: "HearingCreated", data: { date: "2025-06-10" } },
+   { type: "HearingRescheduled", data: { date: "2025-07-01" } },
+   { type: "HearingConfirmed", data: { status: "scheduled" } }
+ ]
+
+ we know when the hearing was created, who rescheduled it and why status changed
+
+ Scenario -- this will help us send notifcations to external parties based on the current state or past state
+ “In our legal domain, a defendant’s case might go through dozens of transitions — reopened, rescheduled, paused, appealed.
+  Using event sourcing allows us to model and persist each step cleanly.
+  Instead of writing custom audit logic, the system's history is the source of truth.”
+
+ What are the challenges of events sourcing and cqrs
+ Increased complexity
+ Instead of storing the latest state, we store and process all immmutable events,
+ developers must understand event serialization ,ordering,replay logic and agggreagte rehydration
+
+Serialization ??
+  serialization is a process of converting the objet to a format that can be stored or transmitted (e.g., into JSON, XML, or binary)
+In event sourcing, every change (event) is stored as a serialized payload in an event store, rather than saving the final state.
+
+why this matters ?
+Serialized correctly (during storage)
+Deserialized correctly (during replay)
+Version-compatible over time
+
+Example Scenario
+Let’s say you're tracking hearings in a court system.
+
+public class HearingScheduledEvent {
+    private UUID caseId;
+    private LocalDate hearingDate;
+    private String courtroom;
+}
+
+Before storing this event is serialized to json -- Java code
+ObjectMapper mapper = new ObjectMapper();
+HearingScheduledEvent event = new HearingScheduledEvent(caseId, date, "Courtroom A");
+
+String json = mapper.writeValueAsString(event);
+System.out.println(json);
+// this is the object converted to json
+{
+  "type": "HearingScheduledEvent",
+  "caseId": "123e4567-e89b-12d3-a456-426614174000",
+  "hearingDate": "2025-07-01",
+  "courtroom": "Courtroom A"
+}
+This JSON is saved in the event store (could be a database or a Kafka topic or a queue).
+
+Deserialization (on replay) // java code , the event is deserialized back to object
+HearingScheduledEvent replayed = mapper.readValue(json, HearingScheduledEvent.class);
+
+Deserialization (on replay)
+When you reload:
+The JSON is converted back into a HearingScheduledEvent object.
+This event is applied to the aggregate to rebuild its current state.
+
+Why Serialization Is a Challenge in Event Sourcing
+| Issue                           | Impact                                             |
+| ------------------------------- | -------------------------------------------------- |
+| Schema change (e.g., new field) | Old events may not deserialize unless defaulted    |
+| Version mismatch                | New code may not understand old event structure    |
+| Type safety                     | JSON lacks type fidelity (enums, dates can break)  |
+| Polymorphism                    | Serializing/deserializing base + subclass properly |
+
+How to Handle
+Use versioning inside event payloads
+Prefer backward-compatible changes (add fields, don't rename/remove)
+Centralize serialization logic
+Use tools like Jackson with annotations (@JsonTypeInfo) for polymorphism

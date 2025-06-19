@@ -1,0 +1,53 @@
+This will deal with 2ndpart of the flow from the commadn handler to the processor
+
+what is an event store ??
+its like a database , but instead of storing the current state ,it stores a sequence of domain events
+the source of truth is the list of events ,not rows in tables
+example
+HearingId: 123
+- HearingCreated
+- HearingScheduled
+- HearingSequenced
+
+Event stream is a list of events with a stream id/aggreagte id -- usually the hearing id ,,
+You load all events from this stream to reconstruct the aggregate
+
+what is an Aggregate
+It is a domain object the encapsulates the business logic and state
+REbuilt from the event stream
+Has internal state like date, courtId, sequence
+Exposes methods like scheduleHearing() or sequenceHearingDays()
+
+Aggregate is a pattern described in Domain-Driven Design (DDD) that logically groups different entities
+by binding entities to an aggregate root.
+The aggregate pattern provides transactional consistency between the entities.
+
+CQRS naturally benefits from the aggregate pattern,
+ which groups the write domain model, providing transactional guarantees.
+  Aggregates normally hold a cached state for better performance but can work perfectly without it.
+
+Projection/Projector:
+Projection is another important pattern which greatly benefits CQRS.
+Projection essentially means representing domain objects in different shapes and structures.
+
+These projections of original data are read-only and highly optimized to provide an enhanced read experience.
+We may again decide to cache projections for better performance, but that's not a necessity.
+
+ An aggregate that's responsible for taking commands and handling them. Aggregates may accept or reject a command:
+The aggregate uses a repository to retrieve the current state and persist any changes to it.
+Moreover, it may store the current state locally to avoid the round-trip cost to a repository while processing every command.
+
+Finally, we need a repository to hold the state of the domain model. This will typically be a database or other durable store, but here we'll simply replace them with an in-memory data structure:
+
+
+
+
+UPstream --> The system or service that sends the command or event
+Downstream	The system that reacts to the event (e.g., sends email, updates search index)
+
+In your example:
+Command API is upstream
+Event Processor + View Store + Notification Publisher = downstream
+
+
+

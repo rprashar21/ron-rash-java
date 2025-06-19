@@ -1,0 +1,45 @@
+Solictors -- lawyers who represent a lcient ,defendant in public or private crimes-
+Present cases, advise clients, communicate with court
+Legal adivisor - Legal professionals who assist magistrates or court staff
+Since magistrates in the UK are not legally trained, Legal Advisors play a critical role in ensuring that court decisions comply with the law
+they manage courtroom proceedings -- , comply with court law
+they review Case files and evidence: Review materials ahead of hearings
+
+Magitrates court are on less or minor offence ,, like dispute ,minor assualts ,, theyer is no jury
+judge - Magistrates (usually 3 volunteeers  people) or a District Judge
+they can give imprisonment upto 6-12 montsh
+quuikc less formal , laegal advisors give advice to them ,,verdicts can referred to crown court
+
+for serious offence crown court, oroper judsges ,long trials
+
+
+NOrmalization is the process of structuring relationla database
+To eliminate redundacny, data integrity reduce anomalies
+
+-- Users table
+id   | name
+-----|-------
+1    | Alice
+
+-- Orders table
+id   | user_id | total
+-----|---------|------
+100  |    1    | 50.00
+
+Less storage used
+Easy to maintain and update (e.g., change a user name in one place)
+
+Denormalization is when you combine related data into one table to:
+speed up performance
+avoid complex joins
+Often used in read-heavy systems (e.g., reporting, analytics
+Tables have duplicated data
+redundacny is intorduced
+
+-- Orders table (with user name embedded)
+id   | user_id | user_name | total
+-----|---------|-----------|------
+100  |    1    | Alice     | 50.00
+
+fast perofroamcne
+

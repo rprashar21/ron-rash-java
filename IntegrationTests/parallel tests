@@ -1,0 +1,14 @@
+<configuration>
+        <!-- Run test classes in parallel -->
+        <parallel>classes</parallel>
+        <!-- Number of concurrent threads (i.e., test classes) -->
+        <threadCount>4</threadCount>
+        <!-- Always use separate JVMs for performance and safety -->
+        <forkCount>2</forkCount>
+        <!-- Reuse JVMs across classes (important for parallel=classes) -->
+        <reuseForks>true</reuseForks>
+        <!-- Fail fast if any test fails -->
+        <testFailureIgnore>false</testFailureIgnore>
+        <!-- Optional: limits thread usage in CI environments -->
+        <perCoreThreadCount>true</perCoreThreadCount>
+      </configuration>

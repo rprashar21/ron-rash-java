@@ -1,0 +1,35 @@
+we can setup secuirty as user/roles in broker.xml in the security-settings
+
+bascically in this we can setup users and roles
+
+class MessageProdcuer{
+
+      psvm(){
+       InitialContext context = new InitialContext();
+       Queue requestQueue = context.lookup("queue/requestQueue")
+       // other stuff
+       try(ActiveMqConnectionfactory cf = new ActiveMqConnectionFactory()){
+          JMSContext jmsContext = cf.createContext("user","role") // this for a transaction only when its is commited the message will be sent to the jms server
+
+        var JmsProdcuer jmsProdcuer=  jmsContext.createProdcuer();
+         jmsProdcuer.send("requestQueue","Message 1");
+         jmsProdcuer.send("requestQueue","Message 1");
+
+         jms.commit();
+       }
+      }
+}
+
+// sned a group of messsage
+
+message.setStringProperty("JMSXGroupId","grp1")
+prodcuer.send(message)
+
+// consumer will
+
+class MyListener implements MessageListner{\
+ @Override
+ public void onMessage(Message message){
+
+ }
+}

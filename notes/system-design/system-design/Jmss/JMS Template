@@ -1,14 +1,33 @@
 JmsTemplate hides all teh complexities to avoid connectionfactory and session and other stuff
 its an abstarction
 
+// applicatiom.properties
+springjms.Myqueuue=myquque
+
+
+// this is the producer
 @Component
 class MessageSender{
 
+
 @Autowired
 JmsTempalte jmsTemplate;
+
+@Value("${springjms.Myqueuue}")
+private String queue;
+
      public void sendMessage(final Message message){
-       jmsTemplate.send(message)
+       jmsTemplate.convertAndSend(queue,message)
      }
+}
+
+// consumer
+class MyListener{
+
+@JmsListener(destination="${springjms.Myqueuue}")
+public void receive(String message){
+sout("message recived")
+}
 }
 
 ====== Jms Messages ======
@@ -55,4 +74,33 @@ jmsContext,createTextMessage,byteMessage
 
 =============P2P ======
 when 2 use -- oneto one -- like login,bank and atm machine ,improve performance ,,increase queues when load is heavy
+
+Message Acknowledgement
+once u send the message , the consumer has consumed ,, if u resend u will no meessage becoz it has been consumed and removed from queue
+there is an aautomactic understanding from the jms server that message has been consumed
+
+whereas in client ie consumer acknowledgement-- the client has to specify only then the jms provide will say the message has been consumed
+like  message.acknowledge
+
+== code for all of these
+
+Producer code
+
+class MessageProdcuer{
+
+      psvm(){
+       InitialContext context = new InitialContext();
+       Queue requestQueue = context.lookup("queue/requestQueue")
+       // other stuff
+       try(ActiveMqConnectionfactory cf = new ActiveMqConnectionFactory()){
+          JMSContext jmsContext = cf.createContext(JMS.SESSION_TRANSACTED) // this for a transaction only when its is commited the message will be sent to the jms server
+
+        var JmsProdcuer jmsProdcuer=  jmsContext.createProdcuer();
+         jmsProdcuer.send("requestQueue","Message 1");
+         jmsProdcuer.send("requestQueue","Message 1");
+
+         jms.commit();
+       }
+      }
+}
 
