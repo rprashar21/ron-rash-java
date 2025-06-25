@@ -1,0 +1,120 @@
+public class ThreadSample01 {
+
+    /**
+     * ===============================
+     * 🔹 THREADS & MULTITHREADING IN JAVA
+     * ===============================
+     */
+
+    /*
+     * ✅ What is a Thread?
+     * A thread is a **lightweight unit of execution** within a process.
+     * It represents a single sequential flow of control within a program.
+     *
+     * ✅ Multitasking vs Multithreading
+     * - Multitasking: Running multiple **processes** simultaneously (e.g., listening to music while coding).
+     * - Multithreading: Running multiple **threads** within a single process (e.g., background tasks in an app).
+     */
+
+    /*
+     * ✅ What is a Process?
+     * A process is an instance of a running program.
+     * Each process runs in its own memory space and can have one or more threads.
+     */
+
+    /**
+     * ==========================================
+     * 🔹 THREAD INTERNALS - What happens under the hood?
+     * ==========================================
+     *
+     * - When a Java program is run, the JVM starts with the **main thread**.
+     * - Additional threads can be created by the developer or libraries.
+     * - Each thread is backed by a **native kernel thread**, created by the OS.
+     *
+     * Internally, each thread has:
+     * - **Program Counter (PC)**: Points to the next instruction to execute.
+     * - **Registers**: Hold temporary data for CPU computation.
+     * - **Stack**: Stores method calls, local variables, and arguments.
+     *
+     * 🔁 When context-switching happens:
+     * - The OS stores the thread's PC, stack, and registers in a **Thread Control Block (TCB)**.
+     * - When the thread resumes, this state is restored to continue exactly where it left off.
+     */
+
+    /**
+     * ✅ Memory Layout:
+     *
+     * STACK:
+     * - Thread-specific memory region
+     * - Stores local variables, method call frames, arguments
+     *
+     * HEAP:
+     * - Shared among all threads
+     * - Stores objects, static variables, instance members
+     *
+     * Example:
+     *     void main() {
+     *         int x = 1;
+     *         int y = 2;
+     *         int result = x + y;
+     *     }
+     * - All above variables reside on the stack
+     */
+
+    /**
+     * ====================================
+     * 🔹 Creating Threads in Java
+     * ====================================
+     *
+     * ✅ Two primary ways:
+     *
+     * 1. **Extend Thread class**
+     *     class MyThread extends Thread {
+     *         public void run() {
+     *             // Task logic here
+     *         }
+     *     }
+     *
+     * 2. **Implement Runnable interface**
+     *     class MyRunnable implements Runnable {
+     *         public void run() {
+     *             // Task logic here
+     *         }
+     *     }
+     *
+     * - Use `new Thread(new MyRunnable()).start()` to start the thread.
+     * - Prefer `Runnable` for better flexibility (can extend other classes).
+     */
+
+    /**
+     * ✅ Modern Approach – Executor Framework
+     *
+     * - Better alternative to manually creating threads.
+     * - Provides thread pooling, task scheduling, and lifecycle management.
+     *
+     * Key Components:
+     * - `ExecutorService` – manages thread pools
+     * - `Future<V>` – represents result of asynchronous computation
+     * - `Callable<V>` – like Runnable, but returns a value and can throw exceptions
+     * - `CompletableFuture` – modern async programming with chaining and callbacks
+     */
+
+    /**
+     * ===========================
+     * 🔹 When to Use Threads?
+     * ===========================
+     *
+     * - ✅ I/O-bound tasks: reading/writing files, making API calls (non-blocking improves performance)
+     * - ✅ CPU-bound tasks: heavy computation that can be split across cores
+     * - ✅ GUI applications: offload long tasks to avoid freezing the UI (e.g., Swing, JavaFX)
+     * - ✅ Server-side apps: handle multiple client requests concurrently (e.g., web servers)
+     */
+
+    /*
+     * 💡 Pro Tip for Interviews:
+     * - Understand **thread lifecycle** (NEW → RUNNABLE → RUNNING → BLOCKED/WAITING → TERMINATED)
+     * - Know about **synchronization, deadlocks, race conditions, wait/notify**
+     * - Be familiar with high-level concurrency tools from `java.util.concurrent`
+     * - Practice using Executors and CompletableFutures for async programming
+     */
+}

@@ -1,0 +1,121 @@
+In Spring Boot there are different ways to manage configuration
+Maintain the configurations in a central repsitory along wihtn the versioning of the microservices
+
+We can manage
+Configuring spring boot with properties and profiles
+Applying external configuration with spring boot
+Implementing configuration server with spring cloud config sever
+
+In Spring we can read properties from teh properties file
+
+Spring Boot, including:
+@Value annotation
+Environment object
+@Configuration class
+Spring Cloud Config Server (for centralized configuration)
+
+
+1. @Value
+
+application.properties:
+app.message=Hello from properties!
+
+@Component
+public class MyComponent {
+
+    @Value("${app.message}")
+    private String message;
+
+    public void printMessage() {
+        System.out.println("Message: " + message);
+    }
+}
+
+
+2. Reading Properties Using Environment
+
+@Component
+public class EnvBasedComponent {
+
+    @Autowired
+    private Environment environment;
+
+    public void printMessage() {
+        String message = environment.getProperty("app.message");
+        String javaHOme = environment.getProperty("JAVA_HOME")
+        System.out.println("Env Message: " + message);
+    }
+}
+
+3. Using @ConfigurationProperties (Better for groups of related properties)
+   This is a cleaner and type-safe approach.
+
+application.yml
+
+app:
+  config:
+    name: MyApp
+    version: 1.0
+
+@Component   map this to an object and use it throught ur application
+@ConfigurationProperties(prefix = "app.config")
+public class AppConfigProperties {
+    private String name;
+    private String version;
+
+    // getters and setters
+}
+
+Usage in a class
+
+@Component
+public class ConfigPrinter {
+
+    @Autowired
+    private AppConfigProperties config;
+
+    public void printConfig() {
+        System.out.println(config.getName() + " - " + config.getVersion());
+    }
+}
+
+4. Spring Cloud Config Server (External Configuration Management)
+   Use this when you want to centralize configuration across multiple microservices.
+
+ Create a Confog Server
+ <dependency>
+   <groupId>org.springframework.cloud</groupId>
+   <artifactId>spring-cloud-config-server</artifactId>
+ </dependency>
+
+This is ur config server application u need to create another application
+
+@SpringBootApplication
+@EnableConfigServer
+public class ConfigServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}
+
+application.yml
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-org/your-config-repo
+
+Step 2: Create a Client Microservice
+spring:
+  application:
+    name: my-service
+
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+==================

@@ -1,0 +1,80 @@
+Kusto Queries for App Insights (Log Analytics) kql
+🔍 Trace request paths by correlationId
+🔥 List failed events by service
+🐢 Detect slow API calls
+🧯 Query DLQ processing issues
+
+| **Use Case**                         | **Query or Metric**                        | **Alert Condition**                       | **Action**                     |
+| ------------------------------------ | ------------------------------------------ | ----------------------------------------- | ------------------------------ |
+| DLQ filling up                       | `Service Bus -> Dead-letter messages`      | When DLQ length > 50 for 10 mins          | Email, Teams, Webhook          |
+| Failed Event Processing              | `exceptions` in Log Analytics              | >5 exceptions in 5 minutes in any service | Email DevOps                   |
+| Slow API call detection              | `requests` duration > 2s                   | >20 slow calls per minute                 | PagerDuty or Azure Alert Group |
+| Service crash/restarts (K8s)         | Container restart count metric             | Restarts > 3 in 5 minutes                 | Email Infra Team               |
+| Auth failures in APIM                | `401`/`403` responses in diagnostics logs  | >10 failed auths in 2 mins                | Block IP + Alert Admin         |
+| Result notification failures to DVLA | Trace with `message has "DVLA"` and failed | Occurrence > 1 per 10 mins                | Trigger retry logic manually   |
+
+Example of kusto query language
+
+exceptions
+| where timestamp > ago(5m)
+| summarize count() by cloud_RoleName
+| where count_ > 5
+
+Questions
+How do you detect performance issues in production?
+“We monitor service response times via Application Insights.
+Every request and dependency call (DB, queue, HTTP) is tracked with timing and failure rates.
+We define performance alerts when:
+API latency crosses thresholds
+DB calls take too long
+Queue processing lag builds up
+We correlate this with logs and metrics using Kusto queries, and we visualize trends in dashboards for proactive tuning
+
+
+How do you trace a request end-to-end across services?
+“We inject a correlationId into every incoming request at the API Gateway (or service entrypoint).
+This ID is passed in HTTP headers and MDC context across services.
+
+Using App Insights distributed tracing or OpenTelemetry, we track:
+Entry point (APIM or controller)
+Downstream service calls
+Queue interactions and failures
+In Log Analytics, we query everything by correlationId to get a complete execution path
+
+
+How do you log in a way that supports debugging complex production issues?
+We use structeured logging in json format
+ervy log includes the :
+correlationId
+userId
+operation (e.g., ‘SCHEDULE_HEARING’)
+caseId or urn if available
+
+Logs are streamed to Azure Log Analytics, and we use Kusto to:
+Investigate failures
+Use Dlq tool to
+Reconstruct events
+Trigger replay flows if needed
+
+
+How do you proactively detect and handle failures in messaging queues (ActiveMQ or Azure Service Bus)
+We monitor:
+DLQ length
+Queue depth and processing lag
+Retry count
+
+Alerts are triggered if retry thresholds are breached.
+ In our system, all event consumers are idempotent, so we can safely replay events after investigating the root cause
+
+
+How do you tune performance of APIs in Azure?
+“We use:
+
+        App Insights performance analysis tools to see response time percentiles
+        Dependency tracing to locate slow DB queries
+        Spring Boot actuator metrics exposed to Prometheus
+        We optimize based on findings, such as:
+        Caching permission responses
+        Using HikariCP for DB poolin
+        Reducing payload size
+        Switching to async processing where needed”

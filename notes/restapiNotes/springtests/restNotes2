@@ -8,3 +8,4 @@ In Spring MVC, both @RestControllerAdvice and @ControllerAdvice are used to hand
 
 In summary, @ControllerAdvice is used for traditional Spring MVC applications where the response can be in various formats,
  while @RestControllerAdvice is used specifically for RESTful APIs, where the response is typically in JSON format.
+

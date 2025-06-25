@@ -142,3 +142,12 @@ public ResponseEntity<Error> handleException(Srt ex)
 
 }
 }
+
+
+what are dto objects?
+DTO is a design pattern , dtos are simple data transfer objects
+used to transfer data between layers of the application, they do not ontain any business logic
+
+reducees network traffic - u can pari nultiple objects in a single request which can reduce the number of http request
+serialization - dto helps in serializing the objects
+decouples layers

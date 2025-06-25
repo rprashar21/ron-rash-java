@@ -7,6 +7,26 @@ Testing: JUnit for testing
 Containerization: Docker support (visible in docker directory)
 
 
+when considering traditional web applicattions we use to package using wars and then deploy using tomcat or wildfly servers
+to over come this we use springboot
+
+Springboot easy to develop and deploy  applications in java ,, the jar files contain all the dependencies and configurations of the application
+and eliminate the need for an external server to run the application
+Obtains all the benefits of a microservice architecture-- it give rich features like autoconfiguration , dependecy injection and so on
+it has an embedded server(tomcat/jetty) without the need for an external server like tomcat or wildfly to run it
+it also has inbuild support of production ready features such as metrics,health checks and externalized configuration
+we can easily bootstrap our application using springboot and deploy it to k8s cluster add componets for db queue ,cloud platforms
+
+
+example
+wars with external server tomcat                        jars with embedded server
+application 1.         application 2                        ms1             ms2
+       server                                                       jvm
+       JVM
+
+With springboot we can also document our apis using swagger or openapi helps us to generate documentation for our apis and use it for testing
+
+
 Our 40+ Java microservices are containerized using WildFly and deployed to AKS.
  We use Azure APIM to manage SOAP and REST access securely.
 Frontend UI runs in its own pod and communicates with backend via REST.

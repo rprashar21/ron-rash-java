@@ -1,0 +1,11 @@
+What to Say in an Interview
+Here’s a sample answer you can tailor:
+“If I were to review and analyze this project for bottlenecks, I would take a structured approach:
+
+Understand the architecture and main workflows by reading the documentation and exploring the codebase.
+Review the code for quality and maintainability: I’d look for large or complex classes, duplicated code, and areas lacking comments or tests.
+Assess test coverage and strategies: I’d check if the integration tests cover critical scenarios and if there are any gaps.
+Profile the application (if possible) to identify performance bottlenecks, such as slow functions, inefficient database queries, or memory leaks.
+Check the build and deployment process for inefficiencies, such as slow builds or unnecessary dependencies.
+Review logs and monitoring data to spot runtime issues or frequent errors.
+Finally, I’d document my findings and suggest improvements, prioritizing areas that impact performance, reliability, or maintainability the most.”

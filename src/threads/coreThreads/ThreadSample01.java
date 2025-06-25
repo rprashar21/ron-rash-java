@@ -3,6 +3,15 @@ package threads.coreThreads;
 public class ThreadSample01 {
 
    // https://www.educative.io/blog/multithreading-and-concurrency-fundamentals#why
+
+    //Operating systems today can run multiple programs at the same time.
+    // For example, you’re reading this article in your browser (a program) but you can also listen to music on your media player (another program).
+    //
+    //Processes are what actually execute the program. Each process is able to run concurrent subtasks called threads.
+    //
+    //Threads are sub-tasks of processes and if synchronized correctly can give the illusion that your application is performing everything at once. Without threads you would have to write one program per task, run them as processes and synchronize them through the operating system.
+
+
     // what is a thread in java ??
     // thread is a single flow of execution  withing a program
 

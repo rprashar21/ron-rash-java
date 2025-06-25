@@ -1,0 +1,17 @@
+Spring Batch is one of the core modules of SpringFramework is a technique  to process data in a large group.
+Example inserting data in db like thousands of record in Db
+
+
+| Type    | Stands For              | Description                                                                                                              |
+| ------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **JAR** | Java ARchive            | A package that contains Java classes, libraries, and metadata to **run a standalone application**.                       |
+| **WAR** | Web Application ARchive | A package specifically for **deploying Java web applications** into a servlet container like **Tomcat, JBoss, WildFly**. |
+
+
+| Use Case                                      | JAR                                       | WAR                                |
+| --------------------------------------------- | ----------------------------------------- | ---------------------------------- |
+| Microservices                                 | ✅ Preferred (standalone, embedded server) | ❌ Overkill                         |
+| Monolith deployed to a central Tomcat/WildFly | ❌                                         | ✅ Good fit                         |
+| CI/CD & Docker                                | ✅ Easier (self-contained)                 | ❌ Needs external servlet container |
+| Spring Boot app                               | ✅ Default option                          | ✅ Possible, but rarely needed      |
+| Need to run on shared app server              | ❌                                         | ✅ Required                         |

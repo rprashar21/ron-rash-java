@@ -1,0 +1,2 @@
+liveness means an application is live
+readiness is -- an app or container is ready to receive traffic

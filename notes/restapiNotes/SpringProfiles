@@ -1,0 +1,2 @@
+We can env specifi profiles
+we can have default active profiles using spring.profiles.active=prod

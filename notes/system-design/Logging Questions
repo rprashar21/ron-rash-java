@@ -1,0 +1,94 @@
+Scenario -- A Legal Advisor Schedules a Hearing
+He make a post call to pur application
+POST /api/hearings/schedule
+Header: CJSCPPUID=abc123...
+Body: { caseId, date, courtroom }
+
+Step1 API Call Enters via APIM
+Observability:
+                API Management logs:
+                Who called it (CJSCPPUID)
+                When was it caled
+                From which IP / device
+                Which API endpoint
+
+Logging:
+        We enable APIM Diagnostic Logging to Azure Application Insights
+        Response times, success/failure, and quota checks are logged
+        ✅ You can trace slow APIs or blocked clients here
+
+
+Step2 The Traffic is Routed Through App Gateway + Ingress → Microservice:
+        Routed to hearing-command-service in AKS
+        Handled by a pod (one of several replicas)
+
+ Inside the service/logging inside the service   :
+ Structured log entry created:{
+                                "timestamp": "...",
+                                "level": "INFO",
+                                "message": "Schedule hearing command received",
+                                "correlationId": "abc-xyz",
+                                "userId": "abc123",
+                                "caseId": "cse001",
+                                "operation": "SCHEDULE_HEARING"
+                              }
+These logs are sent via container insight to the Azure Log Analytics
+
+MOnitoring:
+CPU, memory, request count for the pod is tracked
+Health probes detect failures (e.g., container restart
+You can detect pod failures, memory issues, or unhealthy rollouts here
+
+Step 3 -- commands intaites domain events
+Observability:
+            Metrics collected:
+
+                                Queue size (how many messages are waiting)
+                                Latency from event generated to consumed
+                                Error count
+
+Logging:
+Event logged:
+{
+  "event": "HearingScheduledEvent",
+  "caseId": "cse001",
+  "eventId": "evt-1234",
+  "version": 1,
+  "timestamp": "...",
+  "status": "PUBLISHED"
+}
+If the event consumer fails, it’s routed to DLQ
+
+Step 4 -- Consumer Service Applies the Event → ViewStore Updated
+listener logs
+{
+  "message": "Applying HearingScheduledEvent",
+  "caseId": "cse001",
+  "status": "SUCCESS",
+  "eventId": "evt-1234"
+}
+if the event fails sent to dlq
+DLQ metrics tracked via:JMX (for ActiveMQ) -- replay the dlqs va the dlq tool -- look at the logs for errors
+
+End-to-End Tracing via Correlation ID
+At each stage:
+
+            correlationId is passed in headers or MDC (Mapped Diagnostic Context)
+            App Insights or OpenTelemetry enables:
+            Viewing the full request journey
+            Finding bottlenecks
+            Debugging failures quickly
+
+   Summary table of Observablilty per layer
+   | Stage                    | What You Observe                                 | Tools                           |
+   | ------------------------ | ------------------------------------------------ | ------------------------------- |
+   | APIM                     | Auth errors, rate limits, API latency            | App Insights, APIM Logs         |
+   | App Gateway + Ingress    | TLS termination issues, WAF rejections           | Azure WAF, App Gateway Logs     |
+   | Service Logs             | App behavior, business errors                    | App Insights, Log Analytics     |
+   | Pod/Infra Metrics        | Pod crashes, memory leaks, scaling issues        | Azure Monitor, Prometheus       |
+   | Messaging / DLQ          | Failed event processing, retries                 | Service Bus Metrics, DLQ Viewer |
+   | Event Replay + Debugging | Rehydrate state, debug flow with correlation IDs | Kusto Logs, Replay APIs         |
+
+We’ve built end-to-end observability across all layers. Every request is traceable using correlation IDs across APIM, pods, queues, and event processors.
+We use structured logging, App Insights, and DLQ monitoring to ensure visibility and fast debugging —
+all crucial for a legal system that can’t afford blind spots.”

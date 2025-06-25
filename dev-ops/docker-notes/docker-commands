@@ -1,20 +1,15 @@
-stop all runninng containers
-docker stop $(docker ps -q) -- lists all the runninf conatiners
 
-docker system prune -a
-this will remove all stopped containers
-all networks not used by atleast one container
-all build cache
 
 # run docker image by pulling it directly from dockerHub
- docker run -d -p 8081:8080 rondocker2191/credit-card 
+
+ docker run -d -p 8081:8080 rondocker2191/credit-card
  
 #push to docker hub
 docker push rondocker2191/credit-card  -- this will go ahead and create a repository in your docker hub account with credit-card name
 
 # build a docker image
-docker build -t rondcoker2191/credit-card .
-then push it to odkcer hub
+docker build  -t rondocker2191/credit-card .
+push to
 docker push rondocker2191/credit-card
 
 

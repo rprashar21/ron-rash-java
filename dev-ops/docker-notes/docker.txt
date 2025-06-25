@@ -1,85 +1,48 @@
-Docker its a containerization/packaging tool which does not require ur os that is why it is different from virtual machines
-which need os to run several vms and hence they take upa lot of space which the docker does not.
+What is Conatiner ?
+Container is a loosely couple env with all the depedencies ur app needs to run , librearies external ibs
+It will provide all the runtime ,, it  is like a software packaging unit where u pack all that u need and run it on any env where
+there is a container runtime
 
-Now you can run ur dockereizez image on any machine as Docker is platform independant and better usage of resource
-app isolation -- so less security is required
-containers are fast to create replicate
+What is Docker?
+Docker is a containerization tool that packages your application with all dependencies and runtime.
+Unlike VMs, Docker does not need a full OS, so it's lightweight, fast, and portable.
+Containers are isolated, quick to start/stop, and can run anywhere Docker is installed (local, cloud, server).
+its is platfrom idependent, build once and run anywhere ,fast lighwieght and ideal for microservces ci/cd versioning
 
--- containerization-- dockerizing the application which has all the dependencies adn run time environment to run ur code
-create a docker image of the application be it java or javascript or python
-and run it wherever you want
+Key Concepts
+Image: Blueprint (static) of your app.
+Container: Running instance of an image.
+Dockerfile: Instructions to build an image.
+Docker Hub: Public registry to push/pull images
 
-why docker - standard application packing-- for all applications be it java or python
-docker can run on local machines or cloud or data centers
-dockers are light wieght and isolated
+Build an image
+docker build -t username/app-name .
+
+Run a conatiner
+docker run -d -p hostPort:containerPort username/app-name
+
+Multiple Versions
+docker run -d -p 8081:8080 username/app-name:0.0.1-RELEASE
+docker run -d -p 8082:8080 username/app-name:0.0.2-RELEASE
+
+Push to a docker hub
+docker push username/app-name
+
+Docker lets you build, run, and ship apps quickly in isolated environments using containers.
+It's lightweight, portable, and perfect for microservices and cloud-native apps.
 
 
-to create a docker image of our application we need a docker file--
-dockerfile is a file which has all the instructions for to create a docker image
+These are the basic docker commnads
+| Action                  | Command                             |
+| ----------------------- | ----------------------------------- |
+| Show running containers | `docker container ls`               |
+| Show all containers     | `docker container ls -a`            |
+| Stop all containers     | `docker stop $(docker ps -aq)`      |
+| Remove all images       | `docker rmi -f $(docker images -q)` |
+| Show logs               | `docker logs <container-id>`        |
+| Check disk usage        | `docker system df`                  |
+| Clean unused data       | `docker system prune -a`            |
+| Show stats              | `docker stats <container-id>`       |
+| Start/Stop container    | `docker start/stop <container-id>`  |
 
-#----Create a docker image------
-go to that specific folder and build a docker image
-docker build -t rondocker2191/credit-card .  --> -t tag name rondocker2191 - username , credit-card --> repository
 
-#run docker image hostport:containerport
-
-docker run -d -p 8081:8080 rondocker2191/credit-card
-all the images/containers run inside the docker network
-#push to docker hub
-docker push rondocker2191/credit-card  -- this will go ahead and create a repository in your docker hub account with credit-card name
-
-Under this we can create multiple versions and tag them as per our requirement
-version- docker run -d -p 8081:8080 rondocker2191/credit-card:0.0.1-RELEASE
-
-running multiple versions/releases on the local machine on different ports
-docker run -d -p 8081:8080 rondocker2191/credit-card:0.0.1-RELEASE
-docker run -d -p 8082:8080 rondocker2191/credit-card:0.0.2-RELEASE
-docker run -d -p 8083:8080 rondocker2191/credit-card:0.0.3-RELEASE
-
-docker rmi -f $(docker images -q) -- delete all dangling images
-Developer builds an image and you can run the image wherever a container runtime is installed
-#runnning a docker image on local machine
-Run Docker from docker Hub
-              hostport:containerport
-docker run -p 5000:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
-
-The static version is called the image and running is called the container
-we map the container port to a host port to run it in our host machine
-
-to stop all the running containers
-docker stop $(docker ps -aq)
-# start a conatiner
-docker start <container_id_or_name>
-docker start
-
-#detached mode
-docker run -d -p 5000:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
-
-#logs
-docker logs <containerid>
-
-#docker image  commands
-docker container ls -a  -- all conatiners
-docker container ls -- only running containers
-docker container stop <containerid>  -- stops the conatiner running
-
-docker pull -- only pulls the image but doesnt run it
-docker seacrh <something to search>
-docker image history <Tag name>
-docker image inspect 651d47c5d17c
-docker image remove <TagName>
-
-#docker component commands
-docker container pause b92ab88309db
-
-#docker system commands
-docker system
-docker system df  -- shows disk space
-docker system prune -a
-This will remove:
-  - all stopped containers
-  - all networks not used by at least one container
-  - all images without at least one container associated to them
-  - all build cache
-
-docker stats <containerId> -- shows all stats

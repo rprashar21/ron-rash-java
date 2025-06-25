@@ -1,0 +1,50 @@
+Observability Design for a Legal Case System
+
+Imagine your court case management system is live in production. It’s a distributed event-driven system using microservices, CQRS, and event sourcing.
+I want you to design a complete observability strategy — including logging, monitoring, tracing, alerting, and defining SLOs.
+You have 10 minutes. Start from entrypoint (API gateway or APIM) to backend pods, message queues, and view projections.
+I’d like to understand how:
+You trace requests end-to-end
+You detect failures in event flows
+You define SLOs and act on breaches
+You avoid alert fatigue
+Please whiteboard and explain as you go
+
+1. Logging Startergy
+Logging Strategy
+Structured Logging using JSON
+Include correlationId, userId, caseId, operation
+Injected at API Gateway or Ingress filter
+Use MDC (Mapped Diagnostic Context) in Spring Boot
+Logs are pushed via Fluent Bit → Azure Log Analytics
+
+🧠 Add:
+“Every microservice enriches the log context. Correlation ID flows via headers and MDC.
+ We can filter by operation=SCHEDULE_HEARING and status=FAILED
+
+ 2.Distributed Tracing
+   Use Azure App Insights or OpenTelemetry
+   Correlation ID added as custom dimension
+   View full request graph:
+   APIM → controller → DB → event published → consumer → viewstore
+
+   🧠 Add:
+   “We’ve enabled distributed tracing via Spring and App Insights SDK, so each stage (including retries and event failures) is traceable.
+
+3. MOnitoring Stack
+| Layer                 | Tools                     | Metrics Example                          |
+| --------------------- | ------------------------- | ---------------------------------------- |
+| API Gateway / APIM    | App Insights              | Failed auth, latency, request count      |
+| App Pods              | Azure Monitor, Prometheus | CPU, memory, pod restarts, HPA           |
+| DB (Cosmos, Postgres) | Insights, Query Metrics   | Query time, throttling, 429s             |
+| Messaging (ActiveMQ)  | JMX, DLQ metrics          | Queue lag, DLQ depth, consumer failures  |
+| Viewstore             | Custom metrics            | Sync lag between event & projection time |
+
+
+4. Alerts and dashboard
+| Alert Type             | Trigger                         | Action                                 |
+| ---------------------- | ------------------------------- | -------------------------------------- |
+| DLQ threshold exceeded | DLQ length > 10                 | Email + ticket for triage              |
+| API latency spike      | 95th percentile > 500ms         | Slack/PagerDuty to API team            |
+| Viewstore lag > 5 mins | Projection lag detection script | Manual replay job or alert dev         |
+| Auth failures          | 403 rate spikes in APIM         | Block abusive IPs, audit access tokens |
