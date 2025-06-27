@@ -50,8 +50,6 @@ Concurrency is a broader concept—any approach that allows you to work on sever
 
  Concurrency is an architectural goal (“I want smooth responsiveness, lots of tasks in flight, scalable handling of many requests”).
 Multithreading is one mechanism to implement it.
-
-
 when to use what
 
 

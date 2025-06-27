@@ -46,6 +46,7 @@ public class CpuBoundSum {
     static class Worker implements Runnable {
         final long start, end;
         long partialSum;
+
         Worker(long s, long e) { start = s; end = e; }
         @Override
         public void run() {
