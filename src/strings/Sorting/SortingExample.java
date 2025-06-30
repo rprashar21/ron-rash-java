@@ -10,7 +10,7 @@ public class SortingExample {
 
         ResultPrompt resultPrompt = new ResultPrompt();
 
-        Set<String> fixedList = new HashSet();
+        Set<String> fixedList = new HashSet<>();
         fixedList.add("To prevent offending");
         fixedList.add("For the defendant's own protection");
         fixedList.add("To ensure appearance");

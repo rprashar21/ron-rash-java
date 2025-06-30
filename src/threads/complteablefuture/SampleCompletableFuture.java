@@ -29,7 +29,8 @@ public class SampleCompletableFuture {
         HelloWorldService helloWorldService = new HelloWorldService();
         CompletableFuture
                 .supplyAsync(()->helloWorldService.helloWorld())  // takes in supplier and return a value
-                .thenAccept(s -> System.out.println(s.toLowerCase()));// theAccept method has A consumer Interface whihc consumes or takes an inout and consumes that value
+                .thenAccept(s -> System.out.println(s.toLowerCase()));// theAccept method has A consumer
+        // Interface whihc consumes or takes an inout and consumes that value
 
         System.out.println("This is executed by the main thread "+Thread.currentThread().getName());
 

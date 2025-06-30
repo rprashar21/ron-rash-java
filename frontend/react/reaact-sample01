@@ -1,0 +1,104 @@
+what is react ?
+js librabry
+Uses component for build resuable ui blocks
+It leverages JSX (Javascript +HML)
+Uses a virtual dom
+
+What is ReactDOM?
+react-dom is the package that connects React with the real DOM in the browser.
+
+import React from 'react'
+import ReactDOM from 'react-dom/client';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+// this will render the react component tree insdei the div elemnet inside index.html
+
+Why we use react
+virtual dom for efficent re rendering and performance
+hooks-- add state,side-effects
+JSX -- javascript _htm
+
+
+Project createion
+npx create-react-app projectname -- Sets up everything for you — Webpack, Babel, ESLint, etc
+
+| Command         | Description                                                      |
+| --------------- | ---------------------------------------------------------------- |
+| `npm start`     | Starts development server                                        |
+| `npm run build` | Bundles app for production                                       |
+| `npm test`      | Runs test runner                                                 |
+| `npm install`   | Installs dependencies                                            |
+| `npm run eject` | Unconfigures React’s abstraction (not recommended unless needed) |
+
+myapp/
+├── public/
+│   └── index.html   ← root <div id="root"></div>
+├── src/
+│   ├── index.js     ← entry point, renders App
+│   ├── App.js       ← main component
+│   └── components/  ← your custom components
+├── package.json     ← dependencies, scripts
+
+
+React is full of compnents
+function Greeting() {
+  return <h1>My First Component</h1>;
+}
+export default Greeting
+
+JSX rules
+Always return a single root element
+Use className instead of class
+HTML attributes use camelCase (e.g., onClick, tabIndex)
+Embed JS using {} — but it must return a value
+
+<h1>{5 + 3}</h1> // ✅
+<h1>{if (true) {}} </h1> // ❌
+
+
+Hooks are functions that let you use React features without writing classes
+| Hook         | Purpose                                  |
+| ------------ | ---------------------------------------- |
+| `useState`   | Add state to functional components       |
+| `useEffect`  | Perform side effects (API calls, timers) |
+| `useContext` | Share state globally                     |
+| `useReducer` | Complex state logic (Redux alternative)  |
+
+Rules of Hooks:
+Must start with use
+Must be called at he top level (not inside loops/conditions)
+Must be used inside a React component
+
+#Simple example of a counter
+
+const[count,setCount] = useState(0); initialize the state value to 0
+
+<button onClick={() => setCount(count + 1)}>{count}</button>
+
+Named vs default imports
+import React from 'react';         // default import
+import { useState } from 'react';  // named import
+
+
+================= VITE ------
+Vite is the modern way to build React (or other JS framework) projects —
+it’s faster, simpler, and more developer-friendly than traditional tools like Create React App (CRA).
+
+Comparision
+| Feature                        | Vite                                          | Create React App                       |
+| ------------------------------ | --------------------------------------------- | -------------------------------------- |
+| **Dev Server Speed**           | Instant startup (native ES modules)           | Slow (bundles everything with Webpack) |
+| **Hot Module Reloading (HMR)** | Super fast and snappy                         | Slower                                 |
+| **Build Tool**                 | Uses **ESBuild** (written in Go)              | Uses Webpack (JS-based, slower)        |
+| **Customization**              | Easier config via `vite.config.js`            | More complex via `eject`               |
+| **Modern Support**             | Out of the box support for modern JS features | Needs Babel plugins/configs            |
+| **Bundle Size**                | Smaller and faster production builds          | Heavier builds                         |
+
+how vite works unde rthe hood
+In development, Vite does not bundle your code. It serves raw ES modules and only processes what’s needed, on-demand.
+
+In production, Vite uses Rollup for optimized builds (tree-shaking, code splitting, etc.).
+
+
+

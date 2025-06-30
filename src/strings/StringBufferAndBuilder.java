@@ -24,10 +24,28 @@ public class StringBufferAndBuilder {
         sentenceBuilder.append(" StringBuilder");
         sentenceBuilder.append(" example.");
 
-        String sentence = sentenceBuilder.toString();
+        // the second approach is better .  no runtime overhead
+// this is better and faster Compile-Time Optimization (
+// Regular string concatenation with + inside loops results in creation of multiple intermediate String objects.
+        String sentence = "This" +
+                          " is" +
+                          " a" +
+                          " StringBuilder" +
+                          " example.";
         System.out.println(sentence);
 
+
         List<String> items = new ArrayList<>();
+        List<String> words = List.of("this", "is", "a", "example");
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            sb.append(word);
+        }
+        //Regular string concatenation with + inside loops results in creation of multiple intermediate String objects.
+        //
+        //StringBuilder is much more efficient in such scenarios as it avoids creating unnecessary objects.
+        System.out.println(sb);
+
 
         items.add("apple");
         items.add(null);

@@ -28,7 +28,8 @@ public class VolatileSample {
 //        For simple flags or state markers (e.g. a shutdown signal).
 //        When you need the latest value immediately and don’t need to coordinate compound updates.
 
-        // synchronized keyword is used for mutula exclusion and multiple operations , u need to wait/notify and complex mutiple vairable consistency
+        // synchronized keyword is used for mutula exclusion and multiple operations ,
+        // u need to wait/notify and complex mutiple vairable consistency
         // why cannot volatile replace sysnchronized
         // 1. multiple threads can execute the same code ,, synchrozine main only one thread ata time
         // 2 . only individual read/writes are atomic not entire block

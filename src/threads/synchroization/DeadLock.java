@@ -8,7 +8,7 @@ public class DeadLock {
     *  when 3 threads are waiting for each other forever then its such type of infinite waiting is called deadlock
     *  Deadlock occurs bcz of synchronization
     * Two or more threads each grab two locks in opposite order—once they each hold one lock and block on the other, neither can proceed.
-    *
+    * https://medium.com/@pudarimadhavi99/12-multithreading-java-interview-questions-d296e492eb74
     *
     *
     * */

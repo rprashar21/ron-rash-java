@@ -10,9 +10,8 @@ public class SampleProdConsumerExample {
         // lets create 2 threads and start prodcuing and consuming
         Thread producer = new Thread(() -> {
             try {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 1; i < 10; i++) {
                     boundedBuffer.put(i);
-                    System.out.println("Producer put item in the queue " + i);
                     Thread.sleep(3000); // sleep for 3 seconds
                 }
             } catch (InterruptedException e) {
@@ -55,6 +54,7 @@ class BoundedBuffer<T> {
         }
 
         buffer.add(item);
+        System.out.println("Producer put item in the queue " + item);
         notifyAll(); // notifyAll -- wake up any threads waiting
     }
 

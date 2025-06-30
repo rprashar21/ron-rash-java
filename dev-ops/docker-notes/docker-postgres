@@ -12,6 +12,10 @@ sets the password for the default "postgres" user as "postgres," and runs the co
 
 
 version: '3'
+
+networks:
+ net:
+
 services:
   db:
    image: postgres
@@ -38,8 +42,7 @@ services:
 
 volumes:
   postgres_data: // create the folder
-networks:
- net:
+
 
 
 docker-compose up -d // runs the docker comspose in the background

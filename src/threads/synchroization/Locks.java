@@ -35,7 +35,7 @@ class Display {
 
             for (int i = 0; i < 10; i++) {
                 System.out.println("Inside Display Method " + Thread.currentThread().getName() + " " + i);
-                Thread.sleep(100);
+                Thread.sleep(1000);
             }
 
         } catch (InterruptedException exception) {

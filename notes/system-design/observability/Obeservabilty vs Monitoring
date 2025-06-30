@@ -1,0 +1,45 @@
+Observability is the ability to understand the internal state of the system.
+
+3 main components of observabilty of microservice is
+1. Metrics --> quantitatve mesasurements like cpu usage ,memeory usage ,response times
+2. Logs -- recording events in the system , see logs ,error eceptions and unexpected events
+3. Trace -- tracing a  request response to identofy bottlenck
+
+Monitoring -    collecting telemetry data for the application and creating alerts ,, tracks  the overall health of teh system
+1. identify problems in ur system
+2. track health and aotimize ur micrsoervec
+
+| Aspect                    | **Observability**                                                              | **Monitoring**                                                          |
+| ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| **Definition**            | Ability to infer the internal state of a system from external outputs          | Process of collecting, analyzing, and alerting on telemetry data        |
+| **Goal**                  | Understand **why** something is wrong                                          | Know **when** something is wrong                                        |
+| **Data Types Used**       | Metrics, Logs, Traces (**Three Pillars**)                                      | Mostly metrics and logs, focused on **known** issues                    |
+| **Focus**                 | Root cause analysis, **debugging unknown unknowns**                            | Detecting and alerting on **known conditions** (e.g., CPU > 80%)        |
+| **Proactive vs Reactive** | More **proactive** (helps explore and discover new issues)                     | More **reactive** (alerts after something goes wrong)                   |
+| **Usage Scenario**        | "Why did the service slow down for one customer request?"                      | "Notify me when response time exceeds 3 seconds"                        |
+| **Tools**                 | Jaeger, OpenTelemetry, Honeycomb, Zipkin (focus on tracing, context-rich logs) | Prometheus, Grafana, Nagios, New Relic, Datadog (alerts and dashboards) |
+| **Data Granularity**      | High cardinality, trace-level, contextual                                      | Aggregated, summarized metrics                                          |
+| **Complexity Handling**   | Designed for **complex, distributed systems**                                  | Can be used in both simple and complex systems                          |
+| **Example Use Case**      | Debug a **distributed transaction** failing across 4 microservices             | Get alerts when **disk space > 90%**                                    |
+
+
+Real-World Example in Microservices
+Let's say your order processing service is slow.
+Monitoring will: Alert you that average response time > 3s. Show you CPU/memory spikes in dashboards.
+Tell you what is wrong, not why.
+
+Observability will:
+Let you trace a request through the order, payment, and inventory services.
+Show logs, timestamps, and failure points in the distributed trace.
+Help you identify that inventory service is calling an external API that is timing out.
+
+Im microsevrice since we have many services centralized loggging is best option
+grafana is open source for interactive visualization web application
+
+Prometheus and Grafana are open source
+Prometheus, for metrics building dashboards as well
+Grafana -- for aggreagating the log we can use grafana
+Grafana temp for tracing
+
+microservices ----> promtail{fetch logs from services and forwards to loki} ----->
+forwards the logs to loki{log integration system} --->Grafna{query,search,visulizethe logs with loki as datasource}

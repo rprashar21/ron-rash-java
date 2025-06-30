@@ -1,0 +1,17 @@
+Below is the example for grafana loki-- https://grafana.com/docs/loki/latest/get-started/overview/
+What is Grafana loki -- basically its a log aggreagtion system, differnet from promethues as it fouces on collecting logs via push
+and not pull
+loki does not index the contents of ur logs only indexes the metadata baout ur logs  as a  set of labels for each log stream.
+
+Loki has 3 components-
+1.Loki Alloy or promtail -- Agent or client scrapes the logs from the application
+turns the logs into streams by adding labels, and pushes the streams to Loki through an HTTP API
+
+2. Loki Server -- which is the main server storing ingetsing the logs
+3. grafana 0-- visulaization adn aquery ur logs creating dashboard
+
+
+quick start for loki
+https://grafana.com/docs/loki/latest/get-started/quick-start/quick-start/
+
+Download loki-config.yaml, alloy-local-config.yaml, and docker-compose.yaml

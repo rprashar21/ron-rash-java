@@ -1,0 +1,23 @@
+VIte is a modern way of developing react applications ,, its faster and developer freindly
+
+Steps
+1. Initialize a project
+npm create vite@latest my-app -- --template react
+npm install
+npm run dev
+
+my-app/
+├── public/
+│   └── vite.svg            ← Static assets
+├── src/
+│   ├── App.jsx             ← Main component
+│   ├── main.jsx            ← Entry point, renders App -- uses ReactDOM.createRoot()
+│   └── components/         ← (Your future components)
+├── index.html              ← App root div
+├── vite.config.js          ← Vite config
+├── package.json
+
+Importat Vote concepts
+Vite uses ES modules, so all imports use relative paths or aliases (@/).
+For environment variables, use .env and prefix with VITE_, e.g., VITE_API_URL.
+CSS modules, TypeScript, and JSX all work out of the box.

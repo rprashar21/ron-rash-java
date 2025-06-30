@@ -7,7 +7,8 @@ public class SampleAutoBoxingWrapper {
         // every primitive type have a wrapper class an it converts the primitive type to Object using the static method valueOf
           int myint=10;
         Integer integer = Integer.valueOf(myint); // autoboxing expilicitly
-
+         int x = integer;
+        int sum = x+10;
          Integer integer1 = myint; // autoboxing primtive to Object type
 
         Integer integer2 = new Integer(100);

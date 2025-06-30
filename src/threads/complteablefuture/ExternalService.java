@@ -15,7 +15,7 @@ public class ExternalService {
 
     public static String hello() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(6000);
             System.out.println(Thread.currentThread().getName());
         } catch (InterruptedException exception) {
 

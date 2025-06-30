@@ -14,7 +14,8 @@ public class VolatileVsAtomic {
     // in summary, volatile is used for variables that are shared among multiple threads and need to be accessed without interference,
     // while atomic is used for operations that need to be performed as an atomic unit.
 
-    // the values of thses variable are directly updated to the main memory  instead of the variable cache ,, this makes sure the value is consistent
+    // the values of thses variable are directly updated to the main memory  instead of the variable cache ,,
+    // this makes sure the value is consistent
     // but decreases the performance.
 }
 

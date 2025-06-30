@@ -1,0 +1,112 @@
+what is frontend ?
+Frontend is everything you see and interact with on a website or app. It’s built using:
+
+| Tool               | Analogy (Car)                | Purpose                      |
+| ------------------ | ---------------------------- | ---------------------------- |
+| **HTML**           | Car’s **chassis/body**       | Defines structure/content    |
+| **CSS**            | **Paint job and interiors**  | Styling and layout           |
+| **DOM**            | **Blueprint** (of the car)   | Live structure JS can modify |
+| **JavaScript**     | **Engine, brakes, steering** | Adds interactivity and logic |
+| **Browser Window** | **Garage manager**           | Controls the environment     |
+
+
+Window  Obect
+window is the top-level global object in the browser.
+window is the global object in browsers.
+document lives inside window and represents the loaded webpage (DOM).
+
+What is DOM or document
+document is a property of window, and it represents the webpage loaded in the browser ,
+it can access html elements and change content style attributes and create new elements on the webpage
+
+console.log(document.title);                    // gets <title> content
+document.getElementById("loginBtn").click();    // simulates a click
+document.body.style.backgroundColor = "pink";   // changes page background
+
+
+# Lets start building the js fundas
+# let var const
+#let -- for datatype, we cannot change the dataType
+# var -- we can change the value or datatype
+# const --- final , we cannot change the value
+
+# promise object - js object which handle aysnchronous operations in a more manageable way -- it has 3 states pending resolved and rejected
+
+example using fetch -- return a js object
+
+const url = ""
+fetch("https://api.example.com/data")
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+
+
+# example with aysnc
+
+const getData = async () => {
+  try {
+    const res = await fetch("https://api.example.com/data");
+    const data = await res.json();
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+============= ============= ============= ============= ============= =================================================================
+
+Array functions
+destructure
+rest operator
+spread opertaor
+
+# destructure
+# Array Destructure
+const fruits = ['apple', 'banana', 'kiwi'];
+const [a, b, c] = fruits;
+
+# Oject Destructure
+const user = { name: "Rohit", age: 34 };
+const { name, age } = user;
+
+
+# spread operator
+const fruits =['apple','banan','pear','kwiw'];
+const moreFruits = ['grapes', ...fruits]; // copy and merge
+
+const updatedUser = { ...user, role: 'admin' }; // new key added
+
+
+const person = {
+ name:'rohit',
+ age :32;
+ sayName : function(){
+ console.log(`My name is ${name} and age is ${age}`)
+ }
+}
+
+const anotherPerson = {...person,dept:'CS'}
+  
+ # Rest operator ---> Used to collect the remaining items
+const [firstFruit, ...restOftheFruits] = fruits;
+
+# Map,filter reduce
+  const numbers = [1, 2, 3, 4];
+  
+  const doubled = numbers.map(n => n * 2);           // [2, 4, 6, 8] returns an array
+  const evens = numbers.filter(n => n % 2 === 0);    // [2, 4] 
+  const sum = numbers.reduce((acc, n) => acc + n, 0);// 10
+
+# Ternary Operator
+  const age = 20;
+const status = age > 18 ? "Adult" : "Minor";
+
+# Optional Chaining ?. & Nullish Coalescing ??
+const user = { profile: { name: "Rohit" } };
+  console.log(user.profile?.name);     // Rohit
+  console.log(user.address?.city);     // undefined (no error)
+  
+  const city = user.city ?? "Unknown"; // fallback if null or undefined
+
+

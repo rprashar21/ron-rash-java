@@ -4,16 +4,19 @@ public class SampleQuiz2 {
 
     public static void main(String[] args) {
 
-        v1();
+        String s = v1();
+        System.out.println(s);
+
         v2();
     }
 
-    private static void v1() {
+    private static String v1() {
 
         String hello = "hello";
         try {
-            if ("heloo".equals(hello)) {
+            if ("hello0".equals(hello)) {
                 System.out.println("hello");
+                return hello;
             }
             throw new RuntimeException("some exception");
             // here we are not catching the exception program will terminate and not excute the v2 methid although it will execute finallly block

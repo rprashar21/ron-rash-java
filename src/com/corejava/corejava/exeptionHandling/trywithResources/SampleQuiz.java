@@ -25,6 +25,6 @@ public class SampleQuiz {
     private static void m1() {
         throw new RuntimeException();
 
-        // ans is BDE
+        // ans is BD
     }
 }
