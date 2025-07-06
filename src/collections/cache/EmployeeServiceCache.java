@@ -24,8 +24,8 @@ public class EmployeeServiceCache {
 //    }
 
     static {
-        cache.putIfAbsent("flat 9", List.of(new Employee("rohit", 45), new Employee("swati", 40)));
-        cache.putIfAbsent("flat 10", List.of(new Employee("barry", 45), new Employee("claudia", 40)));
+        cache.putIfAbsent("flat 9", List.of(new Employee("rohit", 32), new Employee("swati", 28)));
+        cache.putIfAbsent("flat 10", List.of(new Employee("barry", 40), new Employee("claudia", 38)));
     }
 
 

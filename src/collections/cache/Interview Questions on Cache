@@ -1,0 +1,65 @@
+what is caching ??
+Caching is a temporary storage layer that stores frequently accessed or expensive-to-fetch data in a fast-access medium like RAM.
+The main goals are:
+
+Reduce latency
+Decrease load on downstream systems (like databases or APIs)
+Improve application throughput and scalability
+Real-world use cases:
+Netflix: Caching movie metadata or user watch history to avoid DB round-trips
+Amazon: Caching product pages or stock availability
+Google: Caching autocomplete results in search
+Backend APIs: Caching authorization tokens or rate-limit counters
+
+
+
+Q What if the redis or our cache  is down
+If Redis is down, our cache layer is temporarily unavailable, which increases DB load and latency. To handle this gracefully, we:
+Fallback to the DB for reads
+Write to DB first and cache second to ensure persistence
+Wrap cache calls in circuit breakers and use retries with backoff
+Use Prometheus and Grafana to monitor cache health and alert SRE teams
+
+
+Q Different type of cache
+1.write thru cache -- data is written in db and cache synchronoulsy
+cons - May slow down system under heavy write load. and hig latency, perforamnce is low
+Use case - User profile updates, login sessions
+
+2.write behind cache -- cache is updated and the db is updated asynchronously... low latency ,, good peromance
+cons- if cache fails data might be lost ,hard to debug
+use case -- logginsystems and analytical systems
+
+3. Write-Around Cache -- db is wrtten first and then cache is updated on a read ,
+prevents cache pollution
+Use case: Bulk data inserts, infrequently accessed writes.
+
+Q Which Would You Choose for a Financial Transaction System?
+For a financial system like payments or fund transfers, I'd choose write-through caching to ensure t
+hat every write is persisted to the database immediately.
+ This guarantees data consistency and minimizes the risk of loss, even though it comes at a performance cost.
+
+q in memory cache vs distributed cache
+data is stored in aplication lvel , cannot survive restanrts,, fast as no netwrok callls
+Caching configuration values, recent DB query results, or small reference data in a single-node app
+eg linkedlist+hashmap
+
+Distributed cache -- Examples: Redis, Memcached, Hazelcast
+cale horizontal
+data is shared across intsance , data can be restored survice app restart
+
+Caching authentication tokens, user sessions, search results in microservices
+
+
+Q Differernce between LRU LFU AND TTL
+| Policy | Eviction Logic        | Used For                          |
+| ------ | --------------------- | --------------------------------- |
+| LRU    | Least Recently Used   | Web sessions, product views       |
+| LFU    | Least Frequently Used | Caching most used data (e.g. DNS) |
+| TTL    | Time-based Expiry     | OTPs, price cache, auth tokens    |
+
+TTL -- expiry time with caching -- look at the springboot example and also in memory cache examples
+Use ReentrantLock to avoid multiple threads refreshing concurrently
+Use CompletableFuture or async call for refresh
+Add retry + exponential backoff if external call fails
+Use Caffeine with CacheLoader.refreshAfterWrite(...)

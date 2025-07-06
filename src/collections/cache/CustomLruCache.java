@@ -56,7 +56,8 @@ class CustomLRUCache<K, V> {
     }
 
     private void remove(Node node) {
-        if (node.prev != null) node.prev.next = node.next;
+        if (node.prev != null)
+            node.prev.next = node.next;
         else head = node.next;
         if (node.next != null) node.next.prev = node.prev;
         else tail = node.prev;

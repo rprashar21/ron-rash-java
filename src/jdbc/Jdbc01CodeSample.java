@@ -27,7 +27,7 @@ public class Jdbc01CodeSample {
    (    "NAME" VARCHAR2(4000),
       "PHOTO" BLOB
    )
-    * Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sonoo","root","root");
+    *   Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/sonoo","root","root");
     *    PreparedStatement ps = con.prepareStatement("insert into IMGTABLE values(?,?) ");
     *    ps.setString(1,"ron");
     *    ps.setBinaryStream(2,new FileInputStream("d:\\g.jpg")); // this where we load the image and give it as 2nd param
