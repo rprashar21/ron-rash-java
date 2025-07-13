@@ -3,7 +3,7 @@ package datastructures.recursion;
 public class RecursionFibonnaci {
     public static void main(String[] args) {
 
-        int n = 4;
+        int n = 6;
         fib(n);
     }
 
@@ -21,12 +21,15 @@ public class RecursionFibonnaci {
             return 1;
 
         int fib1 = fib(n-1); // this will be called recursively
+        System.out.println(fib1);
         int fib2 = fib(n-2); // this wil be called recursively
+        System.out.println(fib2);
 
         // there is possibilty that the firest recursive call will resolve some of th problem ,,
         // so there might be calls which mihht have been resolved in the previous case which can be avoided using  dynamic programming
 
         int result= fib1 +fib2;
+        System.out.println("final result is "+result);
         return result;
 
     }

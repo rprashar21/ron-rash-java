@@ -1,0 +1,7 @@
+When you go from SQL tables to a production-grade Java backend, you’re essentially following these steps:
+Gather requirements & identify your domain model
+Design your logical and physical schema
+Choose the right database
+Map tables to JPA entities
+Layer your application (Repo ↔ Service ↔ Controller)
+Manage schema changes

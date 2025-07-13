@@ -1,0 +1,56 @@
+@Entity
+@Table(name = "user_account",
+       uniqueConstraints = {
+         @UniqueConstraint(columnNames = "user_name"),
+         @UniqueConstraint(columnNames = "email")
+       })
+public class UserAccount { … }
+
+uniqueConstarints will not allow anyone to have duplicate username or email in the application
+Enforces uniqueness at the database level on user_name and email
+
+When you run your schema generation (or apply your DDL), JPA will emit something like:
+CREATE TABLE user_account (
+  user_id    BIGINT    PRIMARY KEY,
+  user_name  VARCHAR(50) NOT NULL,
+  email      VARCHAR(50) NOT NULL,
+  password   VARCHAR(100) NOT NULL,
+  created_on TIMESTAMP   NOT NULL,
+  last_login TIMESTAMP,
+  UNIQUE (user_name),
+  UNIQUE (email)
+);
+
+if we try to insert duplicate email or username we will get an errror ->
+ERROR: duplicate key value violates unique constraint "user_account_user_name_key"
+
+
+
+
+These are some of the column mappings
+@Column(name = "user_name", nullable = false, length = 50)
+private String username;
+
+@Column(nullable = false, length = 50)
+private String email;
+
+@Column(nullable = false, length = 100)
+private String password;
+
+@Column(name = "created_on", nullable = false)
+private Instant createdOn;
+
+@Column(name = "last_login")
+private Instant lastLogin;
+
+name / length / nullable
+Controls DDL generation: column name, maximum size, NOT NULL constraint.
+
+Instant vs LocalDateTime
+Instant stores a UTC timestamp. Ensure your JDBC driver and Hibernate hibernate.jdbc.time_zone are set to UTC to avoid surprises.
+
+Security note: Never store plaintext passwords! Always hash (e.g. BCrypt) and annotate with @JsonIgnore (in your DTO)
+so it’s never serialized back to clients.
+
+
+

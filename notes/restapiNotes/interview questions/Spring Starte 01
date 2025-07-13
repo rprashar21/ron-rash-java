@@ -1,0 +1,31 @@
+What is Spring Framework?
+A Java framework providing comprehensive infrastructure support for developing Java applications.
+Key features: Dependency Injection (DI), Aspect-Oriented Programming (AOP), transaction management, data access (JDBC, JPA), Spring MVC, etc.
+Promotes loose coupling via DI, making code testable, modular, and maintainable.
+
+What is Spring Boot?
+A framework built on top of Spring to simplify setup and development.
+Opinionated defaults: Sensible defaults reduce configuration overhead.
+Auto-configuration: Automatically configures beans based on the classpath, properties, and beans defined.
+Standalone applications: Embeds web server (Tomcat/Jetty/Undertow).
+Actuator: Built-in production-ready features (health checks, metrics, tracing).
+Spring Initializr: Rapid project scaffolding.
+
+Spring Boot Starters
+spring-boot-starter-web: All you need for RESTful APIs and MVC web apps.
+spring-boot-starter-data-jpa: JPA & Hibernate integration.
+spring-boot-starter-security: Security/autentication.
+More: Actuator, Thymeleaf, Batch, AMQP, etc.
+
+IoC (Inversion of Control) & Dependency Injection
+IoC: Framework controls object creation and wiring instead of manual new-ing.
+DI: Objects (dependencies) are injected, not created inside a class.
+Constructor Injection (recommended for mandatory dependencies).
+
+2. How do you monitor and manage Spring Boot applications in production?
+Use Actuator endpoints /actuator/health, /actuator/metrics.
+
+Integrate with Prometheus, Grafana, ELK/EFK.
+
+10. How does dependency injection improve testability?
+Swap real implementations for mocks in unit/integration tests.

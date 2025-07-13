@@ -1,0 +1,164 @@
+https://medium.com/@shivamsrivastava.iec/d9ee16c2260d
+
+What is content negotiation - format agreed by client and server for data exchange over http request and response
+It can be application/jsonxml palin text protobuf
+
+How it works -- client sends an http header called accept application/json or any  othr format
+
+
+clientSide
+
+fetch(url,{
+header:{ 'Accept': 'application/xml' }
+})
+.then((response)=>{
+response.text()
+})
+.then((data)=>{console.log(data)})
+
+
+
+ Handle in server
+@GetMapping(value = "/products", produces = { "application/json", "application/xml" })
+public List<Product> getProducts() {
+    // returns a list of products
+}
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+  { "id": 1, "name": "Apple" },
+  { "id": 2, "name": "Banana" }
+]
+What if the server doesn’t support the client’s requested type?
+The server will return 406 Not Acceptable.
+
+Mention both client-side (setting the Accept header) and server-side (supporting multiple types and responding accordingly).
+Mention fallback (406) and why this is better than having separate endpoints for each format
+
+Why java 8
+functional programming - easy for developers to write code - features like lambda expressions, method references, and default methods reduce boilerplate code
+Stream API - powerful abstraction to process collection in a functional style --
+            we can process collection sthru filter,maps
+Better Concurrency: in terms of parallel stream -- using fork and join poll framework in behind on a multi core machine
+                    basically each task is divided into multiple subtasks and then the resullt is combined on a multi core machine
+Date and Time API, which are modern,immutable threadsafe, then imporved jvm performance , backward compatibiity
+
+What is Dependency Injection
+technique used in object-oriented programming to achieve Inversion of Control (IoC)
+basically it involves providing an object(ie a dependent object with its dependeices from the outisde)
+an ibject doesnt have to be initialisedin that class , the framework manages the lifecycle of the beans,
+we can have a singleton ojecct created thrput the class , the code becomes modular teatstavle
+Dependencies: The objects or resources a class needs to function.
+Injection: The process of passing these dependencies to the dependent object
+
+DI injection can be hanlde by constructor setter and interface injection
+
+eg without di
+public class Service {
+    private Repository repository = new Repository(); // Tight coupling
+
+    public void performService() {
+        repository.save();
+    }
+}
+Advantages
+loose coupling
+dependeincie can be easlily managed , nokced or stubbed
+we can follow solid principles
+
+
+. What are advantages of MongoDB over MySQL?
+documnet, processing large unstrutcire data
+
+
+Q.Why should you avoid session/request scope in stateless microservices? What are the risks?
+Session and request scopes keep state in the server’s memory, tied to the current JVM instance.
+In stateless microservices, requests can be routed to any instance (due to load balancers, autoscaling, etc.),
+so relying on local state means user/session data may not be available on the next request.
+his leads to inconsistent user experience, data loss,
+and bugs (e.g., a shopping cart that disappears when a user’s request is routed to another instance).
+State is lost when a subsequent request lands on a different instance—users see missing data, inconsistent sessions, or may be logged out unexpectedly.
+memory pressure increases as the number of active sessions/requests grows, potentially causing OOM errors.
+
+Statelessness enables horizontal scaling, resilience, and easier failure recovery.
+
+Q.How would you implement user-specific or session-specific state in a stateless REST microservic
+Answer
+Store user/session state externally:
+For short-term state: Use distributed caches like Redis or Memcached (keyed by session/user ID).
+For authentication/session: Use JWT (JSON Web Token) where all necessary claims are embedded in the token and verified per request.
+For long-term state: Persist in a database (user carts, preferences).
+This makes each REST request independent, and the service can scale free
+
+q.Are there any justified cases to use session/request scope in Spring Boot microservices?
+Rarely. Possible exceptions:
+Internal gateways, API aggregators, or monolithic legacy apps where you know requests from a user always reach the same server.
+
+How do Spring Cloud or Spring Session projects address these issues
+Spring Session can externalize the HTTP session, storing it in Redis, JDBC, Hazelcast, etc.
+This allows session state to be shared between all app instances.
+Spring Cloud encourages stateless design, but where state is required, it can be managed using these externalized solutions
+
+6. If you must use a session/request-scoped bean in a distributed app, what must you ensure?
+Answer:
+
+Use @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS) to prevent startup errors.
+Back the session with a shared external store (like Spring Session with Redis).
+Prefer idempotent, stateless endpoints wherever possible.
+
+
+7. How would you implement shopping cart functionality in a stateless RESTful e-commerce system?
+Answer:
+Use a browser-stored token (JWT or session ID).
+Cart data is stored in a distributed cache (e.g., Redis) or database, keyed by user/session ID.
+On each request, the backend retrieves cart state from external storage, processes changes, and saves it back.
+No server memory is required per user; scaling is seamless
+
+8. Can you describe a scenario where prototype scope causes subtle bugs in a multi-threaded or cloud environment?
+Answer:
+If a prototype bean has state, but is injected into a singleton and not managed correctly,
+the singleton might hold onto a single instance, breaking the expected “new instance per use” guarantee.
+This can lead to shared state between threads/users, causing data leaks, race conditions, or corrupt results.
+
+9. What’s the performance/memory impact of each scope?
+| Scope       | Memory Impact | Scalability | Typical Pitfall                 |
+| ----------- | ------------- | ----------- | ------------------------------- |
+| singleton   | Low           | High        | Data leaks if mutable state     |
+| prototype   | Medium-High   | High        | Unmanaged beans, memory leaks   |
+| request     | Medium        | Medium      | Memory spikes on traffic bursts |
+| session     | High          | Low-Med     | Not scalable, OOM risks         |
+| application | Low           | High        | Shared state, global locks      |
+
+11. What happens if you inject a session/request-scoped bean into another non-singleton (prototype, request) bean?
+Answer:
+
+It works as expected as long as the dependent bean lives within a valid scope.
+Always use proxies to ensure Spring resolves the correct instance at runtime.
+
+Recap
+Avoid session/request scope for critical or persistent user data in distributed systems
+Use external stores for scalability, consistency, and fault-tolerance.
+Leverage JWT for stateless session information.
+Understand proxying to avoid ScopeNotActiveException.
+If forced to use session/request scope, externalize the session with Spring Session or similar tools.
+
+@RestController
+public class CartController {
+    @Autowired
+    private RedisTemplate<String, Cart> redisTemplate;
+
+    @PostMapping("/cart/add")
+    public void addToCart(@RequestHeader("X-Session-Id") String sessionId, @RequestParam String item) {
+        Cart cart = redisTemplate.opsForValue().get(sessionId);
+        if (cart == null)
+        cart = new Cart();
+
+        cart.add(item);
+        redisTemplate.opsForValue().set(sessionId, cart);
+    }
+    @GetMapping("/cart")
+    public Cart getCart(@RequestHeader("X-Session-Id") String sessionId) {
+        return redisTemplate.opsForValue().get(sessionId);
+    }
+}

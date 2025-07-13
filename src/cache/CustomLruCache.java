@@ -1,4 +1,4 @@
-package collections.cache;
+package cache;
 
 //Custom LRU Cache with O(1) Operations (For Interviews)
 import java.util.HashMap;

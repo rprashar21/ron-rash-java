@@ -1,0 +1,127 @@
+Normalization is the process of organizing data to reduce redundancy and improve data integrity.
+This involves breaking down larger tables into smaller, related tables to make sure each piece of data is stored in only one place.
+
+Here are the typical stages of normalization
+First Normal Form (1NF): Helps make sure that each column contains atomic (indivisible) values.
+Second Normal Form (2NF): Building on 1NF by making sure all non-key attributes fully depend on the primary key.
+Third Normal Form (3NF): Further refining the structure by eliminating transitive dependencies between columns.
+BCNF --  strictier form of 3nf
+
+| Normal Form | Eliminates                          | When to apply                    |
+| ----------- | ----------------------------------- | -------------------------------- |
+| **1NF**     | Repeating groups, non-atomic fields | Always                           |
+| **2NF**     | Partial dependencies                | Composite-key tables             |
+| **3NF**     | Transitive dependencies             | OLTP, transactional integrity    |
+| **BCNF**    | Non-key determinants                | Complex schemas with unusual FDs |
+
+
+1st Normal Form (1NF)-- columns must be atomic -- No repeating groups or arrays in a single column
+Violation
+| order\_id | items                  |
+| --------- | ---------------------- |
+| 1001      | “sku123,sku124,sku125” | -- violation as there are groups or arrays
+| 1002      | “sku200,sku201”        |
+
+fix -->
+CREATE TABLE order_items (
+  order_id INT,
+  sku      TEXT,
+  quantity INT,
+  PRIMARY KEY(order_id, sku)
+);
+
+2nd Normal Form (2NF) == 1nf + there should be no partial dependecy
+Every non-key column must depend on the whole primary key, not just part of it.
+Whenever you have a table with a composite primary key
+Violation
+| user\_id | product\_id | product\_name | rating |
+| -------- | ----------- | ------------- | ------ |
+| U1       | P1          | “Widget”      | 5      |
+| U2       | P2          | “Gadget”      | 4      |
+PK = (user_id, product_id)
+product_name depends only on product_id (partial dependency)
+To fix
+-- Ratings table (no product_name)
+CREATE TABLE ratings (
+  user_id    UUID,
+  product_id INT,
+  rating     SMALLINT,
+  PRIMARY KEY(user_id, product_id),
+  FOREIGN KEY(product_id) REFERENCES products(id)
+);
+
+-- Separate product info
+CREATE TABLE products (
+  id          INT PRIMARY KEY,
+  product_name TEXT NOT NULL,
+  ...
+);
+3rd Normal Form (3NF)
+Must be in 2NF.
+No transitive dependencies: non-key columns depend only on the primary key, not on other non-key columns.
+When to use:
+In OLTP (transactional) systems where update anomalies must be avoided.
+| order\_id | customer\_id | customer\_city | customer\_region |
+| --------- | ------------ | -------------- | ---------------- |
+| 1001      | C1           | “London”       | “Greater London” |
+| 1002      | C2           | “Oxford”       | “Oxfordshire”    |
+PK = order_id
+customer_region depends on customer_city (transitive via city → region)
+
+fix
+-- Orders table
+CREATE TABLE orders (
+  order_id    INT PRIMARY KEY,
+  customer_id UUID REFERENCES customers(id),
+  ...
+);
+
+-- Customers table
+CREATE TABLE customers (
+  id            UUID PRIMARY KEY,
+  city_id       INT REFERENCES cities(id),
+  ...
+);
+
+-- Cities & Regions
+CREATE TABLE cities (
+  id      SERIAL PRIMARY KEY,
+  name    TEXT UNIQUE NOT NULL,
+  region_id INT REFERENCES regions(id)
+);
+
+CREATE TABLE regions (
+  id   SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL
+);
+
+Boyce–Codd Normal Form (BCNF) -- strictier version of
+A stronger version of 3NF: every determinant must be a candidate key.
+Rare—only if you spot a dependency where a non-key column functionally determines part of the key
+| driver\_id | vehicle\_model | manufacturer |
+| ---------- | -------------- | ------------ |
+| D1         | “Model X”      | “Tesla”      |
+| D2         | “Model S”      | “Tesla”      |
+PK = (driver_id, vehicle_model)
+manufacturer depends on vehicle_model, which is not a candidate key.
+
+to fix
+-- Drivers & assignments
+CREATE TABLE driver_assignments (
+  driver_id     UUID,
+  vehicle_model TEXT,
+  PRIMARY KEY(driver_id, vehicle_model),
+  FOREIGN KEY(driver_id) REFERENCES drivers(id)
+);
+
+-- Vehicle info
+CREATE TABLE vehicles (
+  model         TEXT PRIMARY KEY,
+  manufacturer  TEXT NOT NULL
+);
+
+Denormalization
+When to Stop Normalizing
+OLTP Systems: Aim for 3NF or BCNF to avoid insert/update/delete anomalies.
+Read-Heavy Scenarios: After reaching 3NF, denormalize selectively (e.g., add category_name to products) to reduce joins and improve performance.
+Data Warehouses / Analytics: Often use star schemas (denormalized) for simpler, faster aggregations.

@@ -23,9 +23,12 @@ For example, PostgreSQL has its own set of SQL commands and data types, which ma
 A dialect acts as an intermediary between the ORM framework and the underlying database.
 It translates the ORM framework's generic SQL queries and commands into the specific SQL syntax understood by the target DBMS.
 
-By configuring the appropriate dialect for your DBMS, the ORM framework can generate the correct SQL statements and leverage the specific features and optimizations provided by the database.
+By configuring the appropriate dialect for your DBMS, the ORM framework can generate the correct SQL
+ statements and leverage the specific features and optimizations provided by the database.
 
-For example, when using Hibernate with Spring Boot and PostgreSQL, you would typically specify the PostgreSQL dialect in your configuration to ensure that Hibernate generates the correct SQL statements and takes advantage of PostgreSQL-specific features.
+For example, when using Hibernate with Spring Boot and PostgreSQL, you would typically specify the
+PostgreSQL dialect in your configuration to ensure that Hibernate generates the correct SQL statements
+and takes advantage of PostgreSQL-specific features.
 
 Spring data jpa removes all the boiler plate code -- no need for data access layers like dao daoimpl or jdbc queriees
 just create our entity and in application yml file we need to map the

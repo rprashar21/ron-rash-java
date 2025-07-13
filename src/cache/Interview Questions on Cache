@@ -63,3 +63,26 @@ Use ReentrantLock to avoid multiple threads refreshing concurrently
 Use CompletableFuture or async call for refresh
 Add retry + exponential backoff if external call fails
 Use Caffeine with CacheLoader.refreshAfterWrite(...)
+
+
+Q - Imagine you have a product API used by millions of users. How would you use caching to reduce load on your DB
+In a high-traffic product API, I’d identify the most frequently accessed or slow-to-query product data and cache that layer.
+For example, top-selling products, recently viewed items, or search results.
+I’d use a distributed cache like Hazelcast or Redis, so that all instances of my API can share the same cache layer.
+TTL would be used for dynamic data like stock levels (e.g., 5 minutes), and static data like descriptions can be cached longer.
+
+How would you decide what data to cache and what not to cache
+We basically cache static data like name,price description as these dont change -- meatdata info ,,
+should not cache -- inventory count ,dynamic data like dicount code --ttl based cache -- reviews reating can be cached
+
+Mention Where You Cache
+In-memory (Caffeine) for per-instance ultra-fast reads
+Distributed cache (Hazelcast/Redis) for shared data across nodes
+
+in our product api -- we will cache the data which is mots
+To avoid caching rarely accessed items, we maintain a popularity index (say top 1,000 SKUs/hour) and cache only those
+We track product popularity via access logs or Redis counters and cache the top-N most requested products,
+ updated every 10 mins using a background job.
+
+Invalidation Startergy
+For price and stock, we use cache-aside + short TTL + DB triggers to proactively invalidate product IDs when updates occur.

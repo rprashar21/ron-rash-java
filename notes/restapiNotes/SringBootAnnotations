@@ -1,5 +1,5 @@
 Spring annotations
-@SpringBootApplication -- combination of  @enableAutoconfiguration,componetScan,configuration
+@SpringBootApplication -- combination of  @enableAutoconfiguration,@componetScan,`@configuration
 
 enableAutoconfiguration-  auto configures the spring application and all the dependencies we have in the classpath and creates
 beans for that -- looks in the pom.xml -- for eg if we have h2 database jar it will configure all the beans related totto that
@@ -11,10 +11,10 @@ we can also provide the base packages and classes to load specific classes to th
 is scan all the beans and provide it to the ioc conatiner..
 
 Sterotype Annotations? -- spring will see these annotaions and manage the lifecycle of these beans
-@Component -
-@Service
-@Repository
-@RestController
+@Component - generic to mark a class to be manged by the spring comatiner , o additional behaviour
+@Service -annotaion for the service layer , used for business logic
+@Repository - indicates dao layer , componets interacting with datbase , converts db exception to springs dataaccess exceptions
+@RestController - web conteroller to handle web request
 
 @PostConstruct -- when the spring context has finished creating the beans -- ie Sterotype annotations-(we have no control over)
 and we want to execute some instructions we can use this annotation
@@ -24,7 +24,29 @@ Like connecting to the db or initializing some data.
 
 Spring Core related annotaion
 @Configuration and @Bean-- to manage the java based beans/configuration-- we dont want to manage the lifecycle of these beans uig xml or annotations
-it is made availabe to the ioc container when it sees it will create the bean and maintain the lifecylce for it -- usually when we use kafka or restTemplate
+it is made availabe to the ioc container when it sees it will create the bean and maintain the lifecylce for it --
+ usually when we use kafka or restTemplate
+
+What is @Configuration?
+Marks a class as a source of bean definitions for the Spring IoC container.
+Replaces applicationContext.xml or beans.xml for Java-based configuration.
+when we wnat more explicit contorl over bean instantiation
+@Configuration
+public class AppConfig {
+    @Bean // this indicates that this is a bean managed by spring
+    public RestTemplate restTemplate() {.  //When Spring scans this class, it will create a singleton bean of type RestTemplate and manage its lifecycle.
+        return new RestTemplate();
+    }
+You can configure external libraries or infrastructure beans here (like Kafka clients, DataSources, etc.).
+}
+
+
+There are 2 types of IOc containers .
+1. BeanFactory - Lazy initialization: beans are created only when requested , basic functionality used behind the scenes
+2. ApplicationContext - superset of beanfactory -- eager bean loading ,INternationalization ,aop
+
+@Component is for your own classes—Spring will auto-detect and instantiate.
+@Bean is for third-party classes or complex initialization logic not under your control.
 
 @Qualifier -- tells ioc or application context / spring which bean to load when there are multiple implementations of a service
 this is an example of Qualifier annotation
@@ -109,7 +131,7 @@ public String dataSourceProps()
 
 @Scope - by default singleton --
 prototye -- for every rest call
-session -- bean for every
+session -- bean for every ession
 request
 
 @RequestBody -- for post when we pass the entire payload and map to our model

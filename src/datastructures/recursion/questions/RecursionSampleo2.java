@@ -4,6 +4,10 @@ public class RecursionSampleo2 {
     // find sum of n numbers
 
     public static void main(String[] args) {
+
+        int sumRecursion = sumRecursion(5425, 0);
+        System.out.println(sumRecursion);
+
         int n=5;// 5+4+2+3+1; 15
         int ans = sum(5);
         System.out.println(ans);
@@ -30,5 +34,15 @@ public class RecursionSampleo2 {
        return n+sum(n-1);
     }
 
+
+    private static int sumRecursion(final int n, int sum) {
+
+        if(n==0)
+            return sum;
+
+        sum = n%10 +sum;
+        return sumRecursion(n/10,sum);
+
+    }
 
 }

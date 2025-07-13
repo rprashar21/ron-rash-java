@@ -22,6 +22,7 @@ public class StreamsMaxAnMin {
 
         final Stream<Integer> sorted = integerList.stream().sorted(Comparator.comparing(Integer::intValue));
 
+
 //        sorted.forEach(System.out::println);
 
         // maxBy and MIn by

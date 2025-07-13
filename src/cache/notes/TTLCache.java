@@ -1,4 +1,4 @@
-package collections.cache.notes;
+package cache.notes;
 
 import java.util.HashMap;
 import java.util.Map;

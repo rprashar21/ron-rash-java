@@ -1,0 +1,47 @@
+https://www.geeksforgeeks.org/dbms/dbms/
+
+no sql -- will have key value pair -- like documents ,mongodb,cassandra,Dynamodb,redis
+sql - relational dbs -- mysql{oracl} postgresql
+
+rdbms - there is
+Tier 1 (Single-Tier Architecture): The database and application are on the same system.
+Tier 2 (Two-Tier Architecture): The application and database are separate, directly connected via a network.
+Tier 3 (Three-Tier Architecture): Divides into three parts: user interface, logic and database, all working together.
+
+Entity relationship is a conceptual model for designing a databases
+logical structure for our databse , defining entties and relationships between them
+Er model -- entities - logical strucute of the database -- orm object relation mapping
+Entity: An objects that is stored as data such as Student, Course or Company.
+Attribute: Properties that describes an entity such as StudentID, CourseName, or EmployeeEmail.
+Relationship: A connection between entities such as "a Student enrolls in a Course".
+
+ER Diagrams -> These diagrams serve the purpose of real-world modeling of objects which makes them intently useful
+
+Types of entity
+Strong Entity --> entity with a primary key -- strongly
+Weak entity --> cannot exisit on it own --does nt have a primary key
+An employee {strong entity} in a comapny has dependents{weak entity} {parents spouse children}-- they cannot be exist on their own
+Employye has dependents -- employee
+
+Attributes -- name
+Composite Attribute -- combintaion of attribiutes --> Address {street city state country}
+multivalue Attributes --> like phoneNumber can have multiple values
+Derived Attribute -- Age is derived from DOB
+
+Relationships
+one-to-one
+one-many
+many to one
+many to many
+
+Normalization -
+Normalization generally involves splitting a table into multiple ones which must be linked
+ each time a query is made requiring data from the split tables
+ Primary objective is to elimnate anomalies ,redundancy
+
+Anomalies
+Inertion -- For example, if a database requires that every record has a primary key,
+but no value is provided for a particular record, it cannot be inserted into the database.
+Deletion - For example, if a database contains information about customers and orders, deleting a customer record
+may also delete all the orders associated with that customer
+Updation - if a database contains information about employees and their salaries, updating an employee’s salary in one record but not in all related records could lead to incorrect calculations and reporting.

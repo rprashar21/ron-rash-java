@@ -1,0 +1,163 @@
+What are the different scopes of beans -- beans are objects ,, bean  in spring ioc are managed by spring ioc container
+1.Singleton - default , one instance of the bean thruout application . spiring ioc container
+Created at container startup (by default), reused everywhere.
+stateless beans
+@Component
+// or no annotation needed, as singleton is default
+public class UserService { ... }
+
+==================-------------------------------------------------================================
+==================-------------------------------------------------================================
+2.Prototype -- a new instance of the bean is repeated every time from the container
+Beans that hold user-specific, request-specific, or temporary state
+Prototype means isolation
+Every usage is independent, preventing data sharing issues and making your code thread-safe
+
+Suppose your PdfGenerator bean has an internal StringBuilder or list to store PDF content:
+If it's a singleton (one shared instance), user A starts adding pages, then user B starts using it,
+ and their content gets mixed together! That’s a bug.
+
+If it's a prototype (new instance every time), each user or operation gets a fresh, empty PdfGenerator. Their data stays separate.
+ach call should get a new, clean generator object.
+
+@Component
+@Scope("prototype")
+public class PdfGenerator {
+    private StringBuilder content = new StringBuilder();
+
+    public void addPage(String page) {
+        content.append(page);
+    }
+
+    public String buildPdf() {
+        // Simulate PDF build
+        return content.toString();
+    }
+}
+
+@RestController
+public class PdfController {
+    @Autowired
+    private ApplicationContext context;
+
+    @GetMapping("/generate")
+    public String generatePdf(@RequestParam String page) {
+        PdfGenerator pdfGenerator = context.getBean(PdfGenerator.class); // new instance every time
+
+
+        pdfGenerator.addPage(page);
+        return pdfGenerator.buildPdf();
+    }
+}
+ PdfGenerator pdfGenerator = context.getBean(PdfGenerator.class); // i we do PdfGenerator pdfGenerator = new PdfGenerator()
+ this is a simple java object and not managed by bean
+
+If your class is a Spring bean (@Component), always get it from the Spring context (via injection or getBean).
+becoz spring manages the lifecyle of the beans and also other magic of spring like aop or di, if the class has ither dependecies
+Manual new is only for POJOs that do NOT depend on Spring.
+
+@Component -- Spring managed bean
+public class WatermarkService {
+    public String addWatermark(String content) {
+        return content + "\n--- Confidential ---";
+    }
+}
+
+
+@Component
+@Scope("prototype")
+public class PdfGenerator {
+    @Autowired
+    private WatermarkService watermarkService; // this is injected by spring using autowired
+
+    private StringBuilder content = new StringBuilder();
+
+    public void addPage(String page) {
+        content.append(page);
+    }
+
+    public String buildPdf() {
+        String pdf = content.toString();
+        // Use the injected WatermarkService
+        return watermarkService.addWatermark(pdf);
+    }
+}
+
+
+
+@RestController
+public class PdfController {
+
+    @Autowired
+    private ApplicationContext context;
+
+    @GetMapping("/spring-pdf")
+    public String generateWithSpring(@RequestParam String page) {
+        PdfGenerator pdfGenerator = context.getBean(PdfGenerator.class);
+        pdfGenerator.addPage(page);
+        return pdfGenerator.buildPdf(); // WatermarkService injected and used!
+    }
+
+    @GetMapping("/manual-pdf")
+    public String generateManually(@RequestParam String page) {
+        PdfGenerator pdfGenerator = new PdfGenerator(); // NOT managed by Spring!
+        pdfGenerator.addPage(page);
+        return pdfGenerator.buildPdf(); // WatermarkService is null -> NPE! becoz it will not be injecte by spring
+    }
+}
+
+==================-------------------------------------------------================================
+==================-------------------------------------------------================================
+
+Session Scope??
+Session scope means: one instance of a bean per HTTP session (user’s browser session).
+Different users (or browser tabs in incognito) get their own separate instance of the bean.
+When you want to persist data across multiple requests by the same user/session.
+Good for: Shopping carts, login sessions, user preference
+
+Example
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION)
+public class ShoppingCart {
+    private List<String> items = new ArrayList<>();
+
+    public void addItem(String item) { items.add(item); }
+    public List<String> getItems() { return items; }
+}
+
+Session scope is a simple and safe way to keep user data isolated in stateful web applications—each user gets their own,
+ private bean instance!
+
+| User   | JSESSIONID (cookie) | ShoppingCart Bean    | Items in cart  |
+| ------ | ------------------- | -------------------- | -------------- |
+| User A | abc123              | shoppingCart\@abc123 | Apple, Mango   |
+| User B | def456              | shoppingCart\@def456 | Banana, Orange |
+
+
+
+Without a Proxy (What Fails)
+Scenario:
+
+Your CartController (singleton bean) is created at application startup.
+You @Autowired a @SessionScope bean (ShoppingCart) directly.
+But: At startup, no HTTP request/session exists, so Spring can’t create or inject the session bean.
+Result: ScopeNotActiveException
+
+[App Startup]
+|
+|-- [Singleton] CartController   <-- tries to inject --> [SessionScoped] ShoppingCart
+|                                             ^
+|                                             |
+|------------------ NO SESSION YET! ----------|
+|
+|-- Error: "Scope 'session' is not active"
+
+
+With a Proxy (How Spring Fixes It)
+At startup, Spring injects a proxy (not the real ShoppingCart) into the singleton.
+The proxy sits there, waiting.
+When an actual HTTP request/session comes in, the proxy looks up the real session bean for the current session
+
+Singleton beans are created at startup (no session/request exists).
+Session/request beans only make sense when an HTTP request or session is alive.
+The proxy “defers” the lookup until there’s a valid scope, keeping your app working correctly.

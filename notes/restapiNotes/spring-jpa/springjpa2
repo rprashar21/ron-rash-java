@@ -1,3 +1,97 @@
+AccountsEntity -- Java object that maps to table
+
+@Repository -- indicates dao layer , components interacting with database , converts db exception to springs dataaccess exceptions
+public interface AccountsRepository extends JpaRepository<Accounts, Long> {
+    Accounts findAccountsByCustomerId(Long customerId);
+}
+
+Accounts is the entity class (each instance represents a row in your database table).
+Long is the type of the primary key of Accounts
+
+What is Derived Query ?
+A derived query in spring data jpa measn u derive query based on method names by converntions
+Spring Data JPA generates the queries for you, based on the method name
+
+
+@Entity
+public class SampleUserAccountWithJPA {
+    @Id
+    private Long id;
+
+    private String userName;
+    // other fields, getters, setters
+}
+
+public interface SampleUserAccountWithJPARepository extends JpaRepository<SampleUserAccountWithJPA, Long> {
+
+    // Derived query by method name JPA will automatically convert thi to SELECT * FROM sample_user_account_with_jpa WHERE user_name = ?
+    List<SampleUserAccountWithJPA> findByUserName(String userName);
+
+    SampleUserAccountWithJPA findById(Long id);
+
+    // You can also use @Query Paramenter or Name Query
+}
+
+What is a NAmed Query
+Named Query Example
+A named query is a query defined with a name, usually in the entity itself, and referenced by that name in your repository.
+
+@Entity
+@NamedQuery(
+    name = "SampleUserAccountWithJPA.findByUserName",
+    query = "SELECT u FROM SampleUserAccountWithJPA u WHERE u.userName = :userName"
+)
+public class SampleUserAccountWithJPA {
+    @Id
+    private Long id;
+
+    private String userName;
+    // ... other fields
+}
+Use in repository
+public interface SampleUserAccountWithJPARepository extends JpaRepository<SampleUserAccountWithJPA, Long> {
+
+    @Query(name = "SampleUserAccountWithJPA.findByUserName")
+    List<SampleUserAccountWithJPA> findByUserNameWithNamedQuery(@Param("userName") String userName);
+
+}
+REcap
+Derived Query: Just method name, no query string needed.
+
+JPQL Query (@Query): Write JPQL (Java Persistence Query Language), operates on entities/fields.
+
+   @Query("select uas from SampleUserAccountWithJPA uas where uas=:username")
+    List<SampleUserAccountWithJPA> findUsingUserName(String username);
+
+
+Native Query (@Query(nativeQuery = true)): Write actual SQL, operates on table/columns.
+ @Query(value = "select * from user_accounts_sample uas where user_name = :username",nativeQuery = true)
+  List<SampleUserAccountWithJPA> findUsingUserNameV2(@Param("username") String username); -- we have to add the @Param annotation to map
+
+Named Query: Predefined in the entity, referenced by name in repository.
+
+
+=======================Pagination In Spring -============
+1.What is pagination in Spring Data JPA and why is it important?
+Pagination means showing chunks of data pre paage ,this is for perfroamnce memomry ,, eg in a product page showing 10 products per page
+
+
+2.How do you Implement paging and sorting in Spring Data JPA?
+Using Pageable and PageRequest for Paginination
+sort for soring data
+eg
+Dervied Query findAll(Pageable pageable) or custom query like findByCategory(String category, Pageable pageable)
+
+3. difference between Page, Slice, and List in Spring Data JPA?
+Page: Contains data plus metadata (total pages, elements, etc.)
+Slice: Contains data and info about next/previous pages, but not total count.
+List only contains data and no paging info
+
+4. Can you sort by multiple fields?
+Sort.by("field1").ascending().and(Sort.by("field2").descending())
+
+
+
 finder methods
 findByName(String s)
 findByNameAndDesc(String name, String desc)

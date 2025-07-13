@@ -1,0 +1,30 @@
+Lets start with a sample examle of
+user job userjob info -- these are my entities
+
+What are my entities?
+how do they map with each other?
+What constraints matter?
+Email & username must be unique.
+salary > 1000, hire_date > birthday (business rules).
+
+UserEntity--> attributes{}
+JobEntity--> attribtes
+
+Draw a quick UML or ERD for clarity:
+UserAccount ─< UserJob >─ Jobs
+        │
+        └── has one Info record
+
+2.Schema Design & Choice of Database
+Do we need rdbms or no sql database
+since user jobs jobinfo can have relationship we will go for  rdbms
+Why PostgreSQL?
+
+ACID compliance & strong FK support
+Rich datatypes (e.g. TIMESTAMP, UUID, JSONB)
+Mature JDBC driver and Spring Data support
+Scales well for both reads and writes
+You’d keep your DDL much as you have it, perhaps tweaking for UUID PKs or adding indexes later.
+
+
+JPA ENTITY MAPPING

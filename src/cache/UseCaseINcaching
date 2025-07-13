@@ -1,0 +1,76 @@
+Big Billion Day
+What data to cache
+How to cache (local, distributed, multi-level)
+How to keep cache fresh or consistent
+How to handle cache failures
+Scaling strategies for traffic
+Monitoring and alerting
+
+| Data Type             | Strategy                 | Why                          |
+| --------------------- | ------------------------ | ---------------------------- |
+| Product metadata      | ✅ Long TTL cache         | Doesn't change during sale   |
+| Price & discounts     | ✅ Cache with short TTL   | Dynamic but refreshable      |
+| Inventory/stock count | ✅ Cache + fallback to DB | Needs real-time + protection |
+| Flash sale items      | ✅ Preload to cache       | Hot items — very high demand |
+| Banner / UI content   | ✅ CDN or in-memory       | Pure static                  |
+
+
+Client --> CDN --> App Server
+                   ↓
+               Caffeine (L1 local cache)
+                   ↓
+              Redis/Hazelcast (L2 distributed)
+                   ↓
+                  DB
+Use multi-level caching (L1+L2) to reduce pressure on Redis/DB
+Preload flash sale data into Redis during a warm-up window
+
+How caching helps ?
+slow db queries --
+spikes in the load
+Stock oversell	Use cache + atomic operations
+High page latency	Cache API responses at CDN or gateway
+Cold start problems	Pre-warm cache with flash items
+
+Cache Invalidation
+| Data            | TTL       | Update Trigger                 |
+| --------------- | --------- | ------------------------------ |
+| Product info    | 1 hour    | Manual or batch job            |
+| Price / offer   | 5–10 mins | Price update event             |
+| Stock           | 1–2 mins  | Inventory update + event-based |
+| Flash sale item | Preloaded | TTL = end of flash sale        |
+
+ Failure Scenarios and Mitigation
+| Failure               | How to Handle                                           |
+| --------------------- | ------------------------------------------------------- |
+| Redis goes down       | Fallback to DB, circuit breaker, local cache (Caffeine) |
+| DB overload           | Use cache-aside + backpressure                          |
+| Cache miss stampede   | Locking + SingleFlight pattern                          |
+| Stock inconsistency   | Final check at checkout (strong consistency)            |
+| Cache warm-up failure | Scheduled preloader + readiness probe                   |
+
+
+5. Scaling Strategies
+| Component     | Strategy                                      |
+| ------------- | --------------------------------------------- |
+| App servers   | HPA (Horizontal Pod Auto-scaling)             |
+| Redis cluster | Use Redis Cluster + replicas                  |
+| Caching tier  | Multi-level + sharding                        |
+| Network       | CDN for static data, API Gateway cache        |
+| Monitoring    | Cache hit ratio, Redis latency, eviction rate |
+
+Monitoring Metrics You Must Track
+
+| Metric                 | Tool (e.g. Prometheus)           |
+| ---------------------- | -------------------------------- |
+| Cache hit/miss ratio   | Redis/Caffeine custom metrics    |
+| Redis response latency | `redis_command_duration_seconds` |
+| DB read QPS            | Alert if too high (cache missed) |
+| Memory usage           | For Caffeine & Redis             |
+| Inventory oversell     | Alert if multiple orders > stock |
+
+For a large-scale sale event, I’d rely heavily on pre-warmed, multi-level caching to reduce database and service pressure.
+Flash sale items and static metadata are aggressively cached using Redis (L2) and Caffeine (L1).
+Dynamic fields like stock and price use short TTL with background refresh via scheduled or event-based mechanisms.
+We implement fallback logic in case Redis is down and track cache hit ratios, latencies, and evictions via Prometheus.
+This strategy ensures fast responses under load while maintaining data freshness and operational stability
