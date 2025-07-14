@@ -90,6 +90,26 @@ List only contains data and no paging info
 4. Can you sort by multiple fields?
 Sort.by("field1").ascending().and(Sort.by("field2").descending())
 
+What happens if you request a page number beyond available pages?
+You get an empty page, not an exception
+
+How do you make a repository method support pagination and sorting
+
+JUst need to add the pageable param
+Page<Product> findByCategory(String category, Pageable pageable);
+
+How do you create a PageRequest with sorting---> PageReqquest.of(offset,pageSize,Sort.by("fieldName").Ascending.and())
+Pageable pageable = PageReqquest.of(0,10,Sort.by("name").descinding())
+
+| Feature       | Example Code / Usage                                     |
+| ------------- | -------------------------------------------------------- |
+| Paging        | `findAll(Pageable)` / `findByCategory(String, Pageable)` |
+| Sorting       | `Sort.by("price").descending()`                          |
+| Multiple Sort | `Sort.by("category").and(Sort.by("price"))`              |
+| Controller    | Accepts `page`, `size`, `sortBy` as request params       |
+
+
+
 
 
 finder methods
