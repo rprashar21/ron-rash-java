@@ -1,0 +1,250 @@
+Transaction is a unit of work whihc is ethier complete or not
+Spring transaction @transactional
+
+@Service
+public class AccountService {
+    @Transactional // spring takes care of the transaction
+    public void transfer(Long fromAccount, Long toAccount, BigDecimal amount) {
+        // 1. Debit fromAccount
+        // 2. Credit toAccount
+        // If any step fails, rollback happens automatically
+    }
+}
+Short note -- here the proxy intercepts the method ie tranfer -- the proxy calls the transaction manager which starts a transaction
+exectures our logic , if success commit or if fails rollsback
+
+
+what happens internally
+1.Bean with transactional -- This tells Spring: "Wrap this method with transaction management."
+2. Proxy Creation - Spring creates a proxy object for your service bean (using CGLIB for classes, JDK Dynamic Proxies for interfaces).
+  when you call transfer(), you are actually calling the proxy, not the original bean directly.
+3. Transaction Interceptor -- the proxy delegates the call to Transaction Interceptor
+
+The interceptor:
+
+1.Before method execution: Calls txManager.getTransaction(): Starts a new transaction or joins an existing one.
+2.Executes your method: Calls the actual business logic (e.g., transfer money).
+3.After method execution:
+If successful: Calls txManager.commit(): Commits (saves) the transaction.
+If an exception occurs: Calls txManager.rollback(): Rolls back (undoes) all changes.
+
+The Code Flow in the Diagram
+txManager.getTransaction() — Before method runs, start transaction.
+method.invoke() — Run the business logic.
+txManager.commit() — If successful, commit transaction.
+txManager.rollback() — If an exception is thrown, rollback.
+
+questions
+What happens when you use @Transactional?
+Spring wraps your bean in a proxy. The proxy opens a transaction, calls your method, then commits/rolls back as needed
+
+What is a transactionManager ?
+The txManager is an implementation of PlatformTransactionManager like
+(like DataSourceTransactionManager for JDBC, JpaTransactionManager for JPA/Hibernate
+Responsible for actually starting, committing, and rolling back the physical database transaction.
+
+What is the role of proxies?
+Proxies intercept method calls to manage transactions transparently.
+CGLIB proxies are used when your service is a class (not an interface).
+
+What is Transaction Interceptor?
+A Spring component that implements AOP (Aspect-Oriented Programming) advice for managing transactions.
+
+
+===========================
+Real Time Use case
+@Transactional
+public void transferFunds(Long fromAccount, Long toAccount, BigDecimal amount) {
+    debit(fromAccount, amount);    // Deduct from sender
+    credit(toAccount, amount);     // Add to receiver
+    saveAuditLog(fromAccount, toAccount, amount); // Log the transfer
+    // If any step fails, the whole operation rolls back — NO partial transfer!
+}
+
+| Component                  | Role                                                    |
+| -------------------------- | ------------------------------------------------------- |
+| **Proxy**                  | Intercepts calls to trigger transaction management      |
+| **TransactionManager**     | Does the real work: start, commit, rollback transaction |
+| **TransactionInterceptor** | AOP advice that coordinates the process                 |
+
+Any time you change multiple tables or multiple steps must succeed together, use a transaction.
+
+
+=========================
+Optimistic locking -->Generally transaction do not collide-- Conflicts are very rare
+each row or entity has version number,when u update the row the jpa will check the version number matches with your read
+at that time if another transaction tries to read that it will throw OptimisticLockExceptionn
+Use case -- when you update a bank account or profile or product or book a seat
+
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private int stock;
+
+    @Version   // This enables optimistic locking
+    private int version;
+}
+@Transactional
+public void updateProductStock(Long productId, int delta) {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new RuntimeException("Product Not found"));
+    product.setStock(product.getStock() + delta);
+    // When saving, Hibernate checks the 'version' if another transaction at the same time reads it will throw an exception
+    productRepository.save(product);
+}
+
+Pessimistic Locking -- during this transaction the entire row is locked for any other transactions to happen
+
+we need to update the repository as whon below
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Product p where p.id = :id")
+    Product findByIdForUpdate(@Param("id") Long id);
+}
+
+@Transactional
+public void updateProductStockPessimistic(Long productId, int delta) {
+    Product product = productRepository.findByIdForUpdate(productId);
+    product.setStock(product.getStock() + delta);
+    productRepository.save(product);
+}
+| Feature     | Optimistic Locking                 | Pessimistic Locking                   |
+| ----------- | ---------------------------------- | ------------------------------------- |
+| Lock when   | On update (checks version)         | On select (locks row)                 |
+| Performance | Best when conflicts are rare       | Best when conflicts are likely        |
+| Exception   | `OptimisticLockException` on clash | Other transactions block/wait/timeout |
+| How in JPA  | `@Version` field                   | `@Lock(LockModeType.PESSIMISTIC_*)`   |
+
+| Use Case                 | Lock Type               | Code Pattern                                         |
+| ------------------------ | ----------------------- | ---------------------------------------------------- |
+| Inventory, Profile Edit  | Optimistic (`@Version`) | Add `@Version` field, handle OptimisticLockException |
+| Banking, Tickets, Ledger | Pessimistic (`@Lock`)   | Use `@Lock(LockModeType.PESSIMISTIC_WRITE)`          |
+
+
+Exception Handling in prodcution
+try {
+    service.reserveProduct(itemId, quantity);
+} catch (OptimisticLockException e) {
+    // Tell user: "Sorry, item was just sold. Try again."
+    // Optionally: retry logic
+}
+Pessimistic Locking
+// Typically, thread waits for lock or gets a timeout
+// Catching LockTimeoutException can help with user-friendly errors
+
+======Propagation levels ===========
+| Propagation            | Description                                                                                                                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **REQUIRED** (default) | If a transaction exists, join it; else, create a new one. Most common.                                                                                                                                        |
+| **REQUIRES\_NEW**      | Always create a new transaction; suspend existing. Useful for independent sub-operations.                                                                                                                     |
+| **SUPPORTS**           | Join if a transaction exists, else run non-transactionally.                                                                                                                                                   |
+| **MANDATORY**          | Must run in an existing transaction; throws exception if none exists.                                                                                                                                         |
+| **NESTED**             | Run within a nested transaction if one exists; else, like REQUIRED. Nested transactions can roll back to savepoint without affecting the outer transaction. Supported only with JDBC DataSource transactions. |
+| **NEVER**              | Must run outside a transaction; throws exception if there is an active transaction.                                                                                                                           |
+| **NOT\_SUPPORTED**     | Suspend existing transaction and run non-transactionally.                                                                                                                                                     |
+
+| **REQUIRED** (default) | If a transaction exists, join it; else, create a new one. Most common.
+Example --
+
+@Service
+public class TransferService {
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void transferMoney(String from, String to, BigDecimal amount) {
+        // 1. Debit from account
+        // 2. Credit to account
+
+        // 3. Send notification (should not affect main transaction)
+        notificationService.sendNotification(to, amount);
+    }
+}
+
+@Service
+public class NotificationService {
+    // Independent transaction; failure here does NOT rollback transferMoney
+    @Transactional(propagation = Propagation.REQUIRES_NEW) //Always create a new transaction; suspend existing. Useful for independent sub-operations.
+    public void sendNotification(String to, BigDecimal amount) {
+        // ... send email/SMS
+        // throw new RuntimeException("Notification failed"); // Will rollback this notification txn only
+    }
+}
+If sendNotification fails, only the notification transaction is rolled back. The main fund transfer still commits.
+
+Lets take an example
+Project Structure
+
+OrderService (main business flow, starts a transaction)
+PaymentService (REQUIRED)
+AuditService (REQUIRES_NEW)
+NotificationService (SUPPORTS) - this joins a transaction ,, if this fails it will rollback the entire transaction
+// if we don specify the method then its independent
+DiscountHelperService (MANDATORY) --This will throw an exception if not called inside a transcation
+BatchItemService (NESTED) -Can rollback just this method if something fails, without affecting the whole transaction. (Requires JDBC, not JPA/Hibernate)
+HealthCheckService (NEVER) -should never be inside a transaction
+ReportingService (NOT_SUPPORTED)
+
+@Service
+public class OrderService {
+    @Transactional // Propagation.REQUIRED by default
+    public void saveOrder(Order order) {
+        // ... save order to DB
+        sendNotification(order);
+        // ... other logic
+    }
+
+    public void sendNotification(Order order) {
+        // ... notify customer (maybe call email API or DB)
+        throw new RuntimeException("Notification failed!");
+    }
+}
+what happens here --What happens?
+                    saveOrder() starts a transaction.
+                    sendNotification() runs as a regular Java method, not a transactional boundary. However, it is executed as part of the current transaction, because it's just code inside the transactional method.
+                    If sendNotification() throws a RuntimeException, that exception will bubble up to saveOrder().
+                    Since an unchecked exception was thrown and not caught, Spring marks the current transaction for rollback.
+                    Result: Everything done in saveOrder() (including DB operations) will be rolled back.
+                    (No order will be saved, no partial state.)
+
+// when we save an order that starts a transaction -- now the second one is payment
+
+
+Call placeOrder(): Most methods run in the main transaction.
+If paymentService.processPayment() throws: Whole transaction rolls back, nothing is committed.
+If auditService.recordAudit() throws: Only the audit log is rolled back, the rest of the order continues.
+If batchItemService.processBatchItem() throws: Only that item is rolled back, not the whole order.
+If discountHelperService.applyDiscount() is called outside @Transactional: Exception is thrown.
+If healthCheckService.health() is called inside @Transactional: Exception is thrown.
+reportingService.generateOrderReport(): Always runs outside any transaction.
+
+Nested Example
+@Service
+public class BatchService {
+    @Transactional
+    public void processBatch(List<Item> items) {
+        for (Item item : items) {
+            try {
+                processItem(item); // NESTED: runs with savepoint
+            } catch (Exception e) {
+                // log error and continue to next item
+            }
+        }
+    }
+
+// if we dont put here nested and put the propagation required the whole batc will fail ,, if we put new -- only process item fails and not parent
+// If an exception occurs in processItem, it marks the entire transaction for rollback (i.e., the whole batch), not just this item’s work.
+    @Transactional(propagation = Propagation.NESTED)
+    public void processItem(Item item) {
+        // ... process item
+        // throw new RuntimeException("Failed!"); // Rolls back only this item's changes
+    }
+}
+
+
+
+

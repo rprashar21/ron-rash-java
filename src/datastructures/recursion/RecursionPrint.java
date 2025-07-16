@@ -29,3 +29,13 @@ public class RecursionPrint {
         System.out.println(n);
     }
 }
+// visual presentation
+//main
+//  |
+//printRecursion(3)
+//  |
+//printRecursion(2)
+//  |
+//printRecursion(1)
+//  |
+//printRecursion(0) <-- base, returns
