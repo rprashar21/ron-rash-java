@@ -1,0 +1,46 @@
+The right sizing ue ms by using domaain driven knowledge and the right tools and frameworks.
+we can also use event stroming 0r some lucid chart for event stroming and coming up with an architecture.
+
+straangler fig pattern - is a patter that can be used to replace monolith app to microservices eventually
+the fig grows around an existing tree slowly replacing it until the original tree is gione
+
+Containerization of applications
+we can containerize our applications / microservices
+containers offer self contained and isolated environment, including all necessary dependencies,
+networking, and resources to run the application.
+they work seamlessly in cloud environments, allowing for easy deployment and scaling.
+containerization can help to reduce the complexity and cost of application development and deployment,
+and can make it easier to manage and scale applications in a distributed environment.
+
+Why microservies are stateless
+A stateless microservice does not store any data or user session information between requests.
+ Each request is independent and contains all the information the service needs to process it.
+
+Why Design Microservices to Be Stateless
+u can add/remove instances freely
+Since no session or state is stored locally, any instance can serve any request.
+This enables horizontal scaling easily.
+If 1 instance of your service can handle 100 users, adding 2 more lets you serve 300—no special config needed.
+
+Resilience and Fault Tolerance
+if one instance crashes, users aren’t affected because no state is lost
+
+Load Balancer
+A load balancer can send requests to any available instance, since all are interchangeable.
+
+Deployment
+Stateless services can be restarted or replaced without worry of data loss.
+Zero-downtime deployments become easier.
+
+
+But What If I Need State?
+| State Type       | Where It Goes                |
+| ---------------- | ---------------------------- |
+| User sessions    | Redis, JWT tokens            |
+| Application data | Database (SQL, NoSQL, etc.)  |
+| Shared caches    | Redis, Memcached             |
+| Eventual state   | Message queues (Kafka, etc.) |
+
+
+What About Authentication?
+Use JWT (JSON Web Token) to carry user identity and permissions in each request.

@@ -9,7 +9,7 @@ import java.util.Map;
 public class HashMapIntro {
 
     // HashMap can have a List or object as keys but need to make sure that the hashcode does not change
-    // ifu modifiy the list the hashcode will change which
+    // ifu modifiy the ashcodlist the he will change which
   //      When you try to retrieve the value using the modified list as a key,
     //      you might not find it because the hashCode of the list has changed.
 

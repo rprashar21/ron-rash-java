@@ -1,0 +1,77 @@
+| Strategy                  | Use in Rate Limiting            | When to Use                            |
+| ------------------------- | ------------------------------- | -------------------------------------- |
+| Tell Everyone Everything  | ❌ No — too heavy                | Never                                  |
+| Gossip Communication      | ⚠️ Maybe — eventual consistency | Soft limits only                       |
+| Distributed Cache (Redis) | ✅ Yes — accurate, scalable      | ⭐ Recommended                          |
+| Coordination Service      | ⚠️ Maybe — for configs or rules | For leader election or syncing configs |
+| Random Leader Selection   | ⚠️ Maybe — simple cases         | Small-scale apps                       |
+| TCP vs UDP                | ✅ Use TCP                       | Always use TCP for accurate updates    |
+UDP for fast updates
+
+[API Server A]         [API Server B]
+     ↓                      ↓
+      →→→→→→→ Redis (shared token buckets) ←←←←←←
+     ↑                      ↑
+[API Server C]         [API Server D]
+
+
+Distrubuted Cache (Redis)
+All hosts read/write to the same central in-memory store (like Redis).
+Each request checks Redis for the user’s token bucket
+Centralized control, consistent updates
+
+Pros:
+Easy to keep accurate limits
+Works well with high load
+
+Cons:
+Redis is a single point of failure unless clustered
+Slightly higher latency due to network
+
+Use? ✅ Best option for production rate limiting
+
+How do we integrate all of this with our services ?
+We can run the rate limiter as part of our API Server or Sevice
+or we can run it as its own servuce like a daemon process
+
+1.as part of the process it will be a library ,set of classes , a library taht should be integrated with our existing code
+faster
+resilient to inter pricess failure
+
+2. as a daemon process, we can run it as a separate process and it will be a service that runs in the background
+we will have 2 librarier one for the rate limiter process and other rate limiter client library will be used for nter process communication
+
+Programming Language agnostic
+rate limiter will have its own memory
+
+Question will be asked of how to integrate ur rate limiter library with the service
+How much memory and CPU your library will consume
+What will happen in case of network partition or exception scenario
+
+We can gaurantee that any bugs will not affect the main service
+
+
+Other Questions
+Millions of requests are coming , shall we keep the buckets in memory or in redis
+If the requests keep coming from same user and the interval of request is short we can keep the buckets in memory
+if the requests keep coming from different users and the interval of request is long we can remove the buckets from memory and keep the buckets in redis
+or create a new bucket for each request when the client makes a request again
+
+
+Exception
+Daeomn can fail causing hosts in the cluster to loose visability of this failed daemon
+the host will leave and continue to throttle the request
+less request will be throttled in total
+Same in case of network partition when serveral host in cluster will not be able to broadcast the updates to each other ,
+less request will be throttled in total
+
+For rules and configs service teams may need a ruleservice to create update delete rules
+
+for synchronization better to use atomic reference ,, concurrenthasp for internal memory
+
+What should clients do when request are throttled
+Clients may put in queue and process later
+or retry throttled request -- use fibanacci backoff or exponential backoff or jitter
+
+W want o build a soultion that is scalable and resilient fast and accurate ??
+how can we build that 

@@ -1,0 +1,15 @@
+The rate limiter patter as we all know is limiting the umberof api calls from a client to prevent abuse ,,ddos attacks
+make sure application doesnt get overhwlemed .
+
+too may reques 429 error
+
+
+What Is Redis Rate Limiter in Spring Cloud Gateway?
+Spring Cloud Gateway uses Redis to store request counts for each client/IP/key and allows or blocks requests based on configured limits per time window.
+It’s often implemented using Token Bucket Algorithm internally
+
+Why we use it
+Scalable, distributed rate limiting (unlike in-memory)
+Helps prevent abuse, DoS, API spamming
+Works well in Kubernetes / stateless environments
+Easy integration with Spring Cloud Gateway

@@ -1,0 +1,85 @@
+
+A service (ProductService) calls an external InventoryService.
+Sometimes InventoryService fails temporarily — you want to retry a few times, and if it keeps failing, open the circuit.
+
+Adda dependency
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot3</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+
+application.yml
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventoryService:
+        registerHealthIndicator: true  //Adds a health check to /actuator/health to show circuit status.
+        slidingWindowSize: 5.  // Only looks at the last 5 calls to calculate the failure rate.
+        minimumNumberOfCalls: 5 //Only evaluate the failure rate after at least 5 calls have happene
+        failureRateThreshold: 50. // If more than 50% of those 5 calls fail (i.e., 3 out of 5), the circuit will open.
+        waitDurationInOpenState: 10s. //After circuit opens, it will stay open for 10 seconds, then go to half-open to test if service is back
+  retry:
+    instances:
+      inventoryService:
+        maxAttempts: 3   // On failure, Resilience4j will retry up to 3 times (initial + 2 retries)
+        waitDuration: 2s //It will wait 2 seconds between each retry attempt.
+
+
+What actuall happens
+You call ProductService.checkInventory("123")
+It makes 1 attempt to InventoryService.
+If it fails → it retries 2 more times (every 2 seconds).
+If all fail → it's counted as 1 failure by the Circuit Breaker.
+After 5 such calls, Circuit Breaker checks the failure rate.
+If ≥ 50% calls failed → it opens the circuit for 10 seconds.
+Any call during that time → goes to the fallback method immediately.
+
+// this is my service where i have implemented this
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class ProductService {
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Retry(name = "inventoryService")
+    @CircuitBreaker(name = "inventoryService", fallbackMethod = "fallbackInventory")
+    public String checkInventory(String productId) {
+        // Simulate call to downstream service
+        return restTemplate.getForObject("http://localhost:8081/inventory/" + productId, String.class);
+    }
+
+    // Fallback if circuit is open or retries failed
+    public String fallbackInventory(String productId, Throwable ex) {
+        return "Inventory service is currently unavailable. Please try later.";
+    }
+}
+
+
+// this is basically the controller to trigger the calls
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping("/{id}/check")
+    public String checkInventory(@PathVariable String id) {
+        return productService.checkInventory(id);
+    }
+}
+
+

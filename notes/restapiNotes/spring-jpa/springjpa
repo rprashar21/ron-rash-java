@@ -75,21 +75,7 @@ Mandatory -- on a method or class should always run in a transaction-- if inner 
 Supports- it will nt create a new  transaction , but if it is called from a method which uses transaction it will use its transaction but will never create a
            a new transaction on it own.
 
-Isolation Levels
-Dirty Reads -- Transaction A  -- updates a data before it commits transaction b reads it --
-Non-Repeatabale read -- Transaction A -- queries a database
-                        Transaction B -- updates
-                        Transaction A -- agains queries
-Phantom Reads ------- Transaction A --- queries
-                      transaction B  -- inserts
-                      Transaction A -- again reads gets different data
 
-
-In java e differentIsolation levels are
-Read Uncommitted -- all three hapen -- dirty read ,non Repeatabale and phantom
-Read Comitted -- avoids dirty Reads
-Repeatable read -- phantom reads still happen
-Serializable -- all three avoided but --performace takesa hit
 
 
 Optimistic vs Pessimistic locking

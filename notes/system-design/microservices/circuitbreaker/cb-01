@@ -1,0 +1,44 @@
+What is the Circuit Breaker Pattern?
+Imagine an electrical circuit in your home — when there's a power surge or short circuit, the breaker trips to prevent further damage.
+
+A Circuit Breaker wraps a call to a remote service (like an API or database). If the call fails repeatedly,
+the breaker "trips", and instead of continuing to make requests that will likely fail, it quickly returns an error or a fallback response.
+
+Circuit breaker has 3 states
+closed -- all request go thru normally --  If failures exceed a threshold, breaker trips → moves to Open.
+open -- al calls fail fast -- it returns cached/fallback response),After a timeout, it moves to Half-Open to test if the downstream is back
+half-open - Allows a limited number of test calls -- if success goes to closed  state
+
+What is resilien4j -- ligtweight librarar for java based applications
+provide fault toleracne feature features
+supports micrometer prommtheus
+
+Beneifts
+resource exhaustion,system stability
+fail fast ie quick failure detection
+performance
+
+
+What is
+Resilience4j is a Java library that helps build robust, resilient,
+and fault-tolerant systems by providing ready-to-use implementations of resilience patterns.
+
+Core Patterns
+| Pattern                      | Purpose                                                                                      |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| ✅ **Circuit Breaker**        | Prevents cascading failures by breaking the circuit when failures cross a threshold.         |
+| 🔁 **Retry**                 | Automatically retries a failed operation a configurable number of times.                     |
+| 🕒 **Time Limiter**          | Sets a time limit for calls. If exceeded, cancels and returns a timeout error.               |
+| ⚖️ **Rate Limiter**          | Controls the rate of requests per second/minute to prevent overloading services.             |
+| 📦 **Bulkhead**              | Isolates failures by limiting concurrent calls per resource to avoid system-wide exhaustion. |
+| 🧠 **Cache**                 | Caches responses to avoid repeated calls to the same resource.                               |
+| ⏱ **Scheduler**              | Allows delay and periodic execution of tasks.                                                |
+| 🧾 **Fallback (Decorators)** | Provides alternative response if a call fails (e.g., cached value, default value).           |
+
+
+Use Case
+cirucit breaker -- prevents cascadig failure, eg prevets a service to failing
+retry -- suppose u r trying to do a payament or a payment gateway , retry for 3 times or else fail
+rate limiter --> limits ths number of api calls to a third party to prevent using all their quotas , like chatgpt
+bulkhead --> Avoid one service hogging all threads in a thread pool.
+time limiter --> : If a service doesn’t respond in 2 seconds, return an error.

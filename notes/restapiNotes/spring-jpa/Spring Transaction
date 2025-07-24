@@ -247,4 +247,128 @@ public class BatchService {
 
 
 
+============================== What is Isolation in Transactions?=================
+Isolation determines how and when the changes made by one transaction become visible to others.
+ It is crucial in concurrent database access—preventing dirty data, phantom reads, etc
+
+| Isolation Level       | Dirty Read | Non-Repeatable Read | Phantom Read |
+| --------------------- | :--------: | :-----------------: | :----------: |
+| **READ\_UNCOMMITTED** |      ✗     |          ✗          |       ✗      |
+| **READ\_COMMITTED**   |      ✓     |          ✗          |       ✗      |
+| **REPEATABLE\_READ**  |      ✓     |          ✓          |       ✗      |
+| **SERIALIZABLE**      |      ✓     |          ✓          |       ✓      |
+
+
+Isolation Levels
+Dirty Reads -- Transaction A  -- updates a data before it commits transaction b reads it --
+Non-Repeatabale read -- Transaction A -- queries a database
+                        Transaction B -- updates
+                        Transaction A -- agains queries
+Phantom Reads ------- Transaction A --- queries
+                      transaction B  -- inserts
+                      Transaction A -- again reads gets different data
+
+
+In java e differentIsolation levels are
+Read Uncommitted -- all three hapen -- dirty read ,non Repeatabale and phantom
+Read Comitted -- avoids dirty Reads -- this is by deafult
+Repeatable read -- phantom reads still happen
+Serializable -- all three avoided but --performace takesa hit
+
+Why is isolation important?
+Prevents data anomalies in concurrent transactions—key for integrity.
+
+What’s the default in Spring?
+Isolation.DEFAULT (which maps to DB default, often READ_COMMITTED).
+
+when would you use SERIALIZABLE?
+
+When absolute correctness is required and performance isn’t a bottleneck (e.g., financial transfer ledgers).
+Typically not used for high-throughput apps
+
+| Level             | Prevents                       | Allows                         | Real Use Case                              |
+| ----------------- | ------------------------------ | ------------------------------ | ------------------------------------------ |
+| READ\_UNCOMMITTED | Nothing                        | Dirty, Non-repeatable, Phantom | Fast analytics, not for OLTP               |
+| READ\_COMMITTED   | Dirty reads                    | Non-repeatable, Phantom        | Standard business apps, orders             |
+| REPEATABLE\_READ  | Dirty, Non-repeatable          | Phantom                        | Financial readbacks, MySQL default         |
+| SERIALIZABLE      | Dirty, Non-repeatable, Phantom | None (most strict)             | Ledgers, mission-critical, low concurrency |
+
+============== Spring Transaction Scenarios=======================
+User checks out and places an order for a product.
+Product stock can be low (think: “only 1 left in stock!”).
+Multiple users may try to place the order at the same time.
+
+ISOLATION LEVEL = READ_UNCOMMITTED-- dirty reads -- 2 users could both see the last item as available and both orders may proceed, causing overselling.
+
+READ_COMMITTED prevents dirty reads. Two users cannot see each other’s uncommitted changes. however repeatable reads can still occur
+e.g., after one user checks stock, another order could change the stock before checkout.
+
+@Transactional(isolation = Isolation.READ_COMMITTED)
+public void placeOrder(Long productId) {
+    Product product = productRepository.findById(productId);
+    if (product.getStock() > 0) {
+        product.setStock(product.getStock() - 1);
+        productRepository.save(product);
+        // continue with order...
+    } else {
+        throw new OutOfStockException();
+    }
+}
+In high-concurrency, add SELECT ... FOR UPDATE for pessimistic locking, or use optimistic locking.
+
+
+Bank transfer -- with read_committed {avoid dirty reads ,, non repeatable reads and phnatom ie update and insert by another transaction can happen}
+REPEATABLE_READ or SERIALIZABLE prevents non-repeatable reads and, at highest, phantom reads (e.g., new transactions that could affect sum checks).
+However, performance suffers: increased locking, possible deadlocks
+
+
+Monthly Report Generation (READ_UNCOMMITTED)
+Analytics/reporting job aggregates sales data nightly. Data can be slightly “dirty” (it’s not used for final bookkeeping
+With READ_UNCOMMITTED, the reporting job can run very fast—no locks, no waiting
+
+@Transactional(isolation = Isolation.READ_UNCOMMITTED, readOnly = true)
+public BigDecimal calculateTotalSales() {
+    return orderRepository.sumSales();
+}
+
+With Read_Commited use proper locking like optimistic or pessimistic
+User A                   User B
+  |                        |
+  |----Place Order-------->|
+  |  (Tx1 starts)          |
+  |                        |----Place Order-------->|
+  |                        |  (Tx2 starts)          |
+  |                        |                        |
+  |--Read Stock (1)        |--Read Stock (1)        |
+  |                        |                        |
+  |--Decrement Stock       |                        |
+  |  (Stock = 0, uncommitted)                      |
+  |                        |--Decrement Stock       |
+  |                        |  (Stock = 0, conflict?)|
+  |--Commit                |                        |
+  |                        |--Commit (might fail)   |
+With READ_COMMITTED and no locking, both can read 1 and set to 0—overselling!
+
+With Pessimistic Lock (SELECT ... FOR UPDATE), User B waits for User A.
+
+Spring code with Pessimistic LOcking
+@Transactional(isolation = Isolation.READ_COMMITTED)
+public void placeOrder(Long productId) {
+    // Fetch the product row with a lock
+    Product product = productRepository.findByIdForUpdate(productId);
+    if (product.getStock() > 0) {
+        product.setStock(product.getStock() - 1);
+        productRepository.save(product);
+        // proceed with order
+    } else {
+        throw new OutOfStockException();
+    }
+}
+
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+@Query("SELECT p FROM Product p WHERE p.id = :id")
+Product findByIdForUpdate(@Param("id") Long id);
+
+Is isolation enough
+
 
