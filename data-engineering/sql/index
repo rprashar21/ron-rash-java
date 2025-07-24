@@ -53,3 +53,44 @@ Here, the index 2 is used to directly access the element at that position, which
 
 In summary, whether in SQL or in general computing,
 an index is a tool to optimize the retrieval of data, providing faster access based on an ordered or mapped structure.
+
+
+Lets take an example
+you have a db --- > users
+| id      | name    | email                                       |
+| ------- | ------- | ------------------------------------------- |
+| 1       | Alice   | [alice@mail.com](mailto:alice@mail.com)     |
+| 2       | Bob     | [bob@mail.com](mailto:bob@mail.com)         |
+| 3       | Charlie | [charlie@mail.com](mailto:charlie@mail.com) |
+| 4       | David   | [david@mail.com](mailto:david@mail.com)     |
+| ...     | ...     | ...                                         |
+| 1000000 | Zach    | [zach@mail.com](mailto:zach@mail.com)       |
+
+SELECT * FROM users WHERE email = 'bob@mail.com';
+
+The database starts from the first row and checks the email column one by one.
+Even if the match is early, it keeps scanning till the end (or until it’s sure no duplicates exist depending on engine).
+Time complexity: O(n), where n is the number of rows.
+
+[Row 1] -- no match
+[Row 2] -- ✅ match found
+[Row 3] -- check
+[Row 4] -- check
+...
+[Row 1,000,000] -- check
+
+======================== With an index =============
+
+CREATE INDEX idx_users_email ON users(email);
+with an index  the DBMS creates a separate data structure (usually a B-tree) to map email → row reference.
+Index (B-Tree):
+-----------------------------
+alice@mail.com   → Row 1
+bob@mail.com     → Row 2
+charlie@mail.com → Row 3
+david@mail.com   → Row 4
+...
+zach@mail.com    → Row 1,000,000
+
+DB jumps to the B-tree index, does a binary search or tree traversal
+Time complexity: O(log n) – very fast!
