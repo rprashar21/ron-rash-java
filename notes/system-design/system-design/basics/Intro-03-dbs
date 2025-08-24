@@ -1,0 +1,127 @@
+rdbms - acid
+Atomicity - Each transaction is all or nothing
+Consistency - Any transaction will bring the database from one valid state to another
+Isolation - Executing transactions concurrently has the same results as if the transactions were executed serially
+Durability - Once a transaction has been committed, it will remain so
+
+Techniques to scale a relational database:
+
+master-slave replication, clinet can onlyread/write to master -- clinet can only read from replications
+master-master replication,
+
+federation -like each microservice have its own db,splits up databases by function like users db products db
+there will be less read and write ,less memory
+cons - comllex queries joins
+
+sharding - distributes data across different databases, each db manages a subset of db
+Taking a users database as an example, as the number of users increases, more shards are added to the cluster.
+
+cons -> complexity
+ A sharding function based on consistent hashing can reduce the amount of transferred data
+
+
+denormalization,
+SQL tuning.
+In SQL-based systems, performance starts with designing for access patterns—then tuning indexes, caching, and partitions accordingly. For large-scale systems, I think in terms of query shape, hot paths, and how reads and writes scale differently. I measure before optimizing and always watch for slow queries and unnecessary joins. Tuning is less about magic and more about observability and practical trade-offs
+indexs -- use proper indexes -- indexs can hurt perfromance
+use proper queries ,fetch only columns wnated
+Use EXPLAIN or query plan analysis to identify full table scans or bad indexes.
+Do proper partition and sharding , partition large tables by time, tenant, or status to reduce I/O.
+rewrite expensive queries , caching layer,Handle Large Data Sets Carefully{bulk updates and writes }
+schema tunig - use apporaproate data types -- ,
+
+monitoring and observabiltity
+Log and track slow queries.
+Monitor key DB metrics: CPU, IOPS, query time, connection pool, buffer pool hit rate.
+Use APM tools (e.g., New Relic, Datadog) to track query performance in context
+
+We used EXPLAIN ANALYZE to understand why our queries weren’t using indexes.”
+“We chose to denormalize X table due to frequent JOINs causing high latency.”
+“We cached the first page of results in Redis with a short TTL and fall back to DB for deep pagination.”
+“We used read replicas for 90% of our query traffic to protect the primary from overload.”
+“We moved time-series logs to partitioned tables to optimize recent data access.
+
+COnnection pooling, optimie queries ,
+
+example of e used EXPLAIN ANALYZE to understand why our queries weren’t using indexes
+Actula Query
+SELECT * FROM products
+WHERE category = 'electronics'
+AND available = true
+ORDER BY updated_at DESC
+LIMIT 20;
+
+analyzing --> EXPLAIN ANALYZE SELECT * FROM ...
+
+Finding:
+
+The output showed "Using filesort" and "Full Table Scan"
+Reason: the query wasn’t using the index effectively because the index didn’t match the filter + sort order
+
+created a composite index
+CREATE INDEX idx_category_avail_updated
+ON products(category, available, updated_at DESC);
+
+FOr partition example
+A system recorded audit logs (e.g., user actions). Queries to recent logs were fast, but scans or filters across the full table were very slow.
+SELECT * FROM audit_logs
+WHERE timestamp > NOW() - INTERVAL 1 DAY
+ORDER BY timestamp DESC;
+
+Problem
+Table had 500M+ rows
+No pruning or filtering
+Even LIMIT queries scanned large portions of the table
+
+
+Solution: Partition by Date -Recreated audit_logs with partitioning by month
+CREATE TABLE audit_logs (
+  id BIGINT,
+  user_id INT,
+  action VARCHAR(255),
+  timestamp DATETIME,
+  ...
+) PARTITION BY RANGE (YEAR(timestamp) * 100 + MONTH(timestamp)) (
+  PARTITION p202501 VALUES LESS THAN (202502),
+  PARTITION p202502 VALUES LESS THAN (202503),
+  ...
+);
+
+
+Nosql is collection of data in key value or documnets trore or wide column store, or a graph database
+data is denormalized ,joins are generally done in the application code
+lacks acid favors eventual consistency
+
+BASE is often used to describe the properties of NoSQL databases
+bascalill the syetm is alwasy availabe, eventual consistent, the system may change over time
+
+Which type of no sql best fits ur solution keyvalue,document,wide column store,graph databse
+KeyValue store -- hash table , high performacne , o(1) read and write, simple mode complexity is shifted to application layer
+mostly for caching
+Redis (in-memory, also supports expiry & data structures)
+Amazon DynamoDB (can behave as key-value with primary key access)
+We used Redis as a key-value cache to store the first 10 products of each category page for fast delivery and reduced DB pressure
+
+Document Store- we store semi structured json like documnets
+Each document can have its own schema
+Allows nested objects, arrays, and hierarchical data
+
+schema flexibilty--
+We stored blog posts and comments in MongoDB since each post had flexible structure, tags, embedded media, and varying fields per use
+
+Wide-Column Store - Apache Cassandra
+Stores data in rows and dynamic columns, grouped in column families
+When to use:
+Massive-scale write-heavy workloads (IoT, metrics, event logs)
+Time-series data, user activity logs, recommendation engines
+Great for horizontal partitioning (sharding)
+Designed to write and read in chunks efficiently
+Column-level tuning possible (e.g., TTL, compression)
+
+
+| Type            | Best For                        | Querying Style        | Example Use Case                       |
+| --------------- | ------------------------------- | --------------------- | -------------------------------------- |
+| **Key-Value**   | Fast lookup by key              | Get(key)              | Caching, sessions, rate limiting       |
+| **Document**    | Flexible, nested data           | Query by fields       | User profiles, blog posts, e-commerce  |
+| **Wide-Column** | Time-series, large scale writes | Filter on keys/ranges | IoT data, logs, recommendation engines |
+| **Graph**       | Relationship-heavy data         | Node/edge traversal   | Social graphs, fraud detection         |

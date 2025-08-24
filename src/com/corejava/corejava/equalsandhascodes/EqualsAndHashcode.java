@@ -48,6 +48,8 @@ class Employee{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Employee employee = (Employee) o;
+      //  return Integer.compare(id, employee.id) == 0;
+     // return  Objects.equals(this.name,employee.name);
         return (this.id==employee.id && this.name.equals(employee.name));
     }
 

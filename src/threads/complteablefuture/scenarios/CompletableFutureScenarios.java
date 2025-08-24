@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 public class CompletableFutureScenarios {
 
 
-    // call from 3 different apis and stock price an dsumd the value
+    // call from 3 different apis and stock price and sumd the value
     // Assume one faile what tp do
 
     // importance of this style of  coding is
@@ -27,6 +27,7 @@ public class CompletableFutureScenarios {
         CompletableFuture<BigDecimal> avgPrice = ap1.thenCombine(ap2, (a, b) -> a.add(b))
                 .thenCombine(ap3, (a, b) -> getFinalPrice(a, b));
 
+        // this will make the main thread wait
         System.out.println("final Stock price is " + avgPrice.join());
 
     }
@@ -41,9 +42,7 @@ public class CompletableFutureScenarios {
 
         // simulate  the call
 
-        return CompletableFuture.supplyAsync(() -> {
-            return externalCall(url);
-        }).exceptionally(ex -> {
+        return CompletableFuture.supplyAsync(() -> externalCall(url)).exceptionally(ex -> {
             System.err.println(ex.getMessage());
             System.out.println("Error occurred while trying to fetch stock price");
             return BigDecimal.valueOf(100.0); // default stock price

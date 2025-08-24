@@ -8,7 +8,7 @@ public class CheckString {
        // Parent / Guardian - No Distribution - Notice and Acknowledgement of Bind Over
       // Case File - No Distribution - Warrant of Arrest (Offence)
       // . Defendant Parent - Sexual Harm Prevention Order
-        if(name.contains("Parent")){
+        if(name.contains("Pay")){
             System.out.println("exist");
         }
         else {

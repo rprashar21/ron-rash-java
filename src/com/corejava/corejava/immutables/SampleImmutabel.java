@@ -17,6 +17,45 @@ public class SampleImmutabel
     //such as Collections.unmodifiableList(), Collections.unmodifiableSet(), and Collections.unmodifiableMap().
     // These collections prevent modifications after creation,
 
+    //import lombok.Value;
+    //
+    //@Value
+    //public class UserDto {
+    //    String name;
+    //    String email;
+    //}
+
+    // here the lombok will generate a constructor and intialize the final fields , no setters , no getters , equals hashcode and tostring  method
+    // Once created, UserDto cannot be modified.
+
+
+    // using java 17 record
+    // much cleaner this record is immutable by default and comes with equals hashcode and to srting
+    //public record UserDto(String name, String email) {}
+
+    // when to use in real prjects
+    // use them in API responses, kafka events, domain value types (money range dimensions )
+
+    //@Entity
+    //public class Order {
+    //    @Id @GeneratedValue
+    //    private Long id;
+    //
+    //    private String product;
+    //    private int quantity;
+    //
+    //    public Order() {} // Required by JPA
+    //
+    //    public Order(String product, int quantity) {
+    //        this.product = product;
+    //        this.quantity = quantity;
+    //    }
+    //
+    //    // setters and getters
+    //} this class is mutbale JPA needs a no args constructor becoz it proxies fields/methods to load lazily
+
+
+
     public static void main(String[] args) {
         List<String> mutbaleList = new ArrayList<>();
         mutbaleList.add("apples");

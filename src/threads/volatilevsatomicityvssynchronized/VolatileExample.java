@@ -21,7 +21,8 @@ public class VolatileExample {
     public static void main(String[] args) {
         VolatileExample volatileExample = new VolatileExample();
         // A CountDownLatch is a simple thread‐coordination aid in java.util.concurrent that allows one or
-        // more threads to wait until a set of operations being performed in other threads completes (or, in our example, until a “ready” signal is given).
+        // more threads to wait until a set of operations being performed in other
+        // threads completes (or, in our example, until a “ready” signal is given).
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
         // we want threads to simulataneoulsy execute the increemnt ad get code

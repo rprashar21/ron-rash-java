@@ -1,0 +1,26 @@
+Cap Theorem
+Consistent -- every read recives the most recent write (no stale data ) --
+      example -->If you update your Instagram profile picture, all friends see the new picture instantly
+               we can comprose on this sometimes due to eventual consistency
+
+ Availability -- every request will give u some response , the system is always up
+                Instagram always loads something for you, even during high traffic.
+                like fault tolerannce --even when a ms is down it gives u some reponse
+
+Partituion Tolerance -- Eben when there are netwrok failure and the systems are not able to talk to each other, the application still operates
+Even if one Instagram data center loses connectivity, the rest still work.
+
+In a distributed system, Partition Tolerance (P) is non-negotiable — networks can and do fail.
+CP → Consistency + Partition Tolerance
+AP → Availability + Partition Tolerance
+
+Imagine two banks on different islands (nodes) that must keep balances in sync:
+
+CP: If the cable between islands is cut, they stop transactions to avoid mismatch.
+AP: They keep processing locally, but balances might mismatch and later need fixin
+
+Consistency: All nodes see the same data at the same time.
+Availability: Every request gets a response, even if some nodes fail.
+Partition Tolerance: The system functions despite network partitions (communication failures between nodes).
+
+

@@ -17,7 +17,8 @@ traffic --> servvice{load balancer}--> pod, replica3 of nginx server
 install wordpress
 helm search hub
 helm search hub nginx
-helm repo add bitnami url --> first we need to install the bitnami and then do a search -- we install this repo which is actually a metadata and not a repo
+helm repo add bitnami url --> first we need to install the bitnami and then do a search --
+ we install this repo which is actually a metadata and not a repo
 
 helm pull bitnami/nginx --untar=true --> puling nginx image
 

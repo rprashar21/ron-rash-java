@@ -2,6 +2,14 @@ package com.corejava.corejava.oops.abstraction;
 
 public class SampleAbstract {
 
+    // the real meaning of abstarction is hiding complex details
+    // it focuses on Focus on interface, not implementation
+
+    // when to use
+//    For defining contracts (interface, abstract class)
+//
+//    For service layers, APIs, drivers, strategy patterns
+
     // why abstraction --> where we cannot descibe what specific type it is like an animal --octupus/tiger both are animals and
     // java allows to group certain charesteristics into a group called abstraction
 
@@ -34,13 +42,30 @@ public class SampleAbstract {
 
 }
 
+// what in real life is abstraction
+//public interface NotificationService {
+//    void send(String to, String message);
+//}
+//
+//public class EmailNotificationService implements NotificationService {
+//    public void send(String to, String message) {
+//        // actual email sending logic
+//    }
+//}
+
+//You define NotificationService once and use it across your app.
+//
+//You can plug in SMSNotificationService or PushNotificationService later without changing your core logic.
+
+
+
 abstract class Sam{
      final String name="hello"; // an instance vraibale
     static final String adderss="chatsworth";
     protected int age=40; // subclasses can access
 
     public  final void calSum(){
-        System.out.println("value is ");;
+        System.out.println("value is ");; // this is a non abstract method
     }
 }
 

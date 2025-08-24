@@ -1,0 +1,28 @@
+Azure Ai Search -- helps us to search
+Indexer - component that connect ot our data source
+Index -- index on our data source -- what fileds are searchable
+
+Skillset -->Add language detection:
+ Indexer --> The assistant tying it together:
+
+
+ final otput
+ [Blob Storage: Letter.txt]
+    ↓ (Indexer reads)
+ [Language Detection Skill → "English"]
+    ↓
+ [Search Index]
+    - id: "letter1"
+    - content: "Hello! This is a test letter"
+    - lang: "en"
+
+
+Skillset - set of ai skills that define how to enrich ur data during indexing
+
+
+| Component        | Real-world analogy                       | Azure AI Term    |
+| ---------------- | ---------------------------------------- | ---------------- |
+| Letters in a box | Raw data (PDFs, images, blobs)           | **Data Source**  |
+| Smart Assistant  | Reads and processes each letter          | **Indexer**      |
+| Summary Skills   | Highlights key phrases, detects language | **Skillset**     |
+| Digital Library  | Neatly organized searchable archive      | **Search Index** |

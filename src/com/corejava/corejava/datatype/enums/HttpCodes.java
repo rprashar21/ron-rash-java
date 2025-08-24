@@ -4,9 +4,14 @@ public enum HttpCodes {
 
     OK(200),
     NOT_FOUND(404),
-    INTERNAL_SERVER_ERROR(500);
+    INTERNAL_SERVER_ERROR_New,
+    INTERNAL_SERVER_ERROR;
 
     private final int code;
+
+    HttpCodes(){
+        this.code = 500; // this value will be set to  INTERNAL_SERVER_ERROR
+    }
 
     HttpCodes(int code) {
         this.code =code;
@@ -22,4 +27,11 @@ enum MenuOPtions{
 }
 class AbsSample{
 
+    public static void main(String[] args) {
+        HttpCodes[] array = HttpCodes.values();
+
+        for(HttpCodes httpcodes:array){
+            System.out.println(httpcodes.name()+ " = "+httpcodes.getCode());
+        }
+    }
 }

@@ -30,8 +30,8 @@ public class ThreadPool {
      *    Runnable has run method  and does not return anything
      *   Callable has call method ,, return type is object and We can hold that using future
      *
-     *   ExecutorService is good as we dont have to create and wait on the threads
-     *   Problem with executorService is that it still blocks -->> i,e it has to wait
+     *    wait on the threads
+     *   Problem with executorService is that itExecutorService is good as we dont have to create and still blocks -->> i,e it has to wait
      *   When we  get from callable we can use get(1.TimeUnit) --> but if this time lapses we will not  get the result
      *   Secondly we don not have a proper way to combine the furture
      *
@@ -42,7 +42,8 @@ public class ThreadPool {
 
     // It’s concurrent by design
     //You’ve created an ExecutorService and you’re using multiple threads.
-    // That allows your tasks to be interleaved or actually run at the same time if you let them—but that potential alone is “threads.concurrency.”
+    // That allows your tasks to be interleaved or actually run at the same time if you
+    // let them—but that potential alone is “threads.concurrency.”
 
     // It’s not truly parallel as written
     //Because of the immediate future.get(), you never let two tasks actually overlap.

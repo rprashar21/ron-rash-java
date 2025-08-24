@@ -1,0 +1,50 @@
+# PowerShell script to create the generic RAG index
+# Usage: .\create-generic-index.ps1
+
+# Configuration - Update these values
+$resourceGroupName = "RG-STE-CASEDATARAG"
+$searchServiceName = "your-search-service-name"
+$indexName = "generic-rag-index"
+$indexDefinitionFile = "generic-rag-index-definition.json"
+
+Write-Host "Creating generic RAG index..." -ForegroundColor Green
+
+# Check if Azure CLI is installed
+if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+    Write-Error "Azure CLI is not installed. Please install it first."
+    exit 1
+}
+
+# Check if logged in
+$account = az account show 2>$null
+if (-not $account) {
+    Write-Host "Please log in to Azure..." -ForegroundColor Yellow
+    az login
+}
+
+# Create the index
+Write-Host "Creating index '$indexName' in search service '$searchServiceName'..." -ForegroundColor Yellow
+
+try {
+    az search index create `
+        --resource-group $resourceGroupName `
+        --service-name $searchServiceName `
+        --name $indexName `
+        --definition @$indexDefinitionFile
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "✅ Index '$indexName' created successfully!" -ForegroundColor Green
+        Write-Host "Index URL: https://$searchServiceName.search.windows.net/indexes/$indexName" -ForegroundColor Cyan
+    } else {
+        Write-Error "❌ Failed to create index"
+        exit 1
+    }
+} catch {
+    Write-Error "❌ Error creating index: $_"
+    exit 1
+}
+
+Write-Host "`nNext steps:" -ForegroundColor Yellow
+Write-Host "1. Update your local.settings.json with the new index name" -ForegroundColor White
+Write-Host "2. Update your AzureSearchStorageService to use the new schema" -ForegroundColor White
+Write-Host "3. Test document upload with the new index" -ForegroundColor White

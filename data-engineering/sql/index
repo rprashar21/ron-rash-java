@@ -12,6 +12,45 @@ When you search or retrieve data from a table (using a SELECT query, for example
 the database can look up the index rather than scanning each row of the table.
 This reduces the time and computational cost of querying large datasets.
 
+INDEXS CAN SLOW DOWN WRITES , MAINTAINING IS AN ISSUE
+Use EXPLAIN / QUERY PLAN to spot slow queries
+EXPLAIN SELECT * FROM orders WHERE user_id = 123;
+Create indexes on WHERE, JOIN, and ORDER BY columns
+| Clause Used                | Should You Index? | Example                              |
+| -------------------------- | ----------------- | ------------------------------------ |
+| `WHERE user_id = ?`        | ✅                 | `CREATE INDEX ON users(user_id)`     |
+| `JOIN ON product_id`       | ✅                 | `CREATE INDEX ON products(id)`       |
+| `ORDER BY created_at DESC` | ✅                 | `CREATE INDEX ON orders(created_at)` |
+
+Avoid Indexing on
+| Case                                               | Why Not?                    |
+| -------------------------------------------------- | --------------------------- |
+| Small tables                                       | Full table scan is faster   |
+| Columns with very low cardinality (e.g., `gender`) | Index won't help much       |
+| Frequently updated columns                         | Index causes more overhead  |
+| Large text/blob columns                            | Can slow down insert/update |
+
+
+If ur suing jpa
+@Entity
+@Table(name = "orders", indexes = {
+  @Index(name = "idx_user_status", columnList = "user_id, status")
+})
+public class Order { ... }
+
+
+| You Should Index If...                                          |
+| --------------------------------------------------------------- |
+| A column is used in `WHERE`, `JOIN`, `ORDER BY`, or `GROUP BY`  |
+| You see full table scans in `EXPLAIN` output                    |
+| A query is slow and filters large datasets                      |
+| The table has >10K rows and the column has **high cardinality** |
+
+
+
+
+
+
 Indexes are created to improve performance, especially in SELECT queries involving WHERE, JOIN, or ORDER BY clauses.
 However, they come with a cost: maintaining indexes requires additional storage, a
 nd they may slow down write operations like INSERT, UPDATE, or DELETE, as the index must be updated along with the data.

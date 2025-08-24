@@ -132,6 +132,8 @@ class BinryTree {
 
         int n = findNumberOfNodes(node.getLeftNode()) + 1;
 
+        System.out.println(n);
+
         if (n == k) {
             return node;
         }
@@ -150,8 +152,55 @@ class BinryTree {
         if (node == null)
             return 0;
 
+//        int n1 = findNumberOfNodes(node.getLeftNode());
+//        int n2 = findNumberOfNodes(node.getRightNode());
+
 
         return ((findNumberOfNodes(node.getLeftNode()) + findNumberOfNodes(node.getRightNode())))+1;
+//        return n1 + n2;
+
+
+//        tep-by-step Stack Trace:
+//
+//        Let’s do this from root (4), and follow the recursive calls:
+//
+//🔽 1. Call findNumberOfNodes(4)
+//
+//        Calls findNumberOfNodes(2) → goes left
+//
+//🔽 2. Call findNumberOfNodes(2)
+//
+//        Calls findNumberOfNodes(1) → goes left
+//
+//🔽 3. Call findNumberOfNodes(1)
+//
+//        Calls findNumberOfNodes(null) → returns 0
+//
+//        Calls findNumberOfNodes(null) → returns 0
+//
+//        Returns 0 + 0 + 1 = 1
+//
+//➡️ Unwind 1 level — back to node 2
+//
+//🔼 Back to findNumberOfNodes(2)
+//
+//        Left count = 1
+//
+//        Now calls findNumberOfNodes(3) → goes right
+//
+//🔽 4. Call findNumberOfNodes(3)
+//
+//        Calls findNumberOfNodes(null) → returns 0
+//
+//        Calls findNumberOfNodes(null) → returns 0
+//
+//        Returns 0 + 0 + 1 = 1
+//
+//➡️ Unwind 1 level — back to node 2
+//
+//        Left = 1 (from 1), Right = 1 (from 3), so return 1 + 1 + 1 = 3
+//
+//➡️ Unwind to node 4
     }
 
     public void traversal(Node node)

@@ -36,3 +36,17 @@ class Splendor extends Bike{
         System.out.println(b.speed); // this will give not becoz data members are not overridden
     }
 }
+
+class Polymorphism{
+
+    int add(double x){
+        return 10;
+    }
+    int add(int  x){
+        return 20;
+    }
+}
+
+
+
+

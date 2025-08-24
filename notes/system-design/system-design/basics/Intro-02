@@ -1,0 +1,298 @@
+| **Aspect**     | **Vertical Scaling (Scale Up)**                    | **Horizontal Scaling (Scale Out)**                 |
+| -------------- | -------------------------------------------------- | -------------------------------------------------- |
+| **How**        | Add more power (CPU, RAM, SSD) to a single machine | Add more machines/instances to share the load      |
+| **Example**    | Upgrade server from 8GB RAM → 64GB RAM             | Add 10 more servers behind a load balancer         |
+| **Complexity** | Simple to implement                                | More complex (load balancing, distributed systems) |
+| **Limit**      | Hardware limits                                    | Can scale almost indefinitely (theoretically)      |
+
+| **Vertical Scaling**      | **Horizontal Scaling**               |
+| ------------------------- | ------------------------------------ |
+| ✅ Easy to set up          | ✅ High fault tolerance               |
+| ✅ No code changes needed  | ✅ Can handle massive traffic         |
+| ❌ Has a physical limit    | ❌ More infrastructure complexity     |
+| ❌ Downtime when upgrading | ❌ Requires distributed system design |
+
+data replication vs data partitioning
+| **Aspect**              | **Database Replication**                | **Database Partitioning (Sharding)**                                 |
+| ----------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| **Definition**          | Copy the same data to multiple servers  | Split data into different chunks and store them on different servers |
+| **Goal**                | Improve availability & read performance | Handle very large datasets & write scalability                       |
+| **Data on Each Server** | **Full copy** of the entire database    | **Only a portion** of the database                                   |
+| **Scaling Type**        | Usually read scaling                    | Usually write & storage scaling                                      |
+
+Example Use Cases
+Replication Example:
+E-commerce site with heavy read load (product catalog).
+Writes happen on the primary database, and reads are served from multiple replicas to avoid overloading one server.
+
+Partitioning Example:
+Social media platform storing billions of posts.
+Partition by user_id so users A–M are stored in server 1, and N–Z in server 2.
+
+Trade offs
+| **Replication**                                    | **Partitioning**                             |
+| -------------------------------------------------- | -------------------------------------------- |
+| ✅ Improves read performance                        | ✅ Handles massive data sets                  |
+| ✅ High availability (failover)                     | ✅ Improves write scalability                 |
+| ❌ Writes must sync to all replicas → can be slower | ❌ Queries across partitions are more complex |
+| ❌ Still limited by size of one DB for writes       | ❌ Harder to manage & rebalance data          |
+
+When to Use
+Replication: You need fast reads, better availability, and disaster recovery.
+
+Partitioning: Your data size or write load is too big for a single database server.
+
+
+==========================**==========================**==========================**==========================**==========================**
+
+Scalabilty -- ability of the system to handle increasing workload without hurting performance
+
+eg
+Traffic spikes (sales events, viral campaigns, seasonal load)
+Long-term growth in users/data
+Business expansion into new markets
+Keeping performance (speed) consistent as demand rises
+
+
+How Scalabilty resolve a problem
+| **Problem**                                     | **Scalability Solution**                                                          |
+| ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| **Slow response time under heavy load**         | Add more servers (horizontal scaling) or upgrade existing ones (vertical scaling) |
+| **Single machine can’t store/process all data** | Partition/shard the database                                                      |
+| **Sudden traffic surge**                        | Auto-scale cloud resources based on load                                          |
+| **Regional demand**                             | Deploy multiple instances in different locations (geo-scaling)                    |
+
+
+Scalability solves the “growth problem” — it ensures your system doesn’t collapse under more users,
+more data, or more requests, and it does so in a way that can grow with your business.
+
+Scalablity for a devloper or coding rules
+
+
+Stateless services, externalize state.
+1.Design Stateless microservice -- easy to clone scale --no sticky sessions
+/// Controller: no in-memory per-user state, all state in DB/Redis/queues
+
+2.Idempotent, retry‑safe writes.
+ Idempotency for write APIs
+Why: clients retry under load; you must not duplicate work
+
+@Service
+class OrderService {
+  private final StringRedisTemplate redis;
+  private final OrderRepo repo;
+
+  public void create(CreateOrder req, String idemKey) {
+    if (idemKey != null) {
+      Boolean first = redis.opsForValue().setIfAbsent("idem:"+idemKey, "1", Duration.ofHours(24));
+      if (Boolean.FALSE.equals(first)) return; // duplicate -> swallow
+    }
+    repo.save(map(req)); // real write
+  }
+}
+
+
+Paginate/stream/batch I/O. avoid o(n) and full table scans
+@GetMapping
+public Page<OrderDto> list(Pageable pageable) {   // ?page=0&size=50
+  return repo.findAll(pageable).map(OrderDto::from);
+}
+
+Connection pooling tuned for concurrency
+Why: DB connections are scarce; pool caps prevent meltdown.
+
+Cache hot stuff; queue slow stuff.
+
+DB: indexes, replicas, partitioning as needed.
+the DB is usually the bottleneck.
+Proper indexes for every high‑cardinality filter:
+Write amplification control: append-only event table + async projections (CQRS) if writes get hot.
+Partitioning (by time/user/tenant) when tables get huge.
+
+Read replicas + read/write split for heavy read workloads.
+
+Rate limit at the edge.
+
+Ship with metrics, health probes, graceful shutdown.
+Prove it with load tests.
+
+
+==========================**==========================**==========================**==========================**==========================**
+CDN - content delivery network -- globally distributed network -- like edge servers for hosting static content or dynamic content in some case
+,, like images,files videos
+pro
+fast
+less load on original server
+handles load well
+improve availabilty across many regions
+
+cons
+extra cost
+data can be stale
+cache invalidation startergy -- anotehr layer
+
+| **Push CDN**                                                        | **Pull CDN**                                                             |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| You manually upload content to the CDN’s servers                    | CDN automatically fetches content from your origin when requested        |
+| You control exactly what’s on the CDN                               | Origin must be always available for first-time requests                  |
+| Good for static, rarely changing files (e.g., app install packages) | Good for dynamic or frequently updated content (e.g., images from blogs) |
+| More work to manage                                                 | Less work — auto-sync                                                    |
+| Example: You upload your site assets to AWS S3 + CloudFront         | Example: Cloudflare pulls files from your web server on demand           |
+
+Real Example
+Push CDN: A gaming company uploads its 20 GB game update to the CDN before release so players download it instantly.
+like netflix
+
+Pull CDN: A news website’s images are fetched by the CDN when a reader first views an article, and then cached for others
+
+
+cache vs cdn
+
+| **CDN**                                                              | **Cache**                                                                |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Distributed across many locations worldwide                          | Usually local (browser cache, app cache, or single server)               |
+| Primarily for delivering content to **geographically distant users** | Primarily for speeding up repeated access to data **in the same system** |
+| Works at the **network level**                                       | Works at the **application or hardware level**                           |
+| Examples: Cloudflare, Akamai, AWS CloudFront                         | Examples: Redis, Memcached, browser cache                                |
+
+==========================**==========================**==========================**==========================**==========================**
+Load balancers
+-sofware whihc distribute traffic or load to backend servers like application server or db servers
+prevents load,fast evenly distrubute data ,scalable application ,prevents sigle point of failure
+
+Load balancers can be implemented with hardware (expensive) or with software such as HAProxy
+SSL Termination --> decryypt incoming messages and encrypt server responses
+Session -  can rout a particaluar client to a backend server
+to prevent load balancer failure we can use active active or active passive mode
+
+Layer 4 Load Balancing (Transport Layer)
+Routes traffic based on IP address + port (no knowledge of HTTP or content).
+Looks only at TCP/UDP headers.
+"Send all TCP traffic on port 443 evenly to these backend servers."
+ Very fast (less processing).
+  Raw TCP/UDP apps, gaming servers, VoIP, streaming
+
+Layer 7 Load Balancing (Application Layer)
+What it does: Routes traffic based on application-level data (HTTP headers, URL paths, cookies, etc.).
+How it works: Reads the actual request content.
+Example:
+/api/* → API servers
+/images/* → Image servers
+Speed: Slightly slower (needs to parse requests).
+Use case: Websites, microservices routing, API gateways.
+
+Algo used by load balancer
+Load balancers can route traffic based on various metrics, including:
+
+Random -- randlomly distrubute traffic
+Least loaded --
+Session/cookies
+Round robin or weighted round robin
+Layer 4
+Layer 7
+
+load balancers can introduce problems
+Scaling horizontally introduces complexity and involves cloning servers
+Servers should be stateless: they should not contain any user-related data like sessions or profile pictures
+Sessions can be stored in a centralized data store such as a database (SQL, NoSQL) or a persistent cache (Redis, Memcached)
+Downstream servers such as caches and databases need to handle more simultaneous connections as upstream servers scale out
+
+==========================**==========================**==========================**==========================**==========================**
+What is reverse proxy ?
+A reverse proxy is a server that sits in front of one or more backend servers and forwards client requests to them.
+
+The client thinks it’s talking directly to the backend.
+The backend only ever sees requests coming from the reverse proxy.
+Example tools: NGINX, Apache HTTP Server (mod_proxy), HAProxy, Envoy.
+
+Pros
+One public endpoint, even if you have many services.u can do caching,
+ssl/ tls termination - it can handle encryption,offloading work from backends.
+traffic control --> Can rewrite URLs, filter requests, add headers.
+
+cons
+can become a single point of failure
+omplexity increases in large deployments
+
+When to use
+U have multiple backend services and want one public endpoint
+
+| **Reverse Proxy**                                                 | **Load Balancer**                             |
+| ----------------------------------------------------------------- | --------------------------------------------- |
+| Forwards requests to one or more backend servers                  | Distributes load across multiple servers      |
+| Can do caching, compression, SSL offloading                       | Focused on balancing traffic efficiently      |
+| Usually **Layer 7**                                               | Can be **Layer 4 or Layer 7**                 |
+| Often *does* some load balancing if multiple backends are defined | Doesn’t necessarily cache or modify responses |
+| Main job: **Gateway + helper features**                           | Main job: **Even traffic distribution**       |
+
+RealTime Scenario
+Real-Time Scenario
+E-commerce Website
+
+Public traffic → shop.example.com
+Reverse proxy (NGINX) does:
+SSL termination
+Caching product images
+Routing /api/* → API service, /checkout/* → payment service
+Hiding backend IPs from the internet
+Backends only see requests from NGINX, not from customers directly.
+
+
+Application Gateway
+
+An Application Gateway is a layer 7 (application layer) load balancer that provides advanced traffic routing,
+Web Application Firewall (WAF), SSL termination, URL-based routing, and session affinity.
+It’s designed to handle HTTP/HTTPS traffic and make intelligent routing decisions based on application-level data (e.g., URL paths, headers).
+When to Use: Use when you need advanced routing (e.g., path-based routing to specific microservices), security features like WAF, or application-level insights.
+Where It Sits: Typically sits at the edge of your network, before traffic reaches your Kubernetes cluster, acting as the entry point for external traffic.
+
+
+Load balacner layer 4  4 (transport layer, e.g., TCP/UDP) or layer eg Azure load balcner
+simple use case
+Kubernets cluster -- distributing traffic across Kubernetes pods or nodes when simple load balancing
+
+A Reverse Proxy is a server that sits between clients and backend servers, forwarding client requests to the appropriate backend service.
+: In Kubernetes, it’s typically part of the Ingress controller inside the cluster,
+ routing traffic from the load balancer or application gateway to microservices.
+
+ Real Time case Scenairo
+ U have an application hosted in azure kubernetes and multiple mircoservices
+ the application uses a frontend React app served via a CDN (Azure CDN), Redis for caching, and a SQL database (Azure SQL).
+  Security is a top concern due to sensitive user data, and the system must handle high traffic with low latency.
+
+Application Gateway: Used at the edge to handle HTTPS traffic, WAF for security, and URL-based routing
+ (e.g., /api/products/* to product catalog service, /api/orders/* to order service). It also terminates SSL to reduce backend load.
+
+Load Balancer: Azure Load Balancer exposes the Application Gateway or Ingress controller to the public internet, distributing traffic across AKS nodes.
+
+Reverse Proxy: An Nginx Ingress controller inside the AKS cluster routes traffic to the appropriate microservices based on URL paths or headers.
+
+Tradeoff for Application vs load balancer vs reverseproxy
+App Gateway pros
+Layer 7 routing (URL, headers) for precise traffic control.,waf,ssl
+
+cons --> slow,high cost,increase complexity
+
+Load Balancer -simple fast,High availability with Azure’s managed service
+cons - limited to transport layer, no extra features
+Great for scaling pods, but limited control over traffic routing
+
+Reverse Proxy -- Lightweight and flexible for internal routing.Supports caching, compression, and rewriting.
+Integrates well with Kubernetes Ingress
+cons limited to internal cluster traffic, requires additional config with kubernetes cluster
+
+Higg Level design
+Users: Access the e-commerce website via browsers or mobile apps.
+Azure CDN: Serves static assets (React app, images) globally.
+Azure Application Gateway: Handles HTTPS traffic, WAF, and URL-based routing
+Azure Load Balancer: Distributes traffic to AKS nodes.
+Nginx Ingress Controller: Routes traffic to microservices inside AKS.
+Microservices: Handle business logic (e.g., product catalog, orders).
+Redis Cache: Stores frequently accessed data.
+Azure SQL: Stores persistent data
+
+Low level design
+Ingress Configuration --> Nginx Ingress routes traffic based on URL paths (e.g., /api/products to product service).
+Service Discovery --> Kubernetes Services expose microservices internally.
+Security --> Kubernetes Network Policies restrict internal traffic
+Scaling - Horizontal Pod Autoscaler (HPA) scales pods based on CPU/memory metrics.

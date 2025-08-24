@@ -5,6 +5,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class SampleCompletableFuture {
 
+
+
     // CompletableFuture in background usess the Fork/JOin Pool framework
     // Ayschronous -- non blocking call
     // call returns immediatley but response is sent when it is available

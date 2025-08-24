@@ -1,0 +1,19 @@
+why document Intelligence
+
+
+- Header: "Case: Smith vs. Johnson"
+- Date field: "2024-01-15"
+- Attorney field: "John Doe"
+- Section: "Summary of Facts" with numbered list
+- Table: "Financial Damages" with proper columns and rows
+
+
+Semantic chunks instead of random text splits
+Context preservation (headers stay with their content)
+Table integrity (related data stays together)
+
+
+When someone searches for "financial damages", Document Intelligence helps:
+Find the table with financial information
+Keep related data together in chunks
+Provide structured context for the LLM

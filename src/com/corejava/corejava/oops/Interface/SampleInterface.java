@@ -34,11 +34,12 @@ interface Samp{
     public static final int age=10;
      void m1(); // public and abstract
     // default methods
+    // ff you added a method to an interface, all implementing classes broke.
     default void calculate(){
         square(10,2);
         System.out.println("default cal method gives :: "+square(10,2));
     }
-
+// helper functions related to the interface, without needing an implementation class.
     static int calculateAdd(int x, int y)
     {
         return x+y;

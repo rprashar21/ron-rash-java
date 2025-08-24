@@ -21,6 +21,10 @@ public class ReentrantLockDemo {
 // (timeouts, interruptible waits, multiple conditions).
 // “ReentrantLockDemo” means the thread that holds the lock can acquire it again without deadlocking itself.
 
+//Reentrant – the same thread can acquire the lock multiple times (increments an internal counter).
+//
+//Useful in recursive calls or methods calling other locked method
+
     private final ReentrantLock reentrantLock = new ReentrantLock();
     private int    counter = 0;
 

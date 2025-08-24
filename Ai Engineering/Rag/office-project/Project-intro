@@ -1,0 +1,51 @@
+what is this ??
+This system appears to be designed for legal professionals to quickly search and get AI-assisted answers from case documents,
+ helping them find relevant information efficiently while maintaining accuracy through source citations.
+
+
+Project Overview
+This is a RAG (Retrieval-Augmented Generation) Java Function App built for the UK Ministry of Justice (MOJ) Court and Tribunal Service.
+It's designed to provide intelligent legal document search and question-answering capabilities using Azure cloud services.
+
+
+
+
+Architecture
+The project implements a RAG pipeline that allows users to query legal case documents and
+receive AI-generated responses based on relevant document content.
+
+
+Core Components
+RagOrchestratorFunction - The main Azure Function that orchestrates the entire RAG process
+EmbeddingService - Converts user queries into vector embeddings using Azure OpenAI
+AzureAISearchService - Performs semantic search on indexed legal documents
+LegalLlmService - Generates AI responses using retrieved document context
+
+
+On a highl level
+we have 2 steps
+Step 1: Document upload → vectorization (chunking + embedding)
+Step 2: User query → semantic search → GPT response
+
+Tools: Azure Document Intelligence → Azure AI Search → Azure AI Foundry (LLM)
+
+
+2 Document Ingestion, Preprocessing & Vectorisation
+
+1st flow
+PDF Upload → Document Intelligence → Text Extraction → Chunking → Embedding → Azure Search
+
+2nd flow
+User Question → Embed Query → Search Documents → Retrieve Context → Generate Answer → Return Response
+
+what each flow is doing ??
+AnalyzeResult result = poller.getFinalResult();
+
+// You can access:
+result.getPages()           // List of pages with text
+result.getTables()          // Extracted tables
+result.getKeyValuePairs()   // Key-value pairs found
+result.getStyles()          // Text styles (bold, italic, etc.)
+result.getLanguages()       // Detected languages
+result.getDocuments()       // Document structure
+

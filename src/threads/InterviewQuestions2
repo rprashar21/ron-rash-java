@@ -1,0 +1,57 @@
+1. what is Thread Runnaable Callable
+Thread is a class in java --Thread is a class that represents an actual thread of execution.
+Runnable is a functional Interface that reprsents a task and return no value
+Callable --> is a functional Interface that reprsents a task and return a value
+You should use Runnable (or Callable) to define the task and pass it to an executor or thread.
+This promotes separation of task definition and execution, which is essential in scalable systems.
+
+
+What are the states of a thread in Java, and what transitions cause state changes ???
+NEW: Thread is created but not started.
+RUNNABLE: Ready to run, waiting for CPU time.
+BLOCKED: Waiting for a monitor lock.
+WAITING: Waiting indefinitely (wait(), join(), etc.).
+TIMED_WAITING: Waiting for a specified time (sleep(), join(timeout), etc.).
+TERMINATED: Execution completed or aborted
+
+Transitions occur via start(), wait(), notify(), join(), acquiring locks, completing execution, etc.
+
+Sleep vs wait
+sleep -- doesnt require lock, static method in Thread class , use for delays
+wait -- method on object , releases the lock of the object,must be called from a synchronized block
+
+volatile vs synchronized
+volatile: Ensures visibility of changes to variables across threads, but not atomicity.
+synchronized: Ensures both mutual exclusion and visibility by acquiring a monitor lock.used on methods and blocks
+acquires the lock of the object
+
+Implemet tHread safe counter
+AtomicInteger counter = new AtomicInteger(0);
+counter.incrementAndGet();
+
+or synchronized block
+
+synchronized void increment(){
+  count++
+}
+You need to choose between lock-free (e.g., Atomic*) and lock-based (synchronized) depending on contention levels and performance goals.
+
+How would you troubleshoot a Java app where threads are getting stuck or slow under load?
+Answer:
+Take thread dumps (jstack, kill -3)
+Look for blocked/waiting threads, contention points
+Check locks, synchronized blocks, DB or I/O calls
+Use tools like VisualVM, JFR, or async profilers
+Check GC logs (GC pauses can block all threads)
+Pain point: Identifying deadlocks, long GC pauses, or thread pool starvation is key in production incidents.
+
+
+What is thread starvation? How do you prevent it?
+when threads are unable to get cpu time due to ling running tasks,a fixed-size thread pool with long-running tasks
+
+Fixes:
+
+Use Thread.yield() carefully
+Use bounded queues with rejection policies
+Avoid unbounded thread creation
+Break down long tasks or use async processin

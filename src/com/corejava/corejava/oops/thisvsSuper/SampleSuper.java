@@ -9,6 +9,7 @@ public class SampleSuper {
 
     public static void main(String[] args) {
         Dog dog = new Dog();
+        dog.print();
         System.out.println(dog.colour);
 
         // using super keyword we can access parent class methods and keyword
@@ -30,6 +31,7 @@ class Dog extends Animal{
     String colour ="green";
     public void print()
     {
+        // supre keyword  i will be able to access the immediate class suoer methods
         System.out.println(super.colour);
         super.hello();
     }

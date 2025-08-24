@@ -1,0 +1,60 @@
+what is consistent hashing -- technique used in distributes systems  to distribute data or workload across multiple nodes.
+
+real world use case
+Distrubted Caching system {memcahced or redis }
+
+What: Caches store frequently accessed data (e.g., web page data, user sessions) to reduce database load.
+How Consistent Hashing Helps: Keys (e.g., session IDs) are hashed to a ring, and cache servers are also placed on the ring.
+When a request comes, the key is routed to the nearest server clockwise.
+If a cache server fails or is added, only a small fraction of keys are remapped.
+
+example - Amazon’s website uses Redis or Memcached to cache product details .
+
+
+2. Distributed Databases (e.g., Amazon DynamoDB, Apache Cassandra)
+What: Databases that store data across multiple nodes for scalability and fault tolerance.
+How Consistent Hashing Helps: Data keys (e.g., user IDs) are hashed to nodes on a ring.
+This ensures even data distribution and minimal data movement when nodes are added/removed
+eg cassandra db uses consitent hashing
+
+Load balancers uses -- Client requests are hashed (e.g., by IP or session ID) to route to a specific server.
+This ensures sticky sessions (same client, same server) with minimal reshuffling when servers change
+
+CDN- URLs or content IDs are hashed
+Distributed File Systems (e.g., Hadoop HDFS): File chunks are hashed to node
+
+
+
+[Client Requests (e.g., Web/App Users)]
+         |
+         v
+[Load Balancer with Consistent Hashing]
+         |
+         v
+[Hash Ring: Circular Structure]
+   - Server1 (at hash 20, 25, 30 with virtual nodes)
+   - Server2 (at hash 50, 55, 60)
+   - Server3 (at hash 80, 85, 90)
+         |
+         v
+[Cache Servers: Memcached Instances]
+   - Server1: Stores keys hashed between 0-50
+   - Server2: Stores keys hashed between 50-80
+   - Server3: Stores keys hashed between 80-100
+         |
+         v
+[Backend Database (e.g., MySQL, if cache miss)]
+
+HASH RING - A logical circle where servers and keys are mapped via a hash function (e.g., MD5).
+Each server has multiple virtual nodes for better load balancin
+
+Cache Servers: Memcached instances storing key-value pairs (e.g., user ID → profile data).
+
+flow
+    A client sends a request with a key (e.g., user123).
+    The load balancer hashes user123 to a point on the ring (e.g., 45).
+    The request is routed to the nearest server clockwise (e.g., Server2 at 50).
+    If the data is in the cache, Server2 returns it. If not, Server2 queries the database, caches the result, and responds.
+
+System Design Explanation with Consistent Hashing
+why to use -- in cache servers -- to reduce load on actual server -- minimal key movement
