@@ -8,7 +8,7 @@ public class StringTokenizerSample {
 
         String str= "You,are,my,friend";
         // true will return the delimiter as well
-        StringTokenizer stringTokenizer = new StringTokenizer(str,",",true);
+        StringTokenizer stringTokenizer = new StringTokenizer(str,",",false);
 
 
         while (stringTokenizer.hasMoreTokens())

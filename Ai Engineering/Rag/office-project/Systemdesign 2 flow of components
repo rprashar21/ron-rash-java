@@ -1,0 +1,112 @@
+Step 1: Upload to Azure Blob Storage
+
+The user/system uploads a document (CASE-456-IDPC.pdf) to a predefined blob container (idpc-uploads) using a federated entity.
+Blob versioning is enabled → older versions are retained automatically (helps in tracking changes).
+
+Metadata is attached to the blob:
+caseId: CASE-456
+uploadedBy: MCC
+documentType: IDPC
+uploadTime: timestamp
+status: update_success
+
+Key Rsopnsibilitesies of the springboot service step 1
+Receives document IDPC metadata + blob
+Checks if it's a new document or a new version
+Uploads with TTL and metadata
+Skips upload if duplicate (optimization)
+Invalidate older version if updated
+
+Trade offs
+federated indentity or managed identity -- secure -- we can use multi tenant as well
+Metadata will help us track document -- risk --- Metadata is not indexed/searchable — must be parsed manually later
+ttl cleanup ,, cost effective -- risk will be deleted too soon
+
+| Case           | Handling                                                  |
+| -------------- | --------------------------------------------------------- |
+| Upload fails   | Retry via Spring Retry or client-level retry              |
+| Duplicate      | Can cache IDPC ID in Redis/Postgres — skip upload         |
+| Blob too large | Use block blob streaming upload API                       |
+| Upload slow    | Use SAS URL upload from client, skip Spring Boot download |
+
+
+public void uploadDcoument(Sring caseId, MultipartFile){
+// Manged Identity connection for the Blob
+BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+        .credential(new DefaultAzureCredentialBuilder().build()) // this is via managed identity whihc is a amnaged servic eby azure help to keep no secrets
+        .endpoint("<your-blob-endpoint>")
+        .buildClient();
+
+ // get the container client
+     BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient("idpc-container");
+
+BlobClient blobClient = containerClient.getBlobClient(blobName);
+
+    // Add metadata (IDPC ID, uploaded timestamp,version)
+    Map<String, String> metadata = Map.of(
+        "idpc-id", idpcId,
+        "uploaded-at", Instant.now().toString()
+    );
+
+    // Upload with metadata
+    blobClient.upload(file.getInputStream(), file.getSize(), true);
+    blobClient.setMetadata(metadata);
+}
+
+
+⛓️ This triggers the next step using a Blob Triggered Azure Function
+
+Step 2: Blob Trigger – Metadata Extractor & Deduplicator
+Azure Function 1 is triggered.
+Reads the blob's metadata:
+Extracts caseId, documentType, version, etc.
+Deduplication Logic:
+Checks Redis (or internal cache) for a hash of the document or checks if this caseId + documentType combo has already been processed.
+If duplicate → Skips enqueueing.
+Else → Proceeds.
+📨 Enqueues a message into Azure Storage Queue files-to-process:
+{
+  "blobUrl": "https://<storage>.blob.core.windows.net/idpc-uploads/CASE-456-IDPC.pdf",
+  "caseId": "CASE-456",
+  "uploadedBy": "MCC",
+  "documentType": "IDPC",
+  "version": 3
+}
+
+rate limiting and cost
+
+{
+  "maxDequeueCount": 5,
+  "batchSize": 16,
+  "newBatchThreshold": 8,
+  "visibilityTimeout": "00:02:00"
+}
+
+
+
+
+Recommended as Step 1:
+
+Use pre-upload SHA-256 deduplication to eliminate obvious duplicates.
+✅ Recommended as Step 2 (later):
+Add chunk-level deduplication post-upload for partial updates (e.g., one page changes).
+Consider versioning logic and page-level hash diffing for long-term scalability.
+
+
+Processing Queue Function
+✅ Key Responsibilities
+
+Read from queue
+Download blob via SAS (faster, zero auth handshake)
+Parse using Document Intelligence -- maintans stricture
+Chunk using LangChain4j
+Embed using Azure OpenAI
+Store vectors in Azure AI Search
+
+trade offs
+| Scenario              | Strategy                                         |
+| --------------------- | ------------------------------------------------ |
+| Embedding fails       | Retry with backoff (Resilience4j/Function Retry) |
+| Vector indexing fails | DLQ the message (Azure Storage Queue DLQ)        |
+| Blob corrupt          | Move to quarantine container                     |
+| Cost spikes           | Monitor via Azure Monitor + set throttling rules |

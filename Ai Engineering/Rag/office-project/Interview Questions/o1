@@ -1,0 +1,89 @@
+Q2: “How do you ensure documents aren’t reprocessed unnecessarily?”
+
+Answer:
+We use two layers:
+Blob metadata (documentId, uploadTimestamp, version) is checked by the lightweight Azure Function.
+Ingestion tracking table in our service datastore stores document status (PROCESSED, FAILED, IN_PROGRESS) and version.
+Before processing, we verify if the document ID + version combo already exists.
+If it's a duplicate, we skip reprocessing and log it.
+If version has changed, we invalidate the previous index and reprocess.
+
+3: “If 1000s of documents arrive in a spike, how does the system handle it?”
+
+Answer:
+The system uses Azure Storage Queue as a natural buffer between ingestion trigger and processing.
+Azure Functions are set with controlled concurrency (batch size, max dequeue count, visibility timeout) to throttle ingestion. For scaling, we:
+Configure dynamic scaling on Azure Functions (Premium Plan or Consumption with pre-warmed instances).
+Use separate queues per document source (SPI, CPPI, MCC) for better isolation and parallelism.
+Use a rate limiter (Resilience4j or Function built-in concurrency cap) in the document-processing function.
+
+
+4. How do you avoid performance issues with large files?”
+
+Answer:
+We avoid full downloads where possible using SAS URL streaming and read only necessary pages.
+Instead of downloading to disk, we stream the document in memory chunks (e.g., per page) and use LangChain to process.
+We chunk upfront and embed lazily — this improves memory usage and speeds up response time.
+
+
+
+5. Azure Storage Queue vs Event Grid vs Service Bus
+| Criteria        | Azure Storage Queue     | Event Grid                 | Service Bus (Premium)       |
+| --------------- | ----------------------- | -------------------------- | --------------------------- |
+| **Simplicity**  | ✅ Very simple           | ❌ Needs Event Subscription | ❌ Requires setup, namespace |
+| **Durability**  | ✅ 7-day retention       | ❌ Push model only          | ✅ 14-day retention + DLQ    |
+| **Retry Logic** | ✅ Manual or built-in    | ❌ Client-side retry needed | ✅ DLQ, Retry policies       |
+| **Throughput**  | ✅ High                  | ✅ High                     | ✅ High                      |
+| **Ordering**    | ❌ No ordering guarantee | ❌ No ordering guarantee    | ✅ FIFO support              |
+
+6. How do you monitor and handle ingestion failures?”
+
+Answer:
+Each ingestion failure is logged to a dead-letter queue or failure queue with:
+documentId
+errorCode
+retryCount
+timestamp
+
+We use Application Insights to trace function invocations, latency, and exceptions.
+Azure Monitor dashboards visualize ingestion rate, success/failure, and queue length.
+
+A failure handler reprocesses items based on policy (e.g., max 3 retries → alert)
+we have ui to look at the failures -->
+
+6. How does document versioning in blob help here
+We check current version ID in blob metadata.
+If documentId exists but version is newer, we invalidate vector index entries using documentId and reprocess with the new version.
+This helps in avoiding re-ingestion of unchanged blobs and also provides audit/history
+
+7.If Azure Search indexing fails, what happens?”
+
+  Answer:
+
+  Azure Function logs the chunk + vector to an “indexing failure” queue with retry metadata.
+  We track indexing status in service DB and support:
+
+  Manual replay via admin endpoint.
+  Scheduled retry using Azure Durable Function.
+  Errors are categorized:
+  Transient: Retry (e.g., throttling)
+  Permanent: Logged, alert raised
+
+8. Q9: “Can this architecture scale to 100,000+ documents/day?”
+
+   Answer:
+   Yes — because:
+   Ingestion is asynchronous and queue-backed
+   Processing is serverless and autoscaling
+   Azure AI Search supports up to 10M+ vectors/index, with ability to shard per tenant or per source
+   Large files are streamed or processed page-wise to avoid memory bottlenecks
+   But, we need to monitor:
+   Queue growth (auto-scaling trigger)
+   Indexing latency
+   Azure OpenAI throughput/quota limits (token-based)
+
+How would you make this architecture tenant-aware
+Add tenantId as metadata on each blob and queue message
+Use tenantId as part of AI Search vector index name (e.g., dev03_tenantX_index)
+Isolate vector indexes and chunking results per tenant
+Apply rate limiting per tenant to avoid noisy neighbor problem

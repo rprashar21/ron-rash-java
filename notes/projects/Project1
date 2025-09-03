@@ -40,7 +40,8 @@ This problem mirrors what high-paying startups (e.g., Shopify, Stripe) and enter
   - **Cloud**: AWS (ECS or EKS for Kubernetes, RDS for PostgreSQL, ElastiCache for Redis).
 
 **Why This Project?**
-- Addresses **scalability** (microservices, Kubernetes), **performance** (caching, query optimization), **concurrency** (locking, event-driven systems), and **observability** (metrics, logging).
+- Addresses **scalability** (microservices, Kubernetes), **performance** (caching, query optimization),
+**concurrency** (locking, event-driven systems), and **observability** (metrics, logging).
 - Showcases **end-to-end development** (backend, frontend, DevOps).
 - Solves a real-world problem relevant to startups and enterprises.
 - Portable to GitHub with clear documentation to impress recruiters.
@@ -51,7 +52,8 @@ This problem mirrors what high-paying startups (e.g., Shopify, Stripe) and enter
 To build a scalable, high-performance system, you’ll implement the following patterns:
 
 1. **Microservices Architecture**:
-   - Split the system into services (e.g., User Service, Product Service, Order Service, Inventory Service) to ensure modularity and scalability.
+   - Split the system into services (e.g., User Service, Product Service, Order Service, Inventory Service)
+    to ensure modularity and scalability.
    - Use **Spring Cloud** for service discovery and configuration.
 
 2. **Event-Driven Architecture**:

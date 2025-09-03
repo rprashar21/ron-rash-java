@@ -1,0 +1,191 @@
+Step 1: Document Upload to Azure Blob (with TTL)
+why azure blob storage -->. cheap ,easy to use , can handel lagre files, event grid integration is native
+we will set TTL is set to auto-delete old data → reduce storage cost.
+
+trade offs -- blob is not transaction ,, we have to check fro idempotency , and also delte old blobs
+TTl - hsoul not be too aggresive and
+
+Securiy choice s-- fedrrated identity is  managed identity -- more secure than access apis and keys directly
+Alternative: SAS tokens — faster, easier for external users.
+Trade-off: Federated identity is more secure but more complex to set up.
+
+failure case -- when dcoument is uploaded --meatdat info {}
+Blob triggers will only processed if metadata validated.
+
+Cost consideration -- blob storagesa are quite cheap -- > ttl helps cost control
+archive docs if ttl is extended
+
+Questions asked ?
+Why not use Azure Files, SharePoint, or Cosmos DB?” blob can store text files images videos and unstructured files
+“How do you prevent duplicate uploads?” -- checking for the markdown ,, metadat
+“What happens if the same file is uploaded twice under different names?”
+“How do you audit document access?
+
+We used Azure Blob with federated identity because it gives us secure,
+scalable, event-integrated storage for unstructured PDFs.
+We added TTL to auto-clean stale documents, reducing cost.
+Deduplication is handled at the metadata validation layer by comparing hashes and tracking case IDs.
+
+
+Use Case: Upload IDPC Document to Azure Blob with TTL + Deduplication
+You want to securely upload an IDPC document from the Common Platform to Azure Blob Storage:
+use maanged Identity --> avoid reprocessing the same file ,delete or archive file after 30 days
+track the upload status using metadata upload_complete) and idpc_id
+
+Happy flow
+user uploads or system uploads adocument sya case 1234 idpcid say 12344
+uses IdpcUploadHandler to Authenticate using Azure AD Federated Identity (via DefaultAzureCredential).
+Check if case_123.pdf already exists with upload_complete marker.
+If not:
+Upload the file to blob storage.
+Apply metadata:
+upload_complete = true | uploaded_at = <now> | ttl_days = 30
+
+The document is now stored and ready for ingestion.
+A separate Azure Function (Step 2) will now pick up this file for further processing.
+
+In failure
+The blob exists, but metadata does not contain upload_complete.
+We assume it was incomplete or corrupted, so:
+We overwrite the file.
+Reapply the TTL and metadata.
+Now the file is ready to be processed.
+
+For cleanups
+You run a scheduled job daily to clean up expired blobs.
+deleteExpiredBlobs -- runs thru all the blobs and checks for ttl > 30 delete it
+
+
+Federated Identity Setup
+new DefaultAzureCredentialBuilder().build() -- no secrest managed
+
+deduplicatuion check
+if (blobClient.exists() && blobClient.getProperties().getMetadata().containsKey(\"upload_complete\"))
+
+ttl simulation
+metadata.put(\"uploaded_at\", OffsetDateTime.now().toString());
+metadata.put(\"ttl_days\", String.valueOf(TTL_DURATION.toDays()));
+
+Security
+Chose Blob + Azure Identity because:
+Event Grid integration downstream.
+TTL enforcement.
+Managed identity support.
+
+You could replace this with SAS + APIM + Logic App for non-Azure users (but you lose native RBAC).
+
+🔐 Security
+
+Auth via DefaultAzureCredential → uses Managed Identity
+
+All files encrypted at rest with Microsoft-managed keys (or BYOK)
+
+Role-based access at container level (Storage Blob Data Contributor)
+
+| Question                                           | How to Answer                                            |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| “Why Azure Blob and not SQL/Cosmos?”               | Unstructured binary storage, cheap, natively scalable    |
+| “How do you prevent duplicate uploads?”            | Metadata marker `upload_complete`; enforced idempotency  |
+| “How would you scale this for 100K files per day?” | Parallel uploads + blob lifecycle for retention control  |
+| “What happens if upload fails part-way?”           | Don’t mark `upload_complete`; ingestion pipeline ignores |
+
+
+# step 3 which is very important
+Simple Summary
+Step 1: Blob Trigger Function
+When a document is uploaded to Azure Blob Storage:
+Your Blob-triggered Azure Function runs
+It checks the file name or metadata to avoid duplicates
+It builds a JSON message with blob info
+It sends this message to a Storage Queue (files-to-process)
+
+Step 2: Queue Trigger Function
+This second Azure Function listens to the queue:
+When a new message arrives in the queue, the function automatically runs
+It reads the message, downloads the document from blob, and begins processing (chunking, embedding, storing, etc.)
+
+Queue message put by the azure function in stpe 1
+{
+  "blobUrl": "https://youraccount.blob.core.windows.net/idpc-container/filename.pdf",
+  "fileName": "filename.pdf",
+  "caseId": "CASE123",
+  "uploadedBy": "prosecutor-X",
+  "timestamp": "2025-08-29T10:15:00Z"
+}
+
+How Messages Are Sent (Code)
+QueueClient queueClient = new QueueClientBuilder()
+    .endpoint("https://youraccount.queue.core.windows.net")
+    .queueName("files-to-process")
+    .credential(new DefaultAzureCredentialBuilder().build())
+    .buildClient();
+
+// JSON message
+String json = "{\"blobUrl\": \"https://...\", \"fileName\": \"xyz.pdf\"}";
+String base64Message = Base64.getEncoder().encodeToString(json.getBytes(StandardCharsets.UTF_8));
+
+// Enqueue the message
+queueClient.sendMessage(base64Message);
+
+
+How messages are read
+@FunctionName("processQueueMessage")
+public void run(
+    @QueueTrigger(name = "message", queueName = "files-to-process", connection = "AzureWebJobsStorage")
+    String message,
+    final ExecutionContext context
+) {
+    // Decode and parse the JSON
+    JSONObject json = new JSONObject(message);
+    String blobUrl = json.getString("blobUrl");
+
+    // Download the blob, chunk, embed, etc.
+    processBlob(blobUrl, context.getLogger());
+}
+
+Cost of Azure Queue + Function
+Azure Queue Storage is Very cheap: $0.07 per million operations
+You pay for:
+PutMessage (send)
+GetMessage (read)
+DeleteMessage (after success)
+
+If you process 100K files/day → ~300K operations/day = ~$0.02/day
+
+Azure Function (Queue Trigger)
+Free for 1M executions/month
+After that: ~$0.20 per million runs
+Each execution billed by GB-s compute timeh
+
+
+
+What happens if a message fails -- it is made invisble for sometime , then retried and then goes to the dlq
+we can write a separate function to process the dlqs
+
+Hpow do we do scaling and rate limiting
+| Concern                  | Solution                                                                                                    |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Preventing overload**  | Set `batchSize` and `newBatchThreshold` in `host.json`. E.g., limit to 16 messages at once                  |
+| **Fair usage + retries** | Use Azure Storage Queue's built-in retry (up to 7 days). Max dequeue count = 5                              |
+| **Spike protection**     | Use [Azure Function scaling rules](https://learn.microsoft.com/en-us/azure/azure-functions/functions-scale) |
+| **Burst file uploads**   | Queue-based decoupling isolates ingestion spikes from processing throughput                                 |
+| **TTL enforcement**      | Use `queueClient.sendMessage(msg, Duration.ofMinutes(5), Duration.ofDays(1))`                               |
+
+{
+  "version": "2.0",
+  "extensions": {
+    "queues": {
+      "batchSize": 16,              // umber of messages it picks up at once
+      "newBatchThreshold": 8,       //When batch has < 8 left, grab more from queue
+      "maxDequeueCount": 5,         // If a message fails 5 times, move it to poison queue
+      "visibilityTimeout": "00:01:00"  // hile processing a message, hide it for 60 seconds
+    }
+  }
+}
+
+
+
+
+
+
+

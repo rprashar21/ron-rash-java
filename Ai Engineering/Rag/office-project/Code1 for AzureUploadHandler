@@ -1,0 +1,94 @@
+package uk.gov.moj.cpp.rag.ingestion;
+
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobClientBuilder;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobItem;
+import com.azure.storage.blob.models.BlobRequestConditions;
+import com.azure.storage.blob.specialized.BlockBlobClient;
+import com.azure.storage.blob.models.BlobHttpHeaders;
+import com.azure.storage.blob.models.ExpirationRule;
+import com.azure.storage.blob.models.BlobStorageException;
+
+import java.io.InputStream;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+public class IdpcUploadHandler {
+
+    private static final String CONTAINER_NAME = "idpc-documents";
+    private static final String BLOB_METADATA_MARKER = "upload_complete";
+    private static final Duration TTL_DURATION = Duration.ofDays(30); // TTL: 30 days
+
+    private final BlobServiceClient blobServiceClient;
+
+    public IdpcUploadHandler(String blobServiceEndpoint) {
+        this.blobServiceClient = new BlobServiceClientBuilder()
+                .endpoint(blobServiceEndpoint)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient();
+    }
+
+    public void uploadDocument(InputStream fileStream, long fileLength, String blobName, Map<String, String> customMetadata) {
+        BlobClient blobClient = blobServiceClient
+                .getBlobContainerClient(CONTAINER_NAME)
+                .getBlobClient(blobName);
+
+        // Deduplication: check if blob exists and has marker
+        if (blobClient.exists() && blobClient.getProperties().getMetadata().containsKey(BLOB_METADATA_MARKER)) {
+            System.out.println("Document already uploaded and marked complete. Skipping.");
+            return;
+        }
+
+        // Upload blob
+        BlockBlobClient blockBlobClient = blobClient.getBlockBlobClient();
+        blockBlobClient.upload(fileStream, fileLength, true);
+
+        // Set TTL via metadata (simulated, you can implement lifecycle management rule in portal)
+        metadata
+        Map<String, String> metadata = new HashMap<>(customMetadata);
+        metadata.put(BLOB_METADATA_MARKER, "true");
+        metadata.put("uploaded_at", OffsetDateTime.now().toString());
+        metadata.put("ttl_days", String.valueOf(TTL_DURATION.toDays()));
+
+        blobClient.setMetadata(metadata);
+
+        System.out.println("Document uploaded and metadata applied: " + blobName);
+    }
+
+    public void deleteExpiredBlobs() {
+        blobServiceClient.getBlobContainerClient(CONTAINER_NAME)
+                .listBlobs()
+                .forEach(blobItem -> {
+                    try {
+                        Map<String, String> metadata = blobItem.getMetadata();
+                        if (metadata.containsKey("uploaded_at") && metadata.containsKey("ttl_days")) {
+                            OffsetDateTime uploadedAt = OffsetDateTime.parse(metadata.get("uploaded_at"));
+                            long ttlDays = Long.parseLong(metadata.get("ttl_days"));
+                            if (uploadedAt.plusDays(ttlDays).isBefore(OffsetDateTime.now())) {
+                                blobServiceClient.getBlobContainerClient(CONTAINER_NAME)
+                                        .getBlobClient(blobItem.getName())
+                                        .delete();
+                                System.out.println("Deleted expired blob: " + blobItem.getName());
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Failed to check/delete blob: " + blobItem.getName() + ", reason: " + e.getMessage());
+                    }
+                });
+    }
+
+    public boolean isUploadComplete(String blobName) {
+        BlobClient blobClient = blobServiceClient
+                .getBlobContainerClient(CONTAINER_NAME)
+                .getBlobClient(blobName);
+        return blobClient.exists()
+                && blobClient.getProperties().getMetadata().containsKey(BLOB_METADATA_MARKER);
+    }
+}
+
+

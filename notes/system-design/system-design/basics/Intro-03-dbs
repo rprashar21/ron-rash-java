@@ -22,7 +22,8 @@ cons -> complexity
 
 denormalization,
 SQL tuning.
-In SQL-based systems, performance starts with designing for access patterns—then tuning indexes, caching, and partitions accordingly. For large-scale systems, I think in terms of query shape, hot paths, and how reads and writes scale differently. I measure before optimizing and always watch for slow queries and unnecessary joins. Tuning is less about magic and more about observability and practical trade-offs
+In SQL-based systems, performance starts with designing for access patterns—then tuning indexes,
+caching, and partitions accordingly. For large-scale systems, I think in terms of query shape, hot paths, and how reads and writes scale differently. I measure before optimizing and always watch for slow queries and unnecessary joins. Tuning is less about magic and more about observability and practical trade-offs
 indexs -- use proper indexes -- indexs can hurt perfromance
 use proper queries ,fetch only columns wnated
 Use EXPLAIN or query plan analysis to identify full table scans or bad indexes.

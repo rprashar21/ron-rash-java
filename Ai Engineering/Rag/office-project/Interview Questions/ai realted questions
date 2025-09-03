@@ -1,0 +1,72 @@
+we are build a rag based application --> lingeting leagl documensta nd answerig strictly from these chunks of data
+
+
+How We Prevent Hallucinations:
+Every query is answered strictly from the retrieved chunks.
+Our prompt structure clearly says:
+“Only answer from the provided context. If unsure, say you don’t know.”
+
+We use LangChain4j-based semantic chunking
+DocumentSplitter splitter = DocumentSplitters.recursive(config.getChunkSize(), config.getChunkOverlap());
+This improves context quality by splitting on logical sentence/semantic boundaries — not raw page breaks — so retrieval gives more coherent results.
+
+Every chunk is includes pagenumber for ssource citation , idpic_id ,sectionTag --that inculde offecne,previos convictions,defendant statemnets etc
+chunk.setSourceDocumentUrl(sasUrl);
+chunk.setPageNumber(pageIndex);
+chunk.setSemanticContext("Chunk " + (i + 1) + " of " + segments.size());
+chunk.setCaseId(idpcId);
+
+This allows per-response auditing, debugging, and future feedback loops.
+If a response is wrong, we can trace it back to the chunk/page
+
+
+You’ve handled embedding failures gracefully
+try {
+    List<Double> vector = embeddingService.embedQuery(chunk.getText());
+    chunk.setEmbedding(vector);
+} catch (Exception e) {
+    logger.error("Failed to embed chunk on page " + chunk.getPageNumber());
+}
+
+Key Components of our Rag Service
+Azure Document Intellignce - is amnaged service by azure -- helps to extract text from the pdfs
+maintains a proper structure -- we use a custom model where we have trained on sample idpcs -- bsaically labelling the documenst with
+witness section,defendants sections handwritten police statemnets --it also use ocr
+Langchain4j for semantically chunking  the document using RecursiveCharacterTextSplitter
+Azure OpenAI embeddings (via EmbeddingService) to vectorize chunks and store each chunk wit
+Basically every chunk stores the details witness_statement,forensic_report
+Use re-ranking via BGE-reranker or Azure Cognitive Search reranker to prioritize legally critical chunks
+
+Every chunk is includes pagenumber for source citation , idpic_id ,sectionTag --that inculde offecne,previos convictions,defendant statemnets etc
+chunk.setSourceDocumentUrl(sasUrl);
+chunk.setPageNumber(pageIndex);
+chunk.setSemanticContext("Chunk " + (i + 1) + " of " + segments.size());
+chunk.setCaseId(idpcId);
+chunk.sectionTag()--like witness statemenst or forensic reports or offences ,previous offences
+
+In short to reduce halluncination
+Our system minimizes hallucination by limiting the LLM to semantically chunked content from trusted IDPC documents using Azure Document Intelligence and LangChain4j.
+Each chunk is tagged with rich metadata for traceability and embedded with error protection.
+We tune prompts and structure retrieval in a way that encourages grounded, verifiable responses.
+We also have chunk-level auditability, and the architecture supports future enhancement for feedback loops and section-aware reasoning
+
+Basically the documnet is chunked woth sections -- each embedding know what section idpc_id id it is under
+We introduce a sectionType tag — e.g., witness_statement, offence_summary, forensic_report, previous_convictions
+
+so by tagging each chunk with sematic section type we prevent the llm to hallucinate ,stay grounded, be tracebale , enabale feedback loops
+
+when we retireve data --
+Retrieval
+You’re filtering by idpcId and embedding-based semantic search (good precision)
+ystem Prompt
+You’re dynamically injecting query-specific system prompts using QueryPromptMappingUtil.getSystemPrompt(userQuery)
+🔍 Retrieval
+You’re filtering by idpcId and embedding-based semantic search (good precision)
+🔗 LLM Invocation
+You’re passing userQuery + retrievedDocuments + systemPrompt to llmService.getLlmResponse
+
+
+Q1. Is your RAG system cost-efficient at scale
+This tests understanding of token consumpltion, azure services cost
+Document chunking is page-based, ensuring minimal but meaningful units of embedding. Document Intellignece cost is very minimal
+

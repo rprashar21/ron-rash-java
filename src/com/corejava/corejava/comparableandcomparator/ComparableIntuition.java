@@ -76,7 +76,8 @@ class Player {
 
 class ScoreComparator implements Comparator<Player> {
     public int compare(Player a, Player b) {
-        return b.score - a.score; // descending
+       // return b.score - a.score; // descending
+        return Integer.compare(a.score, b.score);
     }
 }
 

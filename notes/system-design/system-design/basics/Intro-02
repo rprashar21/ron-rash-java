@@ -243,8 +243,10 @@ Application Gateway
 An Application Gateway is a layer 7 (application layer) load balancer that provides advanced traffic routing,
 Web Application Firewall (WAF), SSL termination, URL-based routing, and session affinity.
 It’s designed to handle HTTP/HTTPS traffic and make intelligent routing decisions based on application-level data (e.g., URL paths, headers).
-When to Use: Use when you need advanced routing (e.g., path-based routing to specific microservices), security features like WAF, or application-level insights.
-Where It Sits: Typically sits at the edge of your network, before traffic reaches your Kubernetes cluster, acting as the entry point for external traffic.
+When to Use: Use when you need advanced routing (e.g., path-based routing to specific microservices),
+security features like WAF, or application-level insights.
+Where It Sits: Typically sits at the edge of your network, before traffic reaches your Kubernetes cluster,
+acting as the entry point for external traffic.
 
 
 Load balacner layer 4  4 (transport layer, e.g., TCP/UDP) or layer eg Azure load balcner
@@ -296,3 +298,15 @@ Ingress Configuration --> Nginx Ingress routes traffic based on URL paths (e.g.,
 Service Discovery --> Kubernetes Services expose microservices internally.
 Security --> Kubernetes Network Policies restrict internal traffic
 Scaling - Horizontal Pod Autoscaler (HPA) scales pods based on CPU/memory metrics.
+
+Actual Diagram
+Starting from the user: Users access the app via browsers or mobile.
+Static assets like the React app and images are served from Azure CDN—it's globally distributed, reduces latency by caching at edge locations,
+and offloads the origin server.
+For dynamic requests (e.g., /api/products), traffic hits Azure Application Gateway first. This acts as our edge router:
+it terminates SSL (reducing backend load), applies Web Application Firewall (WAF) rules to block threats like SQL injection or XSS,
+ and does URL-based routing—e.g., /api/products/* goes to the product service, /api/orders/* to orders.
+From there, traffic goes to Azure Load Balancer, which distributes it across AKS nodes at Layer 4 (transport level) for high availability.
+Inside the AKS cluster, an Nginx Ingress Controller serves as a reverse proxy.
+It receives traffic from the Load Balancer and routes it internally based on paths or headers to the right microservice pods.
+Microservices handle the business logic, pulling from Redis for fast caching (e.g., session data or hot products) and Azure SQL for persistent storage

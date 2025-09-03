@@ -1,0 +1,48 @@
+Step-by-Step Answering Template
+Set the Stage — What’s the Problem or Need?
+
+Goal: Show the why behind the system.
+Say:
+“At the UK Ministry of Justice,
+ we needed a way to allow legal teams to quickly query large legal case files (IDPCs)
+ and extract structured insights like weapons used, victim injuries, and prior convictions.
+ Manually searching PDFs was slow, error-prone, and inconsistent.”
+ This system appears to be designed for legal professionals to quickly search and get AI-assisted answers from case documents,
+  helping them find relevant information efficiently while maintaining accuracy through source citations.
+
+Specifi info from the documents
+reduce human error, increase efficeincy , context aware,
+summarize the documents ,extract key information , timeline , descrepancy of the witness statemenst
+chronlogy of the events ,statemnets
+
+2.Scope the System — What Should It Do?
+
+“The system had to:
+Ingest IDPC documents from Azure Blob
+
+Extract structured sections (e.g., Witness Statements, Forensic Reports) using DocumentIntelligence
+
+Chunk them meaningfully using semantic logic -- LangChain4j comes into picture
+Create vector embeddings and index in Azure AI Search
+Allow users to query via a chatbot and get grounded, structured answers with citations.”
+
+
+The flow is as follows
+he flow starts when:
+
+A case is listed in the Magistrates’ Court.
+It could be submitted by:
+SPI – Police Prosecutors
+
+CPPI – Non-Police Prosecutors
+
+MCC – Manual Case Creators
+
+The system checks:
+Does this case involve a new IDPC document?
+Is the court house enabled for the AI feature rollout?
+Has the document already been processed?
+🔹 If all conditions are met:
+
+The IDPC document is sent to the AI Document Ingestion & Query Service, which breaks down the legal document,
+extracts key facts (like weapons used or injuries), and makes them queryable via a chatbot.

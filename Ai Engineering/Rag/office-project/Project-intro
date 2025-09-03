@@ -2,6 +2,11 @@ what is this ??
 This system appears to be designed for legal professionals to quickly search and get AI-assisted answers from case documents,
  helping them find relevant information efficiently while maintaining accuracy through source citations.
 
+Show the why behind the system.??
+At the UK Ministry of Justice,
+ we needed a way to allow legal teams to quickly query large legal case files (IDPCs)
+ and extract structured insights like weapons used, victim injuries, and prior convictions. Manually searching PDFs was slow, error-prone, and inconsistent.
+
 
 Project Overview
 This is a RAG (Retrieval-Augmented Generation) Java Function App built for the UK Ministry of Justice (MOJ) Court and Tribunal Service.
