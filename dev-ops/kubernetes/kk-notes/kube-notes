@@ -18,7 +18,7 @@ we'll have the container runtime installed.
  It acts as a load balancer, routing traffic to the appropriate Pod based on labels associated with the Pods.
 
  A Service consists of two parts: a set of Pods and a label selector. The label selector defines the group of Pods that the Service will route traffic to.
-  When you create a Service, Kubernetes creates an endpoint object that includes the IP addresses of the Pods that match the label selector.
+ When you create a Service, Kubernetes creates an endpoint object that includes the IP addresses of the Pods that match the label selector.
 
 
 apiVersion: v1

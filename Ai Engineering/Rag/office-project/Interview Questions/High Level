@@ -1,0 +1,5 @@
+High-Level Architecture Overview
+Purpose: Process and ingest legal documents (IDPCs) for intelligent querying using a RAG system.
+Cloud Provider: Microsoft Azure
+Core Technologies: Spring Boot, Azure Blob Storage, Azure Functions, Azure Storage Queues, Azure AI Search,
+LangChain, Azure Document Intelligence, Azure OpenAI

@@ -165,11 +165,67 @@ public ResponseEntity<Error> handleException(Srt ex)
 }
 }
 
+what are dto objects
+data transfer object bewtween different layers fo the application --controller ---> service --> repository
 
-what are dto objects?
-DTO is a design pattern , dtos are simple data transfer objects
-used to transfer data between layers of the application, they do not ontain any business logic
+Bascailly u can only show what fields u needs -- dont need to expose al the fields
 
-reducees network traffic - u can pari nultiple objects in a single request which can reduce the number of http request
-serialization - dto helps in serializing the objects
-decouples layers
+| Benefit                           | Explanation                                                                         |
+| --------------------------------- | ----------------------------------------------------------------------------------- |
+| 🔄 **Decouples layers**           | UI doesn’t depend on internal entity/model structure.                               |
+| 🔒 **Security**                   | You can expose only the needed fields, hiding sensitive data (e.g., password, SSN). |
+| 📦 **Efficient Network Payloads** | Send only necessary data instead of full objects, reducing size.                    |
+| 🔄 **Serialization**              | Easily serialized to JSON/XML when transferring over REST APIs.                     |
+
+
+@Entity
+public class User {
+    @Id private Long id;
+    private String name;
+    private String email;
+    private String password; // 🔒 Sensitive
+}
+
+public class UserDTO {
+    private String name;
+    private String email;
+
+    public UserDTO(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    // Getters and setters
+}
+
+public UserDTO getUser(Long id) {
+    User user = userRepository.findById(id).orElseThrow();
+    return new UserDTO(user.getName(), user.getEmail()); // no password -- no need to send the password
+}
+
+
+What is a record in Java? -- bascailly replaces dto objects
+record is a concise way to create immutable DTO-like classes.
+
+public record(Sring name,String status){
+// since this isimmutable
+// automatically creates constructor ,, getters no setters equals and hascode
+// all the fields are final by default
+
+// when to use --w hen u need immutable dtos
+// for value object like money or coordinates
+In controller response payload
+For Kafka message schema
+For cache representation
+}
+
+// Java record for concise, immutable, serializable DTO
+public record OrderSummaryDTO(String orderId, double totalAmount, String status) {}
+
+Jackson supports records for JSON (de)serialization out of the box since Spring Boot 2.6+ (with Java 16+). Just annotate lik
+@GetMapping("/order/{id}")
+public OrderSummaryDTO getOrder(@PathVariable String id) {
+    return new OrderSummaryDTO(id, 599.99, "SHIPPED"); // automatcailly maps to json
+}
+
+

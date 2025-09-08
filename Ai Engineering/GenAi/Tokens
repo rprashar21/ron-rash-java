@@ -1,0 +1,136 @@
+What is a token ?
+token is word or subword or piece of text whihc the model uses to process  the language.
+it can be as short as a character [a,?]
+Or as long as a whole word (cat, dog)
+Often, it’s a piece of a word (play, ing → “playing”).
+
+What is tokenization?
+Tokenization is the process of splitting input text into tokens (the pieces that the model can understand)
+
+
+What does the model take with respect to tokens
+model takes these token[bascaill numbers or vectors to get a context]
+Sentence: “Hello world”
+Tokens: ["Hello", " world"]
+Token IDs (for example): [15496, 995]
+The model processes these numbers internally.
+
+Each token is mapped to a unique ID number (from the model’s vocabulary)
+
+1.Tokens ie piec of text is converted to numbers so tokes are unique  numbers
+2.Embedding the Tokens
+The token IDs are then turned into vectors (lists of numbers).
+This is called an embedding layer.
+
+3. Transformer Magic (Attention)
+The model processes these token embeddings through many transformer layers
+Each layer has attention mechanisms that ask
+
+Which tokens should I pay attention to when predicting the next word?
+Example:
+For the text:
+
+“The cat sat on the ___”
+The model looks at “cat” and “sat” more strongly than “The” when predicting “mat.”
+This is why it’s called self-attention: each token looks at other tokens to build context.
+
+4. Probability Distribution
+At the end, the model produces a probability distribution over all possible next tokens in its vocabulary.
+Next token after “The cat sat on the …”
+→ "mat" (80%)
+→ "sofa" (10%)
+→ "floor" (5%)
+→ others (5%)
+
+5. Sampling / Decoding
+the model picks one token based on probabilities (using strategies like greedy search, top-k, or temperature sampling
+Then it repeats the process:
+	•	Adds the chosen token to the sequence.
+	•	Predicts the next one.
+	•	Continues until it generates the full response
+
+Lets take an example
+the cat sat on the _
+
+the model has tp guess the next token
+it uses some algorithms to understand the next tokn
+for example greedy search --> always pick the token with highest probablity
+Deterministic → same input, same output every time.
+"mat" → 80%
+"sofa" → 10%
+"floor" → 5%
+"dog" → 5%
+Greedy Algo picks “mat” (80%).
+Sentence: “The cat sat on the mat
+
+this approach is fast can be boring
+
+2.  Random Sampling --> this can be unpredictable
+Pick randomly based on probabilities
+Using same probabilities:
+80% chance → “mat”
+	•	10% chance → “sofa”
+	•	5% chance → “floor”
+	•	5% chance → “dog”
+
+3. 3. Top-k Sampling
+   	•	Restrict to the top k tokens with highest probabilities.
+   	•	Example: k = 2 → only consider {“mat” (80%), “sofa” (10%)}.
+Randomly choose between them.
+Sentence could be:
+	•	“The cat sat on the mat.”
+	•	“The cat sat on the sofa.”
+
+ 4. Top-p Sampling (Nucleus Sampling)
+	•	Instead of top k, pick smallest set of tokens where total probability ≥ p.
+	•	Example: p = 0.9
+	•	“mat” (80%) + “sofa” (10%) = 90% → keep these two.
+	•	Ignore “floor” and “dog.”
+
+👉 Then randomly pick from {“mat”, “sofa”}.
+Sentence:
+	•	“The cat sat on the mat.”
+	•	Or: “The cat sat on the sofa.”
+
+✅ Pros: More adaptive than top-k.
+❌ Cons: Needs careful tuning
+
+ 5. Temperature Scaling
+	•	Controls creativity by adjusting probability sharpness.
+	•	Formula: P_new = exp(logits / temperature).
+	•	Temperature = 1 (normal) → original probabilities.
+	•	Temperature < 1 (e.g., 0.2) → makes distribution sharper → model picks safe/likely tokens (boring).
+	•	Temperature > 1 (e.g., 1.5) → makes distribution flatter → model more random/creative.
+
+Example:
+	•	Temp = 0.2 → almost always “mat.”
+	•	Temp = 1.5 → higher chance of “sofa,” “floor,” or even “dog.”
+
+	•	Greedy always returns mat.
+	•	Random sampling sometimes returns sofa, floor, or dog.
+	•	Top-k (k=2) limits choices to {mat, sofa}.
+	•	Top-p (0.9) adaptively keeps {mat, sofa} (since they reach 90%).
+	•	Temperature 0.2 makes mat dominate; 1.5 spreads probability to others.
+	•	The combo (Temp + Top-p) is a common production setup for controlled creativity.
+
+Postional Embedding -- is extra information u give ur embedding or token hat tells the model where in the sequence the token appears.
+for example
+Token + Position (3rd word in sentence) → [0.12, -0.33, 0.85, …] + [positional vector]
+cat” at position 3 is different from “cat” at position 7.
+The model can learn relationships like “sat” comes after “cat”.
+
+Simple explanation
+Tokens are word or subwords --converted to  numbers converted to vectors in a space
+tokens tell the model what the words are
+positional embeddings tell the model where they are
+Together, they let transformers understand language as a sequence, not just a bag of words.
+
+How is it done
+Fixed sinusoidal embeddings  -- Use sine & cosine waves of different frequencies to encode positions.
+PE(pos, 2i)   = sin(pos / 10000^(2i/d))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d)) --> (where pos = token position, d = embedding size).
+
+Learned positional embeddings (used in GPT models)
+	•	Each position (1st token, 2nd token, …) has a trainable vector.
+	•	During training, the model learns the best way to represent order.
+	•	Advantage: More flexible for the specific training data.
