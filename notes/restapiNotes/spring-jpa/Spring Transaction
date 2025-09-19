@@ -16,7 +16,7 @@ exectures our logic , if success commit or if fails rollsback
 
 what happens internally
 1.Bean with transactional -- This tells Spring: "Wrap this method with transaction management."
-2. Proxy Creation - Spring creates a proxy object for your service bean (using CGLIB for classes, JDK Dynamic Proxies for interfaces).
+2. Proxy Creation - foSpring creates a proxy object r your service bean (using CGLIB for classes, JDK Dynamic Proxies for interfaces).
   when you call transfer(), you are actually calling the proxy, not the original bean directly.
 3. Transaction Interceptor -- the proxy delegates the call to Transaction Interceptor
 

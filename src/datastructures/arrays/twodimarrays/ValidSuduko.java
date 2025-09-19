@@ -64,11 +64,18 @@ public class ValidSuduko {
                 if (board[j][i] != 0 && !colSet.add(board[j][i]))
                     return false;
 
-                if(i==4 && j== 4)
+                if(i==2 && j== 2)
                 {
-                    System.out.println("hello");
+                    System.out.println("hello "+board[i][j]);
                 }
                 // Validate box
+                // how is the box calculated is in this way
+                //      i=0 → (0,0) (top-left corner)
+                //	•	i=1 → (0,3) (top-middle corner)
+                //	•	i=2 → (0,6) (top-right corner)
+                //	•	i=3 → (3,0) (middle-left corner)
+                //	•	i=4 → (3,3) (center)
+                //	•	i=8 → (6,6) (bottom-right corner)
                 int rowIndex = 3 * (i / 3);
                 int colIndex = 3 * (i % 3);
                 if (board[rowIndex + j / 3][colIndex + j % 3] != 0 && !boxSet.add(board[rowIndex + j / 3][colIndex + j % 3])) {

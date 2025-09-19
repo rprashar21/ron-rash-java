@@ -1,3 +1,11 @@
+Pod is still the smalest depolyable unit
+pod == warapper for ur microservice inside a kubernetes cluster
+
+
+
+
+
+This is a pod manifest file
 apiVersion: v1 -- This is the kubernetes api  being used
 kind: pod  -> this defines the resource which is being created
 metadata:   --> information about our pod

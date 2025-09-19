@@ -1,6 +1,7 @@
 What is Spring Framework?
 A Java framework providing comprehensive infrastructure support for developing Java applications.
-Key features: Dependency Injection (DI), Aspect-Oriented Programming (AOP), transaction management, data access (JDBC, JPA), Spring MVC, etc.
+Key features: Dependency Injection (DI), Aspect-Oriented Programming (AOP), transaction management,
+data access (JDBC, JPA), Spring MVC, etc.
 Promotes loose coupling via DI, making code testable, modular, and maintainable.
 
 What is Spring Boot?

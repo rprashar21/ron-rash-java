@@ -1,0 +1,27 @@
+VNet -Virtual Network (VNet)
+      Your own private network in Azure. CIDR: 10.0.0.0/16.
+CIDR - Ip Address range each application gets a range of ip addresses
+Subnet- Defines Subnets:
+        Public Subnet → Web + Load Balancer.
+        Private Subnet → App + DB.
+
+NSG -Networ securith group
+ASG -Application Security groups
+Router -- make the request travel from Internet gateway to the private subnet into the applicationserver via the nsg
+Define how traffic flows (e.g., internet via IGW, private via VPN).
+Route Table-- defines routes,Collections of routes attached to subnets for custom routing
+InternetGateway - Sits in the VNET to allow outbound traffice to enter
+LoadBalance -- sits in public subnet and sends requester to routers
+DNS - Domain Naming service for each ip address -- aksing the ip address
+
+Sara’s Laptop
+   |
+   └──> DNS resolves "example.net" → 20.55.23.101
+   |
+Azure App Gateway (Public Subnet, Port 443)
+   |
+   └──> Forwards to Web Server (Web Subnet)
+          |
+          └──> Calls App Server (Private Subnet)
+                    |
+                    └──> Queries DB Server (Private Subnet)

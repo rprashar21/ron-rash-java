@@ -1,0 +1,67 @@
+Scenario 1: MOJ Judge Logging into Court Case Portal
+Actors: Judge Alice, accessing https://moj.com from her laptop.
+Goal: View case #12345 evidence.
+
+1. Judge enters URL → https://moj.com/case/12345
+2. Browser → DNS resolves to Azure Public IP.
+Request hits Azure Application Gateway (with WAF).
+
+App Gateway checks:
+TLS/SSL (is it HTTPS).
+WAF rules (SQL injection, XSS, bots).
+Only if safe → forwards traffic to UI service (React frontend hosted in AKS/App Service).
+
+2.Frontend detects Judge not logged in
+  App Gateway just forwards; it doesn’t handle login itself.
+  React app says: “No session/JWT present → redirect to Azure Entra ID (Azure AD).”
+
+3.Authentication with Azure Entra ID
+  Judge redirected to https://login.microsoftonline.com/....
+  She signs in with username + MFA.
+  Entra ID issues tokens:
+  ID Token (JWT) → who the user is (sub, name, roles).
+  Access Token (JWT) → bearer token for APIs.
+  Refresh Token → to renew tokens silently.
+
+  Tokens signed by Entra ID → backend services can verify without calling AD again.
+
+4.Judge retries request with JWT Access Token
+  Browser → sends Authorization: Bearer eyJhbGciOi... to API endpoint /case/12345.
+  Request again goes through App Gateway:
+  WAF filters, TLS termination.
+  Can be configured with JWT validation policy (rejects bad/expired tokens before hitting backend).
+  Then forwards to backend microservice
+
+5. Backend service parses JWT claims:
+{
+  "sub": "alice@justice.gov.uk",
+  "role": "judge",
+  "region": "london",
+  "exp": 1716042321
+}
+ if drools rule passes -- service request db for case details
+
+ 6.Data Access
+
+   Backend fetches case evidence from Azure Blob Storage (private endpoint).
+   Files decrypted (transparent via Azure).
+   Data returned → JSON → frontend renders evidence.
+
+| Step | Component          | Security Role                                  |
+| ---- | ------------------ | ---------------------------------------------- |
+| 1    | App Gateway        | Entry point security (TLS, WAF, rate limiting) |
+| 3    | Entra ID           | Authentication (who you are)                   |
+| 4    | JWT (Access Token) | Proof of identity across services              |
+| 5    | Backend + Drools   | Authorization (what you can do)                |
+| 6    | Key Vault + Blob   | Data security (encryption, access keys)        |
+
+
+Scenario 2: Public Info Website (Guest + 3rd Party Integration)
+Citizen Bob, visiting https://gov-news.moj.com
+ to read press releases.
+👉 Goal: No login, but site uses a 3rd-party comments plugin (Disqus).
+
+Bob enters URL → https://gov-news.moj.com/press-release/123 -- this hits the app gateway {tls ssl waf protects from xss bot ,, rate limiting we can do}
+goes to the frnotendui , since the content is public do not need login or jwt
+we can do 3rd party integration like login thur google or fb for any comment to be made
+Optional Guest Session Tracking - or analytics, site might issue a session cookie (non-auth, just tracking).sored  in Azure App Insights logs for monitoring.

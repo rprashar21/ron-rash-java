@@ -1,0 +1,33 @@
+Thank you fo rthe quesition before we start designing our system
+I would like to lcarify some question about the platform
+
+e. what is our targted audience/users
+Audience / Users
+1.Who is this system for?
+Legal analysts, customer support agents, doctors, or general enterprise users?
+Is the target audience global or restricted to a specific region (e.g., UK-only)?
+
+2. Problem We’re Solving
+What pain point are we addressing?
+Example: Analysts spend hours searching documents → RAG reduces this to seconds.
+Users want trustworthy answers with citations, not hallucinations.
+
+3.Constraints / Resistance Points --> Compliance GDPR, latencey response cost of llm accuracy hallucaintion
+4. Impcat we have - pro - Faster research, cost savings, better decision-making.
+negative - Wrong answers could harm trust, hallucinations could mislead, cost overruns if not optimized.
+
+
+5. Success Metrics - customer satisfaction ,accurate ,faster data,  User trust (answers backed by citations
+Definition of Success
+A system that is: acurate ,relaiblae trustworthy scalabel
+Accurate (retrieves the right context),
+Reliable (low latency, high availability),
+Trustworthy (grounded answers with citations),
+Scalable (can grow from 10K to 100K docs/day).
+
+6. Feasibility / Cost / Infrastructure
+Can this be built cost-effectively with existing infra?
+Embeddings → Vector DB → LLM inference.
+Consider cloud costs (storage, embeddings, queries).
+Need rate limiting + batching to keep infra feasible.
+

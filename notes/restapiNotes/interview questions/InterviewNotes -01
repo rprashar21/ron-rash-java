@@ -1,5 +1,91 @@
 https://medium.com/@shivamsrivastava.iec/d9ee16c2260d
 
+How would u define rest ful apis
+REST is resource-oriented and stateless, built on HTTP/TCP.
+It’s great for interoperability, but heavier due to JSON parsing.
+gRPC uses HTTP/2 + Protobuf, making it much faster for internal service-to-service communication,
+ and supports streaming.
+ UDP is lightweight and fastest but unreliable, so it’s used for real-time streaming and gaming.
+
+
+ https is good for client facing service slike webapps or mobiles
+ Use REST/HTTPS when:
+ You're building a mobile banking app. The backend exposes REST APIs (/balance, /transactions) over HTTPS,
+ secured by OAuth2 access tokens.
+ External clients use curl, Postman, Android/iOS HTTP clients
+
+ where as for grpc -- ur buildng a ms for fraud detection - the services exchange high volume low latency secure data via mlts
+ You're building a microservice-based fraud detection engine. Services exchange high-volume, low-latency transaction data
+ in binary Protobuf format, with mTLS-secured gRPC calls between services inside a Kubernetes cluster
+
+
+
+In REST APIs, we rely on HTTP status codes for communication clarity.
+As a senior engineer, I always map errors to the right code—like 400 for client validation errors,
+ 401/403 for auth issues, 409 for conflicts, and 5xx for server-side issues
+
+
+Http status code
+100 Contiue - informational  - client should continue to talk to the server
+2xx: Success
+200 OK → Success (GET).
+201 Created → New resorce created (POST).
+202 Accepted → Request accepted, processing async.
+204 No Content → Success, no body (DELETE).
+
+3xx: Redirection
+301 Moved Permanently → Resource moved.
+302 Found → Temporary redirect.
+304 Not Modified → Client can use cached version.
+
+4xx: Client Errors
+400 Bad Request → Invalid input.
+401 Unauthorized → Auth required (invalid/missing token).
+403 Forbidden → Authenticated, but not allowed.
+404 Not Found → Resource doesn’t exist.
+405 Method Not Allowed → Wrong HTTP verb.
+406 - fallback method - server does not accept the clients request --maybe server only reponds to json -- but uare expecting xml
+409 Conflict → Resource state conflict (e.g., duplicate).
+429 Too Many Requests → Rate limit exceeded.
+
+5xx: Server Errors
+500 Internal Server Error → Generic error.
+502 Bad Gateway → Invalid response from upstream service.
+503 Service Unavailable → Server overloaded/down.
+504 Gateway Timeout → Upstream didn’t respond in time.
+
+
+what is graphql ??
+GraphQL is a query language and runtime for APIs.built by facebook for the clients to define what exactly do they want
+Clients send a single HTTP request with a query string.
+The server parses that query and returns a custom response with only the requested fields
+
+| Feature        | **REST**                                 | **GraphQL**                       |
+| -------------- | ---------------------------------------- | --------------------------------- |
+| Structure      | Multiple endpoints (`/users`, `/orders`) | Single endpoint (`/graphql`)      |
+| Data fetching  | Fixed fields (defined by server)         | Client defines needed fields      |
+| Over-fetching  | Common                                   | Avoided                           |
+| Under-fetching | Requires more requests                   | Avoided                           |
+| Tooling        | Postman, Swagger                         | GraphQL Playground, Apollo Client |
+| Performance    | Multiple roundtrips possible             | Single call with precise response |
+
+In rest u may call
+/users/1
+/users/1/posts
+/users/1/followers -- > 3 separate API calls
+
+graphql - query language for apis
+{
+  user(id: 1) {
+    name
+    posts { title }
+    followers { name }
+  }
+}
+request, all the data you need
+
+
+
 What is content negotiation - format agreed by client and server for data exchange over http request and response
 It can be application/jsonxml palin text protobuf
 

@@ -1,0 +1,155 @@
+cpp-ai-rag-service/
+├── pom.xml (Root POM)
+├── libs/common/ (Shared library)
+├── ai-document-metadata-check-function/
+├── ai-document-ingestion-function/
+├── ai-document-answer-retrieval-function/
+└── ai-document-answer-scoring-function/
+
+unction Classes (4 Total):
+DocumentMetadataCheck - Blob Trigger (documents/{name})
+DocumentIngestion - Queue Trigger (document-processing-queue)
+AnswerRetrieval - HTTP Trigger (POST)
+AnswerScoring - Queue Trigger (answer-scoring-queue)
+
+# 🔒 Security Guidelines for CPP AI RAG Service
+
+## ⚠️ **IMPORTANT: This is a PUBLIC Repository**
+
+This repository is public and accessible to everyone. **NEVER commit secrets, credentials, or sensitive information.**
+
+## 🛡️ **Protected Files & Folders**
+
+### **Azure Functions Configuration**
+- ❌ `local.settings.json` - Contains connection strings and secrets
+- ❌ `**/local.settings.json` - Any local settings file
+- ❌ `**/Azure/local.settings.json` - Azure-specific settings
+- ✅ `local.settings.sample.json` - Template files (safe to commit)
+
+### **Build Artifacts**
+- ❌ `target/` - Maven build output
+- ❌ `**/target/` - Any target directory
+- ❌ `**/target/**` - All contents of target directories
+- ❌ `*.jar`, `*.war`, `*.ear` - Compiled artifacts
+
+### **Secrets & Credentials**
+- ❌ `*.key` - Private keys
+- ❌ `*.pem` - Certificate files
+- ❌ `*.p12`, `*.pfx` - Certificate stores
+- ❌ `*.jks`, `*.keystore` - Java keystores
+- ❌ `secrets.json`, `secrets.yaml` - Secret files
+- ❌ `config.json`, `config.yaml` - Configuration files
+
+### **Environment Files**
+- ❌ `.env` - Environment variables
+- ❌ `.env.local` - Local environment
+- ❌ `.env.development` - Development environment
+- ❌ `.env.staging` - Staging environment
+- ❌ `.env.production` - Production environment
+- ❌ `.env.*.local` - Any local environment files
+
+### **Azure Credentials**
+- ❌ `.azure/` - Azure CLI credentials
+- ❌ `azure-credentials.json` - Azure credentials
+- ❌ `azure-credentials.yaml` - Azure credentials
+
+## ✅ **Safe to Commit**
+
+### **Template Files**
+- ✅ `local.settings.sample.json` - Configuration templates
+- ✅ `host.json` - Function host configuration
+- ✅ `pom.xml` - Maven configuration
+
+### **Source Code**
+- ✅ `src/` - All source code
+- ✅ `*.java` - Java source files
+- ✅ `*.xml` - Configuration files (without secrets)
+
+### **Documentation**
+- ✅ `README.md` - Project documentation
+- ✅ `SECURITY.md` - This security guide
+- ✅ `*.md` - Markdown documentation
+
+## 🚨 **Security Checklist**
+
+Before committing, verify:
+
+- [ ] No `local.settings.json` files
+- [ ] No `target/` folders
+- [ ] No `.env` files
+- [ ] No secret files (`.key`, `.pem`, etc.)
+- [ ] No build artifacts (`.jar`, `.war`, etc.)
+- [ ] No Azure credentials
+- [ ] Only template files with placeholders
+
+## 🔧 **Local Development Setup**
+
+### **1. Create Local Settings**
+```bash
+# Copy template to create local settings
+cp ai-document-metadata-check-function/Azure/local.settings.sample.json \
+   ai-document-metadata-check-function/Azure/local.settings.json
+
+# Edit with real values (this file will NOT be committed)
+```
+
+### **2. Add Real Connection Strings**
+```json
+{
+  "Values": {
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=...",
+    "BLOB_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=...",
+    "DOCUMENT_CONTAINER_NAME": "documents"
+  }
+}
+```
+
+### **3. Deploy Safely**
+```bash
+# Deploy function (local.settings.json stays local)
+mvn azure-functions:deploy
+```
+
+## 🚫 **What NOT to Do**
+
+- ❌ Never commit `local.settings.json`
+- ❌ Never commit `target/` folders
+- ❌ Never commit `.env` files
+- ❌ Never commit secret files
+- ❌ Never commit build artifacts
+- ❌ Never commit Azure credentials
+
+## ✅ **What TO Do**
+
+- ✅ Use `local.settings.sample.json` as templates
+- ✅ Add real values only in local files
+- ✅ Keep secrets in environment variables
+- ✅ Use Azure Key Vault for production secrets
+- ✅ Regularly review `.gitignore` rules
+
+## 🔍 **Verification Commands**
+
+```bash
+# Check for ignored files
+git status --ignored
+
+# Search for potential secrets
+find . -name "local.settings.json" -type f
+find . -name "*.key" -o -name "*.pem" -o -name ".env*"
+
+# Verify target folders are ignored
+find . -name "target" -type d
+```
+
+## 📞 **Security Issues**
+
+If you accidentally commit secrets:
+
+1. **Immediately** remove the file from git history
+2. **Rotate** any exposed credentials
+3. **Update** `.gitignore` if needed
+4. **Notify** the team
+
+---
+
+**Remember: When in doubt, don't commit it!** 🛡️

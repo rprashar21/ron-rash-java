@@ -158,6 +158,32 @@ At startup, Spring injects a proxy (not the real ShoppingCart) into the singleto
 The proxy sits there, waiting.
 When an actual HTTP request/session comes in, the proxy looks up the real session bean for the current session
 
-Singleton beans are created at startup (no session/request exists).
+Singleton beans are created at startup (quest no session/reexists).
 Session/request beans only make sense when an HTTP request or session is alive.
 The proxy “defers” the lookup until there’s a valid scope, keeping your app working correctly.
+
+
+what are scopes?
+generally meant lifecycle and visibilty of a bean , how many instances are created and how logn do they live
+by default scope is singleton scope which means the instance of a bean is shared thruout the lifecycle of the bean.
+One instance per Spring container
+
+In microservice we generally use scope as singleton ,ms are stateless
+| Problem                         | Scope to Use  | Why                          |
+| ------------------------------- | ------------- | ---------------------------- |
+| Need to share bean across app   | `singleton`   | One shared instance          |
+| Need a clean instance each time | `prototype`   | Fresh state                  |
+| Track per-request data          | `request`     | Data tied to HTTP call       |
+| Store user’s cart/login info    | `session`     | Data tied to session/browser |
+| Cache app-wide config/stats     | `application` | One instance per app         |
+| Scope       | Real-Life Example                        | Code Snippet                                  |
+| ----------- | ---------------------------------------- | --------------------------------------------- |
+| singleton   | Service layer bean (e.g., `UserService`) | `@Component` (default)                        |
+| prototype   | Temporary file/image/PDF generator       | `@Scope("prototype")`                         |
+| request     | Store client IP, trace ID per request    | `@Scope("request", proxyMode = TARGET_CLASS)` |
+| session     | Shopping cart, logged-in user            | `@Scope("session", proxyMode = TARGET_CLASS)` |
+| application | App-level stats (e.g., total visits)     | `@Scope("application")`                       |
+
+In a distributed system we avoid session scope because it relies on server memory and breaks statelessness.
+to maintain state or keep a record we use external apis like redis
+I also ensure APIs are idempotent and stateless, so requests can be routed to any service instance

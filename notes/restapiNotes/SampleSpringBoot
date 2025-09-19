@@ -1,3 +1,7 @@
+What are annotation -- annotation are metadata bounded to the elements of the source code , they do not have any affect on the code level
+inform the compiler , used at compile time and detect errors or surpress errors
+Runtime processing – annotations can be examined at runtime to customize the behavior of a program
+
 @RestControllerAdvice is an annotation in Spring that combines @ControllerAdvice and @ResponseBody.
 It is used to create a global exception handler for handling exceptions thrown by the application's RESTful API controllers.
 

@@ -1,4 +1,7 @@
 Spring annotations
+marks the entry point of a Spring Boot application.when ur spring boot application
+runs Spring Boot auto-configures your environment based on dependencies on the classpath,
+scans your packages for @Component, @Service, @Repository, etc., and initializes everything.
 @SpringBootApplication -- combination of  @enableAutoconfiguration,@componetScan,`@configuration
 
 enableAutoconfiguration-  auto configures the spring application and all the dependencies we have in the classpath and creates
@@ -7,7 +10,7 @@ beans for that -- looks in the pom.xml -- for eg if we have h2 database jar it w
 ComponentScan -- it will scan the beans and will make it visible to all the Ioc conatiner
 we can also provide the base packages and classes to load specific classes to the ioc container
 
-@Configuration -- used for java based configuration -- we have bean definitions inside this class and whena componetScan
+@Configuration -- used for java based configuration -- we have bean definitions inside this class and when a componentScan
 is scan all the beans and provide it to the ioc conatiner..
 
 Sterotype Annotations? -- spring will see these annotaions and manage the lifecycle of these beans
@@ -23,7 +26,8 @@ Like connecting to the db or initializing some data.
 @PreDestroy-- Just before destroying all the beans by spring ,this method will be called - eg closing db operations
 
 Spring Core related annotaion
-@Configuration and @Bean-- to manage the java based beans/configuration-- we dont want to manage the lifecycle of these beans uig xml or annotations
+@Configuration and @Bean-- to manage the java based beans/configuration--
+we dont want to manage the lifecycle of these beans uig xml or annotations
 it is made availabe to the ioc container when it sees it will create the bean and maintain the lifecylce for it --
  usually when we use kafka or restTemplate
 

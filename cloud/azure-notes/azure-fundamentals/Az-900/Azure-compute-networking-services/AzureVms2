@@ -46,12 +46,17 @@ Route network traffic
 
  Filter network traffic
  Azure virtual networks enable you to filter traffic between subnets
- Network security groups are Azure resources that can contain multiple inbound and outbound security rules.
+
+ Network security groups are attached Azure resources that can contain multiple inbound and outbound security rules.
  You can define these rules to allow or block traffic, based on factors such as source and destination IP address, port, and protocol.
 
  Network virtual appliances are specialized VMs that can be compared to a hardened network appliance.
  A network virtual appliance carries out a particular network function, such as running a firewall or
  performing wide area network (WAN) optimization.
+
+Application Security Groups -- Group VMs by application role (e.g., "web-servers", "db-servers")
+Lets you write security rules by group instead of IPs
+Scales & simplifies security management.
 
  Connect virtual networks
  Peering allows u to connect 2 virtual network the network is prvate and can be in separat regions

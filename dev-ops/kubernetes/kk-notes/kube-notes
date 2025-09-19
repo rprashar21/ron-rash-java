@@ -1,4 +1,11 @@
 Kubeconfig -- a file which has information to access the kubernetes cluster
+Think of kubeconfig as your login passport to Kubernetes.
+In your MOJ setup (AKS in UK South), kubeconfig is generated when you provision the cluster.
+Devs/DevOps download it locally (az aks get-credentials) and use it to interact with the cluster.
+It contains API server address, auth tokens/certificates, and context (which cluster & namespace you’re targeting).
+👉 Without kubeconfig, kubectl wouldn’t know which cluster you’re talking to or how to authenticate.
+
+
 docker ps --
 
 when we want to create any kubernetes resource object we use the command
@@ -16,22 +23,42 @@ we'll have the container runtime installed.
  Services in kubernets
  In Kubernetes, a Service is an abstraction layer that provides a stable IP address and DNS name for a set of Pods in a cluster.
  It acts as a load balancer, routing traffic to the appropriate Pod based on labels associated with the Pods.
+ Pods are ephemeral -- meaning they die restart, gets rescheduled . Their IPs change.
+ Services give you a stable entrypoint to those pods
 
- A Service consists of two parts: a set of Pods and a label selector. The label selector defines the group of Pods that the Service will route traffic to.
+ example
+ Your hearing-service pod may scale from 2 → 10 pods under load.
+ Instead of your frontend trying to track pod IPs, it just calls hearing-service.default.svc.cluster.local.
+ Kubernetes Service routes traffic to whichever pod is healthy, using label selectors
+
+
+ A Service consists of two parts: a set of Pods and a label selector.
+ The label selector defines the group of Pods that the Service will route traffic to.
  When you create a Service, Kubernetes creates an endpoint object that includes the IP addresses of the Pods that match the label selector.
 
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: my-service # this is a loadbalancer or ingress
 spec:
   selector:
-    app: my-app
+    app: defendant-service
   ports:
     - name: http
       port: 80
       targetPort: 8080
+
+Here’s your extended **AKS production flow** diagram with namespace separation, data layer (Postgres/Artemis/Redis), monitoring/logging, and secrets via Key Vault + ESO.
+
+Key takeaways:
+
+* Ingress handles **north–south** traffic; Services handle **east–west** inside the cluster.
+* Each **business domain** gets its own namespace (e.g., `prosecution`, `hearing`) with its Service and Pods.
+* **Data layer** may live in cluster or as managed PaaS; Pods connect via stable Services and secrets pulled via **External Secrets Operator** from **Azure Key Vault**.
+* **Observability** (Prometheus/Grafana/Loki) scrapes metrics/logs; **Policy/Security** (Kyverno/OPA, Falco) enforces guardrails across namespaces.
+
+Want me to generate a **printable PNG + a one-page legend** you can stick on your wall for quick recall?
 
 
 
