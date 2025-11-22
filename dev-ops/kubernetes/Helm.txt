@@ -4,7 +4,7 @@ They can be versioned,shared and published
 
 lets do a demo on helm chart for nginx server
 
-traffic --> servvice{load balancer}--> pod, replica3 of nginx server
+traffic --> servvice{load balancer}--> pod, x
 
 brew install helm
 helm search repo

@@ -113,8 +113,11 @@ ShopFast
 ---
 
 ### Implementation Plan
-Below is a step-by-step guide to build the project, with code artifacts for key components. Each component addresses specific skills (backend, frontend, DevOps, etc.) and solves the problems of scalability, performance, and observability.
+Below is a step-by-step guide to build the project, wach component addresses specifith code artifacts for key components. Eic skills (backend, frontend, DevOps, etc.) and solves the problems of scalability, performance, and observability.
 
 #### 1. Backend: User Service (Spring Boot, JWT Authentication)
 **Purpose**: Secure user authentication and profile management.
 **Skills Demonstrated**: Java, Spring Boot, Spring Security, JWT, PostgreSQL.
+
+
+

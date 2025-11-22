@@ -1,7 +1,9 @@
 Cahce is temporary storage -not a db which can be used as an alternative to retrieve commonly accessed data fast
 frequently used for api and io or db calls
 
-Goal is to improve the application
+Goal is to improve the application speed and retiveal
+So Redis operates primarily in RAM for speed, but can write to disk for safety - giving you a tunable trade-off between performance and durability
+Memcached is pure cache does not survive , restarts
 
 Types of cache
 Caching Technique	        Purpose	Used In

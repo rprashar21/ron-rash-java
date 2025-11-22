@@ -22,12 +22,13 @@ Classes - java.lang.object
               DataInputStream - read primitive datatypes in java
               * ObjectInputStream - deserializes primitive data type
 Encoding: It's a way of converting characters into bytes.
-* Different encodings have different ways of representing characters. UTF-8, ISO-8859-1, and US-ASCII are examples of character encodings.
+* Different encodings have different ways of representing characters. UTF-8, ISO-8859-1,
+*  and US-ASCII are examples of character encodings.
 
 * * Use byte streams (FileInputStream/FileOutputStream) for binary data like images, audio, etc.
 Use character streams (FileReader/FileWriter) for text data. They handle encoding automatically.
 Use BufferedReader for efficient reading of characters, arrays, and lines.
-Use InputStreamReader and OutputStreamWriter for converting byte streams to character streams with a specified charset.
+Use InputStreamReader and  OutputStreamWriterfor converting byte streams to character streams with a specified charset.
     * */
     public static void main(String[] args) {
         // here we are supposedly reading an image or video or text

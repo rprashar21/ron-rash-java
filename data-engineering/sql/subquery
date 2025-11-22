@@ -12,7 +12,7 @@ the exist operator is used to test for existence of rows in the subquery
 A subquery is passedin the EXISTS() function to check if the subquery returned any results
 
 eg /*
-    return back the films that have a rental rate higher than the average rental rate
+    return  the films that have a rental rate higher than the average rental rate
 
      2 step process
      1. calcualte average rental rate -   select avg(rental_rate) from film; this return 70

@@ -1,0 +1,17 @@
+Scenario 1: Stock Trading Platform
+
+Ultra-low latency --
+10 m+ concurrent traders
+Critical: No missed trades
+Updates: 100 times per second
+
+Trade-off Analysis:
+Websocket
+Bidirectional (traders can place orders)
+✅ Low latency (10-50ms
+❌ Memory: 50k connections = 400MB server memory
+❌ Complexity: Connection management, load balancing
+❌ Risk: Connection drops = missed trade
+
+
+Option B: UDP + TCP Hybrid

@@ -86,3 +86,73 @@ We track product popularity via access logs or Redis counters and cache the top-
 
 Invalidation Startergy
 For price and stock, we use cache-aside + short TTL + DB triggers to proactively invalidate product IDs when updates occur.
+Let’s trace three users:
+
+👤 User 1 – from India (browsing products)
+👤 User 2 – from UK (searching)
+👤 User 3 – from US (buying a product)
+
+user1 hits the website -- the dns is resolved it smae for all the users -- say https://shop.globalmart.com
+Azure Front Door (a Global Load Balancer) uses Anycast routing + health probes to route users to the nearest healthy region.
+| User   | Routed To            | RTT (approx) |
+| ------ | -------------------- | ------------ |
+| User 1 | India Central region | 20 ms        |
+| User 2 | UK South             | 15 ms        |
+| User 3 | East US 2            | 25 ms        |
+
+Front Door also caches static content (images, CSS, product list JSONs).
+If the response is cached → served from nearest edge POP instantly.
+
+the users calls -- cdn -- if teh data is cached the respnse is quikc
+what do we usually cache here
+
+
+🧩 Step 2: Application Gateway → AKS Service
+Requests hitting /api/products or /api/cart are routed via
+Azure Application Gateway: terminates SSL, routes based on URL path.
+/api/proucts/* → Product Service
+/api/orders/* → Order Service
+
+Aks cluster will be running multiple pods of microservice (prodcut api,order api, paymenst)
+autoscaling(hpa)-- when there is traffic increase the no of pods
+if not a aks solution -- increase or decerease the the instances
+Autoscaling (HPA) based on CPU/RPS thresholds.
+When traffic surges (e.g., during sales), new pods spin up within ~30 seconds
+When idle, pods scale down to save cost
+
+🧩 Step 3: Caching in Action (Reduce DB load)
+say users are hitting /api/products/1234 ---> check in cache if nt cache will be missed and then db
+Hot items (e.g., top 1000 products) are kept permanently warm in cache.
+
+🧩 Step 4: Search Requests (User 2)
+user2 searchers /api/search?q=shoes. --Front Door CDN may cache popular search queries eg /api/search?q=iphone17 for 2m TTL
+Product Search Service queries ElasticSearch or Cosmos DB (index)
+results are cached in the redis cache and then CDN layer further reduces traffic from global users.
+
+Step 5: Checkout Flow (User 3 buying)
+User clicks “Buy Now” → /api/checkou
+Caching not used here (must hit live systems).
+API validates inventory from Azure SQL (primary).
+Order placed → event sent to Azure Service Bus / Event Grid.
+Order confirmation stored in DB → returns 200 OK.
+Event triggers inventory update → cache invalidation for that product.
+
+✅ Cache Invalidation:
+Redis key product:12345 evicted or updated.
+Ensures next product read reflects reduced stock.
+
+
+Data Layer
+Azure SQL (regional DB) for write-heavy operations like orders.
+Cosmos DB with multi-master replication for product catalog
+Ensures users in India/US/UK get local read copies.
+rites (product updates) replicate asynchronously.
+
+Typical api flow
+| Flow                 | Caching Used      | Data Source       | Notes                       |
+| -------------------- | ----------------- | ----------------- | --------------------------- |
+| `/api/products/{id}` | Redis + CDN       | Cosmos DB (read)  | TTL 30m                     |
+| `/api/search`        | Redis             | ElasticSearch     | TTL 10m                     |
+| `/api/top-products`  | CDN + Redis       | Precomputed store | TTL 1h                      |
+| `/api/checkout`      | No cache          | SQL (write)       | Real-time consistency       |
+| `/api/price/{id}`    | Redis (short TTL) | SQL               | TTL 5m (frequently updated) |

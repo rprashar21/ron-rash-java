@@ -1,0 +1,94 @@
+Real-time Chat Application
+Requirements:
+Instant message delivery
+Typing indicators
+Presence status
+High message frequency
+
+Websockets can be used
+Tech Stack
+Layer 7: WebSocket over HTTPS
+Layer 6: TLS encryption
+Layer 4: TCP
+Layer 3: IP
+
+Why this stack:
+✅ Bidirectional communication needed
+✅ Low latency critical
+✅ Server needs to push messages
+✅ Frequent small messages
+
+// WebSocket for real-time features
+socket.emit('message', { text: 'Hello!', room: 'general' });
+socket.emit('typing_start', { room: 'general' });
+
+// Still use REST for non-real-time operations
+GET /api/chat/history/room123
+POST /api/users/profile
+
+
+Scenario 4: Online Gaming
+Requirements:
+
+Ultra-low latency (<50ms)
+High packet frequency
+Can tolerate packet loss
+Position updates every 16ms (60 FPS)
+
+U can used udp -- there is no tcp handshake , can afford data loss ,as next packets are usually correct
+We can use a hybrid approac
+// UDP for frequent position updates
+gameUDP.send(playerPosition);
+
+// TCP for critical events
+gameTCP.send({ type: 'player_died', player_id: 123 });
+
+
+====
+LIve sports -- use case -- score update ervy few seconds, 1m+ users, minimal server load ,can tolerate occasional missed updates
+
+Option A: WebSocket Approach
+pro bi directional support ,instant uptades
+cons -- 1M persistent connections = high memory usage
+Memory calculation:
+1M connections × 8KB per connection = 8GB RAM just for connections
+Plus application memory = 15-20GB per server
+
+Option B: Server-Sent Events (SSE) over HTTP-- it unideirectional websocket interval where the server keeps on sending updates
+Why: One-way communication, lower memory usage than WebSocket
+
+Option C: Smart Polling with HTTP
+Layer 7: REST API with smart caching
+Strategy: Poll every 30 seconds, cache aggressively
+Why: Reduces server load, works everywhere
+
+
+What is sse - Server-Sent Events (SSE) - The Unidirectional WebSocket Alternativ
+SSE is like having a one-way radio where the server broadcasts to clients, but clients can't talk back through the same channel.
+Traditional HTTP:    Client asks → Server responds → Connection closes
+WebSocket:           Client ↔ Server (bidirectional conversation)
+Server-Sent Events:  Client listens ← Server broadcasts (one-way stream)
+
+how sse works is
+Client opens SSE connection-- the server keeps the connection alive and keeps sending updates
+Client receives real-time updates
+
+┌─────────────────┬──────────────┬─────────────┬─────────────┐
+│                 │ HTTP/REST    │ WebSocket   │ SSE         │
+├─────────────────┼──────────────┼─────────────┼─────────────┤
+│ Direction       │ Request/Resp │ Bidirection │ Server→Client│
+│ Connection      │ Short-lived  │ Persistent  │ Persistent  │
+│ Overhead        │ High         │ Low         │ Medium      │
+│ Complexity      │ Simple       │ Complex     │ Simple      │
+│ Browser Support │ Universal    │ Good        │ Good        │
+│ Reconnection    │ N/A          │ Manual      │ Automatic   │
+│ Memory Usage    │ Low          │ High        │ Medium      │
+└─────────────────┴──────────────┴─────────────┴─────────────┘
+
+Design a system for live election results -- use sse
+Results only flow from server to millions of viewers (unidirectional ✅)
+Updates happen every few minutes, not milliseconds (SSE perfect timing ✅)
+Viewers might lose connection and need auto-reconnect (SSE handles this ✅)
+Simpler than WebSocket since users don't need to send data back ✅
+Works through corporate firewalls unlike WebSocke
+Election Results DB → SSE Server → Load Balancer → CDN → Millions of Users

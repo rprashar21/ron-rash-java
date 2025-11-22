@@ -1,0 +1,3 @@
+“Spring Batch is not a scheduling framework … it is intended to work with a scheduler, not replace one.”
+Spring Batch = the washing machine (it performs the washing steps correctly).
+Scheduler (Quartz, Control-M, cron, etc.) = the person pressing the “Start” button at a certain time every day.

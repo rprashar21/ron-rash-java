@@ -8,19 +8,7 @@ Observability is the ability to understand the internal state of the system.
 Monitoring -    collecting telemetry data for the application and creating alerts ,, tracks  the overall health of teh system
 1. identify problems in ur system
 2. track health and aotimize ur micrsoervec
-
-| Aspect                    | **Observability**                                                              | **Monitoring**                                                          |
-| ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| **Definition**            | Ability to infer the internal state of a system from external outputs          | Process of collecting, analyzing, and alerting on telemetry data        |
-| **Goal**                  | Understand **why** something is wrong                                          | Know **when** something is wrong                                        |
-| **Data Types Used**       | Metrics, Logs, Traces (**Three Pillars**)                                      | Mostly metrics and logs, focused on **known** issues                    |
-| **Focus**                 | Root cause analysis, **debugging unknown unknowns**                            | Detecting and alerting on **known conditions** (e.g., CPU > 80%)        |
-| **Proactive vs Reactive** | More **proactive** (helps explore and discover new issues)                     | More **reactive** (alerts after something goes wrong)                   |
-| **Usage Scenario**        | "Why did the service slow down for one customer request?"                      | "Notify me when response time exceeds 3 seconds"                        |
-| **Tools**                 | Jaeger, OpenTelemetry, Honeycomb, Zipkin (focus on tracing, context-rich logs) | Prometheus, Grafana, Nagios, New Relic, Datadog (alerts and dashboards) |
-| **Data Granularity**      | High cardinality, trace-level, contextual                                      | Aggregated, summarized metrics                                          |
-| **Complexity Handling**   | Designed for **complex, distributed systems**                                  | Can be used in both simple and complex systems                          |
-| **Example Use Case**      | Debug a **distributed transaction** failing across 4 microservices             | Get alerts when **disk space > 90%**                                    |
+                                |
 
 
 Real-World Example in Microservices
@@ -43,3 +31,42 @@ Grafana temp for tracing
 
 microservices ----> promtail{fetch logs from services and forwards to loki} ----->
 forwards the logs to loki{log integration system} --->Grafna{query,search,visulizethe logs with loki as datasource}
+ Prometheus and Grafana are indeed fantastic tools for observability.
+ While Azure Monitor is more integrated with Azure services,
+ Prometheus offers powerful metric collection capabilities,
+ and Grafana excels at creating highly customizable dashboards.
+ But let's chat about the foundations of observability—like telemetry data or the RED method—and build from there.
+ What’s your take on telemetry data, for instance
+
+ What is the red method
+ r- rate --measure thruput or requests handled by our system or application over time (requests per second or queries per min)
+          tracks how bsy the system is
+ error - tracks failed request , helping us to identiy issues
+ duration - Monitors the time taken to process requests latency or response times,
+  often broken into percentiles like p50, p95, p99 for average, near-worst, and worst-case scenario
+
+Suppose you're monitoring an e-commerce app's checkout API:
+
+Rate: 100 checkouts per minute during peak hours—if it drops suddenly, it might indicate a upstream service failure.
+Errors: 5% of checkouts fail due to payment gateway issues—telemetry logs help debug this.
+Duration: Average checkout takes 2 seconds, but p99 is 10 seconds—indicating slow database queries for some users.
+
+By collecting and analyzing these telemetry signals, developers can set slaerts and loot the system
+
+
+Imagine a popular mobile game app like Candy Crush. When you play, the app might collect telemetry data such as:
+
+How long levels take to load.
+Which levels players get stuck on most often (e.g., level 50 has a 70% drop-off rate).
+Error logs if the app crashes on certain devices (e.g., "OutOfMemoryError on Android 12").
+Anonymous stats like "X% of users prefer power-up Y."
+
+This data is sent to the developers' servers periodically.
+They use it to fix bugs (e.g., optimize memory for Android), balance difficulty (e.g., make level 50 easier),
+or add popular features, ultimately improving the game for everyone without knowing who you are personally.
+ Tools like Google Analytics, Microsoft Application Insights, or open-source options like Prometheus are often used for this.
+
+
+
+What is the key difference between Promethues and Grafana
+Prometheus focuses on the "backend" of monitoring—collecting and storing data—while Grafana handles the "frontend"—visualizing that data.

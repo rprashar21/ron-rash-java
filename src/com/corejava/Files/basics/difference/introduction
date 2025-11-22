@@ -1,0 +1,52 @@
+                ┌──────────────────────────────┐
+                │        Java I/O Streams       │
+                └────────────┬─────────────────┘
+                             │
+           ┌─────────────────┴───────────────────┐
+           │                                     │
+     Byte Streams (8-bit)                 Character Streams (16-bit)
+           │                                     │
+     ┌─────┴─────┐                        ┌──────┴──────┐
+     │           │                        │             │
+ InputStream  OutputStream          Reader           Writer
+ (read bytes)  (write bytes)       (read chars)     (write chars)
+     │           │                        │             │
+     │           │                        │             │
+ FileInputStream FileOutputStream    FileReader     FileWriter
+ BufferedInputStream BufferedOutputStream   BufferedReader  BufferedWriter
+ DataInputStream DataOutputStream      InputStreamReader OutputStreamWriter
+ ObjectInputStream ObjectOutputStream
+
+
+ what are character stream ?
+ Character streams read text files (letters, words, sentences).
+ They understand alphabets, numbers, spaces, and even emojis 😄.
+ They automatically convert bytes → characters (like UTF-8 decoding).
+
+ what are byte stream?
+ Byte streams read raw data (0s and 1s).
+ They don’t understand letters — they just pass bytes as-is.
+
+🧾 If you can open the file in Notepad and read it → use Character Stream
+🎵 If you see gibberish or weird symbols → use Byte Stream
+
+to read a file ??
+import java.io.*;
+
+public class CharacterStreamExample {
+    public static void main(String[] args) {
+        try (FileReader reader = new FileReader("message.txt")) {
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                System.out.print((char) ch);  // print characters
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// if we want better performance we can use Inputstreamreader
+
+
+

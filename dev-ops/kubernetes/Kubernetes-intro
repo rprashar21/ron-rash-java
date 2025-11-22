@@ -1,0 +1,75 @@
+Kubernetes alone is like buying the hardware, OS, and orchestration software to run containers—you install everything.
+AKS is like renting a fully-managed container-orchestration “cluster” from Azure: you focus on your apps, they keep the control plane healthy.
+
+Whether self-managed or managed (AKS, GKE, EKS, etc.), the core intuition is the same: containers = packing,
+Kubernetes = long-term room service—always ensuring your apps run where and how you specified.
+
+
+Now what is helm
+helm is a apcakge manger for kubernetes -- helps to package,version,share and deploy entire kubernets applications
+like apt for Ubuntu, npm for Node.js, or Maven for Java.
+
+In Kubernetes, deploying an app means writing a lot of YAML files:
+	•	deployment.yaml
+	•	service.yaml
+	•	configmap.yaml
+	•	ingress.yaml
+	•	secret.yaml
+…and so on.
+Doing this manually for every environment (dev, test, prod) quickly becomes painful.
+
+Helm solves this by allowing you to bundle all these YAMLs into a single reusable template package called a Helm Chart.
+
+
+Why We Use Helm
+
+Without Helm:
+	•	You must maintain dozens of YAMLs.
+	•	To deploy to different environments, you duplicate them and change a few lines.
+	•	Upgrading apps means manually applying multiple kubectl apply commands.
+
+With Helm:
+	•	You define one Chart (a template for your app).
+	•	You provide environment-specific values in a values.yaml file.
+	•	You can install, upgrade, rollback, and uninstall apps with one command.
+
+basic commands u can use
+helm install myapp ./mychart --values=values-prod.yaml
+helm upgrade myapp ./mychart --values=values-prod.yaml
+helm rollback myapp 2
+
+Analogy
+Kubernets is a A kitchen that cooks and serves containers (applications)
+
+A recipe manager / cookbook that knows exactly what ingredients (YAMLs) are needed and in what quantity
+(values) to make a dish (deploy an app).
+
+        The Helm Chart = the recipe (template)
+	•	The values.yaml = the ingredients list for a specific meal (environment)
+	•	helm install = “Make me this dish in my kitchen (cluster)”
+	•	helm upgrade = “Change the recipe slightly — add more salt or servings (update version or replicas)”
+	•	helm rollback = “Oops, go back to the previous recipe version!”
+
+Let’s say you want to deploy a Spring Boot API on AKS.
+Without Helm:
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
+
+And you maintain separate YAMLs for dev, staging, and prod.
+
+With Helm:
+You create a folder springboot-api/:
+
+springboot-api/
+├── Chart.yaml          # chart metadata (name, version, etc.)
+├── templates/
+│   ├── deployment.yaml # uses placeholders like {{ .Values.replicas }}
+│   ├── service.yaml
+│   └── ingress.yaml
+└── values.yaml         # sets replicas, image tag, ports, etc.
+
+now just run
+helm install springapi ./springboot-api
+Helm renders all templates, fills values, and deploys everything to Kubernetes
+Change config? Update values.yaml and run helm upgrade springapi ./springboot-api.

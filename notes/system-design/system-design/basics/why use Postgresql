@@ -1,0 +1,31 @@
+Why chose PostgreSQL over MySQL because it gives me richer features like JSONB indexing,
+window functions, and stronger concurrency support.
+This flexibility helps us model both structured and semi-structured product data efficiently.
+
+Sql is owned bu oracle not completely free
+
+In postgres -- we have features with rdbms + semi structured dat in jsonb format , Ai features ike pgvector and PostGIS, cte
+CTEs (Common Table Expressions), Window Functions, Array types: useful for complex reporting, filters
+Better Concurrency
+PostgreSQL uses MVCC (Multiversion Concurrency Control)
+Less locking issues vs MySQL (especially before InnoDB improvements)
+
+Extensibility for AI/Future
+PostgreSQL supports pgvector → for AI embeddings / recommendations
+Supports PostGIS for geo data (good for delivery/logistics)
+Can write custom functions in PL/pgSQL, Python, etc.
+
+| Feature                           | **PostgreSQL**         | **MySQL**                  | **MariaDB** | **Oracle**         | **SQL Server**     |
+| --------------------------------- | ---------------------- | -------------------------- | ----------- | ------------------ | ------------------ |
+| ACID compliant                    | ✅ Excellent            | ✅ Good                     | ✅ Good      | ✅ Excellent        | ✅ Excellent        |
+| JSON/JSONB support                | ✅ Advanced (indexable) | 🟡 Basic                   | 🟡 Basic    | ✅ Advanced         | 🟡 Basic           |
+| Full-text search                  | ✅ Native               | 🟡 Limited                 | 🟡          | ✅ Strong           | ✅                  |
+| Extensibility (plugins/types)     | ✅ pgvector, PostGIS    | ❌ Limited                  | ❌           | 🟡                 | ❌                  |
+| Open Source                       | ✅ Yes (truly open)     | 🟡 Yes (but Oracle-backed) | ✅ Yes       | ❌ No (commercial)  | ❌ No (commercial)  |
+| Spring Boot support               | ✅ Excellent            | ✅ Excellent                | ✅ Excellent | 🟡 License-limited | 🟡 License-limited |
+| Modern features (CTEs, window fn) | ✅ Yes                  | 🟡 Partial                 | 🟡 Partial  | ✅ Yes              | ✅ Yes              |
+| Concurrency support               | ✅ MVCC                 | 🟡 Lock-based              | 🟡          | ✅ Strong           | ✅ Strong           |
+| Vector & AI extension             | ✅ pgvector             | ❌                          | ❌           | ❌                  | ❌                  |
+
+
+E-commerce product catalog where prices, stock, metadata, and categories are well structured and interrelated postgres is a good choice

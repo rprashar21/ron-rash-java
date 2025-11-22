@@ -212,7 +212,7 @@ traffic control --> Can rewrite URLs, filter requests, add headers.
 
 cons
 can become a single point of failure
-omplexity increases in large deployments
+complexity increases in large deployments
 
 When to use
 U have multiple backend services and want one public endpoint

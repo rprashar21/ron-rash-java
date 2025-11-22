@@ -19,6 +19,11 @@ public class SampleFile01 {
         *
         * */
 
+        File file1 = new File(".","src/com/corejava/Files/basics/sample.txt");
+        if(!file1.exists()){
+            System.out.println("File does not exist");
+        }
+
         File file = new File(".","files/sampletext.txt"); // this is basically a file handler
         System.out.println("this will give the absolute path like doing pwd "+new File("").getAbsolutePath());
         System.out.println(file.getAbsolutePath()); // this get the present working directory
@@ -44,4 +49,6 @@ public class SampleFile01 {
         }
         System.out.println("file exist");
     }
+
+
 }

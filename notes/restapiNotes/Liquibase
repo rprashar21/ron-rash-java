@@ -13,7 +13,7 @@ Liquibase migration scripts are used for managing database schema changes and ve
 
  Let's say you're working on a web application that involves an employee management system.
  Initially, the application has a simple database schema with a single "Employee" table containing columns for ID, Name, and Email. However,
-  you need to introduce a new feature that tracks employee addresses. To accommodate this change, you'll need to modify the database schema.
+ you need to introduce a new feature that tracks employee addresses. To accommodate this change, you'll need to modify the database schema.
 
  Create a Liquibase Change Set:
  First, you would create a Liquibase change set to define the necessary changes.
@@ -30,9 +30,93 @@ Next, you would run Liquibase to apply the change set to the database.
 Liquibase will compare the current state of the database with the defined changes and automatically execute the necessary SQL statements to make the required modifications.
 
 Database Schema Evolution:
-With Liquibase, you can easily track and manage the evolution of your database schema over time. As new features or changes are introduced, you can create additional change sets to apply those modifications.
- Liquibase will keep track of which changes have been applied and which are pending, ensuring consistency across different environments.
+With Liquibase, you can easily track and manage the evolution of your database schema over time.
+As new features or changes are introduced, you can create additional change sets to apply those modifications.
+Liquibase will keep track of which changes have been applied and which are pending, ensuring consistency across different environments.
 
 The real-time usefulness of Liquibase becomes evident when working on collaborative projects with multiple developers or
 when deploying changes to different environments (development, testing, production).
 Liquibase ensures that everyone is working with the same database schema version, making it easier to manage and deploy changes consistently.
+
+
+How do we migrate say 1 million records if we normalize the table from explyees.address to address table
+For millions of rows in production, I never run a big insert or schema rewrite directly.
+I chunk the migration using primary key ranges,
+paginate with LIMIT/OFFSET or id > ?, and schedule it with a background process that’s idempotent.
+I monitor system load and enable dual-writes if the application needs to stay live.
+Once migration is complete, I validate row counts and cut over the read path.
+Only then do I remove the old column. This ensures safety, no downtime, and full traceability
+
+
+example of the migration script
+-- Batch example using ID range
+INSERT INTO address (id, employee_id, street, city, state, zip)
+SELECT uuid_generate_v4(), id,
+       split_part(address, ',', 1),
+       split_part(address, ',', 2),
+       split_part(address, ',', 3),
+       split_part(address, ',', 4)
+FROM employees
+WHERE id > :last_id AND id <= :last_id + 10000
+  AND address IS NOT NULL;
+
+
+
+| Challenge              | Solution                                      |
+| ---------------------- | --------------------------------------------- |
+| Millions of rows       | Chunked migration by ID/time                  |
+| Load spikes            | Use `LIMIT`, sleep, throttle                  |
+| Application still live | Dual-writes + feature flags                   |
+| Need rollback          | Don’t delete old column yet                   |
+| Disk usage             | Monitor WAL, use `pg_repack` later            |
+| Audit/compliance       | Log each insert + mapping, or use temp backup |
+
+
+for prod deployemnt we are going to use Canary Deployment with Feature Flags
+
+| Stage                      | What Happens                                                  |
+| -------------------------- | ------------------------------------------------------------- |
+| 1. **Deploy**              | Deploy new code to production — behind a feature flag         |
+| 2. **Initial Toggle**      | Feature flag is `OFF` for all users — no impact               |
+| 3. **Canary Start**        | Turn flag `ON` for 5–10% of users (can be random or targeted) |
+| 4. **Observe**             | Monitor errors, logs, performance, DB metrics                 |
+| 5. **Progressive Rollout** | Gradually increase to 25%, 50%, 75%, 100%                     |
+| 6. **Full Cutover**        | Switch feature flag to `ON` for all users                     |
+| 7. **Clean-Up**            | Optionally delete old code path, remove feature flag          |
+
+Sceanrio is
+You’re migrating address column from employees to a new address table and deploying the new API GET /employees/:id/address
+Deploy the new API behind a feature flag (e.g., useNewAddressAPI)
+🔄 Enable it for 10% of requests or users:
+Based on user ID hash
+Or a random percentage bucket
+
+  if (featureFlags.isEnabled("useNewAddressAPI", userId)) {
+      return addressService.fetchFromNewTable(userId);
+  } else {
+      return legacyAddressService.fetchFromEmployeesTable(userId);
+  }
+
+Feature flag tools
+| Tool                   | Type                             |
+| ---------------------- | -------------------------------- |
+| **LaunchDarkly**       | SaaS Feature Flag Platform       |
+| **Unleash**            | Open-source                      |
+| **Split.io**           | SaaS for feature experimentation |
+| **FF4J / Togglz**      | Java-based OSS libs              |
+| **Config-based flags** | Env flags or DB-driven toggles   |
+
+
+Best practices
+| Best Practice                    | Why It Helps                     |
+| -------------------------------- | -------------------------------- |
+| ✅ Idempotent new logic           | Retry safety for new API/DB path |
+| 📊 Monitor with dashboards       | Compare success rates, latency   |
+| 🚨 Set automated rollback rules  | If failure/error threshold hits  |
+| 👥 Use target-based rollout      | e.g., Internal users first       |
+| 📦 Keep feature flag short-lived | Remove once rollout completes    |
+
+
+We use Canary Deployments with Feature Flags to safely roll out new APIs or DB-backed features. Instead of exposing the change to all users at once, we enable it for a small group — say 10% — and observe system behavior. We monitor metrics like error rates, DB performance, and user latency. If all goes well, we scale up the flag exposure gradually. This reduces risk, allows us to catch early regressions, and improves confidence in production deployments
+
+

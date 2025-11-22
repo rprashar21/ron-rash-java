@@ -1,2 +1,18 @@
 Static blocks and static fields are initialized when the class is loaded, which can add overhead if the initialization is heavy.
 Use @BeforeAll or @AfterAll for setup and cleanup that is shared across all tests, rather than static blocks.
+
+static key word
+Performance:
+✅ Zero object allocation per blob
+✅ No garbage collection pressure
+✅ Minimal memory footprint
+✅ Faster execution (no constructor calls)
+
+There will be no overhead or instance creation so
+/ Static: 0 objects created
+   // Instance: 100+ objects created and garbage collected
+
+ Scalability
+ Azure Functions can process hundreds of blobs concurrently
+ Static methods scale better under load
+ No object pool management needed

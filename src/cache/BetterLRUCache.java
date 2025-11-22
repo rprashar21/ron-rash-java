@@ -1,27 +1,26 @@
 package cache;
 
-//Custom LRU Cache with O(1) Operations (For Interviews)
 
 import java.util.HashMap;
 
-class CustomLRUCache<K, V> {
+class BetterLRUCache<K, V> {
     private class Node {
         K key;
         V value;
         Node prev, next;
-
-        Node(K k, V v) {
-            key = k;
-            value = v;
-        }
+        Node(K k, V v) { key = k; value = v; }
+        Node() {}  // For dummy nodes
     }
 
     private final int capacity;
     private final HashMap<K, Node> map = new HashMap<>();
-    private Node head, tail;
+    private final Node head = new Node();  // Dummy head
+    private final Node tail = new Node();  // Dummy tail
 
-    public CustomLRUCache(int capacity) {
+    public BetterLRUCache(int capacity) {
         this.capacity = capacity;
+        head.next = tail;  // Connect dummies
+        tail.prev = head;
     }
 
     public V get(K key) {
@@ -40,9 +39,11 @@ class CustomLRUCache<K, V> {
             Node node = new Node(key, value);
             map.put(key, node);
             addToHead(node);
+
             if (map.size() > capacity) {
-                map.remove(tail.key);
-                removeTail();
+                Node lru = tail.prev;  // Last real node
+                remove(lru);
+                map.remove(lru.key);
             }
         }
     }
@@ -53,33 +54,25 @@ class CustomLRUCache<K, V> {
     }
 
     private void addToHead(Node node) {
-        node.prev = null;
-        node.next = head;
-        if (head != null) head.prev = node;
-        head = node;
-        if (tail == null) tail = head;
+        // Insert after dummy head
+        node.prev = head;
+        node.next = head.next;
+        head.next.prev = node;
+        head.next = node;
     }
 
     private void remove(Node node) {
-        if (node.prev != null)
-            node.prev.next = node.next;
-        else head = node.next;
-        if (node.next != null) node.next.prev = node.prev;
-        else tail = node.prev;
-    }
-
-    private void removeTail() {
-        if (tail != null) remove(tail);
+        // No null checks needed!
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
     }
 
     public void printCache() {
-        Node current = head;
-        while (current != null) {
+        Node current = head.next;
+        while (current != tail) {
             System.out.print(current.key + "=" + current.value + " ");
             current = current.next;
         }
         System.out.println();
     }
 }
-
-

@@ -1,3 +1,62 @@
+what is llm -- large language model-- a neural network --> a neural network that is trained to predict the next term
+a knowledeg base that is trained on millions and billions of parameters
+
+its basically just a mathematical function
+
+Let’s say you want to predict if an image has a cat or not.
+input is cat image --pixels numbers
+Neural network: (mathematical function )A series of layers that learn patterns — edges, shapes, eyes, fur, etc.
+
+What happens inside ??
+Each “neuron” is just a tiny formula: -output = (w1 * input1) + (w2 * input2) + bias
+Then it passes through a nonlinear activation (like ReLU, sigmoid, etc.) that allows the network to model complex relationships.
+
+
+Imagine a neural network like a giant spreadsheet of numbers (weights).
+When you ask it something:
+It multiplies your input by all those numbers.
+Adds biases.
+	•	Passes the result through nonlinear layers.
+	•	And finally outputs a prediction.
+
+
+	This is what happens
+
+          ┌─────────────────────────────┐
+          │   Input Tokens (numbers)    │
+          │   e.g. "The cat sat..."     │
+          └──────────────┬──────────────┘
+                         │ Tokenization
+                         ▼
+          ┌─────────────────────────────┐
+          │  Embedding Layer            │
+          │  → converts tokens to vectors│
+          └──────────────┬──────────────┘
+                         │ + positional info
+                         ▼
+          ┌─────────────────────────────┐
+          │  Transformer Layers (xN)    │
+          │  • Self-Attention: who relates to who?│
+          │  • Feed-forward: deep math layers     │
+          └──────────────┬──────────────┘
+                         │
+                         ▼
+          ┌─────────────────────────────┐
+          │  Output Probabilities       │
+          │  e.g. "mat" (80%), "sofa" (10%) │
+          └──────────────┬──────────────┘
+                         │
+                         ▼
+          ┌─────────────────────────────┐
+          │ Predicted Next Token        │
+          │  e.g. "mat"                 │
+          └─────────────────────────────┘
+
+
+
+
+
+
 Aspect	                    NLP	                                                        LLM
 Scope	                Broad field of AI.	                                      A specific type of model within NLP.
 Examples	            Translation, chatbots, text mining.	                    ChatGPT, GPT-4, BERT, etc.

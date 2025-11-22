@@ -1,0 +1,121 @@
+OSi Model
+Layer 7: Application    → REST, WebSocket, HTTP, HTTPS
+Layer 6: Presentation   → TLS/SSL, Encryption, Compression
+Layer 5: Session        → Session Management, Connections
+Layer 4: Transport      → TCP, UDP
+Layer 3: Network        → IP (Internet Protocol)
+Layer 2: Data Link      → Ethernet, WiFi
+Layer 1: Physical       → Cables, Radio Waves
+
+
+TCP (Transmission Control Protocol) Layer 4 - Transport Purpose: Reliable, ordered data delivery
+┌─────────────────────────────────────┐
+│        APPLICATION LAYER            │  ← Your app code
+│     (HTTP, WebSocket, REST)         │
+├─────────────────────────────────────┤
+│         TCP LAYER                   │  ← Reliability & Order
+│    (Connection, Flow Control)       │
+├─────────────────────────────────────┤
+│         IP LAYER                    │  ← Routing
+│      (Addressing, Routing)          │
+└─────────────────────────────────────┘
+
+TCP example
+Client                    Server
+  |                         |
+  |------ SYN ------------>|  (Connection request)
+  |<----- SYN-ACK ---------|  (Connection accepted)
+  |------ ACK ------------>|  (Connection established)
+  |                         |
+  |------ Data Packet 1 -->|
+  |<----- ACK --------------|  (Packet 1 received)
+  |------ Data Packet 2 -->|
+  |<----- ACK --------------|  (Packet 2 received)
+
+UDP (User Datagram Protocol)
+Position: Layer 4 - Transport
+Purpose: Fast, unreliable data delivery
+
+┌─────────────────────────────────────┐
+│        APPLICATION LAYER            │  ← Your app code
+│    (DNS, Gaming, Video Streaming)   │
+├─────────────────────────────────────┤
+│         UDP LAYER                   │  ← Speed over reliability
+│      (Fire and forget)              │
+├─────────────────────────────────────┤
+│         IP LAYER                    │  ← Routing
+│      (Addressing, Routing)          │
+└─────────────────────────────────────┘
+
+Client                    Server
+  |                         |
+  |------ Data Packet 1 -->|  (Fire and forget)
+  |------ Data Packet 2 -->|  (No acknowledgment)
+  |------ Data Packet 3 -->|  (Packet 2 might be lost!)
+
+Layer 7 -- Application layer --which is also built on tcp with security --
+┌─────────────────────────────────────┐
+│         HTTP/HTTPS                  │  ← Application Protocol
+│   (GET, POST, Headers, Status)     │
+├─────────────────────────────────────┤
+│         TLS/SSL (HTTPS only)        │  ← Encryption Layer
+│       (Encryption, Certificates)    │
+├─────────────────────────────────────┤
+│         TCP                         │  ← Reliable Transport
+│    (Connection, Reliability)        │
+├─────────────────────────────────────┤
+│         IP                          │  ← Network Routing
+└─────────────────────────────────────┘
+HTTP:  Application ← TCP ← IP
+HTTPS: Application ← TLS ← TCP ← IP
+
+
+==========================================
+Rest Apis -- Position is layer 7 -- https+TCp+TLS
+┌─────────────────────────────────────┐
+│         REST API                    │  ← Architectural Style
+│  (GET /users, POST /orders, etc.)   │
+├─────────────────────────────────────┤
+│         HTTP/HTTPS                  │  ← Protocol
+│   (Methods, Headers, Status Codes)  │
+├─────────────────────────────────────┤
+│         TCP                         │  ← Transport
+└─────────────────────────────────────┘
+
+stateless, responses are cacheable, simple for debugging, universla browser support,Load balancer friendly
+
+
+❌ Higher latency (new connections)
+❌ No server-initiated communication
+❌ Overhead for small messages
+❌ Polling required for real-time updates
+
+Websockets alo work on http layer
+connection is bidriectional and always open
+Persistent Connection Model:
+Client ↔ [Bidirectional Channel] ↔ Server
+Connection stays open
+
+Tradeoffs
+✅ Low latency (persistent connection)
+✅ Bidirectional communication
+✅ Lower overhead for frequent messages
+✅ Server can push data
+
+❌ Stateful (harder to scale)
+❌ Not cacheable
+❌ Complex error handling
+❌ Load balancer challenges
+❌ Memory usage (open connections)
+
+
+Critical System Design Takeaway:
+
+Layer 4 (TCP vs UDP) determines reliability vs speed
+Layer 7 (REST vs WebSocket) determines communication pattern
+Each layer adds overhead and latency
+
+Interview-Ready Examples:
+🎮 Gaming: "I'd use UDP because 60fps means 16ms between updates. TCP's reliability guarantees would add latency we can't afford. Lost position packets are okay since the next update corrects it."
+💬 Chat: "I need WebSocket because users expect instant message delivery and typing indicators. The bidirectional nature means server can push messages without client polling."
+🛒 E-commerce: "REST API works perfectly because product catalogs change infrequently, responses are cacheable, and mobile apps handle intermittent connectivity well."

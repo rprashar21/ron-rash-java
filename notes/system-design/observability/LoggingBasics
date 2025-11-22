@@ -1,0 +1,145 @@
+private static final Logger logger = LoggerFactory.getLogger(BlobTriggerFunction.class);
+This intiliaziae a logger using sl4j -- simple logging facade in java
+we need to add logging backend like like logback --
+
+hus logback class is recommended for production envs --> SLF4J automatically binds to Logback if it’s on the classpath.
+
+implementation("ch.qos.logback:logback-classic:1.4.11"). in gradle
+
+<dependency>.       --> in maven
+  <groupId>ch.qos.logback</groupId>
+  <artifactId>logback-classic</artifactId>. thus lgback class is recommeded for production envs
+  <version>1.4.11</version>
+</dependency>
+
+You can add a logback.xml file for detailed logging control: like the one below
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern></encoder>
+  </appender>
+
+  <root level="INFO"> -- here we can dcefine what kidn of logging we wuld like
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>
+
+----
+to keeps  it consistent throught the application in multimodule project
+we can add the version in main pom.xml
+<properties>
+    <logback.version>1.4.11</logback.version>
+</properties>
+
+when we add these logs will actually work in the production - we can configure the log levels as well
+trace, error info debug
+we should ot have debug in prod envs
+never have huge payloads or ids or sensative information
+these logs can be then redirected to application Azure App Insights,some external loggings like grafana or some other stuff
+also to azure monitor, local terminal
+
+Show how to send logs to Azure Application Insights automatically?
+Answer ths
+
+
+In a multimoudule project we can have a common module
+Logging setup
+	•	POJOs (e.g., IdpcMetadata)
+	•	Utility classes (e.g., BlobHelper, RetryUtils)
+	•	Configuration (e.g., AzureBlobConfig)
+
+basically the modules dont share code
+they don’t share runtime code, but they share build-time libraries,
+configurations, and utility logic at development time, using a shared common module.
+
+what can be shared in a common modukle
+constants common pojos, Utility Classes BlobHelper, RetryUtils, JsonUtil
+custom exceptions ,config loaders
+
+These are compiled and packaged into each Function App when you build
+
+Each Azure Function App (module) is independently deployed — they each have their own copy of the compiled shared code from common-utils.jar.
+If common-utils changes, all modules that depend on it must rebuild and re-deploy to get the update
+
+Benefits of This Model
+	•	✅ DRY principle: Don’t Repeat Yourself
+	•	✅ Standardization: Same logging/auth/config practices across all modules
+	•	✅ Testability: You can test utilities in isolation
+	•	✅ Separation of Concerns: Easier maintenance
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    Azure Function Apps                         │
+├─────────────────┬─────────────────┬─────────────────┬───────────┤
+│ Metadata Check  │   Ingestion     │ Answer Retrieval│  Scoring  │
+│ Function App    │   Function App  │   Function App  │Function App│
+├─────────────────┼─────────────────┼─────────────────┼───────────┤
+│ • BlobTrigger   │ • QueueTrigger  │ • HttpTrigger   │• QueueTrigger│
+│ • Common JAR    │ • Common JAR    │ • Common JAR    │• Common JAR │
+│ • Jackson       │ • Jackson       │ • Jackson       │• Jackson   │
+│ • SLF4J         │ • SLF4J         │ • SLF4J         │• SLF4J     │
+│ • Azure SDK     │ • Azure SDK     │ • Azure SDK     │• Azure SDK │
+
+
+When you create a configuration class in the common library, here's exactly what happens:
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              BUILD TIME                                        │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────┐    ┌─────────────────────────────────────────────────────────┐
+│   Common Lib    │    │              Maven Build Process                        │
+│                 │    │                                                         │
+│ Configuration   │───▶│ 1. Builds common JAR with ConfigurationManager         │
+│ Manager.java    │    │ 2. Installs JAR to local Maven repository              │
+│                 │    │ 3. Each function module declares dependency on common  │
+└─────────────────┘    │ 4. Maven copies common JAR to each function's lib/     │
+                       └─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           RUNTIME DEPLOYMENT                                   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        Azure Function App 1                                    │
+│                    (fa-ste-ai-document-metadata-check)                         │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────────────────────────────────────────┐  │
+│  │   Main JAR      │  │                lib/ directory                       │  │
+│  │                 │  │                                                     │  │
+│  │ BlobTrigger     │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │ Function.java   │  │  │ cp-ai-rag-service-common-17.0.9-SNAPSHOT.jar│   │  │
+│  │                 │  │  │ (Contains ConfigurationManager.class)        │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  │                 │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │                 │  │  │ jackson-databind-2.15.2.jar                │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  │                 │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │                 │  │  │ azure-functions-java-library-3.1.0.jar     │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  │                 │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │                 │  │  │ slf4j-api-2.0.7.jar                       │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  └─────────────────┘  └─────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        Azure Function App 2                                    │
+│                    (fa-ste-ai-document-ingestion)                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────────────────────────────────────────┐  │
+│  │   Main JAR      │  │                lib/ directory                       │  │
+│  │                 │  │                                                     │  │
+│  │ DocumentIngestion│  │  ┌─────────────────────────────────────────────┐   │  │
+│  │ Function.java   │  │  │ cp-ai-rag-service-common-17.0.9-SNAPSHOT.jar│   │  │
+│  │                 │  │  │ (Contains ConfigurationManager.class)        │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  │                 │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │                 │  │  │ jackson-databind-2.15.2.jar                │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  │                 │  │  ┌─────────────────────────────────────────────┐   │  │
+│  │                 │  │  │ azure-functions-java-library-3.1.0.jar     │   │  │
+│  │                 │  │  └─────────────────────────────────────────────┘   │  │
+│  └─────────────────┘  └─────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+
+

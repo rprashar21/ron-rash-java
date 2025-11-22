@@ -22,7 +22,8 @@ which is how the container accesses the host's resources, such as CPU, memory, a
 Namespaces: Docker containers use Linux namespaces to create isolated environments for the container's processes.
 Namespaces provide isolation for resources such as the file system, process ID, and network.
 
-Control groups (cgroups): Docker containers use cgroups to limit and control the amount of resources, such as CPU, memory, and I/O, that a container can access.
+Control groups (cgroups): Docker containers use cgroups to limit and control the amount of resources, such as CPU, memory,
+and I/O, that a container can access.
 
 It's important to note that while a container uses resources from the host operating system,
 it is still isolated from the host and other containers, so changes to the container do not affect the host or other containers.

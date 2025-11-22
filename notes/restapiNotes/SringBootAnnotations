@@ -211,7 +211,7 @@ public UserDTO getUser(Long id) {
 What is a record in Java? -- bascailly replaces dto objects
 record is a concise way to create immutable DTO-like classes.
 
-public record(Sring name,String status){
+public record OrderSummaryDTO(Sring name,String status){
 // since this isimmutable
 // automatically creates constructor ,, getters no setters equals and hascode
 // all the fields are final by default

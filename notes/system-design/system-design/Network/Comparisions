@@ -1,0 +1,84 @@
+REST API over HTTPS/TCP:
+DNS Resolution:     50ms
+TCP Handshake:      80ms
+TLS Handshake:     160ms
+HTTP Request:       10ms
+Server Processing:  50ms
+HTTP Response:      10ms
+Total:
+
+Websocket over https/tcp
+Initial connection: 360ms (same as above)
+Message exchange:    10ms (just network + processing)
+Subsequent messages: 10ms each
+
+UDP
+DNS Resolution:     50ms
+UDP Message:        10ms (no handshake)
+Server Processing:  50ms
+UDP Response:       10ms
+Total:
+
+REST/HTTP Trade-offs
+Advantages
+Scalability: Stateless = infinite horizontal scaling
+Caching: Response caching reduces server load
+Simplicity: Easy to understand, test, debug
+Universal: Works everywhere, every device
+Reliability: Built on TCP, guaranteed delivery
+Debugging: Clear request/response, HTTP status codes
+Load Balancing: Any request can go to any server
+
+Disadvantages
+Latency: Each request = new connection overhead
+Real-time: Impossible without inefficient polling
+Server Push: Can't push updates to clients
+Overhead: HTTP headers add 500-2000 bytes per request
+Connection Limit: Browsers limit concurrent connections
+Battery: Mobile polling drains battery
+
+// Polling every 2 seconds for chat messages
+setInterval(() => {
+    fetch('/api/messages/latest') // 1KB request + 2KB response
+        .then(r => r.json())
+        .then(messages => updateUI(messages));
+}, 2000);
+
+// Cost calculation:
+// 30 requests/minute × 3KB per request = 90KB/minute
+// For 10,000 users = 900MB/minute = 1.3GB/hour just for polling!
+
+Server-Sent Events Trade-offs
+uidirectional, server,simple,lower memory
+HTTP/2 Multiplexing: Multiple SSE streams over one connection
+Event Types: Can send different types of events
+Built-in Retry: Automatic exponential backoff
+
+disadvantage
+Unidirectional: Client can't send through SSE channel
+Connection Limit: Browser limit ~6 SSE connections per domain
+Text Only: Can't send binary data
+No Request Headers: Can't send auth tokens in stream
+Buffer Issues: Large messages can cause memory problems
+Limited Control: Less control over connection lifecycle
+IE Support: No Internet Explorer support
+
+
+WebSocket Trade-offs
+bidirectional
+low latency :Persistent connection, minimal overhead
+binary support - can send any type of data
+Full Control: Complete control over connection
+Custom Protocols: Can implement custom sub-protocols
+No Polling: True real-time updates
+High Throughput: Minimal frame overhead (2-8 bytes)
+
+disadvantage
+Complexity: Connection management, error handling, reconnection
+Memory Usage: Persistent connections consume server memory
+Stateful: Harder to scale horizontally
+Load Balancing: Sticky sessions required
+Debugging: Binary protocol, harder to debug
+Firewall Issues: Some corporate firewalls block WebSocket
+No Caching: Real-time data can't be cached
+Resource Intensive: Each connection holds server resources

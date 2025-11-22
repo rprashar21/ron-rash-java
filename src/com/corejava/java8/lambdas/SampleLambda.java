@@ -12,7 +12,7 @@ This instance is an object stored in the heap.
 
 
 
-    * lambda expression is an anonymous fucntion -- no name of function ,no return type and no modifiers
+    * lambda expression is an anonymous function -- no name of function ,no return type and no modifiers
     * it i used to hold the functional interface
     * public int getLength(String s)
     * {
