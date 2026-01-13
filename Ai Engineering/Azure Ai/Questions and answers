@@ -1,0 +1,9 @@
+"ComputerVision": This is the correct service for generating image captions.
+
+Form Recognizer works on input documents that meet these requirements:
+Format must be JPG, PNG, PDF (text or scanned), or TIFF.
+File size must be less than 50 MB.
+File 2 and 5 are excluded.
+New service limits now goes up to 500MB so...
+File 1, 3, and 6 are correct for "training the model"
+, however if MSFT remove the word "training" from the

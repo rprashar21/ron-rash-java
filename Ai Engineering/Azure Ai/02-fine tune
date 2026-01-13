@@ -1,0 +1,10 @@
+In azure ai foundry you can fine tune a model
+Steps to fine tune a model
+01 Training and validation data-- dat needs to be formatted in jsonl document . must be in conversational format
+02 choose the model to fine tune
+03 choose the training method --> Supervised traing method,direct preference optimization and Reinforcemnet Fine Tuning
+04 coose the training type
+05 deploy the model
+
+
+Ai

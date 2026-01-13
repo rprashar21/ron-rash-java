@@ -1,0 +1,55 @@
+what is functional programming ?
+functional programming is transforming of data using functions ,rather than changing state
+
+Why Companies Care (Say This in Interviews)
+
+Functional style helps because it:
+reduces bugs caused by shared mutable state
+makes concurrent code safer
+improves testability
+simplifies reasoning about code
+fits well with distributed systems and data pipelines
+This is why it appears in:
+
+Java Streams
+Reactive programming
+Kafka Streams
+Spark / Flink
+LangGraph / workflow engines
+
+| Imperative         | Functional            |
+| ------------------ | --------------------- |
+| Change state       | Transform data        |
+| Loops              | Map / filter / reduce |
+| Mutable objects    | Immutable objects     |
+| Harder concurrency | Safer concurrency     |
+
+
+u use functions- we do not modfiy existing data --
+You return new values instead of mutating objects
+work on immutable data
+
+imperative
+is
+order.setStatus("Paid")
+
+functional is
+Order updated = order.withStatus("PAID"); -- on hidden effects, thread safe ,easier debugging
+
+we prefer decalarative over imperative
+-- this is imperatve
+
+List<Integer> result = new ArrayList<>();
+for (int i : numbers) {
+    if (i % 2 == 0) {
+        result.add(i * 2);
+    }
+}
+
+decalrative -->
+List<Integer> list = new ArrayList<>();
+List<Integer> filterderList = list.stream()
+    .filter(i->i%2==0)
+     .map(i->i*2)
+     .toList()
+

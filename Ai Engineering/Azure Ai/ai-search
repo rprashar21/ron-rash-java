@@ -1,4 +1,6 @@
-Azure Ai Search -- helps us to search
+Azure open ai -- this is the componety in azuere where u can deploy ur app and uses deployed models of open ai inside azure
+Azure foundry - agin a unifide platform like playground where u can get many models u can use laygrounds
+Azure Ai Search -- helps us to search, this is th comonent in azuere where u can deploy ur app and uses deployed models
 Indexer - component that connect ot our data source
 Index -- index on our data source -- what fileds are searchable
 
@@ -26,3 +28,54 @@ Skillset - set of ai skills that define how to enrich ur data during indexing
 | Smart Assistant  | Reads and processes each letter          | **Indexer**      |
 | Summary Skills   | Highlights key phrases, detects language | **Skillset**     |
 | Digital Library  | Neatly organized searchable archive      | **Search Index** |
+
+# Model parameters
+Max Tokens -- Is how much token response it needs to send
+Temperature -- 0-1 --> randomness of the output generated in the model -->0 meaning very determinstic 1 will be creative
+Top p -> 0.1 top 10% 1 100% -  the model chooses which next token to choose from
+
+Prompting
+zero shot prompting -- less and clear input
+Few shot prompting -- giving example
+prompt engineering -- chain of thought prompting
+
+
+# from azure open ai we need to create the azure foundry
+
+from openai import AzureOpenAi
+
+client = AzureOpenAI(api_version="",azure_endpoints="",api_key="")
+
+response = client.chat.completions.create(
+   messages=[
+      {
+      "role":"system", # the system role
+      "content":"You are a financial advisor "
+      },
+       {
+            "role":"user", # the system role
+            "content":"Tell me about my portfolio, where i should invest what are good startergies ?? "
+            },
+
+   ],
+   max_tokens=16538,
+   temperature=1.0
+   top_p=1.0
+   model="chat-gpt-0-mini"
+)
+print( response.choices[0].message.content)
+
+
+What is Rag - Retrieval Augment Generation --
+The LLm returns data to the user based on its own knowledge but from the context provided
+
+LLm uses Azure Search -- vector based search
+
+
+
+
+
+
+
+
+

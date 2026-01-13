@@ -27,7 +27,8 @@ Liquibase migration scripts are used for managing database schema changes and ve
 
 Apply the Database Change:
 Next, you would run Liquibase to apply the change set to the database.
-Liquibase will compare the current state of the database with the defined changes and automatically execute the necessary SQL statements to make the required modifications.
+Liquibase will compare the current state of the database with the defined changes and automatically execute the
+necessary SQL statements to make the required modifications.
 
 Database Schema Evolution:
 With Liquibase, you can easily track and manage the evolution of your database schema over time.
