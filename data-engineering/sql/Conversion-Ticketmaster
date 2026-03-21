@@ -1,0 +1,84 @@
+SESSION STARTS
+   |
+   |-- TRANSACTION STARTS
+   |      |
+   |      |-- INSERT
+   |      |-- UPDATE
+   |      |
+   |      |-- COMMIT  ---> permanent
+   |      |-- ROLLBACK ---> nothing happened
+   |
+SESSION CONTINUES (can start another transaction)
+
+
+a client connects to the database ---ie is a session{authentication ,var initiazled etc
+}
+Session begins
+
+A database session is created
+Authentication, variables, context are set
+No transaction yet (or an implicit one, depending on DB)
+
+BEGIN TRANSACTION;
+or call procedure that starts a transaction
+A transaction starts
+The transaction lives inside the session
+All changes are temporary
+
+transaction executes 2 sql stmnst like insert, update, delete
+INSERT INTO orders VALUES (101, 'CREATED');
+Row is inserted
+Row is not yet permanent
+Other sessions cannot see it
+Locks are held
+
+the transaction executes another sql stmnt
+UPDATE orders SET status = 'CONFIRMED' WHERE order_id = 101;
+
+still same -- nothing is permanent
+
+COMMIT --> this step release the lock ,other sessions can see and the data is permannently saved
+
+if failure -- rollback --> all changes are undone ,nothing is saved
+
+=================================================
+NOw if a transaction has commit inside it
+CREATE PROCEDURE create_order_bad(p_order_id INT)
+AS
+BEGIN
+    INSERT INTO orders VALUES (p_order_id, 'CREATED');
+    COMMIT;
+
+    UPDATE orders
+    SET status = 'CONFIRMED'
+    WHERE order_id = p_order_id;
+END;
+
+CALL create_order_bad(101); this proc bascialyy has to insert and update status
+Step by step:
+
+INSERT runs
+COMMIT happens
+Transaction ends
+Row is permanent
+UPDATE fails
+Caller tries ROLLBACK
+
+❌ Rollback does NOTHING
+Because the transaction already ended.
+
+One-Line Final Mental Model
+
+Session holds the conversation
+Transaction holds the promise
+Procedure does the work
+Commit keeps the promise
+Rollback pretends nothing happened
+
+
+
+SESSION ENDS
+   |
+   |-- All transactions must be ended (committed or rolled back)
+   |-- Connection to database is closed
+   |-- Session context is destroyed

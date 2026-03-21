@@ -1,0 +1,13 @@
+| Analogy          | Database                     |
+| ---------------- | ---------------------------- |
+| You in room      | Session                      |
+| Writing on board | Transaction                  |
+| Taking photo     | Commit                       |
+| Erasing board    | Rollback / Auto cleanup      |
+| Board            | Global Temporary Table (GTT) |
+
+CREATE GLOBAL TEMPORARY TABLE gtt_work
+(
+  id NUMBER
+)
+ON COMMIT DELETE ROWS;

@@ -2,6 +2,12 @@ package jdbc;
 
 public class JDBC01 {
 
+//    JDBC is NOT Java objects.
+//
+//    It is a remote protocol to a database server.
+//    Every JDBC object is a handle to something that exists outside the JVM.
+//     That’s the root.
+
     //jdbc is an api which defines how a client application can connect to a database
     //jdbc template --simpliefies the use of jdbc ,executes core jdbc workflow leaving application code to provide sql and extract results
 
