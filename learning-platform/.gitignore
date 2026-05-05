@@ -1,0 +1,7 @@
+node_modules/
+.next/
+out/
+# Generated at build time — do not commit
+content-manifest.json
+.env.local
+.env*.local
