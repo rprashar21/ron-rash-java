@@ -5,7 +5,8 @@ This system appears to be designed for legal professionals to quickly search and
 Show the why behind the system.??
 At the UK Ministry of Justice,
  we needed a way to allow legal teams to quickly query large legal case files (IDPCs)
- and extract structured insights like weapons used, victim injuries, and prior convictions. Manually searching PDFs was slow, error-prone, and inconsistent.
+ and extract structured insights like weapons used, victim injuries, and prior convictions.
+ Manually searching PDFs was slow, error-prone, and inconsistent.
 
 
 Project Overview

@@ -1,0 +1,108 @@
+ What is /init?
+
+  The /init command is a built-in Claude Code command that creates your project's memory system. When you run it:
+
+  1. Creates CLAUDE.md file - This is your project's "memory" file where Claude stores:
+    - Project overview and purpose
+    - Architecture and structure
+    - Build commands
+    - Coding standards
+    - Common workflows
+    - Development guidelines
+  2. Location: Creates the file at either:
+    - .claude/CLAUDE.md (project-specific, recommended)
+    - ./CLAUDE.md (root of project)
+  3. What happens: Claude analyzes your project and generates initial documentation automatically.
+
+  What is the .claude/ folder?
+
+  The .claude/ folder is the Claude Code configuration directory for your project. It's similar to .git/ or .vscode/ folders.
+
+  Structure:
+
+  .claude/
+  ├── CLAUDE.md              # Project memory (created by /init)
+  ├── settings.json          # Hooks configuration (we'll create)
+  ├── skills/                # Custom skills (we'll create)
+  │   ├── spring-crud/
+  │   │   └── SKILL.md
+  │   └── test-generator/
+  │       └── SKILL.md
+  ├── agents/                # Custom agents (we'll create)
+  │   ├── java-architect.md
+  │   └── code-reviewer.md
+  ├── rules/                 # Project standards (we'll create)
+  │   ├── java-style.md
+  │   └── testing.md
+  ├── hooks/                 # Automation scripts (we'll create)
+  │   ├── auto-format.py
+  │   └── check-tests.sh
+  └── mcp-servers/           # Custom MCP servers (optional)
+
+  How is it created?
+
+  1. Automatic - /init creates .claude/CLAUDE.md
+  2. Manual - You create the folder: mkdir -p .claude/skills
+  3. By us - We'll create the subdirectories (skills/, agents/, rules/, etc.)
+
+  Why is it useful?
+
+  For Claude Code:
+  - Remembers context - CLAUDE.md is automatically loaded in every conversation
+  - Enforces standards - Rules in .claude/rules/ are automatically applied
+  - Enables automation - Skills, agents, and hooks extend Claude's capabilities
+  - Team collaboration - Commit .claude/ to git so the whole team benefits
+
+  For you:
+  - Consistency - Everyone (human or Claude) follows same patterns
+  - Productivity - Custom skills automate repetitive tasks
+  - Quality - Hooks enforce quality gates automatically
+  - Knowledge sharing - CLAUDE.md documents your project for new team members
+
+  Example: CLAUDE.md in action
+
+  When CLAUDE.md exists and contains:
+  ## Build Commands
+  ./gradlew build
+  ./gradlew bootRun
+
+  ## Coding Standards
+  - Use constructor injection, not @Autowired
+  - Service classes must be final
+
+  Then every time you start a conversation with Claude Code:
+  - Claude knows how to build your project
+  - Claude follows your coding standards automatically
+  - You don't have to repeat yourself
+
+  Should we commit .claude/ to git?
+
+  YES! (Mostly)
+
+  ✅ Commit these:
+  - .claude/CLAUDE.md - Project memory
+  - .claude/skills/ - Custom skills (team benefit)
+  - .claude/agents/ - Custom agents (team benefit)
+  - .claude/rules/ - Project standards (team benefit)
+  - .mcp.json - MCP configuration (team benefit)
+
+  ❌ Don't commit (add to .gitignore):
+  - .claude/settings.local.json - Personal hooks/settings
+  - Any files with secrets/credentials
+
+  Example workflow:
+
+  # Day 1: You create a skill
+  mkdir -p .claude/skills/spring-crud
+  # Create SKILL.md
+
+  # Commit to git
+  git add .claude/
+  git commit -m "Add spring-crud skill"
+  git push
+
+  # Day 2: Your teammate pulls
+  git pull
+
+  # Now your teammate can use the skill too!
+  > "Use spring-crud to create a User entity"

@@ -5,7 +5,7 @@
      │            │              │
      ▼            ▼              ▼
  ┌───────────────────────────────────────────────┐
- │         Azure Front Door (Global Load Balancer) │
+ │        Azure Front Door (Global Load Balancer) │
  │  • Anycast routing → nearest region (latency)  │
  │  • CDN edge caching for static assets/APIs     │
  │  • WAF & SSL termination                       │

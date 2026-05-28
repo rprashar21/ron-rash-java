@@ -1,0 +1,281 @@
+Excellent question! This is the key to understanding how CLAUDE.md, Skills, Agents, and Rules work together. Let me explain with a real example.
+
+  Scenario: Code Review Workflow
+
+  The Relationship
+
+  CLAUDE.md (Global Context - Always Loaded)
+      ↓
+      Provides foundation to...
+      ↓
+  Skill (Task Instructions) + Agent (Specialized Role)
+      ↓
+      Both use CLAUDE.md context
+
+  ---
+  Example: Code Review in Action
+
+  1. CLAUDE.md (Lean, Always Loaded)
+
+  ## Code Quality Standards
+
+  1. **Dependency Injection:**
+     - ✅ Constructor injection only
+     - ❌ Never use @Autowired on fields
+
+  2. **Service Classes:**
+     - Must be final
+     - Use @Transactional on write operations
+
+  3. **Security:**
+     - Never log sensitive data
+     - Always validate user input
+
+  2. Skill (.claude/skills/code-review/SKILL.md)
+
+  ---
+  name: code-review
+  description: Review code changes for quality, security, and standards compliance. Use when reviewing PRs or code changes.
+  ---
+
+  # Code Review Workflow
+
+  1. Run `git diff` to see changes
+  2. Read modified files
+  3. Check against CLAUDE.md standards ← **USES CLAUDE.MD**
+  4. Use code-reviewer agent for detailed analysis
+  5. Check for security issues
+  6. Verify tests exist
+  7. Provide actionable feedback
+
+  3. Agent (.claude/agents/code-reviewer.md)
+
+  ---
+  name: code-reviewer
+  description: Expert code reviewer for Spring Boot. Use for detailed code analysis.
+  tools: Read, Grep, Glob, Bash
+  model: sonnet
+  ---
+
+  You are a senior Spring Boot code reviewer.
+
+  **Review checklist:**
+  - Apply standards from CLAUDE.md ← **USES CLAUDE.MD**
+  - Security: SQL injection, XSS, exposed secrets
+  - Performance: N+1 queries, missing indexes
+  - Testing: Coverage, edge cases
+  - Spring Boot best practices
+
+  Provide specific line-by-line feedback.
+
+  4. Path-Specific Rule (.claude/rules/service-layer.md)
+
+  ---
+  paths: "src/main/java/**/service/**/*.java"
+  ---
+
+  # Service Layer Rules
+
+  - All service classes MUST be final
+  - All write operations MUST have @Transactional
+  - No direct entity exposure (use DTOs)
+
+  ---
+  How It Works During Code Review
+
+  You run:
+  > Review the changes in TodoService.java
+
+  What happens:
+
+  Step 1: CLAUDE.md is loaded
+
+  ✅ Knows: Constructor injection required
+  ✅ Knows: Services must be final
+  ✅ Knows: @Transactional on writes
+
+  Step 2: Claude decides to use code-review skill
+
+  Skill says: "Check against CLAUDE.md standards"
+  Skill says: "Use code-reviewer agent"
+
+  Step 3: code-reviewer agent is invoked
+
+  Agent reads TodoService.java
+  Agent applies CLAUDE.md standards
+  Agent checks service-layer.md rules (path match!)
+
+  Step 4: Agent finds issues
+
+  ## Code Review Results
+
+  **TodoService.java (line 15-20)**
+
+  ❌ **Critical:** Field injection detected
+  ```java
+  @Autowired
+  private TodoRepository repository;  // WRONG
+
+  Fix: Use constructor injection per CLAUDE.md standards:
+  public TodoService(TodoRepository repository) {
+      this.repository = repository;
+  }
+
+  ---
+  ❌ Critical: Class not final
+  public class TodoService {  // Should be final
+
+  Fix: Make class final per CLAUDE.md and service-layer.md rules:
+  public final class TodoService {
+
+  ---
+  ⚠️ Warning: Missing @Transactional
+  public void updateTodo(Long id, TodoDTO dto) {
+      // Modifies data but no @Transactional
+  }
+
+  Fix: Add @Transactional per CLAUDE.md standards
+  @Transactional
+  public void updateTodo(Long id, TodoDTO dto) {
+
+  ---
+
+  ## Why This Separation?
+
+  ### CLAUDE.md (Lean, Essential)
+  **Purpose:** Core standards that apply everywhere
+  **When updated:** Rarely, only when project-wide standards change
+  **Size:** Keep under 100-150 lines
+  **Example content:**
+  - "Services must be final"
+  - "Use constructor injection"
+  - "H2 JDBC URL: jdbc:h2:mem:testdb"
+
+  ### Skills (Task-Specific Workflows)
+  **Purpose:** How to do specific tasks
+  **When updated:** When workflow changes
+  **Size:** Can be detailed, uses progressive disclosure
+  **Example content:**
+  - "Step 1: Run git diff"
+  - "Step 2: Use code-reviewer agent"
+  - "Step 3: Check CLAUDE.md standards"
+
+  ### Agents (Specialized Expertise)
+  **Purpose:** Deep knowledge in specific domain
+  **When updated:** When expertise evolves
+  **Size:** Can be comprehensive
+  **Example content:**
+  - "Focus on Spring Boot patterns"
+  - "Check for N+1 queries"
+  - "Verify @Transactional usage"
+
+  ### Rules (Path-Specific Standards)
+  **Purpose:** Context-specific requirements
+  **When updated:** When specific subsystem rules change
+  **Size:** Focused on specific paths
+  **Example content:**
+  - "Controllers must validate all input"
+  - "Services must be final"
+  - "Repositories: no business logic"
+
+  ---
+
+  ## As Project Grows: What Gets Updated?
+
+  ### Month 1: Initial Setup
+  CLAUDE.md:
+  - Constructor injection required
+  - Services must be final
+  - H2 setup info
+
+  Skills: code-review (basic)
+  Agents: code-reviewer (basic)
+  Rules: java-style.md (basic)
+
+  ### Month 3: Security Issues Found
+  CLAUDE.md UPDATED:
+  - Never log passwords or tokens
+  - Always sanitize user input before queries
+
+  code-reviewer agent UPDATED:
+  - Check for exposed secrets in logs
+  - Verify SQL injection prevention
+
+  service-layer.md rule UPDATED:
+  - All user input must be validated
+
+  ### Month 6: Performance Problems
+  CLAUDE.md UPDATED:
+  - Use @BatchSize for collections
+  - Add indexes for frequently queried fields
+
+  code-reviewer agent UPDATED:
+  - Check for N+1 query patterns
+  - Verify lazy loading configuration
+
+  NEW RULE: repository-layer.md
+  - Custom queries must use @Query
+  - Use Pageable for large result sets
+
+  ---
+
+  ## Key Insight
+
+  **CLAUDE.md = Universal Truth**
+  - "Services are final" → Every agent, skill, and rule inherits this
+  - Updated rarely, only for project-wide standards
+
+  **Skills/Agents/Rules = Specialized Application**
+  - They reference and apply CLAUDE.md in specific contexts
+  - Updated frequently as you discover patterns
+
+  ---
+
+  ## Practical Example: Evolution
+
+  **Week 1 - Basic CLAUDE.md:**
+  ```markdown
+  ## Standards
+  - Use constructor injection
+
+  Week 4 - Found Bug:
+  You discover field injection caused a circular dependency bug.
+
+  Update CLAUDE.md:
+  ## Standards (Critical - Prevents Bugs)
+  - ✅ Constructor injection only
+  - ❌ NEVER use @Autowired on fields (causes circular dependencies)
+
+  Now ALL future code reviews automatically check this!
+  - Skills read CLAUDE.md
+  - Agents apply CLAUDE.md standards
+  - Rules enforce CLAUDE.md patterns
+
+  ---
+  Your Question Answered
+
+  "How will CLAUDE.md play a role in code review?"
+
+  Answer:
+  1. CLAUDE.md stores the "what" - What standards must be followed
+  2. Skills define the "how" - How to perform code review workflow
+  3. Agents provide the "expertise" - Deep Spring Boot knowledge
+  4. Rules enforce the "where" - Path-specific requirements
+
+  All of them reference CLAUDE.md as the source of truth.
+
+  When you run a code review:
+  - Skill orchestrates the process
+  - Agent does the analysis
+  - Both check against CLAUDE.md standards
+  - Rules add path-specific checks
+  - You get comprehensive, consistent feedback
+
+  ---
+  Does this clarify how they work together?
+
+  Now do you want to:
+
+  A) Create the lean CLAUDE.md I proposed
+  B) Keep existing CLAUDE.md and add just critical standards
+  C) Create CLAUDE.md + one example skill (code-review) + one agent (code-reviewer) to see the full workflow

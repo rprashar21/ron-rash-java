@@ -1,0 +1,246 @@
+# GitHub CLI Integration Guide
+
+## What is gh (GitHub CLI)?
+
+`gh` is the official GitHub Command Line Interface. It lets you interact with GitHub directly from your terminal without opening a browser. This is especially useful when working with Claude Code for automated workflows.
+
+### Installation
+
+```bash
+# macOS
+brew install gh
+
+# Linux/WSL
+sudo apt-get install gh
+
+# Or visit https://cli.github.com
+```
+
+### Authentication
+
+```bash
+gh auth login
+# Follow prompts to authenticate
+# Credentials are stored locally for future use
+```
+
+---
+
+## Core GitHub Operations
+
+### Pull Requests
+
+```bash
+# Create a new PR
+gh pr create --title "Your title" --body "Description"
+
+# Create PR with multiple options
+gh pr create --title "Fix: Bug in login" \
+  --body "Fixes #123. Changes include..." \
+  --reviewer @username \
+  --assignee @username \
+  --base main
+
+# List all open PRs
+gh pr list
+
+# View specific PR details
+gh pr view 123
+
+# Check PR status (your PRs)
+gh pr status
+
+# Review a PR
+gh pr review 123 --approve
+gh pr review 123 --request-changes
+gh pr review 123 --comment -b "Looks good!"
+
+# Merge a PR
+gh pr merge 123                    # Interactive
+gh pr merge 123 --merge            # Squash commits
+gh pr merge 123 --squash           # Squash commits
+gh pr merge 123 --rebase           # Rebase commits
+gh pr merge 123 --delete-branch    # Delete branch after merge
+
+# Check out a PR locally
+gh pr checkout 123
+```
+
+### Issues
+
+```bash
+# Create an issue
+gh issue create --title "Bug: Login broken"
+gh issue create --title "Feature request" --body "Description" --label "enhancement"
+
+# List issues
+gh issue list
+gh issue list --state open
+gh issue list --label bug
+
+# View issue details
+gh issue view 123
+
+# Close an issue
+gh issue close 123
+
+# Reopen an issue
+gh issue reopen 123
+```
+
+### Repositories
+
+```bash
+# View repository info
+gh repo view
+
+# List your repos
+gh repo list
+
+# Clone a repo
+gh repo clone username/repo-name
+
+# Create a new repo
+gh repo create my-repo --public
+gh repo create my-repo --private --source=. --remote=origin --push
+```
+
+### Branches
+
+```bash
+# Check out a branch
+gh repo clone username/repo && gh co branch-name
+
+# List branches
+git branch -a
+
+# Delete a remote branch
+git push origin --delete branch-name
+```
+
+---
+
+## Common Workflows with Claude Code
+
+### Workflow 1: Create Feature Branch → Commit → Create PR
+
+```bash
+# 1. Create and switch to feature branch
+git checkout -b feature/new-feature
+
+# 2. Make changes (Claude Code handles this)
+
+# 3. Stage and commit
+git add .
+git commit -m "Add new feature"
+
+# 4. Push to remote
+git push -u origin feature/new-feature
+
+# 5. Create PR
+gh pr create --title "Add new feature" \
+  --body "This PR adds the new feature. It includes..."
+```
+
+### Workflow 2: Review and Merge a PR
+
+```bash
+# List open PRs
+gh pr list
+
+# View PR details
+gh pr view 123
+
+# Review the PR
+gh pr review 123 --approve
+
+# Merge the PR
+gh pr merge 123 --squash --delete-branch
+```
+
+### Workflow 3: Work with Multiple Reviewers
+
+```bash
+# Create PR with multiple reviewers
+gh pr create --title "Important feature" \
+  --body "Description" \
+  --reviewer @user1,@user2,@user3
+
+# Check review status
+gh pr view 123
+
+# Request changes from specific reviewer
+gh pr review 123 --request-changes -b "Please update..."
+```
+
+### Workflow 4: Link Issues to PRs
+
+```bash
+# Create PR that closes an issue
+gh pr create --title "Fix: Login bug" \
+  --body "Fixes #123"
+
+# Comment on PR with issue reference
+gh pr comment 123 -b "Fixes #456"
+```
+
+---
+
+## Advanced gh Commands
+
+### API Access
+```bash
+# Use gh api for advanced queries
+gh api repos/{owner}/{repo}/issues
+gh api search/issues --input - << 'EOF'
+{"query": "is:open repo:owner/repo"}
+EOF
+```
+
+### Watch Repository Activity
+```bash
+# Get notifications
+gh notification list
+
+# View activity
+gh run list
+gh run view <run-id>
+```
+
+### Complex PR Operations
+```bash
+# Merge only if checks pass
+gh pr merge 123 --auto --squash
+
+# Merge with custom commit message
+gh pr merge 123 --squash --body "Custom message"
+
+# Draft PR (ready for feedback)
+gh pr create --draft --title "WIP: Feature"
+```
+
+---
+
+## Tips for Working with Claude Code
+
+1. **Auto-authentication**: Once authenticated with `gh auth login`, all future commands work automatically
+2. **Readable PR descriptions**: Claude Code creates clear, detailed PR descriptions using HEREDOC syntax
+3. **Branch management**: Use descriptive branch names (feature/*, fix/*, docs/*)
+4. **Squash commits**: Use `--squash` when merging to keep history clean
+5. **Reviewers**: Always request reviewers for important PRs
+
+---
+
+## Troubleshooting
+
+```bash
+# Check authentication status
+gh auth status
+
+# Re-authenticate if needed
+gh auth logout
+gh auth login
+
+# Verify gh installation
+gh --version
+```

@@ -1,0 +1,49 @@
+what are ai agents -- intelligent systems that recives a high level goal from a user and autonomously
+plans decide and excute certain steps using external tools which we give access alll while maintaing context ,reasoining over multiple steps
+adopting to new information and optimizing the outcome
+: An agent's "knowledge" is often just a very clever game of copy-paste.
+ It finds the info in a database, pastes it into its prompt, and then "reasons" over it!
+
+Goal driven -- you tell ur agent what to do not how to do it ??
+Autonomous planning -- agents breaks the problem into a sequence of actions
+Tools used -- agents call apis,external tools search tools etc
+context aware -- meomory of the steps
+adaptive -- rethinks when plans change and do not go as according
+
+They are many design  patterns in ai agenst
+ReAct -- design pattern where reasoning and action -- the ai agent will do reasoning and then react on that
+its a multistep process
+Thought - what is the capital of france
+action - search_tool -- what is that tool maybe chrome browser
+observation - paris
+
+Thought - Now i need the population of france
+action - search_tool -- what is that tool maybe chrome browser
+observation - 2.1 million
+
+
+Thought - what is the capital of france
+action - search_tool -- what is that tool maybe chrome browser
+observation - paris
+
+Thought - Now i have the final answer
+final answer - the capital of frnace is paris with a population of 2.1 million
+
+Ai Agents and Agent Executors-- orchestrates the entore loop
+sends the user query to the agent and thought trace{}
+
+agent = create_agent(
+llm=llm,
+tools =[search_tool]
+prompt=prompt
+)
+# main work of the agent executor is to basically access external tools get the result and maintin the loop fr the agent
+agent_executor= Agent_executor(
+agent =agent
+tools =[search_tool],
+verbose=True --> providing excessive or unnecessary detail, either in code--
+)
+
+the flowchart
+
+agent executor--> recive the query
