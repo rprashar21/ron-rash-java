@@ -1,0 +1,479 @@
+
+# Claude Code Skills Guide
+
+Skills are custom automation commands that extend Claude Code with specialized functionality. They allow you to create shortcuts for repeated workflows or integrate external tools seamlessly.
+
+---
+
+## What Are Skills?
+
+Skills are reusable automation functions that:
+- **Simplify complex workflows** - Combine multiple steps into one command
+- **Integrate external tools** - Connect to build systems, APIs, deployment platforms
+- **Speed up development** - Avoid typing the same commands repeatedly
+- **Add custom logic** - Implement project-specific workflows
+
+### Examples of Skills
+
+```
+/commit          → Auto-format and commit changes with generated messages
+/deploy          → Build, test, and deploy in one command
+/review-pr       → Automated code review against best practices
+/generate-docs   → Auto-generate documentation from code
+/format-code     → Format code according to project standards
+```
+
+---
+
+## Using Built-in Skills
+
+### Checking Available Skills
+
+```bash
+# Ask Claude Code what skills are available
+# Or check the .claude/skills/ directory
+ls .claude/skills/
+```
+
+### Running a Skill
+
+Skills are invoked with the `/` prefix:
+
+```
+/commit
+/deploy
+/review-pr 123
+/generate-docs src/
+```
+
+### Skill Output
+
+When you run a skill, Claude:
+1. Executes the skill's logic
+2. Shows you the results
+3. Asks for approval if needed
+4. Implements the changes
+
+---
+
+## Creating Custom Skills
+
+### Skill Structure
+
+Skills are stored in `.claude/skills/` directory:
+
+```
+.claude/
+├── skills/
+│   ├── skill_name/
+│   │   ├── skill.md          (Metadata and description)
+│   │   ├── script.sh         (Bash implementation)
+│   │   └── config.json       (Configuration)
+│   └── another-skill/
+```
+
+### Basic Skill Example: `/format-code`
+
+**Step 1: Create skill directory**
+```bash
+mkdir -p .claude/skills/format-code
+```
+
+**Step 2: Create skill.md (metadata)**
+```markdown
+# Format Code Skill
+
+Description: Automatically format all code files in the project
+
+Usage: `/format-code`
+
+Options:
+- `--staged`: Only format staged files
+- `--eslint`: Use ESLint configuration
+
+Keywords: formatting, code-quality, prettier
+```
+
+**Step 3: Create script.sh (implementation)**
+```bash
+#!/bin/bash
+
+# Format code using prettier
+npx prettier --write "src/**/*.{js,jsx,ts,tsx}"
+
+echo "Code formatted successfully!"
+```
+
+**Step 4: Create config.json**
+```json
+{
+  "name": "format-code",
+  "description": "Format code files",
+  "command": "bash script.sh",
+  "environments": ["node"],
+  "options": {
+    "staged": {
+      "flag": "--staged",
+      "description": "Format only staged files"
+    }
+  }
+}
+```
+
+### More Complex Skill Example: `/smart-commit`
+
+**Purpose**: Auto-generate meaningful commit messages based on changes
+
+**skill.md**
+```markdown
+# Smart Commit Skill
+
+Analyzes changes and generates appropriate commit messages automatically.
+
+Usage: `/smart-commit`
+
+Options:
+- `--push`: Also push to remote after commit
+- `--force`: Skip validation checks
+
+This skill:
+1. Analyzes your changes
+2. Generates appropriate commit message
+3. Commits with emojis and structure
+```
+
+**script.sh**
+```bash
+#!/bin/bash
+
+# Check if there are changes
+if git diff --quiet && git diff --cached --quiet; then
+  echo "No changes to commit"
+  exit 1
+fi
+
+# Generate commit type based on changes
+COMMIT_MSG=$(claude-analyze-changes)
+
+# Commit with message
+git add .
+git commit -m "$COMMIT_MSG"
+
+if [[ "$1" == "--push" ]]; then
+  git push
+fi
+```
+
+---
+
+## Common Skill Templates
+
+### Template 1: Testing Skill
+
+```bash
+#!/bin/bash
+# runs tests and reports coverage
+
+npm test -- --coverage
+COVERAGE=$(grep -o '"lineCoverage"[^,]*' coverage/coverage-summary.json | cut -d: -f2)
+
+if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+  echo "✓ Coverage: $COVERAGE% - PASS"
+else
+  echo "✗ Coverage: $COVERAGE% - FAIL"
+  exit 1
+fi
+```
+
+### Template 2: Build and Deploy Skill
+
+```bash
+#!/bin/bash
+# builds and deploys the application
+
+set -e  # Exit on error
+
+echo "Building project..."
+npm run build
+
+echo "Running tests..."
+npm test
+
+echo "Deploying..."
+npm run deploy
+
+echo "Deployment complete!"
+```
+
+### Template 3: Code Quality Skill
+
+```bash
+#!/bin/bash
+# runs linting and formatting checks
+
+echo "Running ESLint..."
+npm run lint
+
+echo "Checking formatting..."
+npx prettier --check "src/**/*.{js,jsx,ts,tsx}"
+
+echo "Type checking..."
+npm run type-check
+
+echo "All checks passed!"
+```
+
+---
+
+## When to Create a Skill
+
+### Create a Skill When:
+
+1. **Repeated Workflows**
+   - You run the same sequence of commands regularly
+   - Example: Deploy to staging → run tests → deploy to production
+
+2. **Complex Multi-Step Operations**
+   - Multiple tools need to be orchestrated
+   - Example: Build → test → format → commit → push
+
+3. **Project-Specific Requirements**
+   - Your project has custom build/deployment procedures
+   - Example: Database migrations → app build → deployment
+
+4. **Automation Benefits**
+   - Save significant time per execution
+   - Reduce human error
+   - Standardize workflows across team
+
+### Don't Create a Skill When:
+
+- It's a one-time operation
+- It's a simple command that runs once in a while
+- The workflow changes frequently
+- It's just calling a single existing command
+
+---
+
+## Sharing Skills
+
+### Share with Team
+
+1. **Commit to repo**
+```bash
+git add .claude/skills/
+git commit -m "Add: new-skill for team use"
+git push
+```
+
+2. **Document in README**
+```markdown
+## Available Skills
+
+- `/format-code` - Format all code files
+- `/smart-commit` - Auto-generate commit messages
+- `/deploy-staging` - Deploy to staging environment
+```
+
+### Share Publicly
+
+1. Create GitHub repository with skill
+2. Document thoroughly
+3. Include examples and troubleshooting
+
+---
+
+## Advanced Skill Development
+
+### Using Environment Variables
+
+```bash
+#!/bin/bash
+
+# Access project environment
+PROJECT_NAME=${PROJECT_NAME:-"MyProject"}
+BUILD_ENV=${BUILD_ENV:-"development"}
+
+echo "Building $PROJECT_NAME in $BUILD_ENV mode"
+```
+
+### Input Parameters
+
+```bash
+#!/bin/bash
+
+# Skill takes parameters
+VERSION=$1
+if [ -z "$VERSION" ]; then
+  echo "Usage: /release <version>"
+  exit 1
+fi
+
+echo "Releasing version $VERSION"
+```
+
+### Error Handling
+
+```bash
+#!/bin/bash
+
+set -e  # Exit on error
+set -o pipefail  # Exit on pipe failure
+
+trap 'echo "Error on line $LINENO"' ERR
+
+# Your commands here
+npm run build || { echo "Build failed"; exit 1; }
+```
+
+### Conditional Logic
+
+```bash
+#!/bin/bash
+
+# Check if on main branch
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [ "$BRANCH" != "main" ]; then
+  echo "Error: Can only deploy from main branch"
+  exit 1
+fi
+
+echo "Deploying from main..."
+```
+
+---
+
+## Skill Best Practices
+
+1. **Keep Skills Focused**
+   - One skill = one purpose
+   - Don't try to do everything in one skill
+
+2. **Add Error Checking**
+   ```bash
+   if [ $? -ne 0 ]; then
+     echo "Previous command failed"
+     exit 1
+   fi
+   ```
+
+3. **Provide User Feedback**
+   ```bash
+   echo "Step 1: Building..."
+   npm run build
+   echo "✓ Build complete"
+   ```
+
+4. **Document Thoroughly**
+   - Write clear skill.md metadata
+   - Include usage examples
+   - Document all options
+
+5. **Test Before Sharing**
+   - Run skill multiple times
+   - Test error cases
+   - Check on different environments
+
+6. **Version Your Skills**
+   - Update version in config when changing behavior
+   - Document breaking changes
+   - Keep backward compatibility when possible
+
+---
+
+## Skill Limitations
+
+| Limitation | Workaround |
+|-----------|-----------|
+| Can't prompt for user input | Use environment variables or command-line flags |
+| Can't run interactive commands | Use non-interactive alternatives |
+| Can't access secrets directly | Use `.env` files or credential managers |
+| Can't modify Claude's core behavior | Work within skill's provided hooks |
+
+---
+
+## Examples from the Real World
+
+### Example 1: Python Project Skill
+
+```bash
+#!/bin/bash
+# skill: /python-test
+
+python -m pytest --cov=src --cov-report=html
+python -m mypy src/
+python -m black src/ --check
+python -m isort src/ --check
+
+echo "All Python checks passed!"
+```
+
+### Example 2: Docker Skill
+
+```bash
+#!/bin/bash
+# skill: /docker-dev
+
+docker-compose build
+docker-compose up -d
+docker-compose logs -f
+
+echo "Development environment running!"
+```
+
+### Example 3: Documentation Skill
+
+```bash
+#!/bin/bash
+# skill: /generate-api-docs
+
+npm run docs:generate
+if [ -d "docs" ]; then
+  echo "✓ Docs generated in ./docs"
+  echo "View at: file://$(pwd)/docs/index.html"
+fi
+```
+
+---
+
+## Quick Reference
+
+### Common Skill Commands
+
+| Skill | Purpose |
+|-------|---------|
+| `/format-code` | Format code files |
+| `/test` | Run test suite |
+| `/build` | Build project |
+| `/deploy-staging` | Deploy to staging |
+| `/deploy-production` | Deploy to production |
+| `/smart-commit` | Generate commit message |
+| `/generate-docs` | Generate documentation |
+| `/check-quality` | Run quality checks |
+
+### Skill Development Checklist
+
+- [ ] Create `.claude/skills/<skill-name>/` directory
+- [ ] Write `skill.md` with description and usage
+- [ ] Write `script.sh` with implementation
+- [ ] Create `config.json` with metadata
+- [ ] Test skill thoroughly
+- [ ] Add error handling
+- [ ] Document all options
+- [ ] Commit to repository
+- [ ] Share with team
+
+---
+
+## Getting Help
+
+```bash
+# See available skills
+/help
+
+# Get info about specific skill
+/help <skill-name>
+
+# View skill source code
+cat .claude/skills/<skill-name>/script.sh
+```

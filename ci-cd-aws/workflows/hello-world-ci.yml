@@ -1,0 +1,76 @@
+name: Hello World CI Pipeline
+
+# WHEN TO RUN
+on:
+  push:
+    branches: [main, develop, test/pr-creation-test]  # Run on push to these branches
+  pull_request:
+    branches: [main, develop]  # Run on PR to these branches
+  workflow_dispatch:  # Allow manual trigger via GitHub UI
+
+# WHAT TO DO
+jobs:
+  # JOB 1: Build and Test
+  build:
+    runs-on: ubuntu-latest  # Run on Linux
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']  # Test on multiple Python versions
+
+    steps:
+      # STEP 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # STEP 2: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # STEP 3: Display Python version (debugging)
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      # STEP 4: Run the app
+      - name: Run Hello World App
+        run: python hello_world_app.py
+
+      # STEP 5: Run tests
+      - name: Run unit tests
+        run: |
+          python -m unittest test_hello_world_app.py -v
+
+  # JOB 2: Code Quality Check (runs in parallel with build job)
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install linting tools
+        run: |
+          pip install flake8 pylint
+
+      - name: Check code style with flake8
+        run: flake8 hello_world_app.py test_hello_world_app.py --max-line-length=120
+        continue-on-error: true  # Don't fail the workflow if linting finds issues
+
+  # JOB 3: Summary (only runs if previous jobs succeed)
+  summary:
+    needs: [build, quality]  # Wait for build and quality jobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pipeline Summary
+        run: |
+          echo "✅ Build successful!"
+          echo "✅ Tests passed on Python 3.9, 3.10, 3.11"
+          echo "✅ Code quality checked"
+          echo "🎉 Your CI/CD pipeline is working!"

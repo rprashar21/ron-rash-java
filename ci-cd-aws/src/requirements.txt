@@ -1,0 +1,20 @@
+# Python Dependencies for CI/CD Learning
+
+# Core dependencies
+anthropic>=0.7.0  # Anthropic API for AI agents
+
+# Testing dependencies
+pytest>=7.0.0          # Testing framework
+pytest-cov>=4.0.0      # Coverage reporting
+unittest2>=1.1.0       # Extended unittest (Python 2/3 compatibility)
+
+# Code quality
+flake8>=6.0.0          # Linting
+pylint>=2.17.0         # Code analysis
+black>=23.0.0          # Code formatter
+
+# AWS (optional, for local testing)
+boto3>=1.26.0          # AWS SDK
+
+# Utilities
+python-dotenv>=1.0.0   # Environment variable management

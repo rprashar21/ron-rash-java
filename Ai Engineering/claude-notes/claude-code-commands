@@ -1,0 +1,447 @@
+sti# Claude Code Commands and Features Guide
+
+This guide documents all available Claude Code commands and features for effective AI-assisted development.
+
+## What is Claude Code?
+
+Claude Code is Anthropic's official CLI tool for Claude that helps with software engineering tasks. It runs locally on your machine and connects to Claude via the API, allowing you to:
+- Chat with Claude about code
+- Have Claude read, edit, and write files
+- Run shell commands and see output
+- Search your codebase
+- Create pull requests and manage GitHub
+- Use specialized agents for complex tasks
+
+---
+
+## Getting Started
+
+### Installation
+
+```bash
+# Install Claude Code
+npm install -g @anthropic-ai/claude-code
+
+# Or via pip
+pip install anthropic-claude-code
+
+# Verify installation
+claude-code --version
+```
+
+### Configuration
+
+```bash
+# Set API key
+export ANTHROPIC_API_KEY="your-api-key-here"
+
+# Start Claude Code session
+claude-code
+```
+
+---
+
+## Core Commands (Slash Commands)
+
+Slash commands are special instructions you can use within Claude Code conversations.
+
+### File Operations
+
+#### `/read`
+Read and analyze files in your codebase
+
+```
+/read src/main/java/App.java
+```
+
+**Use when:**
+- You need to understand existing code
+- You're debugging and need to see the full context
+- You're making informed changes
+
+#### `/edit`
+Make targeted edits to files
+
+```
+/edit src/main/java/App.java
+# Change line 10 from "foo" to "bar"
+```
+
+**Use when:**
+- Making surgical changes to specific lines
+- You don't want to rewrite the whole file
+- You need precision edits
+
+#### `/write`
+Create or overwrite entire files
+
+```
+/write path/to/new-file.java
+# Content goes here
+```
+
+**Use when:**
+- Creating brand new files
+- Replacing entire file contents
+- Setting up new modules
+
+---
+
+### Project Navigation
+
+#### `/help`
+Get help with Claude Code
+
+```
+/help
+```
+
+Shows available commands and features
+
+#### `/clear`
+Clear conversation history
+
+```
+/clear
+```
+
+Resets the current session (keeps context knowledge but clears message history)
+
+---
+
+### Code Analysis Commands
+
+#### Search Commands
+These are typically handled automatically, but you can request:
+
+- **Find function definitions**: Ask Claude to find where a function is defined
+- **Find usage**: Ask Claude to find where something is used
+- **Search patterns**: Ask Claude to search for specific code patterns
+
+Example:
+```
+Find all places where validateUser is called
+```
+
+---
+
+## Advanced Features
+
+### 1. Agents
+
+Agents are specialized AI assistants that handle complex, multi-step tasks autonomously.
+
+**Available Agent Types:**
+
+- **general-purpose**: Research, code search, multi-step tasks
+- **Explore**: Quickly understand codebase structure
+- **Plan**: Design implementation approaches
+- **statusline-setup**: Configure Claude Code settings
+
+**Example Usage:**
+```
+Claude, use the Explore agent to understand how authentication works in this codebase
+```
+
+### 2. Task Management with TodoWrite
+
+Track progress on complex tasks using the TodoWrite tool.
+
+**Features:**
+- Create task lists for complex projects
+- Track status: pending, in_progress, completed
+- Mark tasks complete as you finish them
+- Keep user informed of progress
+
+**How Claude Uses It:**
+```
+I'm going to use TodoWrite to create a task list for this feature:
+1. Create database schema (pending)
+2. Implement API endpoints (pending)
+3. Write tests (pending)
+4. Deploy (pending)
+
+Now I'll start working on task 1...
+
+Task 1 complete! Moving to task 2...
+```
+
+---
+
+### 3. GitHub Integration
+
+Claude can create and manage pull requests automatically.
+
+**Common PR Workflow:**
+```bash
+# Claude reads your code, makes changes, then:
+1. Commits changes: git commit -m "message"
+2. Pushes branch: git push -u origin feature/name
+3. Creates PR: gh pr create --title "..." --body "..."
+```
+
+**What Claude Does:**
+- Analyzes all staged changes
+- Writes clear, descriptive PR titles and descriptions
+- Follows your repo's commit message conventions
+- Manages reviewers and branch cleanup
+
+---
+
+### 4. Shell Commands
+
+Claude can execute bash commands and see output.
+
+**Safe Operations:**
+```bash
+# These are commonly used:
+git status
+git diff
+npm test
+mvn clean compile
+docker ps
+```
+
+**What Claude Won't Do:**
+- Run destructive commands without asking
+- Execute commands with dangerous flags (--force-push, etc.)
+- Skip security checks
+
+---
+
+## How to Work Effectively with Claude Code
+
+### 1. Be Specific with Requests
+
+**Good:**
+```
+Add a logout button to the Settings page that calls the /api/logout endpoint
+```
+
+**Bad:**
+```
+Make the app better
+```
+
+### 2. Provide Context
+
+**Before asking for changes:**
+- Tell Claude which file to look at
+- Explain the current behavior
+- Describe what you want instead
+
+```
+I have a LoginForm component at src/components/LoginForm.js that currently
+only validates email. Can you add password validation with these rules:
+- At least 8 characters
+- One uppercase letter
+- One number
+```
+
+### 3. Review Changes
+
+Always review what Claude suggests before approving:
+- Check the diff
+- Understand the changes
+- Ask questions if unclear
+
+### 4. Iterative Development
+
+Use multiple rounds of conversation:
+
+```
+Claude: "I've implemented the authentication. Here are the changes..."
+You: "This looks good, but I want to change how the error messages display"
+Claude: "I'll update the error handling..."
+```
+
+---
+
+## Common Workflows
+
+### Workflow 1: Bug Fix
+
+1. **Describe the bug**
+   ```
+   The login page shows a 500 error when submitting the form
+   ```
+
+2. **Let Claude investigate**
+   - Claude reads error logs
+   - Examines related code
+   - Identifies root cause
+
+3. **Review the fix**
+   - Claude proposes changes
+   - You approve or request modifications
+
+4. **Create PR**
+   - Claude commits and pushes
+   - Creates PR with description
+
+### Workflow 2: Feature Development
+
+1. **Outline the feature**
+   ```
+   I want to add dark mode to the app. Here's what I need:
+   - Toggle in settings
+   - CSS theme switching
+   - Store preference in localStorage
+   ```
+
+2. **Claude creates plan**
+   - Uses /Plan agent to design approach
+   - Shows you the plan
+   - Gets your approval
+
+3. **Implementation**
+   - Claude builds components
+   - Updates styles
+   - Adds tests
+
+4. **Review and merge**
+   - You review changes
+   - Claude creates PR
+   - Gets approval and merges
+
+### Workflow 3: Refactoring
+
+1. **Identify code to refactor**
+   ```
+   This codebase has a lot of duplicated utility functions
+   ```
+
+2. **Claude analyzes**
+   - Finds common patterns
+   - Proposes consolidation
+   - Shows impact analysis
+
+3. **Implement**
+   - Claude refactors code
+   - Updates all references
+   - Runs tests
+
+---
+
+## Settings and Configuration
+
+### Claude Code Settings
+
+Available settings (typically in `.claude/settings.json`):
+- API configuration
+- Default behaviors
+- Integration preferences
+- Hooks for custom workflows
+
+### Hooks
+
+Hooks are custom shell commands that run on specific events:
+
+**Common Hooks:**
+```bash
+# Run tests after file changes
+post-edit-hook: npm test
+
+# Format code before commit
+pre-commit-hook: prettier --write .
+
+# Build project after merge
+post-merge-hook: npm run build
+```
+
+---
+
+## Best Practices
+
+### 1. Start with /help
+When in doubt, use `/help` to see available options.
+
+### 2. Use Agents for Complex Tasks
+Don't ask Claude to do everything manually. Use specialized agents:
+- **Explore**: For understanding codebase
+- **Plan**: For architectural decisions
+- **general-purpose**: For research and multi-step tasks
+
+### 3. Create Task Lists
+For projects > 3 steps, use TodoWrite so Claude tracks progress.
+
+### 4. Commit Frequently
+Small, focused commits are better than one massive commit.
+
+### 5. Review Before Merge
+Always review PRs before clicking merge, even if Claude created them.
+
+### 6. Use Descriptive Branch Names
+Follow conventions:
+- `feature/` - new features
+- `fix/` - bug fixes
+- `docs/` - documentation
+- `refactor/` - code refactoring
+- `test/` - test additions
+
+---
+
+## Limitations and Workarounds
+
+| Limitation | Workaround |
+|-----------|-----------|
+| Can't see real-time terminal output | Ask Claude to save output to file, then read it |
+| Can't use interactive git rebase | Claude will manually handle merge conflicts |
+| Can't test frontend changes visually | Ask for screenshots or run local server |
+| Can't access private APIs | Provide API docs or example responses |
+
+---
+
+## Keyboard Shortcuts
+
+*Note: These depend on your terminal and shell configuration*
+
+```bash
+Ctrl+C          # Interrupt current operation
+Ctrl+D          # Exit Claude Code
+Up Arrow        # Recall previous messages
+Tab             # Autocomplete (shell commands)
+```
+
+---
+
+## Troubleshooting
+
+### Claude Can't Find a File
+```
+Solution: Use /read with the exact path or ask Claude to search first
+```
+
+### PR Creation Fails
+```bash
+# Check GitHub authentication
+gh auth status
+
+# Re-authenticate if needed
+gh auth logout
+gh auth login
+```
+
+### Changes Didn't Apply
+```
+Solution: Ask Claude to check git status and verify the changes
+git status
+git diff
+```
+
+---
+
+## Quick Reference
+
+| Need | Command/Action |
+|------|----------------|
+| Get help | `/help` |
+| Read a file | `/read path/to/file` |
+| Edit a file | `/edit path/to/file` |
+| Create a file | `/write path/to/file` |
+| Clear conversation | `/clear` |
+| Create task list | Ask Claude to use TodoWrite |
+| Create PR | Ask Claude to create pull request |
+| Understand codebase | Ask Claude to use Explore agent |
+| Plan a feature | Ask Claude to use Plan agent |
+| Run command | Ask Claude to run the command |

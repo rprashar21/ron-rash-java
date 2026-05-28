@@ -1,0 +1,581 @@
+cla# TodoWrite Guide: Task Management in Claude Code
+
+TodoWrite is a task management tool that helps organize and track progress on complex projects. It provides visibility into what's being done and helps Claude stay focused on completing all required tasks.
+
+---
+
+## What is TodoWrite?
+
+TodoWrite is a task tracking system that:
+- **Plans work**: Break complex tasks into manageable steps
+- **Tracks progress**: Mark tasks as you complete them
+- **Shows visibility**: Let you see what's being done
+- **Ensures completion**: Prevent important tasks from being forgotten
+- **Coordinates work**: Help Claude and you stay aligned on what needs to be done
+
+---
+
+## Task States
+
+Every task has one of three states:
+
+### Pending
+```
+Status: pending
+Meaning: Not started yet, waiting to begin
+```
+
+### In Progress
+```
+Status: in_progress
+Meaning: Currently being worked on
+Note: Only ONE task should be in_progress at a time
+```
+
+### Completed
+```
+Status: completed
+Meaning: Finished successfully
+```
+
+---
+
+## Task Structure
+
+Each task must have:
+
+1. **Content** (what needs to be done)
+   ```
+   "Add user authentication to the login form"
+   ```
+
+2. **Active Form** (how it's described while working)
+   ```
+   "Adding user authentication to the login form"
+   ```
+
+3. **Status** (pending/in_progress/completed)
+   ```
+   "in_progress"
+   ```
+
+### Example
+
+```
+Content:      "Run tests"
+Active Form:  "Running tests"
+Status:       "pending"
+```
+
+---
+
+## When to Use TodoWrite
+
+### Use TodoWrite When:
+
+✓ Task requires 3+ steps
+✓ Complex, non-trivial work
+✓ Multi-file changes
+✓ Need to coordinate multiple operations
+✓ Want visibility into progress
+
+### Don't Use TodoWrite When:
+
+✗ Single, straightforward task
+✗ Trivial operation (< 3 steps)
+✗ Task can be completed in seconds
+✗ Just informational/research
+✗ One-line fixes or edits
+
+---
+
+## Real-World Examples
+
+### Example 1: Dark Mode Feature
+
+**Scenario**: Implement dark mode in a React app
+
+**Todo List**:
+```
+1. Create theme context and provider
+   Status: pending
+   Active Form: "Creating theme context and provider"
+
+2. Add theme toggle component
+   Status: pending
+   Active Form: "Adding theme toggle component"
+
+3. Update CSS for dark theme
+   Status: pending
+   Active Form: "Updating CSS for dark theme"
+
+4. Store theme preference in localStorage
+   Status: pending
+   Active Form: "Storing theme preference in localStorage"
+
+5. Update components to use theme
+   Status: pending
+   Active Form: "Updating components to use theme"
+
+6. Test dark mode across all pages
+   Status: pending
+   Active Form: "Testing dark mode across all pages"
+```
+
+**Progress**:
+```
+[Claude starts with task 1]
+Status: Task 1 is in_progress
+
+[Task 1 completes]
+Status: Task 1 is completed, Task 2 is in_progress
+
+[Continue until all complete]
+```
+
+---
+
+### Example 2: Bug Investigation and Fix
+
+**Todo List**:
+```
+1. Reproduce the bug locally
+   Status: pending
+   Active Form: "Reproducing the bug locally"
+
+2. Check error logs
+   Status: pending
+   Active Form: "Checking error logs"
+
+3. Identify root cause
+   Status: pending
+   Active Form: "Identifying root cause"
+
+4. Write a test that fails
+   Status: pending
+   Active Form: "Writing a test that fails"
+
+5. Fix the bug
+   Status: pending
+   Active Form: "Fixing the bug"
+
+6. Verify test passes
+   Status: pending
+   Active Form: "Verifying test passes"
+
+7. Create PR and get review
+   Status: pending
+   Active Form: "Creating PR and getting review"
+```
+
+---
+
+### Example 3: API Integration
+
+**Todo List**:
+```
+1. Review API documentation
+   Status: pending
+   Active Form: "Reviewing API documentation"
+
+2. Create API client service
+   Status: pending
+   Active Form: "Creating API client service"
+
+3. Add error handling and retry logic
+   Status: pending
+   Active Form: "Adding error handling and retry logic"
+
+4. Integrate API into components
+   Status: pending
+   Active Form: "Integrating API into components"
+
+5. Add loading and error states
+   Status: pending
+   Active Form: "Adding loading and error states"
+
+6. Test with real API
+   Status: pending
+   Active Form: "Testing with real API"
+
+7. Write integration tests
+   Status: pending
+   Active Form: "Writing integration tests"
+```
+
+---
+
+## How Claude Uses TodoWrite
+
+### Step 1: Plan the Work
+
+When you ask Claude to do something complex:
+
+```
+You: "Add a user profile page with avatar upload and profile editing"
+
+Claude: "This is a complex feature. Let me create a todo list to track it."
+```
+
+Claude creates a task list with all necessary steps.
+
+### Step 2: Start Work
+
+```
+Claude: "I'm marking the first task as in_progress: Creating the ProfilePage component"
+[works on the task]
+Claude: "First task complete! Marking as completed and moving to the next task"
+```
+
+### Step 3: Track Progress
+
+```
+Claude shows you progress:
+✓ Create ProfilePage component
+✓ Add avatar upload form
+→ Add profile editing form (in_progress)
+  Add form validation
+  Add save functionality
+  Write tests
+```
+
+### Step 4: Complete
+
+```
+Claude: "All tasks complete! Here's a summary of what was done..."
+```
+
+---
+
+## Best Practices
+
+### 1. Create Specific Tasks
+
+**Good**:
+```
+"Add form validation for email field"
+"Create database migration for users table"
+"Write unit tests for auth service"
+```
+
+**Bad**:
+```
+"Make feature work"
+"Fix stuff"
+"Add things"
+```
+
+### 2. Order Tasks Logically
+
+Put dependencies first:
+```
+1. Create database schema
+2. Create API endpoints (depends on schema)
+3. Create frontend components (depends on API)
+4. Write tests
+```
+
+### 3. Complete One Task Before Starting Another
+
+**Good**:
+```
+Task 1: in_progress
+Task 2: pending
+Task 3: pending
+[Complete task 1]
+Task 1: completed
+Task 2: in_progress
+Task 3: pending
+```
+
+**Bad**:
+```
+Task 1: in_progress
+Task 2: in_progress    ← Wrong! Multiple in_progress
+Task 3: in_progress
+```
+
+### 4. Mark Tasks as Completed Immediately
+
+As soon as a task finishes:
+```
+Claude: "✓ Database migration created. Marking as completed..."
+[Immediately updates todo list]
+```
+
+Don't batch completions.
+
+### 5. Update Task List When Plans Change
+
+If you discover new tasks:
+```
+Claude: "During implementation, I found we need to add caching.
+Adding a new task for this..."
+```
+
+If tasks are no longer needed:
+```
+Claude: "This task is no longer necessary. Removing it from the list..."
+```
+
+---
+
+## Working with Todo Lists
+
+### Starting a Session
+
+You:
+```
+I want to refactor the authentication system. Create a todo list for this.
+```
+
+Claude:
+```
+I'll create a comprehensive task list:
+
+1. Analyze current auth implementation
+   Status: pending
+   Active Form: "Analyzing current auth implementation"
+
+2. Design new auth architecture
+   Status: pending
+   Active Form: "Designing new auth architecture"
+
+[... more tasks ...]
+
+Let me start with the first task.
+```
+
+### During Work
+
+Claude automatically:
+- Shows which task is being worked on
+- Updates status as tasks complete
+- Explains what's happening
+- Asks for approval before major changes
+
+### Customizing the List
+
+If you want changes:
+```
+You: "I think we should add a task to update documentation"
+
+Claude: "Good point. I'll add that to the todo list."
+[Updates the list with new task]
+```
+
+### Monitoring Progress
+
+Check progress anytime:
+```
+You: "What's the status of the refactoring?"
+
+Claude: "Here's the current todo list:
+✓ Analyze current auth implementation
+✓ Design new auth architecture
+→ Implement new authentication service (in_progress)
+  Write tests
+  Update components
+  Remove old auth code
+  Documentation update
+```
+
+---
+
+## Advanced TodoWrite Usage
+
+### Conditional Tasks
+
+Some tasks might be conditional:
+
+```
+4. Deploy to staging
+   Status: pending
+   Active Form: "Deploying to staging"
+
+5. If staging tests pass:
+   - Deploy to production
+   Status: pending
+   Active Form: "Deploying to production"
+```
+
+### Parallel vs Sequential
+
+**Sequential** (one after another):
+```
+1. Build project
+2. Run tests
+3. Deploy
+```
+
+**Parallel** (can happen simultaneously):
+```
+In separate lists:
+- List A: Frontend work
+- List B: Backend work
+```
+
+### Dependency Tracking
+
+Mark dependencies:
+```
+1. Create database schema (no dependencies)
+2. Create API endpoints (depends on #1)
+3. Frontend components (depends on #2)
+```
+
+---
+
+## Common Patterns
+
+### Pattern 1: CRUD Implementation
+
+```
+1. Create model/schema
+2. Create create endpoint
+3. Create read endpoint
+4. Create update endpoint
+5. Create delete endpoint
+6. Write tests for all
+7. Create UI forms
+8. Integrate API
+```
+
+### Pattern 2: Bug Fix Process
+
+```
+1. Understand the bug
+2. Write failing test
+3. Find root cause
+4. Fix the bug
+5. Verify test passes
+6. Check for regressions
+7. Create PR
+```
+
+### Pattern 3: Feature Development
+
+```
+1. Plan architecture
+2. Create backend components
+3. Create frontend components
+4. Integrate frontend with backend
+5. Add error handling
+6. Write tests
+7. Documentation
+8. Code review
+```
+
+---
+
+## Troubleshooting
+
+### Task Stuck in In-Progress
+
+**Problem**: Task shows as in_progress but work is complete
+
+**Solution**:
+```
+You: "The task is actually done, mark it as completed"
+
+Claude: "You're right, marking it as completed now."
+```
+
+### Too Many Tasks
+
+**Problem**: 50+ tasks in the list
+
+**Solution**: Break into sub-tasks or use multiple todo lists
+
+### Lost Track of Tasks
+
+**Problem**: Forgot what needs to be done
+
+**Solution**:
+```
+You: "What's the current status?"
+
+Claude: [Shows complete todo list]
+```
+
+---
+
+## TodoWrite Benefits
+
+1. **Visibility**: Always know what's being done
+2. **Prevents Forgotten Tasks**: No step gets skipped
+3. **Better Planning**: Forces thinking through requirements
+4. **Progress Tracking**: See work completed
+5. **Clear Handoff**: Easy to continue later
+6. **Coordination**: Keep you and Claude aligned
+
+---
+
+## Quick Reference
+
+```
+When to create todo list:
+- Complex feature (3+ steps)
+- Multiple file changes
+- Uncertain how to approach
+- Want transparency
+
+Task states:
+- pending: Not started
+- in_progress: Currently working (max 1)
+- completed: Finished
+
+Best practices:
+- Create specific tasks
+- Order logically (dependencies first)
+- Complete one before next
+- Mark complete immediately
+- Update when plans change
+```
+
+---
+
+## Example Sessions
+
+### Session 1: Feature with Todo
+
+```
+You: Implement user email verification
+
+Claude: [Creates 8-task todo list]
+
+[Works through tasks systematically]
+[Completes each task, marks complete]
+[Shows final summary]
+
+Result: Feature complete with all steps tracked
+```
+
+### Session 2: Quick Fix without Todo
+
+```
+You: Fix typo in the README
+
+Claude: [Fixes immediately]
+[No todo list needed - single task]
+
+Result: Done in seconds
+```
+
+### Session 3: Interrupted Work
+
+```
+Session 1:
+You: Refactor the router
+Claude: [Creates todo list]
+[Completes 3 of 7 tasks]
+[Saves progress]
+
+Session 2 (Next day):
+You: Continue the router refactoring
+Claude: [Resumes with same todo list]
+[Shows completed: 3 of 7]
+[Continues from task 4]
+
+Result: Work continues seamlessly
+```

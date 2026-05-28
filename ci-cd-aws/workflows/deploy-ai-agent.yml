@@ -1,0 +1,111 @@
+name: Deploy AI Agent to AWS Lambda
+
+# Trigger on main branch push or manual trigger
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ai_agent_example.py'
+      - '.github/workflows/deploy-ai-agent.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # Step 1: Create deployment package
+      - name: Create Lambda deployment package
+        run: |
+          mkdir -p lambda-package
+          cp ai_agent_example.py lambda-package/
+
+          # Create a simple Lambda handler
+          cat > lambda-package/lambda_handler.py << 'EOF'
+          import json
+          import os
+          from ai_agent_example import SimpleAIAgent
+
+          def lambda_handler(event, context):
+              """AWS Lambda handler for AI Agent"""
+              try:
+                  # Get request parameters
+                  task_type = event.get('task_type', 'explain')
+                  content = event.get('content', 'CI/CD Pipeline')
+
+                  # Initialize agent
+                  agent = SimpleAIAgent()
+
+                  # Process request
+                  if task_type == 'analyze':
+                      result = agent.analyze_code(content)
+                  elif task_type == 'test':
+                      result = agent.generate_test_cases(content)
+                  else:
+                      result = agent.explain_devops_concept(content)
+
+                  return {
+                      'statusCode': 200,
+                      'body': json.dumps({'result': result})
+                  }
+              except Exception as e:
+                  return {
+                      'statusCode': 500,
+                      'body': json.dumps({'error': str(e)})
+                  }
+          EOF
+
+      # Step 2: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install anthropic -t lambda-package/
+
+      # Step 3: Create ZIP file
+      - name: Create deployment ZIP
+        run: |
+          cd lambda-package
+          zip -r ../agent-deployment.zip .
+          cd ..
+          ls -lh agent-deployment.zip
+
+      # Step 4: Upload artifact (for download/inspection)
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: agent-lambda-package
+          path: agent-deployment.zip
+
+      # Step 5: Deploy to Lambda (requires AWS credentials)
+      # To enable this, set AWS secrets in GitHub (Settings > Secrets)
+      # and uncomment the section below
+      - name: Deploy to AWS Lambda
+        if: false  # Set to true when AWS credentials are configured
+        run: |
+          aws lambda update-function-code \
+            --function-name my-ai-agent \
+            --zip-file fileb://agent-deployment.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+
+      # Step 6: Deployment summary
+      - name: Deployment Summary
+        run: |
+          echo "✅ AI Agent deployment package created"
+          echo "📦 Package: agent-deployment.zip"
+          echo ""
+          echo "To deploy to AWS Lambda:"
+          echo "1. Create Lambda function: my-ai-agent"
+          echo "2. Set environment variable: ANTHROPIC_API_KEY"
+          echo "3. Enable AWS secrets in GitHub Settings"
+          echo "4. Uncomment the 'Deploy to Lambda' step above"
+          echo "5. Push to main branch to trigger deployment"

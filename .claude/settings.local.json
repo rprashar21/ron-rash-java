@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/rohitprashar/Desktop/ronrashjav/ci-cd-aws/STRUCTURE.md:*)",
+      "Bash(/Users/rohitprashar/Desktop/ronrashjav/ci-cd-aws/guides/START_HERE.md:*)",
+      "Bash(gh pr:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)"
+    ]
+  }
+}

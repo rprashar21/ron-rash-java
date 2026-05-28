@@ -1,0 +1,393 @@
+# Git Commands Guide for Claude Code
+
+This guide covers essential Git commands used when working with Claude Code for version control and GitHub integration.
+
+## Basic Setup
+
+```bash
+# Configure git (one time)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Check configuration
+git config --list
+```
+
+---
+
+## Essential Git Commands
+
+### Repository Status
+
+```bash
+# Check current status
+git status
+
+# See what changed
+git diff                          # Unstaged changes
+git diff --staged                # Staged changes
+git diff HEAD                    # All changes since last commit
+
+# View commit history
+git log                          # Full history
+git log --oneline               # Compact history
+git log -10 --oneline           # Last 10 commits
+git log --author="Name"         # Commits by author
+```
+
+### Staging and Committing
+
+```bash
+# Stage changes
+git add .                       # Stage all changes
+git add path/to/file           # Stage specific file
+git add -p                      # Interactive staging (choose hunks)
+
+# Commit changes
+git commit -m "Your message"
+
+# Commit with detailed message (opens editor)
+git commit
+
+# Amend last commit (only if NOT pushed)
+git commit --amend
+
+# Commit with file changes only (no new files)
+git commit -am "message"
+```
+
+### Branching
+
+```bash
+# View branches
+git branch                      # Local branches
+git branch -a                   # All branches (local + remote)
+git branch -v                   # Branches with last commit
+
+# Create and switch branches
+git checkout -b feature/my-feature     # Create and switch
+git switch feature/my-feature          # Switch (newer syntax)
+git checkout main                      # Switch to main
+
+# Delete branches
+git branch -d feature/my-feature          # Local delete
+git push origin --delete feature/my-feature  # Remote delete
+
+# Rename branch
+git branch -m old-name new-name
+```
+
+### Pushing and Pulling
+
+```bash
+# Push changes
+git push                                    # Push to tracked branch
+git push origin feature/my-feature          # Push specific branch
+git push -u origin feature/my-feature       # Push and set upstream
+
+# Pull changes
+git pull                        # Pull from tracked branch
+git pull origin main            # Pull specific branch
+
+# Fetch (without merging)
+git fetch
+git fetch origin
+```
+
+### Undoing Changes
+
+```bash
+# Undo unstaged changes
+git restore path/to/file
+git checkout -- path/to/file    # Older syntax
+
+# Unstage changes
+git restore --staged path/to/file
+git reset HEAD path/to/file     # Older syntax
+
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Undo last commit (discard changes)
+git reset --hard HEAD~1         # WARNING: Deletes work
+
+# Revert a commit (creates new commit undoing changes)
+git revert <commit-hash>
+```
+
+### Rebasing (Clean History)
+
+```bash
+# Rebase current branch onto main
+git rebase main
+
+# Interactive rebase (edit commits)
+git rebase -i HEAD~3            # Last 3 commits
+
+# Abort rebase if conflicts
+git rebase --abort
+
+# Continue after fixing conflicts
+git rebase --continue
+```
+
+### Stashing (Temporary Storage)
+
+```bash
+# Save work without committing
+git stash
+git stash save "Work in progress"
+
+# List stashed changes
+git stash list
+
+# Apply stash
+git stash apply                 # Apply latest
+git stash apply stash@{0}       # Apply specific stash
+
+# Pop stash (apply and remove)
+git stash pop
+
+# Delete stash
+git stash drop
+git stash drop stash@{0}
+```
+
+---
+
+## Common Workflows with Claude Code
+
+### Workflow 1: Feature Development and PR
+
+```bash
+# 1. Create feature branch
+git checkout -b feature/user-authentication
+
+# 2. Make changes (Claude Code edits files)
+
+# 3. Check status before committing
+git status
+git diff
+
+# 4. Stage and commit
+git add .
+git commit -m "Add user authentication system"
+
+# 5. Push to remote
+git push -u origin feature/user-authentication
+
+# 6. Create PR (using gh cli)
+gh pr create --title "Add user authentication" \
+  --body "Implements JWT-based authentication"
+```
+
+### Workflow 2: Bug Fix and PR
+
+```bash
+# 1. Create fix branch from main
+git checkout main
+git pull
+git checkout -b fix/login-bug
+
+# 2. Make changes
+
+# 3. Commit
+git add .
+git commit -m "Fix: Resolve login validation bug"
+
+# 4. Push and create PR
+git push -u origin fix/login-bug
+gh pr create --title "Fix: Login validation" --body "Fixes #456"
+```
+
+### Workflow 3: Code Review and Merge
+
+```bash
+# 1. Check current branches
+git branch -a
+
+# 2. Review PR (using gh)
+gh pr view 123
+gh pr review 123 --approve
+
+# 3. Merge PR (using gh)
+gh pr merge 123 --squash --delete-branch
+
+# 4. Update local main
+git checkout main
+git pull
+```
+
+### Workflow 4: Sync Fork with Upstream
+
+```bash
+# 1. Add upstream remote
+git remote add upstream https://github.com/original/repo.git
+
+# 2. Fetch upstream changes
+git fetch upstream
+
+# 3. Rebase your branch
+git checkout your-branch
+git rebase upstream/main
+
+# 4. Force push to your fork (only after rebase)
+git push -f origin your-branch
+```
+
+### Workflow 5: Interactive Rebase Before PR
+
+```bash
+# 1. Check your commits
+git log main..HEAD --oneline
+
+# 2. Start interactive rebase
+git rebase -i main
+
+# 3. In the editor:
+# - pick: use commit
+# - squash/s: combine with previous
+# - reword/r: change commit message
+# - drop/d: delete commit
+
+# 4. Fix conflicts if any
+git add .
+git rebase --continue
+
+# 5. Force push to PR branch
+git push -f origin feature/your-feature
+```
+
+---
+
+## Remote Management
+
+```bash
+# View remotes
+git remote
+git remote -v              # Verbose (shows URLs)
+
+# Add remote
+git remote add origin https://github.com/user/repo.git
+
+# Change remote URL
+git remote set-url origin https://github.com/user/new-repo.git
+
+# Remove remote
+git remote remove origin
+
+# Rename remote
+git remote rename origin upstream
+```
+
+---
+
+## Useful Aliases
+
+```bash
+# Create shortcuts (run once)
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.unstage 'restore --staged'
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.visual 'log --graph --oneline --all'
+
+# Use them like:
+git st          # instead of git status
+git co main     # instead of git checkout main
+git ci -m "msg" # instead of git commit -m "msg"
+```
+
+---
+
+## Best Practices with Claude Code
+
+1. **Always pull before creating a new branch**
+   ```bash
+   git checkout main
+   git pull
+   git checkout -b feature/new-feature
+   ```
+
+2. **Commit frequently with clear messages**
+   ```bash
+   git commit -m "Add: New feature description"
+   ```
+
+3. **Review changes before committing**
+   ```bash
+   git status
+   git diff
+   ```
+
+4. **Use feature branches for everything**
+   - Never commit directly to `main`
+   - Use descriptive names: `feature/`, `fix/`, `docs/`, `refactor/`
+
+5. **Clean up remote branches after merge**
+   ```bash
+   git push origin --delete feature/completed-feature
+   git branch -d feature/completed-feature
+   ```
+
+6. **Keep history clean**
+   - Use squash merges for PRs: `gh pr merge --squash`
+   - Rebase instead of merge when appropriate
+
+---
+
+## Troubleshooting
+
+### Merge Conflicts
+
+```bash
+# When git pull fails due to conflicts
+# 1. See conflicted files
+git status
+
+# 2. Edit conflicted files manually
+# Look for markers: <<<<<<< HEAD, =======, >>>>>>>
+
+# 3. Stage resolved files
+git add path/to/resolved/file
+
+# 4. Complete the merge
+git commit -m "Resolve merge conflicts"
+```
+
+### Undo Recent Push (Be Careful!)
+
+```bash
+# Undo last pushed commit (don't do this on shared branches!)
+git push --force-with-lease origin HEAD~1:branch-name
+```
+
+### Find Lost Commits
+
+```bash
+# Reflog shows all commits (even deleted ones)
+git reflog
+
+# Recover a lost commit
+git checkout <lost-commit-hash>
+git checkout -b recovered-branch
+```
+
+---
+
+## Quick Reference
+
+| Command | Purpose |
+|---------|---------|
+| `git status` | Check what changed |
+| `git add .` | Stage all changes |
+| `git commit -m "msg"` | Create a commit |
+| `git push` | Send to remote |
+| `git pull` | Get latest changes |
+| `git checkout -b feat` | Create feature branch |
+| `git log --oneline` | View recent commits |
+| `git diff` | See unstaged changes |
+| `git reset --hard HEAD~1` | Undo last commit |
+| `gh pr create` | Create PR (requires gh CLI) |

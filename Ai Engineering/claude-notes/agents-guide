@@ -1,0 +1,486 @@
+# Claude Code Agents Guide
+
+Agents are specialized AI assistants that work autonomously to handle complex, multi-step tasks.
+Unlike regular Claude conversations, agents can run in the background, use specific tools, and complete tasks without constant guidance.
+
+---
+
+## What Are Agents?
+
+Agents are:
+- **Autonomous**: Execute multi-step plans without waiting for input between steps
+- **Specialized**: Optimized for specific types of tasks (code exploration, planning, research)
+- **Tool-Equipped**: Have access to specialized tools relevant to their domain
+- **Background-Capable**: Can run in the background while you work on other things
+
+---
+
+## Available Agent Types
+
+### 1. General-Purpose Agent
+
+**Purpose**: Complex tasks, research, multi-step work
+
+**Capabilities**:
+- Research complex questions
+- Search and analyze code
+- Execute multi-step workflows
+- Navigate unfamiliar codebases
+
+**When to Use**:
+- You need thorough investigation
+- Task has multiple independent steps
+- You want to explore a codebase broadly
+- You need research across multiple files
+
+**Example Usage**:
+```
+Claude, use the general-purpose agent to investigate how the authentication
+system works in this codebase and create a summary.
+```
+
+**What It Can Do**:
+```bash
+# Search for patterns
+# Read multiple files
+# Analyze relationships
+# Generate comprehensive reports
+# Execute commands
+```
+
+---
+
+### 2. Explore Agent
+
+**Purpose**: Fast codebase exploration and understanding
+
+**Capabilities**:
+- Quick file discovery by patterns
+- Code structure analysis
+- Find specific implementations
+- Answer "how does X work?" questions
+
+**When to Use**:
+- You need quick codebase overview
+- Finding specific files by pattern
+- Understanding code organization
+- Answering architecture questions
+
+**Thoroughness Levels**:
+- `quick`: Basic searches, answer quickly
+- `medium`: Moderate exploration, balanced approach
+- `very thorough`: Comprehensive analysis across multiple patterns
+
+**Example Usage**:
+```
+Claude, use the Explore agent (medium thoroughness) to understand the API
+endpoint structure in this project.
+```
+
+**Time Comparison**:
+- Quick: 1-2 minutes (fast answers)
+- Medium: 3-5 minutes (balanced detail)
+- Very thorough: 10+ minutes (comprehensive analysis)
+
+---
+
+### 3. Plan Agent
+
+**Purpose**: Design and plan implementations before coding
+
+**Capabilities**:
+- Analyze current architecture
+- Design solutions
+- Identify critical files
+- Plan implementation steps
+- Consider trade-offs
+
+**When to Use**:
+- Before implementing significant features
+- When deciding between multiple approaches
+- Need to understand architectural impact
+- Want step-by-step implementation guide
+
+**Example Usage**:
+```
+Claude, use the Plan agent to design how we should implement dark mode
+for this React application. Consider state management, CSS approach, and
+component updates.
+```
+
+**What You Get**:
+- Detailed implementation steps
+- File list that needs changes
+- Architecture considerations
+- Alternative approaches with trade-offs
+- Risk assessment
+
+---
+
+### 4. Statusline-Setup Agent
+
+**Purpose**: Configure Claude Code status line
+
+**Capabilities**:
+- Read configuration files
+- Edit Claude Code settings
+- Update statusline display
+- Configure display options
+
+**When to Use**:
+- Customizing Claude Code appearance
+- Changing status information display
+- Configuring behavior settings
+
+---
+
+## How to Use Agents
+
+### Method 1: Explicit Request
+
+Ask Claude to use an agent directly:
+
+```
+Use the Explore agent to find all database query files in this project.
+```
+
+### Method 2: Claude Decides
+
+Claude often decides to use agents automatically:
+
+```
+"I need to understand the architecture of this monorepo. Let me use the
+Explore agent to investigate..."
+```
+
+### Method 3: In Task Tool Calls
+
+When using the Task tool programmatically:
+
+```
+Task: Explore agent
+Description: Understand API structure
+Thoroughness: medium
+```
+
+---
+
+## Real-World Examples
+
+### Example 1: Understanding Authentication
+
+**Request**:
+```
+Use the Explore agent (thorough) to understand how authentication works
+in this Spring Boot application. Find all auth-related files and explain
+the flow.
+```
+
+**Agent's Process**:
+1. Search for auth-related files (*.java, *.properties)
+2. Find authentication classes and filters
+3. Trace the authentication flow
+4. Identify configuration files
+5. Generate comprehensive summary
+
+**Output**:
+- List of auth-related files
+- Authentication flow diagram
+- Configuration documentation
+- Security considerations
+
+---
+
+### Example 2: Planning a Feature
+
+**Request**:
+```
+Use the Plan agent to design how to implement a user notification system
+for this Node.js application. Include database schema, API endpoints, and
+frontend integration.
+```
+
+**Agent's Process**:
+1. Analyze current project structure
+2. Review existing patterns
+3. Design database schema
+4. Plan API endpoints
+5. Identify affected files
+6. Create implementation steps
+
+**Output**:
+- Step-by-step implementation plan
+- List of files to create/modify
+- Database schema design
+- API endpoint specification
+- Frontend integration approach
+- Estimated complexity
+
+---
+
+### Example 3: Codebase Overview
+
+**Request**:
+```
+Use the Explore agent (quick) to give me a high-level overview of this
+Python Django project structure.
+```
+
+**Agent's Process**:
+1. Map top-level directories
+2. Identify main modules
+3. Find entry points
+4. Summarize structure
+
+**Output**:
+- Directory structure
+- Main modules explained
+- Entry points identified
+- Quick setup guide
+
+---
+
+## Agent Outputs
+
+### General-Purpose Agent Output
+
+```
+Research Summary:
+- Found X relevant files
+- Analyzed Y patterns
+- Key findings:
+  1. ...
+  2. ...
+  3. ...
+- Recommendations:
+  - ...
+```
+
+### Explore Agent Output
+
+```
+Codebase Structure:
+src/
+├── api/
+│   ├── endpoints/
+│   └── middleware/
+├── models/
+├── services/
+
+Key Findings:
+- API pattern used: REST
+- Database: PostgreSQL
+- Framework: Express.js
+
+Files related to [topic]:
+1. ...
+2. ...
+```
+
+### Plan Agent Output
+
+```
+Implementation Plan:
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+Files to Modify:
+- src/components/Header.tsx
+- src/styles/theme.css
+
+Files to Create:
+- src/hooks/useDarkMode.ts
+- src/context/ThemeContext.tsx
+
+Trade-offs Considered:
+- Option A: [pros/cons]
+- Option B: [pros/cons]
+
+Recommended: Option A because...
+```
+
+---
+
+## When to Use Each Agent
+
+### Use Explore When:
+
+✓ You need quick codebase understanding
+✓ Finding specific files or patterns
+✓ Getting structure overview
+✓ Answering "where is X?" questions
+
+### Use Plan When:
+
+✓ Before implementing significant features
+✓ Deciding between approaches
+✓ Need step-by-step guidance
+✓ Considering architectural changes
+
+### Use General-Purpose When:
+
+✓ Complex multi-step research
+✓ Investigating unfamiliar code
+✓ Analyzing relationships
+✓ Comprehensive investigations
+
+### Use Statusline-Setup When:
+
+✓ Customizing Claude Code display
+✓ Configuring behavior settings
+✓ Updating status indicators
+
+---
+
+## Agent Performance Tips
+
+### 1. Give Clear Instructions
+
+**Good**:
+```
+Find all files related to user authentication and explain the security model.
+```
+
+**Bad**:
+```
+Find auth stuff
+```
+
+### 2. Specify Thoroughness
+
+**For Explore**:
+```
+Use Explore (quick) for fast answer
+Use Explore (very thorough) for comprehensive analysis
+```
+
+### 3. Provide Context
+
+```
+This is a microservices architecture with 15 services.
+Understand how the Payment Service integrates with other services.
+```
+
+### 4. Ask Specific Questions
+
+```
+Don't: "Understand this codebase"
+Do: "Find all database migrations and explain the schema evolution"
+```
+
+---
+
+## Running Agents in Background
+
+Agents can run while you continue working:
+
+```
+Claude: I'll start the Explore agent in the background to analyze
+the codebase structure. It will take about 5 minutes.
+
+You: Meanwhile, I can work on other things...
+
+Claude: The Explore agent is complete! Here are the results...
+```
+
+**Advantages**:
+- Don't wait for completion
+- Continue coding while analysis happens
+- Efficient use of time
+
+---
+
+## Agent Limitations
+
+| Limitation | Workaround |
+|-----------|-----------|
+| Can't access live systems | Provide API docs, screenshots, or logs |
+| Can't run interactive commands | Use non-interactive alternatives |
+| Can't view real-time output | Ask agent to save results to file |
+| Takes time for thorough analysis | Use "quick" mode for fast answers |
+| May miss niche patterns | Provide specific search terms |
+
+---
+
+## Best Practices
+
+1. **Use Right Agent for Task**
+   - Explore for speed
+   - Plan for design
+   - General for research
+
+2. **Provide Context**
+   - Tell agent about your goals
+   - Explain what's important
+   - Share constraints
+
+3. **Review Results**
+   - Read agent's findings
+   - Ask clarifying questions
+   - Request additional analysis if needed
+
+4. **Iterate**
+   - Use findings to ask follow-up questions
+   - Refine based on results
+   - Plan next steps
+
+5. **Document Results**
+   - Save important findings
+   - Create task lists from plans
+   - Share discoveries with team
+
+---
+
+## Common Agent Workflows
+
+### Workflow 1: Onboard to New Project
+
+```
+Step 1: Explore agent (quick) → Get structure overview
+Step 2: Explore agent (thorough) → Deep dive on specific areas
+Step 3: Plan agent → Design first contribution
+Step 4: Implement with guidance
+```
+
+### Workflow 2: Plan Major Feature
+
+```
+Step 1: Explore agent → Understand current implementation
+Step 2: Plan agent → Design new feature
+Step 3: Review plan → Get approval
+Step 4: Implement
+```
+
+### Workflow 3: Investigate Bug
+
+```
+Step 1: General-purpose agent → Research bug patterns
+Step 2: Explore agent → Find related code
+Step 3: General-purpose agent → Trace root cause
+Step 4: Plan agent → Design fix
+Step 5: Implement
+```
+
+---
+
+## Quick Reference
+
+| Agent | Best For | Speed | Detail |
+|-------|----------|-------|--------|
+| Explore (quick) | Quick answers | 1-2 min | Low |
+| Explore (medium) | Balanced | 3-5 min | Medium |
+| Explore (very thorough) | Complete analysis | 10+ min | High |
+| Plan | Design & architecture | 5-10 min | Medium-High |
+| General-purpose | Complex research | 10+ min | High |
+| Statusline-setup | Configuration | 2-5 min | Low |
+
+---
+
+## Getting Help
+
+```
+Ask Claude: What agent should I use for [my task]?
+
+Claude will recommend the best agent and explain why.
+```
