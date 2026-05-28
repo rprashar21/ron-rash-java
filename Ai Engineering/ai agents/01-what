@@ -1,7 +1,8 @@
 what are ai agents -- intelligent systems that recives a high level goal from a user and autonomously
 plans decide and excute certain steps using external tools which we give access alll while maintaing context ,reasoining over multiple steps
 adopting to new information and optimizing the outcome
-: An agent's "knowledge" is often just a very clever game of copy-paste. It finds the info in a database, pastes it into its prompt, and then "reasons" over it!
+: An agent's "knowledge" is often just a very clever game of copy-paste.
+ It finds the info in a database, pastes it into its prompt, and then "reasons" over it!
 
 Goal driven -- you tell ur agent what to do not how to do it ??
 Autonomous planning -- agents breaks the problem into a sequence of actions
